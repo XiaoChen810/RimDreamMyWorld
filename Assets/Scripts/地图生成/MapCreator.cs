@@ -1,19 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class MapCreatorTileData
 {
+    // 位置
     public int x;
     public int y;
+
+    // 瓦片类型
     public enum Type
     {
         none,grass,water,ground,mountain
     }
     public Type type = Type.none;
+
+    // 噪声值
     public float noiseValue;
+
+    // 附属的瓦片地图
     public Tilemap loadingTilemap;
+
+    // 瓦片上是否有物体
+    public bool aboveEmpty;
 }
 
 
@@ -33,7 +44,7 @@ public class MapCreator : MonoBehaviour
     public bool useRandomSeed;
 
     [System.Serializable]
-    public struct TileProbaility
+    public struct TileProbability
     {
         [Range(0, 1f)]
         public float probability;
@@ -45,7 +56,7 @@ public class MapCreator : MonoBehaviour
         public Tilemap loadingTilemap;
     }
     [Header("瓦片生成")]
-    public List<TileProbaility> tileList;
+    public List<TileProbability> tileList;
 
     public MapCreatorTileData[,] mapData;
 
@@ -56,7 +67,22 @@ public class MapCreator : MonoBehaviour
 
     private bool useCheck = true;
     private int checkNumber = 100;
-    
+
+    [System.Serializable]
+    public struct ItemProbability
+    { 
+        public string name;
+        [Range(0, 1f)] public float probability;
+        public int number;
+        public bool useNumber;
+        public GameObject prefab;
+        public MapCreatorTileData.Type environment;
+        public Vector3 offset;
+    }
+    [Header("物体生成")]
+    public List<ItemProbability> itemList;
+
+
     public void GenerateMap()
     {
         GenerateMapData();
@@ -115,11 +141,7 @@ public class MapCreator : MonoBehaviour
         }
 
 
-        if (useCheck)
-        {
-            Check();
-
-        }
+        if (useCheck) Check();
     }
 
     public void GenerateTileMap()
@@ -140,6 +162,57 @@ public class MapCreator : MonoBehaviour
             }
         }
 
+        // 生成花草
+        GenerateLeaveAndFlowers();
+
+        // 生成树木
+        GenerateTrees("树");
+    }
+
+    private void GenerateTrees(string treeName)
+    {
+        ItemProbability tree = itemList.FirstOrDefault(item => item.name == treeName);
+        if (tree.prefab != null)
+        {
+            int count = 0;
+            List<MapCreatorTileData> theEnvironmentTile = new List<MapCreatorTileData>();
+            foreach (var md in mapData)
+            {
+                if (md.type == tree.environment && CalculatNeighborGrass(md.x, md.y, MapCreatorTileData.Type.water) <= 0)
+                {
+                    theEnvironmentTile.Add(md);
+                    count++;
+                }
+            }
+
+            if (tree.useNumber)
+            {
+                for (int i = 0; i < tree.number; i++)
+                {
+                    int randomIndex = UnityEngine.Random.Range(0, theEnvironmentTile.Count);
+                    Vector3Int tilePos = new Vector3Int(theEnvironmentTile[randomIndex].x, theEnvironmentTile[randomIndex].y);
+                    Vector3 createPos = tilePos + tree.offset;
+                    Instantiate(tree.prefab, createPos, Quaternion.identity, this.transform);
+                    mapData[tilePos.x, tilePos.y].aboveEmpty = false;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < count * tree.probability; i++)
+                {
+                    int randomIndex = UnityEngine.Random.Range(0, theEnvironmentTile.Count);
+                    Vector3Int tilePos = new Vector3Int(theEnvironmentTile[randomIndex].x, theEnvironmentTile[randomIndex].y);
+                    Vector3 createPos = tilePos + tree.offset;
+                    Instantiate(tree.prefab, createPos, Quaternion.identity, this.transform);
+                    mapData[tilePos.x, tilePos.y].aboveEmpty = false;
+                }
+            }
+
+        }
+    }
+
+    private void GenerateLeaveAndFlowers()
+    {
         // 统计有多少块草地
         int count = 0;
         List<MapCreatorTileData> theGrassTile = new List<MapCreatorTileData>();
@@ -268,12 +341,39 @@ public class MapCreator : MonoBehaviour
 
     public void CleanMap()
     {
+        // 清理瓦片
         foreach(var t in tileList)
         {
             t.loadingTilemap.ClearAllTiles();
         }
         leavesMap.ClearAllTiles();
 
-        Debug.Log("Clear All Tiles");
+        // 清理环境
+#if UNITY_EDITOR
+
+        // 存储子物体的引用
+        List<Transform> childrenToDestroy = new List<Transform>();
+        foreach (Transform child in this.transform)
+        {
+            childrenToDestroy.Add(child);
+        }
+
+        // 销毁子物体
+        foreach (Transform child in childrenToDestroy)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+
+#else
+
+    // 在运行时清理子物体
+    foreach (Transform child in this.transform)
+    {
+        Destroy(child.gameObject);
+    }
+
+#endif
+
+        Debug.Log("Clear All");
     }
 }

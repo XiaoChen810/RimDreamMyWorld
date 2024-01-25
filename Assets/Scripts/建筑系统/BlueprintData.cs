@@ -1,18 +1,28 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(menuName = "蓝图数据", fileName = "蓝图数据", order = 0)]
-public class BlueprintData : ScriptableObject
+namespace 建筑系统
 {
-    [Header("占据格子的长和宽")]
-    public int BuildingWidth;
-    public int BuildingHeight;
+    [CreateAssetMenu(menuName = "蓝图数据", fileName = "蓝图数据", order = 0)]
+    public class BlueprintData : ScriptableObject
+    {
+        [Header("占据格子的长和宽")]
+        public int BuildingWidth;
+        public int BuildingHeight;
 
-    [Header("建造所需工作量")]
-    public int Workload;
+        [Header("建造所需工作量")]
+        public int Workload;
 
-    [Header("预览图")]
-    public Sprite PreviewSprite;
+        [Header("预览图")]
+        public Sprite PreviewSprite;
 
-    [Header("最后生成的建筑的预制体")]
-    public GameObject Prefab;
+        [Header("是否可以在上方继续放东西")]
+        public bool Stackable;
+
+        [Header("最后生成的建筑的预制体")]
+        public GameObject Prefab;
+
+        [Header("最后生成的瓦片")]
+        public TileBase TileBase;
+    }
 }

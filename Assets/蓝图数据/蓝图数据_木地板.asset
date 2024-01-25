@@ -15,5 +15,7 @@ MonoBehaviour:
   BuildingWidth: 1
   BuildingHeight: 1
   Workload: 5
-  PreviewSprite: {fileID: 0}
-  Prefab: {fileID: 0}
+  PreviewSprite: {fileID: 471750548, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
+  Stackable: 1
+  Prefab: {fileID: 7149528950666749753, guid: 4a204d4fb8db30346af38c41cd2d6c13, type: 3}
+  TileBase: {fileID: 0}

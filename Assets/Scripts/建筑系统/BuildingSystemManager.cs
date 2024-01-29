@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
+using System;
 
 namespace 建筑系统
 {
+    /// <summary>
+    ///  记录全部蓝图
+    ///  记录当前建造队列
+    /// </summary>
     public class BuildingSystemManager : MonoBehaviour
     {
         public static BuildingSystemManager Instance;
@@ -17,8 +22,16 @@ namespace 建筑系统
         [SerializedDictionary("名称", "蓝图数据")]
         public SerializedDictionary<string, BlueprintData> _WallBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
 
-        // 当前所需建造蓝图的列表
-        private List<BuildingBlueprintBase> _currentTaskList = new();
+        [Header("BuildingSystem")]
+        public BuildingSystem _BuildingSystem;
+
+
+        // 当前待分配的列表
+        private Queue<BuildingBlueprintBase> _currentTaskQueue = new();
+        // 已经分配好的列表
+        private Queue<BuildingBlueprintBase> _alreadyTaskQueue = new();
+
+        public Action OnTaskQueueAdded;
 
 
         private void Awake()
@@ -30,19 +43,18 @@ namespace 建筑系统
             else
             {
                 Instance = this;
+                _BuildingSystem = GetComponentInChildren<BuildingSystem>();
                 DontDestroyOnLoad(gameObject);
             }
         }
 
-        private void Update()
-        {
-            if(_currentTaskList.Count > 0)
-            {
-                BuildingBlueprintBase task = _currentTaskList[0];
-                task.Complete();
-            }
-        }
+        #region  Task
 
+        /// <summary>
+        ///  依次访问字典，找对存在的蓝图数据并返回
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public BlueprintData GetData(string name)
         {
             if (_floorBlueprintsDict.ContainsKey(name))
@@ -60,17 +72,54 @@ namespace 建筑系统
 
         public void AddTask(BuildingBlueprintBase task)
         {
-            _currentTaskList.Add(task);
+            _currentTaskQueue.Enqueue(task);
+            // 当任务队列里被添加任务时，通知全部建筑小人可以分配任务
+            OnTaskQueueAdded?.Invoke();
+        }
+
+        public void CompleteTask(BuildingBlueprintBase task)
+        {
+            for(int i = 0; i < _alreadyTaskQueue.Count; i++)
+            {
+                if(task != _alreadyTaskQueue.Peek())
+                {
+                    _alreadyTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
+                }
+                else
+                {
+                    _alreadyTaskQueue.Dequeue();
+                    break;
+                }
+            }
+        }
+
+        public void CanelTask(BuildingBlueprintBase task)
+        {
+            for (int i = 0; i < _alreadyTaskQueue.Count; i++)
+            {
+                if (task != _alreadyTaskQueue.Peek())
+                {
+                    _alreadyTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
+                }
+                else
+                {
+                    _currentTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
+                    break;
+                }
+            }
         }
 
         public BuildingBlueprintBase GetTask()
         {
+            if (_currentTaskQueue.Count > 0)
+            {
+                BuildingBlueprintBase sult = _currentTaskQueue.Dequeue();
+                _alreadyTaskQueue.Enqueue(sult); 
+                return sult;
+            }
             return null;
         }
 
-        public void RemoveTask(BuildingBlueprintBase task)
-        {
-            _currentTaskList?.Remove(task);
-        }
+        #endregion
     }
 }

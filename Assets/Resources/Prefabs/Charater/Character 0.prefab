@@ -14,7 +14,9 @@ GameObject:
   - component: {fileID: 8216285898473938149}
   - component: {fileID: 5354813281934415414}
   - component: {fileID: 6204162736436200241}
+  - component: {fileID: 4453147200628381016}
   - component: {fileID: 798842648033601365}
+  - component: {fileID: 6651567802660074714}
   m_Layer: 0
   m_Name: Character 0
   m_TagString: Character
@@ -286,6 +288,22 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4453147200628381016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258274224586722765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsSelect: 0
+  _canBuild: 1
+  CanGetTask: 0
+  currentBuiltObject: {fileID: 0}
 --- !u!114 &798842648033601365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +317,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 100
-  isSelect: 0
   isRun: 0
+  isReach: 0
   currentMapName: MainMap
+--- !u!114 &6651567802660074714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258274224586722765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945321d5e380edf458b3e42ea34594f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SM:
+    isStop: 0

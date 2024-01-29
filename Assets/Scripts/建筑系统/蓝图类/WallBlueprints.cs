@@ -1,44 +1,58 @@
-using 建筑系统;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class WallBlueprints : BuildingBlueprintBase
+namespace 建筑系统
 {
-    public override void Build(int thisWorkload)
+
+    /// <summary>
+    ///  墙体蓝图的类
+    /// </summary>
+    public class WallBlueprints : BuildingBlueprintBase
     {
-        Debug.Log("Build");
-        _workload -= thisWorkload;
-    }
+        /*  
+         *  Placed函数放置到目标点，然后添加到建造队列中
+         *  Build函数用于减少工作量
+         *  Complete函数用于完成时（工作量为0）找到对应的瓦片地图，贴上对应的瓦片，完成时也删掉蓝图的Object
+         *  Cancel函数用于当取消建造时，删掉蓝图的Object
+        */
 
-    public override void Cancel()
-    {
-        Debug.Log("Cancel");
-        Destroy(this.gameObject);
-    }
+        public override void Placed()
+        {
+            Debug.Log("Placed");
+            // 变成半透明，表示还未完成
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            sr.color = new Color(1, 1, 1, 0.5f);
 
-    public override void Complete()
-    {
-        Debug.Log("Complete");
-        // 在瓦片地图设置瓦片
-        BuildingSystem buildingSystem = GameObject.FindWithTag("BuildingSystem").GetComponent<BuildingSystem>();
-        Tilemap WallTilemap = buildingSystem.WallTilemap;
-        Vector3Int completePos = WallTilemap.WorldToCell(transform.position);
-        WallTilemap.SetTile(completePos, _BlueprintData.TileBase);
+            // 添加到建筑管理系统中
+            BuildingSystemManager.Instance.AddTask(this);
+        }
 
-        BuildingSystemManager.Instance.RemoveTask(this);
-        Destroy(this.gameObject);
-    }
+        public override void Build(float thisWorkload)
+        {
+            Debug.Log("Build");
+            _workloadRemainder -= thisWorkload;
+        }
 
-    public override void Placed()
-    {
-        Debug.Log("Placed");
-        // 变成半透明，表示还未完成
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.color = new Color(1, 1, 1, 0.5f);
+        public override void Complete()
+        {
+            Debug.Log("Complete");
+            // 在瓦片地图设置瓦片
+            Tilemap WallTilemap = BuildingSystemManager.Instance._BuildingSystem.WallTilemap;
+            Vector3Int completePos = WallTilemap.WorldToCell(transform.position);
+            WallTilemap.SetTile(completePos, _BlueprintData.TileBase);
 
-        // 添加到建筑管理系统中
-        BuildingSystemManager.Instance.AddTask(this);
+            BuildingSystemManager.Instance.CompleteTask(this);
+            Destroy(gameObject);
+        }
+
+        public override void Cancel()
+        {
+            Debug.Log("Cancel");
+
+            BuildingSystemManager.Instance.CanelTask(this);
+            Destroy(gameObject);
+        }
     }
 }

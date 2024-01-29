@@ -13,13 +13,14 @@ public class CharacterMoveController : MonoBehaviour
     private Rigidbody2D _rb;
     private BoxCollider2D _collider;
     private LineRenderer lineRenderer;
+    private CharacterLogicController logicConrtroller;
 
     // 移动速度
     public float moveSpeed;
-    // 是否被选中
-    public bool isSelect;
     // 是否在奔跑
     public bool isRun;
+    // 是否已经到达目标点
+    public bool isReach;
     // 当前所在的地图
     public string currentMapName;
 
@@ -43,6 +44,7 @@ public class CharacterMoveController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
         lineRenderer = GetComponent<LineRenderer>();
+        logicConrtroller = GetComponent<CharacterLogicController>();
 
         MoveTargetPos = transform.position;
         LastMoveTargetPos = transform.position;
@@ -53,30 +55,54 @@ public class CharacterMoveController : MonoBehaviour
     private void Update()
     {
         MovePathLogic();
+        DrawLineForCurrentPath();
         Filp();
     }
+
+    #region Public
+
+    public void GoToHere(Vector2 target)
+    {
+        Debug.Log("改变目标点");
+        MoveTargetPos = target;
+        ResetPath();
+    }
+
+    #endregion
+
+
 
     private void MovePathLogic()
     {
         // 选中情况下,如果目标点改变，重新获取路径
-        if (isSelect && LastMoveTargetPos != MoveTargetPos)
+        if (logicConrtroller.IsSelect && LastMoveTargetPos != MoveTargetPos)
         {
-            // 获取路径
-            movePathList = MapManager.Instance.GetPath(transform.position, MoveTargetPos, currentMapName);
-
-            // 重置路径点索引
-            if (movePathList != null && movePathList.Count > 0) currentWaypointIndex = 0;
-            LastMoveTargetPos = MoveTargetPos;
+            ResetPath();
         }
 
         // 选中情况下, 鼠标右击，改变目标点
-        if (isSelect && Input.GetMouseButtonDown(1))
+        if (logicConrtroller.IsSelect && Input.GetMouseButtonDown(1))
         {
             MoveTargetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
+        isReach = currentWaypointIndex == -1;
+    }
+
+    private void ResetPath()
+    {
+        // 获取路径
+        movePathList = MapManager.Instance.GetPath(transform.position, MoveTargetPos, currentMapName);
+
+        // 重置路径点索引
+        if (movePathList != null && movePathList.Count > 0) currentWaypointIndex = 0;
+        LastMoveTargetPos = MoveTargetPos;
+    }
+
+    private void DrawLineForCurrentPath()
+    {
         // 根据当前的路径绘制路线
-        if(currentWaypointIndex != -1)
+        if (currentWaypointIndex != -1)
         {
             List<Vector2> currentPath = new List<Vector2>();
             for (int i = currentWaypointIndex; i < movePathList.Count; i++)
@@ -85,7 +111,6 @@ public class CharacterMoveController : MonoBehaviour
             }
             DrawPath(currentPath);
         }
-
     }
 
     private void DrawPath(List<Vector2> points)

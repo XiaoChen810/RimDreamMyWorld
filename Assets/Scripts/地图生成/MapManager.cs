@@ -78,6 +78,7 @@ namespace 地图生成
         /// <param name="mapName"></param>
         public void LoadSceneMap(string mapName)
         {
+
             // 如果加载的是新场景要先把旧场景关了
             if (CurrentMapName != mapName && CurrentMapName != null)
             {

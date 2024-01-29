@@ -10,7 +10,7 @@ public interface IBlueprint
     void Complete();
 
     // 根据工作量执行建造的方法
-    void Build(int thisWorkload);
+    void Build(float thisWorkload);
 
     // 取消建造时调用的方法
     void Cancel();

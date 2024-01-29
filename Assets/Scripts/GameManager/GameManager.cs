@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
 
     public SceneSystem SceneSystem {  get; private set; }
 
+    public List<GameObject> CharactersList;
+
+    public GameObject CharacterTest;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,6 +30,7 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         SceneSystem = new();
+        CharactersList = new List<GameObject>();
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -47,5 +52,11 @@ public class GameManager : MonoBehaviour
         {
             MapManager.Instance.LoadSceneMap("Test");
         }
+    }
+
+    public void 生成一个基础小人()
+    {
+        GameObject newCharacter = Instantiate(CharacterTest);
+        CharactersList.Add(newCharacter);   
     }
 }

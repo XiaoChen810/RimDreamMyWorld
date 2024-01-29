@@ -19,9 +19,6 @@ namespace 场景
                 SceneManager.LoadScene(sceneName);
                 SceneManager.sceneLoaded += WhenSceneLoaded;
             }
-
-            MapManager.Instance.LoadSceneMap("MainMap");
-
         }
 
 
@@ -33,7 +30,8 @@ namespace 场景
 
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            Debug.Log($"{sceneName}加载完毕");
+            Debug.Log($"{sceneName}场景加载完毕");
+            MapManager.Instance.LoadSceneMap("MainMap");
         }
     }
 }

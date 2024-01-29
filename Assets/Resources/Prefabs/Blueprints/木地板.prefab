@@ -99,4 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "\u6728\u5730\u677F"
   _BlueprintData: {fileID: 0}
-  _workload: 0
+  _workloadRemainder: 10

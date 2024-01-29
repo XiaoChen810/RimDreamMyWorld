@@ -16,7 +16,7 @@ namespace ³¡¾°
         {
             currentScene?.OnExit();
             currentScene = scene;
-            currentScene?.OnEnter();
+            currentScene?.OnEnter();           
         }
     }
 }

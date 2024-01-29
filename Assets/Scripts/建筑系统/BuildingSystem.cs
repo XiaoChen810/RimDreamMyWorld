@@ -9,9 +9,9 @@ namespace 建筑系统
 {
     public class BuildingSystem : MonoBehaviour
     {
-        [Header("瓦片地图")]
-        public Tilemap BuildingTilemap;
-        public Tilemap WallTilemap;
+        // 瓦片地图，给其他类调用的
+        [HideInInspector] public Tilemap BuildingTilemap;
+        [HideInInspector] public Tilemap WallTilemap;
 
         [Header("当前建造的物品名字")]
         public string BuildingName;
@@ -19,40 +19,33 @@ namespace 建筑系统
 
         [Header("开启建造模式")]
         public bool BuildingMode;
-        private bool isOpenBuilding;
+        /// <summary>
+        ///  当切换当前蓝图数据时调用的事件
+        /// </summary>
+        public Action<string> OnToggleBlueprint;
 
         [Header("鼠标指示器")]
         public GameObject MouseIndicator;
 
         Action<Vector3> OnPlace, OnCancel;
 
+        private void Start()
+        {
+            OnToggleBlueprint += BuildStart;
+        }
+
+        private void OnDestroy()
+        {
+            OnToggleBlueprint -= BuildStart;
+        }
 
         private void Update()
         {
-            // 当建造模式开关打开时，只进行一次获取蓝图数据和配置相关信息
-            if (BuildingMode && !isOpenBuilding)
+            // 当建造模式开关打开时，进行一次获取蓝图数据和配置鼠标指示器信息
+            if (BuildingMode)
             {
-                isOpenBuilding = true;
-
-                //  找到当前应该放置的蓝图
-                blueprintData = BuildingSystemManager.Instance.GetData(BuildingName);
-                if (blueprintData == null)
-                {
-                    Debug.LogWarning("不存在此蓝图");
-                    BuildEnd();
-                    return;
-                }
-                else
-                {
-                    // 获取TileMap
-                    BuildingTilemap = MapManager.Instance.GetChildObject("Building").GetComponent<Tilemap>();
-                    WallTilemap = MapManager.Instance.GetChildObject("Wall").GetComponent<Tilemap>();
-
-
-                    MouseIndicator.SetActive(true);
-                    SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
-                    sr.sprite = blueprintData.PreviewSprite;
-                }
+                BuildingMode = false;
+                ToggleBlueprint(BuildingName);
             }
 
             BuildUpdate();
@@ -60,9 +53,42 @@ namespace 建筑系统
 
         }
 
+        #region  Public
+
+        public void ToggleBlueprint(string name)
+        {
+            OnToggleBlueprint?.Invoke(name);
+        }
+
+        #endregion
+
+
+        private void BuildStart(string name)
+        {
+            //  找到当前应该放置的蓝图
+            blueprintData = BuildingSystemManager.Instance.GetData(name);
+            if (blueprintData == null)
+            {
+                Debug.LogWarning("不存在此蓝图");
+                BuildEnd();
+                return;
+            }
+            else
+            {
+                // 获取TileMap
+                BuildingTilemap = MapManager.Instance.GetChildObject("Building").GetComponent<Tilemap>();
+                WallTilemap = MapManager.Instance.GetChildObject("Wall").GetComponent<Tilemap>();
+
+                // 配置鼠标指示器信息
+                MouseIndicator.SetActive(true);
+                SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
+                sr.sprite = blueprintData.PreviewSprite;
+            }
+        }
+
         private void BuildUpdate()
         {
-            if (BuildingMode && isOpenBuilding)
+            if (MouseIndicator.activeSelf)
             {
                 // 监听鼠标位置信息转换成世界坐标
                 Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -74,8 +100,12 @@ namespace 建筑系统
                 if (Input.GetMouseButtonDown(0))
                 {
                     OnPlace?.Invoke(cellPosition);
-                    GameObject newObject = Instantiate(blueprintData.Prefab, placePosition, Quaternion.identity);
-                    IBlueprint blueprint = newObject.GetComponent<IBlueprint>();
+                    GameObject newObject = Instantiate(blueprintData.Prefab, placePosition, Quaternion.identity, this.transform);                   
+                    BuildingBlueprintBase blueprint = newObject.GetComponent<BuildingBlueprintBase>();
+                    if(blueprint.Name != blueprintData.name)
+                    {
+                        Debug.LogWarning($"发现蓝图数据与蓝图有所冲突 {blueprint.Name} : {blueprintData.name}");
+                    }
                     blueprint.Placed();
                 }
                 if (Input.GetMouseButtonDown(1))
@@ -89,7 +119,6 @@ namespace 建筑系统
         private void BuildEnd()
         {
             BuildingMode = false;
-            isOpenBuilding = false;
             MouseIndicator.SetActive(false);
         }
     }

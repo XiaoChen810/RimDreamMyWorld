@@ -33,7 +33,7 @@ namespace 场景
         {
             panelManager = new PanelManager();
             panelManager.AddPanel(new StartPanel());
-            Debug.Log($"{sceneName}加载完毕");
+            Debug.Log($"{sceneName}场景加载完毕");
         } 
     }
 }

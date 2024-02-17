@@ -14,6 +14,13 @@ public class GameManagerEditor : Editor
         {
             GameManager.Instance.生成一个基础小人();
         }
-        
+        if (GUILayout.Button("退回开始场景"))
+        {
+            GameManager.Instance.退回开始场景();
+        }
+        if (GUILayout.Button("在周围生成一个敌人"))
+        {
+            GameManager.Instance.在周围生成一个敌人();
+        }
     }
 }

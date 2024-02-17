@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ³¡¾°
+namespace MyScene
 {
     public class SceneSystem
     {

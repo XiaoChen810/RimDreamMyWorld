@@ -6,12 +6,12 @@ public abstract class StateBase : IState
 {
     protected StateMachine _stateMachine { get; private set; }
 
-    public bool IsLoop { get; }
+    public StateBase nextState {  get; private set; } 
 
-    public StateBase(StateMachine machine,bool canLoop)
+    public StateBase(StateMachine machine,StateBase next)
     {
         this._stateMachine = machine;
-        this.IsLoop = canLoop;
+        this.nextState = next;
     }
 
     public virtual void OnEnter()
@@ -24,11 +24,12 @@ public abstract class StateBase : IState
 
     }
 
-    public virtual void OnUpdate()
+    public virtual StateType OnUpdate()
     {
         // 运行
 
         // 当达到某条件时结束或暂停
+        return StateType.Success;
     }
 
     public virtual void OnPause()

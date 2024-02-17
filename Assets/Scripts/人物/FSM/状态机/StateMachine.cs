@@ -1,62 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
 public class StateMachine 
 {
-    public IState currentState;
+    public StateBase currentState;
 
     /// <summary>
     ///  状态队列，当有新的状态添加时，添加到状态队列里
     /// </summary>
-    public Queue<IState> StateQueue;
-
-    /// <summary>
-    ///  暂停变量，当为真时，状态机只会进行当前状态的OnUpdate，而不会变化状态
-    /// </summary>
-    public bool isStop;
-
-    // 添加成员变量
-    private DefaultState defaultState;  
+    public Queue<StateBase> StateQueue;
 
     public StateMachine()
     {
-        StateQueue = new Queue<IState>();
-        defaultState = new DefaultState(this);
-        currentState = defaultState;
+        StateQueue = new Queue<StateBase>();
     }
 
     public void Update()
     {
-        if (currentState != null)
+        if(currentState == null && StateQueue.Count > 0)
         {
-            // 执行当前状态的OnUpdate方法
-            currentState.OnUpdate();
-
-            if (isStop) return;
-
-            // 当该状态执行完成，会进入下一个状态
-            if(StateQueue.Count > 0)
+            ChangeState(StateQueue.Dequeue());
+        }
+        else
+        {
+            if(currentState != null)
             {
-                if (currentState.IsLoop) StateQueue.Enqueue(currentState);
-                ChangeState(StateQueue.Dequeue());
-            }
-            else
-            {
-                // 如果没有下一个状态，则直接结束当前状态，回归默认状态
-                currentState = defaultState;
+                switch (currentState.OnUpdate())
+                {
+                    case StateType.Success:
+                        ChangeState(currentState.nextState);
+                        break;
+                    case StateType.Failed:
+                        currentState = null;
+                        break;
+                    case StateType.Doing:
+                        break;
+                    case StateType.Interrupt:
+                        InterruptState();
+                        break;
+
+                }
             }
         }
     }
 
-    public void AddState(IState state)
+    /// <summary>
+    ///  添加新状态，记得禁止再状态机暂停时添加新状态
+    /// </summary>
+    /// <param name="state"></param>
+    public void AddState(StateBase state)
     {
         StateQueue.Enqueue(state);
-        Debug.Log("已经添加状态" + state);
+        // Debug.Log("已经添加状态" + state + "进入队列");
+        //if (Input.GetKeyDown(KeyCode.LeftShift))
+        //{
+        //    StateQueue.Enqueue(state);
+        //    Debug.Log("已经添加状态" + state);
+        //}
+        //Debug.LogWarning("并没有按住Shift");
     }
 
-    public void ChangeState(IState newState)
+    /// <summary>
+    /// 改变当前状态变成 newState
+    /// </summary>
+    /// <param name="newState"></param>
+    public void ChangeState(StateBase newState)
     {
         // 退出当前状态
         if (currentState != null)
@@ -66,23 +77,25 @@ public class StateMachine
 
         // 切换到新状态
         currentState = newState;
-        currentState.OnEnter();
+        if(currentState != null) currentState.OnEnter();
+
+        // Debug.Log("已经切换状态" + newState);
+    }
+
+    /// <summary>
+    /// 中断当前状态
+    /// </summary>
+    /// <param name="newState"></param>
+    public void InterruptState()
+    {
+        // 中断当前状态
+        if (currentState != null)
+        {
+            currentState.OnInterrupt();
+        }
+
+        currentState = null;
     }
 }
 
-public class DefaultState : StateBase
-{
-    public static readonly bool CanLoop = true;
-    public DefaultState(StateMachine machine) : base(machine, CanLoop) { }
-
-    public override void OnEnter()
-    {
-        // Debug.Log("默认状态开始");
-    }
-
-    public override void OnExit()
-    {
-        // Debug.Log("默认状态结束");
-    }
-}
 

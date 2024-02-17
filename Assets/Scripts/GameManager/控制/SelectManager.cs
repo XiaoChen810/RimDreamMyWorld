@@ -81,7 +81,7 @@ public class SelectManager : MonoBehaviour
             if (collider.CompareTag("Character"))
             {
                 // Ö´ÐÐÑ¡ÖÐÂß¼­
-                CharacterLogicController controller = collider.GetComponent<CharacterLogicController>();
+                CharacterMain controller = collider.GetComponent<CharacterMain>();
                 controller.IsSelect = !controller.IsSelect;
             }
         }

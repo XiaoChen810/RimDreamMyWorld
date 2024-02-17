@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using 场景;
+using MyScene;
 
-namespace UI系统
+namespace MyUISystem
 {
     public class StartPanel : PanelBase
     {

@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using UI系统;
+using MyUISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using 地图生成;
+using MyMapGenerate;
 
-namespace 场景
+namespace MyScene
 {
     public class MainScene : SceneBase
     {
         readonly string sceneName = "Main";
-
+        private PanelManager panelManager;
         public override void OnEnter()
         {
             // 加载场景
@@ -18,6 +18,11 @@ namespace 场景
             {
                 SceneManager.LoadScene(sceneName);
                 SceneManager.sceneLoaded += WhenSceneLoaded;
+            }
+            else
+            {
+                panelManager = new PanelManager();
+                // panelManager.AddPanel(new MainPanel());
             }
         }
 
@@ -30,8 +35,10 @@ namespace 场景
 
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            Debug.Log($"{sceneName}场景加载完毕");
+            panelManager = new PanelManager();
+            // panelManager.AddPanel(new MainPanel());
             MapManager.Instance.LoadSceneMap("MainMap");
+            Debug.Log($"{sceneName}场景加载完毕");
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace 建筑系统
+namespace MyBuildingSystem
 {
-    public class FloorBlueprints : BuildingBlueprintBase
+    public class FloorBlueprints : BlueprintBase
     {
         /*  
         *  Placed函数放置到目标点，然后添加到建造队列中
@@ -14,8 +14,7 @@ namespace 建筑系统
         *  Cancel函数用于当取消建造时，删掉蓝图的Object
         */
         public override void Placed()
-        {
-            
+        {          
             // 变成半透明，表示还未完成
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             sr.color = new Color(1, 1, 1, 0.5f);
@@ -26,8 +25,7 @@ namespace 建筑系统
 
         public override void Build(float thisWorkload)
         {           
-            _workloadRemainder -= thisWorkload;
-            Debug.Log("正在建造,剩余" + _workloadRemainder);
+            _workloadAlready -= thisWorkload;
         }
 
 
@@ -41,8 +39,7 @@ namespace 建筑系统
         }
 
         public override void Cancel()
-        {
-            
+        {           
             Destroy(this.gameObject);
             BuildingSystemManager.Instance.CanelTask(this);
         }

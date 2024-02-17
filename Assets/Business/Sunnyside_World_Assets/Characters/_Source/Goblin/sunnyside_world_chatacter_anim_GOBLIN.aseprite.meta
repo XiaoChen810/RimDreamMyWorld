@@ -35,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 16
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -75,8 +75,8 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
-    customPivotPosition: {x: 0.5, y: 0.5}
+    defaultPivotAlignment: 9
+    customPivotPosition: {x: 0.5, y: 0.4}
     spritePadding: 0
     generateModelPrefab: 1
     generateAnimationClips: 1
@@ -87,15 +87,15 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
-    customPivotPosition: {x: 0.5, y: 0.5}
+    defaultPivotAlignment: 9
+    customPivotPosition: {x: 0.5, y: 0.4}
     spritePadding: 0
     generateModelPrefab: 1
     generateAnimationClips: 1
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638410552079333924
+  platformSettingsDirtyTick: 638424173621927155
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,7 +121,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_0
     originalName: 
-    pivot: {x: 0.5, y: -0.8928572}
+    pivot: {x: 0.5, y: 0.021428587}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -141,7 +141,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 938}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_1
     originalName: 
-    pivot: {x: 0.5, y: -0.8928572}
+    pivot: {x: 0.5, y: 0.021428587}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -161,7 +161,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 974}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_2
     originalName: 
-    pivot: {x: 0.4705883, y: -0.9259259}
+    pivot: {x: 0.4705883, y: 0.022222236}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -181,7 +181,7 @@ ScriptedImporter:
     uvTransform: {x: 260, y: 438}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_3
     originalName: 
-    pivot: {x: 0.4705883, y: -0.86206895}
+    pivot: {x: 0.4705883, y: 0.020689668}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -201,7 +201,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 138}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_4
     originalName: 
-    pivot: {x: 0.4705883, y: -0.8928572}
+    pivot: {x: 0.4705883, y: 0.021428587}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -221,7 +221,7 @@ ScriptedImporter:
     uvTransform: {x: 150, y: 138}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_5
     originalName: 
-    pivot: {x: 0.4705883, y: -0.9259259}
+    pivot: {x: 0.4705883, y: 0.022222236}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -241,7 +241,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 527}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_6
     originalName: 
-    pivot: {x: 0.5, y: -0.8928572}
+    pivot: {x: 0.5, y: 0.021428587}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -261,7 +261,7 @@ ScriptedImporter:
     uvTransform: {x: 255, y: 938}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_7
     originalName: 
-    pivot: {x: 0.5, y: -0.8928572}
+    pivot: {x: 0.5, y: 0.021428587}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -281,7 +281,7 @@ ScriptedImporter:
     uvTransform: {x: 255, y: 974}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_8
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -301,7 +301,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 662}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_9
     originalName: 
-    pivot: {x: 0.5, y: -1.7857144}
+    pivot: {x: 0.5, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -321,7 +321,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 917}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_10
     originalName: 
-    pivot: {x: 0.50000006, y: -1.6666667}
+    pivot: {x: 0.50000006, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -341,7 +341,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 180}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_11
     originalName: 
-    pivot: {x: 0.49999994, y: -1.5625}
+    pivot: {x: 0.49999994, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -361,7 +361,7 @@ ScriptedImporter:
     uvTransform: {x: 152, y: 920}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_12
     originalName: 
-    pivot: {x: 0.50000006, y: -1.6666667}
+    pivot: {x: 0.50000006, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -381,7 +381,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 203}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_13
     originalName: 
-    pivot: {x: 0.50000006, y: -1.7857144}
+    pivot: {x: 0.50000006, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -401,7 +401,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 492}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_14
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -421,7 +421,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 685}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_15
     originalName: 
-    pivot: {x: 0.49999997, y: -1.5625}
+    pivot: {x: 0.49999997, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -441,7 +441,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 60}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_16
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -461,7 +461,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 60}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_17
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -481,7 +481,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 84}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_18
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -501,7 +501,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 108}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_19
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -521,7 +521,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 708}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_20
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -541,7 +541,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 731}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_21
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -561,7 +561,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 754}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_22
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -581,7 +581,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 777}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_23
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -601,7 +601,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 800}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_24
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -621,7 +621,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 132}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_25
     originalName: 
-    pivot: {x: 0.33333334, y: -1.2777778}
+    pivot: {x: 0.33333334, y: 0.14444447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -641,7 +641,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 200}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_26
     originalName: 
-    pivot: {x: 0.32142857, y: -1.4117647}
+    pivot: {x: 0.32142857, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -661,7 +661,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 324}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_27
     originalName: 
-    pivot: {x: 0.3, y: -1.1578947}
+    pivot: {x: 0.3, y: 0.1894737}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -681,7 +681,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 585}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_28
     originalName: 
-    pivot: {x: 0.28125, y: -1.1578947}
+    pivot: {x: 0.28125, y: 0.1894737}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -701,7 +701,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 503}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_29
     originalName: 
-    pivot: {x: 0.27272728, y: -1.2777778}
+    pivot: {x: 0.27272728, y: 0.14444447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -721,7 +721,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 530}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_30
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -741,7 +741,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 156}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_31
     originalName: 
-    pivot: {x: 0.61111116, y: -1.4705882}
+    pivot: {x: 0.61111116, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -761,7 +761,7 @@ ScriptedImporter:
     uvTransform: {x: 202, y: 35}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_32
     originalName: 
-    pivot: {x: 0.61111116, y: -1.4705882}
+    pivot: {x: 0.61111116, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -781,7 +781,7 @@ ScriptedImporter:
     uvTransform: {x: 259, y: 752}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_33
     originalName: 
-    pivot: {x: 0.61111116, y: -1.4705882}
+    pivot: {x: 0.61111116, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -801,7 +801,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 204}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_34
     originalName: 
-    pivot: {x: 0.5294118, y: -1.5625}
+    pivot: {x: 0.5294118, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -821,7 +821,7 @@ ScriptedImporter:
     uvTransform: {x: 150, y: 527}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_35
     originalName: 
-    pivot: {x: 0.50000006, y: -1.6666667}
+    pivot: {x: 0.50000006, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -841,7 +841,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 226}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_36
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -861,7 +861,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 350}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_37
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -881,7 +881,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 374}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_38
     originalName: 
-    pivot: {x: 0.49999997, y: -1.5625}
+    pivot: {x: 0.49999997, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -901,7 +901,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 84}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_39
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -921,7 +921,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 398}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_40
     originalName: 
-    pivot: {x: 0.49999997, y: -1.5625}
+    pivot: {x: 0.49999997, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -941,7 +941,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 108}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_41
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -961,7 +961,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 422}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_42
     originalName: 
-    pivot: {x: 0.49999997, y: -1.5625}
+    pivot: {x: 0.49999997, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -981,7 +981,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 132}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_43
     originalName: 
-    pivot: {x: 0.45454556, y: -3}
+    pivot: {x: 0.45454556, y: -0.6727273}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1001,7 +1001,7 @@ ScriptedImporter:
     uvTransform: {x: 156, y: 896}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_44
     originalName: 
-    pivot: {x: 0.45454556, y: -3.4}
+    pivot: {x: 0.45454556, y: -0.84}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1021,7 +1021,7 @@ ScriptedImporter:
     uvTransform: {x: 104, y: 1004}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_45
     originalName: 
-    pivot: {x: 0.45454556, y: -3.3}
+    pivot: {x: 0.45454556, y: -0.73999995}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1041,7 +1041,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 1010}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_46
     originalName: 
-    pivot: {x: 0.45454556, y: -2.0833335}
+    pivot: {x: 0.45454556, y: 0.050000034}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1061,7 +1061,7 @@ ScriptedImporter:
     uvTransform: {x: 156, y: 872}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_47
     originalName: 
-    pivot: {x: 0.42857143, y: -3.5714288}
+    pivot: {x: 0.42857143, y: 0.08571435}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1081,7 +1081,7 @@ ScriptedImporter:
     uvTransform: {x: 255, y: 1010}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_48
     originalName: 
-    pivot: {x: 0.45454556, y: -2.8}
+    pivot: {x: 0.45454556, y: -0.23999996}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1101,7 +1101,7 @@ ScriptedImporter:
     uvTransform: {x: 154, y: 974}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_49
     originalName: 
-    pivot: {x: 0.45454556, y: -2.5}
+    pivot: {x: 0.45454556, y: 0.06000004}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1121,7 +1121,7 @@ ScriptedImporter:
     uvTransform: {x: 156, y: 846}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_50
     originalName: 
-    pivot: {x: 0.45454556, y: -2.5}
+    pivot: {x: 0.45454556, y: 0.06000004}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1141,7 +1141,7 @@ ScriptedImporter:
     uvTransform: {x: 266, y: 612}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_51
     originalName: 
-    pivot: {x: 0.4736842, y: -1.4117647}
+    pivot: {x: 0.4736842, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1161,7 +1161,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 35}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_52
     originalName: 
-    pivot: {x: 0.45000002, y: -1.5625}
+    pivot: {x: 0.45000002, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1181,7 +1181,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 156}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_53
     originalName: 
-    pivot: {x: 0.45000002, y: -1.6666667}
+    pivot: {x: 0.45000002, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1201,7 +1201,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 304}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_54
     originalName: 
-    pivot: {x: 0.45000002, y: -1.6666667}
+    pivot: {x: 0.45000002, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1221,7 +1221,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 327}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_55
     originalName: 
-    pivot: {x: 0.5, y: -1.6666667}
+    pivot: {x: 0.5, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1241,7 +1241,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 823}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_56
     originalName: 
-    pivot: {x: 0.5, y: -1.5}
+    pivot: {x: 0.5, y: 0.100000024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1261,7 +1261,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 446}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_57
     originalName: 
-    pivot: {x: 0.5, y: -1.5}
+    pivot: {x: 0.5, y: 0.100000024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1281,7 +1281,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 470}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_58
     originalName: 
-    pivot: {x: 0.5, y: -1.4117647}
+    pivot: {x: 0.5, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1301,7 +1301,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 229}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_59
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1321,7 +1321,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 494}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_60
     originalName: 
-    pivot: {x: 0.5, y: -1.7857144}
+    pivot: {x: 0.5, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1341,7 +1341,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 939}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_61
     originalName: 
-    pivot: {x: 0.50000006, y: -1.5625}
+    pivot: {x: 0.50000006, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1361,7 +1361,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 869}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_62
     originalName: 
-    pivot: {x: 0.49999994, y: -1.6875}
+    pivot: {x: 0.49999994, y: -0.087499976}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1381,7 +1381,7 @@ ScriptedImporter:
     uvTransform: {x: 152, y: 947}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_63
     originalName: 
-    pivot: {x: 0.50000006, y: -1.5625}
+    pivot: {x: 0.50000006, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1401,7 +1401,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 893}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_64
     originalName: 
-    pivot: {x: 0.50000006, y: -1.923077}
+    pivot: {x: 0.50000006, y: 0.046153877}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1421,7 +1421,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 638}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_65
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1441,7 +1441,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 518}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_66
     originalName: 
-    pivot: {x: 0.49999997, y: -1.6875}
+    pivot: {x: 0.49999997, y: -0.087499976}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1461,7 +1461,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 180}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_67
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1481,7 +1481,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 542}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_68
     originalName: 
-    pivot: {x: 0.50000006, y: -1.7857144}
+    pivot: {x: 0.50000006, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1501,7 +1501,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 514}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_69
     originalName: 
-    pivot: {x: 0.5, y: -1.4705882}
+    pivot: {x: 0.5, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1521,7 +1521,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 254}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_70
     originalName: 
-    pivot: {x: 0.5, y: -1.5294118}
+    pivot: {x: 0.5, y: -0.02352939}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1541,7 +1541,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 279}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_71
     originalName: 
-    pivot: {x: 0.5, y: -1.75}
+    pivot: {x: 0.5, y: -0.14999998}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1561,7 +1561,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 566}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_72
     originalName: 
-    pivot: {x: 0.5, y: -1.9333334}
+    pivot: {x: 0.5, y: -0.22666666}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1581,7 +1581,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 846}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_73
     originalName: 
-    pivot: {x: 0.50000006, y: -1.8000001}
+    pivot: {x: 0.50000006, y: -0.09333331}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1601,7 +1601,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 249}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_74
     originalName: 
-    pivot: {x: 0.5, y: -1.7857144}
+    pivot: {x: 0.5, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1621,7 +1621,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 961}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_75
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1641,7 +1641,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 590}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_76
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1661,7 +1661,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 614}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_77
     originalName: 
-    pivot: {x: 0.375, y: -1.7857144}
+    pivot: {x: 0.375, y: 0.042857174}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1681,7 +1681,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 536}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_78
     originalName: 
-    pivot: {x: 0.43749994, y: -1.6666667}
+    pivot: {x: 0.43749994, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1701,7 +1701,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 272}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_79
     originalName: 
-    pivot: {x: 0.43749994, y: -1.6666667}
+    pivot: {x: 0.43749994, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1721,7 +1721,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 295}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_80
     originalName: 
-    pivot: {x: 0.43749994, y: -1.6666667}
+    pivot: {x: 0.43749994, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1741,7 +1741,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 318}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_81
     originalName: 
-    pivot: {x: 0.43749994, y: -1.6666667}
+    pivot: {x: 0.43749994, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1761,7 +1761,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 341}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_82
     originalName: 
-    pivot: {x: 0.4444445, y: -2.2727273}
+    pivot: {x: 0.4444445, y: 0.054545492}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1781,7 +1781,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 659}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_83
     originalName: 
-    pivot: {x: 0.5, y: -1.923077}
+    pivot: {x: 0.5, y: 0.046153877}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1801,7 +1801,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 387}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_84
     originalName: 
-    pivot: {x: 0.50000006, y: -1.6666667}
+    pivot: {x: 0.50000006, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1821,7 +1821,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 364}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_85
     originalName: 
-    pivot: {x: 0.5, y: -1.5625}
+    pivot: {x: 0.5, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1841,7 +1841,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 638}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_86
     originalName: 
-    pivot: {x: 0.5, y: -1.1904762}
+    pivot: {x: 0.5, y: 0.028571447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1861,7 +1861,7 @@ ScriptedImporter:
     uvTransform: {x: 259, y: 720}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_87
     originalName: 
-    pivot: {x: 0.6, y: -1.1363636}
+    pivot: {x: 0.6, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1881,7 +1881,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 693}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_88
     originalName: 
-    pivot: {x: 0.7307692, y: -1.25}
+    pivot: {x: 0.7307692, y: 0.03000002}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1901,7 +1901,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 813}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_89
     originalName: 
-    pivot: {x: 0.78571427, y: -1.5625}
+    pivot: {x: 0.78571427, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1921,7 +1921,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 620}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_90
     originalName: 
-    pivot: {x: 0.78571427, y: -1.5625}
+    pivot: {x: 0.78571427, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1941,7 +1941,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 644}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_91
     originalName: 
-    pivot: {x: 0.4871795, y: -1}
+    pivot: {x: 0.4871795, y: 0.024000015}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1961,7 +1961,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 129}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_92
     originalName: 
-    pivot: {x: 0.15909089, y: -1.3157895}
+    pivot: {x: 0.15909089, y: 0.03157897}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -1981,7 +1981,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 218}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_93
     originalName: 
-    pivot: {x: 0.16666669, y: -1.1363636}
+    pivot: {x: 0.16666669, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2001,7 +2001,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 4}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_94
     originalName: 
-    pivot: {x: 0.16000001, y: -1.0416667}
+    pivot: {x: 0.16000001, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2021,7 +2021,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 876}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_95
     originalName: 
-    pivot: {x: 0.30769235, y: -1.388889}
+    pivot: {x: 0.30769235, y: 0.033333354}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2041,7 +2041,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 399}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_96
     originalName: 
-    pivot: {x: 0.59090906, y: -1.25}
+    pivot: {x: 0.59090906, y: 0.03000002}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2061,7 +2061,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 723}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_97
     originalName: 
-    pivot: {x: 0.68, y: -1.1904762}
+    pivot: {x: 0.68, y: 0.028571447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2081,7 +2081,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 784}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_98
     originalName: 
-    pivot: {x: 0.75, y: -1.388889}
+    pivot: {x: 0.75, y: 0.033333354}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2101,7 +2101,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 38}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_99
     originalName: 
-    pivot: {x: 0.78571427, y: -1.1578947}
+    pivot: {x: 0.78571427, y: 0.1894737}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2121,7 +2121,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 669}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_100
     originalName: 
-    pivot: {x: 0.78571427, y: -0.95238096}
+    pivot: {x: 0.78571427, y: 0.26666668}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2141,7 +2141,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 556}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_101
     originalName: 
-    pivot: {x: 0.45238096, y: -1}
+    pivot: {x: 0.45238096, y: 0.024000015}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2161,7 +2161,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 64}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_102
     originalName: 
-    pivot: {x: 0.15909089, y: -1.25}
+    pivot: {x: 0.15909089, y: 0.03000002}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2181,7 +2181,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 190}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_103
     originalName: 
-    pivot: {x: 0.16666669, y: -1.1363636}
+    pivot: {x: 0.16666669, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2201,7 +2201,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 34}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_104
     originalName: 
-    pivot: {x: 0.16000001, y: -1.0416667}
+    pivot: {x: 0.16000001, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2221,7 +2221,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 908}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_105
     originalName: 
-    pivot: {x: 0.2758621, y: -1.4705882}
+    pivot: {x: 0.2758621, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2241,7 +2241,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 175}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_106
     originalName: 
-    pivot: {x: 0.5, y: -1.9285715}
+    pivot: {x: 0.5, y: -0.09999998}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2261,7 +2261,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 983}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_107
     originalName: 
-    pivot: {x: 0.5, y: -1.9285715}
+    pivot: {x: 0.5, y: -0.09999998}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2281,7 +2281,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 1005}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_108
     originalName: 
-    pivot: {x: 0.5, y: -2.0769231}
+    pivot: {x: 0.5, y: -0.10769228}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2301,7 +2301,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 408}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_109
     originalName: 
-    pivot: {x: 0.5, y: -2.0769231}
+    pivot: {x: 0.5, y: -0.10769228}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2321,7 +2321,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 429}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_110
     originalName: 
-    pivot: {x: 0.5, y: -2.25}
+    pivot: {x: 0.5, y: -0.11666664}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2341,7 +2341,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 558}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_111
     originalName: 
-    pivot: {x: 0.5, y: -2.25}
+    pivot: {x: 0.5, y: -0.11666664}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2361,7 +2361,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 578}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_112
     originalName: 
-    pivot: {x: 0.5, y: -2.4545455}
+    pivot: {x: 0.5, y: -0.1272727}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2381,7 +2381,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 678}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_113
     originalName: 
-    pivot: {x: 0.5, y: -2.4545455}
+    pivot: {x: 0.5, y: -0.1272727}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2401,7 +2401,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 697}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_114
     originalName: 
-    pivot: {x: 0.5, y: -2.25}
+    pivot: {x: 0.5, y: -0.11666664}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2421,7 +2421,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 598}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_115
     originalName: 
-    pivot: {x: 0.5, y: -2.25}
+    pivot: {x: 0.5, y: -0.11666664}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2441,7 +2441,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 618}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_116
     originalName: 
-    pivot: {x: 0.5, y: -2.0769231}
+    pivot: {x: 0.5, y: -0.10769228}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2461,7 +2461,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 450}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_117
     originalName: 
-    pivot: {x: 0.5, y: -2.0769231}
+    pivot: {x: 0.5, y: -0.10769228}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2481,7 +2481,7 @@ ScriptedImporter:
     uvTransform: {x: 203, y: 471}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_118
     originalName: 
-    pivot: {x: 0.27272728, y: -1.5625}
+    pivot: {x: 0.27272728, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2501,7 +2501,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 1004}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_119
     originalName: 
-    pivot: {x: 0.28125, y: -1.5625}
+    pivot: {x: 0.28125, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2521,7 +2521,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 841}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_120
     originalName: 
-    pivot: {x: 0.29032257, y: -1.5625}
+    pivot: {x: 0.29032257, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2541,7 +2541,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 90}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_121
     originalName: 
-    pivot: {x: 0.33333334, y: -1.5625}
+    pivot: {x: 0.33333334, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2561,7 +2561,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 751}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_122
     originalName: 
-    pivot: {x: 0.39130434, y: -1.5625}
+    pivot: {x: 0.39130434, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2581,7 +2581,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 872}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_123
     originalName: 
-    pivot: {x: 0.7037037, y: -1.5625}
+    pivot: {x: 0.7037037, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2601,7 +2601,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 775}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_124
     originalName: 
-    pivot: {x: 0.7741935, y: -1.5625}
+    pivot: {x: 0.7741935, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2621,7 +2621,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 114}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_125
     originalName: 
-    pivot: {x: 0.81249994, y: -1.5625}
+    pivot: {x: 0.81249994, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2641,7 +2641,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 865}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_126
     originalName: 
-    pivot: {x: 0.8181819, y: -1.5625}
+    pivot: {x: 0.8181819, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2661,7 +2661,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 696}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_127
     originalName: 
-    pivot: {x: 0.81249994, y: -1.5625}
+    pivot: {x: 0.81249994, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2681,7 +2681,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 889}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_128
     originalName: 
-    pivot: {x: 0.8, y: -1.5625}
+    pivot: {x: 0.8, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2701,7 +2701,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 252}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_129
     originalName: 
-    pivot: {x: 0.7931035, y: -1.5625}
+    pivot: {x: 0.7931035, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2721,7 +2721,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 425}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_130
     originalName: 
-    pivot: {x: 0.7931035, y: -1.5625}
+    pivot: {x: 0.7931035, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2741,7 +2741,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 449}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_131
     originalName: 
-    pivot: {x: 0.7666667, y: -1.5625}
+    pivot: {x: 0.7666667, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2761,7 +2761,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 276}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_132
     originalName: 
-    pivot: {x: 0.7666667, y: -1.5625}
+    pivot: {x: 0.7666667, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2781,7 +2781,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 300}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_133
     originalName: 
-    pivot: {x: 0.75, y: -1.0869565}
+    pivot: {x: 0.75, y: 0.026086973}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2801,7 +2801,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 345}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_134
     originalName: 
-    pivot: {x: 0.6666667, y: -0.8333334}
+    pivot: {x: 0.6666667, y: 0.020000014}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2821,7 +2821,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 275}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_135
     originalName: 
-    pivot: {x: 0.33333337, y: -0.9615385}
+    pivot: {x: 0.33333337, y: 0.023076938}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2841,7 +2841,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 4}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_136
     originalName: 
-    pivot: {x: 0.16279069, y: -0.923077}
+    pivot: {x: 0.16279069, y: 0.06153848}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2861,7 +2861,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 940}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_137
     originalName: 
-    pivot: {x: 0.16666669, y: -1.2}
+    pivot: {x: 0.16666669, y: 0.08000002}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2881,7 +2881,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 162}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_138
     originalName: 
-    pivot: {x: 0.13999997, y: -1.1363636}
+    pivot: {x: 0.13999997, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2901,7 +2901,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 974}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_139
     originalName: 
-    pivot: {x: 0.15384617, y: -1.0416667}
+    pivot: {x: 0.15384617, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2921,7 +2921,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 772}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_140
     originalName: 
-    pivot: {x: 0.1875, y: -1.5625}
+    pivot: {x: 0.1875, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2941,7 +2941,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 1002}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_141
     originalName: 
-    pivot: {x: 0.5263157, y: -1.3157895}
+    pivot: {x: 0.5263157, y: 0.03157897}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2961,7 +2961,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 920}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_142
     originalName: 
-    pivot: {x: 0.68, y: -1.1363636}
+    pivot: {x: 0.68, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -2981,7 +2981,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 639}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_143
     originalName: 
-    pivot: {x: 0.7586207, y: -1.3157895}
+    pivot: {x: 0.7586207, y: 0.03157897}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3001,7 +3001,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 612}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_144
     originalName: 
-    pivot: {x: 0.78571427, y: -1.6666667}
+    pivot: {x: 0.78571427, y: 0.04000003}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3021,7 +3021,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 823}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_145
     originalName: 
-    pivot: {x: 0.41025642, y: -0.80645156}
+    pivot: {x: 0.41025642, y: 0.01935485}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3041,7 +3041,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 837}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_146
     originalName: 
-    pivot: {x: 0.13953489, y: -0.7741935}
+    pivot: {x: 0.13953489, y: 0.051612914}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3061,7 +3061,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 733}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_147
     originalName: 
-    pivot: {x: 0.13043478, y: -1.0434783}
+    pivot: {x: 0.13043478, y: 0.06956524}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3081,7 +3081,7 @@ ScriptedImporter:
     uvTransform: {x: 175, y: 4}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_148
     originalName: 
-    pivot: {x: 0.14285712, y: -0.96}
+    pivot: {x: 0.14285712, y: 0.06400001}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3101,7 +3101,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 804}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_149
     originalName: 
-    pivot: {x: 0.34782612, y: -1.5625}
+    pivot: {x: 0.34782612, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3121,7 +3121,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 896}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_150
     originalName: 
-    pivot: {x: 0.5263157, y: -1.3157895}
+    pivot: {x: 0.5263157, y: 0.03157897}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3141,7 +3141,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 947}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_151
     originalName: 
-    pivot: {x: 0.32142857, y: -1.2777778}
+    pivot: {x: 0.32142857, y: 0.14444447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3161,7 +3161,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 64}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_152
     originalName: 
-    pivot: {x: 0.4782609, y: -1.3333334}
+    pivot: {x: 0.4782609, y: 0.08888891}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3181,7 +3181,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 846}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_153
     originalName: 
-    pivot: {x: 0.6315789, y: -1}
+    pivot: {x: 0.6315789, y: 0.066666685}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3201,7 +3201,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 562}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_154
     originalName: 
-    pivot: {x: 0.6818182, y: -1.0416667}
+    pivot: {x: 0.6818182, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3221,7 +3221,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 720}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_155
     originalName: 
-    pivot: {x: 0.71999997, y: -1}
+    pivot: {x: 0.71999997, y: 0.024000015}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3241,7 +3241,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 405}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_156
     originalName: 
-    pivot: {x: 0.5714286, y: -1.1363636}
+    pivot: {x: 0.5714286, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3261,7 +3261,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 497}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_157
     originalName: 
-    pivot: {x: 0.3, y: -1.1904762}
+    pivot: {x: 0.3, y: 0.028571447}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3281,7 +3281,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 376}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_158
     originalName: 
-    pivot: {x: 0.18918915, y: -1.0454546}
+    pivot: {x: 0.18918915, y: 0.11818184}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3301,7 +3301,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 245}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_159
     originalName: 
-    pivot: {x: 0.19512197, y: -0.7083334}
+    pivot: {x: 0.19512197, y: 0.35833335}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3321,7 +3321,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 97}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_160
     originalName: 
-    pivot: {x: 0.2195122, y: -0.17142858}
+    pivot: {x: 0.2195122, y: 0.56}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3341,7 +3341,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 690}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_161
     originalName: 
-    pivot: {x: 0.20930234, y: -0.078947365}
+    pivot: {x: 0.20930234, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3361,7 +3361,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 450}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_162
     originalName: 
-    pivot: {x: 0.20000002, y: -0.078947365}
+    pivot: {x: 0.20000002, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3381,7 +3381,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 404}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_163
     originalName: 
-    pivot: {x: 0.19148937, y: -0.051282052}
+    pivot: {x: 0.19148937, y: 0.6051282}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3401,7 +3401,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 307}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_164
     originalName: 
-    pivot: {x: 0.1875, y: -0.051282052}
+    pivot: {x: 0.1875, y: 0.6051282}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3421,7 +3421,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 214}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_165
     originalName: 
-    pivot: {x: 0.18367347, y: -0.078947365}
+    pivot: {x: 0.18367347, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3441,7 +3441,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 261}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_166
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3461,7 +3461,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 864}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_167
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3481,7 +3481,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 910}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_168
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3501,7 +3501,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 956}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_169
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3521,7 +3521,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 285}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_170
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3541,7 +3541,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 330}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_171
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3561,7 +3561,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 375}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_172
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3581,7 +3581,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 420}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_173
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3601,7 +3601,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 465}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_174
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3621,7 +3621,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 55}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_175
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3641,7 +3641,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 101}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_176
     originalName: 
-    pivot: {x: 0.2439024, y: -0.078947365}
+    pivot: {x: 0.2439024, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3661,7 +3661,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 726}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_177
     originalName: 
-    pivot: {x: 0.2619048, y: -0.078947365}
+    pivot: {x: 0.2619048, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3681,7 +3681,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 588}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_178
     originalName: 
-    pivot: {x: 0.27906978, y: -0.078947365}
+    pivot: {x: 0.27906978, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3701,7 +3701,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 496}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_179
     originalName: 
-    pivot: {x: 0.27906978, y: -0.078947365}
+    pivot: {x: 0.27906978, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3721,7 +3721,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 542}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_180
     originalName: 
-    pivot: {x: 0.2619048, y: -0.078947365}
+    pivot: {x: 0.2619048, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3741,7 +3741,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 634}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_181
     originalName: 
-    pivot: {x: 0.2439024, y: -0.078947365}
+    pivot: {x: 0.2439024, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3761,7 +3761,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 772}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_182
     originalName: 
-    pivot: {x: 0.22500001, y: -0.081081085}
+    pivot: {x: 0.22500001, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3781,7 +3781,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 510}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_183
     originalName: 
-    pivot: {x: 0.20512824, y: -0.081081085}
+    pivot: {x: 0.20512824, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3801,7 +3801,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 555}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_184
     originalName: 
-    pivot: {x: 0.20512824, y: -0.081081085}
+    pivot: {x: 0.20512824, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3821,7 +3821,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 600}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_185
     originalName: 
-    pivot: {x: 0.20512824, y: -0.081081085}
+    pivot: {x: 0.20512824, y: 0.6108108}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3841,7 +3841,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 645}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_186
     originalName: 
-    pivot: {x: 0.20512824, y: -0.078947365}
+    pivot: {x: 0.20512824, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3861,7 +3861,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 193}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_187
     originalName: 
-    pivot: {x: 0.20512824, y: -0.078947365}
+    pivot: {x: 0.20512824, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3881,7 +3881,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 239}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_188
     originalName: 
-    pivot: {x: 0.22500001, y: -0.078947365}
+    pivot: {x: 0.22500001, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3901,7 +3901,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 147}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_189
     originalName: 
-    pivot: {x: 0.2439024, y: -0.078947365}
+    pivot: {x: 0.2439024, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3921,7 +3921,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 818}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_190
     originalName: 
-    pivot: {x: 0.2619048, y: -0.078947365}
+    pivot: {x: 0.2619048, y: 0.5947369}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3941,7 +3941,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 680}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_191
     originalName: 
-    pivot: {x: 0.27906978, y: -0.071428575}
+    pivot: {x: 0.27906978, y: 0.53809524}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3961,7 +3961,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 354}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_192
     originalName: 
-    pivot: {x: 0.26086956, y: -0.09090909}
+    pivot: {x: 0.26086956, y: 0.4909091}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -3981,7 +3981,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 162}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_193
     originalName: 
-    pivot: {x: 0.29411766, y: -0.16666667}
+    pivot: {x: 0.29411766, y: 0.44285715}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4001,7 +4001,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 112}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_194
     originalName: 
-    pivot: {x: 0.29629627, y: -0.18604651}
+    pivot: {x: 0.29629627, y: 0.40930232}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4021,7 +4021,7 @@ ScriptedImporter:
     uvTransform: {x: 63, y: 4}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_195
     originalName: 
-    pivot: {x: 0.23529412, y: -0.13043478}
+    pivot: {x: 0.23529412, y: 0.42608696}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4041,7 +4041,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_196
     originalName: 
-    pivot: {x: 0.18367347, y: -0.108695656}
+    pivot: {x: 0.18367347, y: 0.44782612}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4061,7 +4061,7 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 58}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_197
     originalName: 
-    pivot: {x: 0.3, y: -1.4117647}
+    pivot: {x: 0.3, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4081,7 +4081,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 913}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_198
     originalName: 
-    pivot: {x: 0.42857146, y: -1.5625}
+    pivot: {x: 0.42857146, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4101,7 +4101,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 999}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_199
     originalName: 
-    pivot: {x: 0.47619045, y: -1.4705882}
+    pivot: {x: 0.47619045, y: 0.03529414}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4121,7 +4121,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 974}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_200
     originalName: 
-    pivot: {x: 0.35999998, y: -1.3333334}
+    pivot: {x: 0.35999998, y: 0.08888891}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4141,7 +4141,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 594}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_201
     originalName: 
-    pivot: {x: 0.30769235, y: -1.4117647}
+    pivot: {x: 0.30769235, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4161,7 +4161,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 668}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_202
     originalName: 
-    pivot: {x: 0.29629633, y: -1.5}
+    pivot: {x: 0.29629633, y: 0.100000024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4181,7 +4181,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 799}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_203
     originalName: 
-    pivot: {x: 0.32142857, y: -1.4117647}
+    pivot: {x: 0.32142857, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4201,7 +4201,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 349}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_204
     originalName: 
-    pivot: {x: 0.32142857, y: -1.4117647}
+    pivot: {x: 0.32142857, y: 0.09411767}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4221,7 +4221,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 374}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_205
     originalName: 
-    pivot: {x: 0.37037033, y: -1.388889}
+    pivot: {x: 0.37037033, y: 0.033333354}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4241,7 +4241,7 @@ ScriptedImporter:
     uvTransform: {x: 125, y: 226}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_206
     originalName: 
-    pivot: {x: 0.3928572, y: -1.0416667}
+    pivot: {x: 0.3928572, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4261,7 +4261,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 313}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_207
     originalName: 
-    pivot: {x: 0.5217391, y: -0.9259259}
+    pivot: {x: 0.5217391, y: 0.022222236}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4281,7 +4281,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 438}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_208
     originalName: 
-    pivot: {x: 0.59090906, y: -1.0416667}
+    pivot: {x: 0.59090906, y: 0.025000017}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4301,7 +4301,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 752}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_209
     originalName: 
-    pivot: {x: 0.50000006, y: -1.1363636}
+    pivot: {x: 0.50000006, y: 0.027272746}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -4321,7 +4321,7 @@ ScriptedImporter:
     uvTransform: {x: 229, y: 473}
   - name: sunnyside_world_chatacter_anim_GOBLIN_Frame_210
     originalName: 
-    pivot: {x: 0.48275867, y: -1.5625}
+    pivot: {x: 0.48275867, y: 0.037500024}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:

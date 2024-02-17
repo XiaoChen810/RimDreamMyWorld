@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI系统
+namespace MyUISystem
 {
     /// <summary>
     /// 管理面板的
@@ -19,6 +19,10 @@ namespace UI系统
             _manager = new UIManager();
         }
 
+        /// <summary>
+        ///  添加新面板，暂停原先顶层的面板，把新面板压入栈
+        /// </summary>
+        /// <param name="nextPanel"></param>
         public void AddPanel(PanelBase nextPanel)
         {
             if(_panelsStack.Count > 0)
@@ -41,18 +45,22 @@ namespace UI系统
             nextPanel.OnEnter();
         }
 
-        public void RemovePanel(PanelBase nextPanel)
+        /// <summary>
+        /// 移除面板( 仅限顶层面板 )，然后恢复下一个面板
+        /// </summary>
+        /// <param name="removedPanel"></param>
+        public void RemovePanel(PanelBase removedPanel)
         {
             // 移除顶点面板
             if(_panelsStack.Count > 0)
             {
-                if( _panelsStack.Peek() == nextPanel)
+                if( _panelsStack.Peek() == removedPanel)
                 {
-                    _panelsStack.Peek().OnExit();
+                    _panelsStack.Pop().OnExit();
                 }
                 else
                 {
-                    Debug.Log($"当前顶层UI不是{nextPanel.UIType.Name}");
+                    Debug.Log($"当前顶层UI不是{removedPanel.UIType.Name}");
                 }
             }
             // 移除后将下一个面板接触暂停

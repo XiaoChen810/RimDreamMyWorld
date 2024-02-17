@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e26f88b41b3c3409fec8a9b2881016, type: 3}
+  m_Name: "\u6728\u5899_BlueprintData"
+  m_EditorClassIdentifier: 
+  Name: "\u6728\u5899"
+  Type: 1
+  BuildingWidth: 1
+  BuildingHeight: 1
+  Workload: 25
+  PreviewSprite: {fileID: -137808568, guid: babd89580c43728438b90485b1e9f689, type: 3}
+  Stackable: 0
+  Prefab: {fileID: 3029701700775518174, guid: 12b81951b48d6fc41a6f722bc9325112, type: 3}
+  TileBase: {fileID: 11400000, guid: 26fb8ba0cafb2ee4d80ab21085bfdfb1, type: 2}

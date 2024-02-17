@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using UI系统;
+using MyUISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace 场景
+namespace MyScene
 {
     public class StartScene : SceneBase
     {
         readonly string sceneName = "Start";
-        PanelManager panelManager;
+        private PanelManager panelManager;
         public override void OnEnter()
         {
             // 加载场景
@@ -18,8 +18,12 @@ namespace 场景
                 SceneManager.LoadScene(sceneName);
                 SceneManager.sceneLoaded += WhenSceneLoaded;
             }
-            panelManager = new PanelManager();
-            panelManager.AddPanel(new StartPanel());
+            else
+            {
+                panelManager = new PanelManager();
+                panelManager.AddPanel(new StartPanel());
+            }
+
         }
 
 

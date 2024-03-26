@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using MyUISystem;
 using UnityEngine;
-using MyMapGenerate;
+using ChenChen_MapGenerator;
 using MyScene;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonMono<GameManager>
 {
-    public static GameManager Instance;
-
     public SceneSystem SceneSystem {  get; private set; }
 
     public PanelManager PanelManager { get; private set; }
@@ -21,17 +19,10 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-            Init();
-        }
+        base.Awake();
+        Init();
     }
 
     private void Init()
@@ -75,14 +66,15 @@ public class GameManager : MonoBehaviour
 
     public void 生成一个基础小人()
     {
-        Vector3 createPos = new Vector3(20f, 15f, 0f);
+        Vector3 createPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
         GameObject newCharacter = Instantiate(CharacterTest, createPos, Quaternion.identity);
         CharactersList.Add(newCharacter);   
     }
 
     public void 在周围生成一个敌人()
     {
-        Vector3 createPos = new Vector3(20f + Random.Range(15, 20), 15f + Random.Range(5, 10), 0f);
+        Vector3 createPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+        createPos += new Vector3(Random.Range(15, 20), Random.Range(15, 20));
         GameObject newEnemy = Instantiate(GoblinPrefab, createPos, Quaternion.identity);
         EnemyList.Add(newEnemy);
     }

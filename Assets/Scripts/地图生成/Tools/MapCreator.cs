@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.WSA;
 
-namespace MyMapGenerate
+
+namespace ChenChen_MapGenerator
 {
     public class MapCreator : MonoBehaviour
     {
@@ -14,53 +14,14 @@ namespace MyMapGenerate
         public TileBase mainMapDefaultTileBase;
         public Tilemap leavesMap;
         public float lacunarrty;
+        public GameObject mapPrefab;
+
+        // 生成地图时用到的全局数据
         private int _mapWidth;
         private int _mapHeight;
+        private MapNode[,] _mapNodes;
+        private SceneMapData _mapData;
 
-        /// <summary>
-        /// 瓦片的数据
-        /// </summary>
-        public class TileData
-        {
-            public TileData(int x, int y, float noiseValue)
-            {
-                this.x = x; this.y = y;
-                this.noiseValue = noiseValue;
-                this.walkAble = true;
-            }
-
-            // 位置
-            public int x;
-            public int y;
-            // 噪声值
-            public float noiseValue;
-            // 瓦片类型
-            public enum Type
-            {
-                none, grass, water, ground, mountain
-            }
-            public Type type = Type.none;
-            // 附属的瓦片地图
-            public Tilemap loadingTilemap;
-            // 人物能否走在上面
-            public bool walkAble;
-        }
-        private TileData[,] _mapData;
-        /// <summary>
-        /// 储存地形数据的结构体
-        /// </summary>
-        [System.Serializable]
-        public struct TerrainData
-        {
-            [Range(0, 1f)]
-            public float probability;
-
-            public TileBase tile;
-
-            public TileData.Type type;
-
-            public Tilemap loadingTilemap;
-        }
         [Header("地形数据")]
         [SerializeField] private List<TerrainData> _terrainList;
 
@@ -70,24 +31,8 @@ namespace MyMapGenerate
         public float leavesProbability;
         [SerializeField] private List<TileBase> _leavesTileBaseList = new List<TileBase>();
 
-        /// <summary>
-        /// 物体数据,树木,房子等
-        /// </summary>
-        [System.Serializable]
-        public struct ItemData
-        {
-            public string name;
-            [Range(0, 1f)] public float probability;
-            public int number;
-            public bool useNumber;
-            public GameObject prefab;
-            public TileData.Type environment;
-            public Vector3 offset;
-            public int height;
-            public int width;
-            public int priority;
-        }
-        [Header("物体数据")]
+
+        [Header("生成物体列表")]
         [SerializeField] private List<ItemData> _itemList;
 
         /// <summary>
@@ -102,22 +47,23 @@ namespace MyMapGenerate
         /// <param name="height"></param>
         /// <param name="seed"></param>
         /// <returns></returns>
-        public TileData[,] GenerateMap(int width, int height, int seed)
+        public SceneMapData GenerateMap(int width, int height,SceneMapData mapData)
         {
             transform.Find("当前地图").gameObject.SetActive(true);
 
-            _mapData = new TileData[width, height];
             _mapWidth = width;
             _mapHeight = height;
-            Random.InitState(seed);
+            Random.InitState(mapData.seed);
+            _mapNodes = new MapNode[width, height];
+            _mapData = mapData;
 
-            InitMapData();
+            InitMapNode();
 
             // 检查地图数据
             Check();
 
             // 根据地图数据生成瓦片
-            SetTileWalkable();
+            // SetTileWalkable();
             GenerateTileMap();
 
             // 生成花草
@@ -132,6 +78,8 @@ namespace MyMapGenerate
             }
 
             transform.Find("当前地图").gameObject.SetActive(false);
+            _mapData.mapNodes = _mapNodes;
+
             return _mapData;
         }
 
@@ -163,7 +111,7 @@ namespace MyMapGenerate
         /// <summary>
         /// 设置地图噪声值，生成对应的TileData，然后根据噪声值确定瓦片类型
         /// </summary>
-        private void InitMapData()
+        private void InitMapNode()
         {
             float randomOffset = Random.Range(-1000, 1000);
 
@@ -176,7 +124,7 @@ namespace MyMapGenerate
                 {
                     float nosieValue = Mathf.PerlinNoise(x * lacunarrty + randomOffset, y * lacunarrty + randomOffset);
 
-                    _mapData[x, y] = new TileData(x, y, nosieValue);
+                    _mapNodes[x, y] = new MapNode(x, y, nosieValue);
 
                     if (nosieValue < minValue) minValue = nosieValue;
                     if (nosieValue > maxValue) maxValue = nosieValue;
@@ -187,13 +135,13 @@ namespace MyMapGenerate
             {
                 for (int x = 0; x < _mapWidth; x++)
                 {
-                    _mapData[x, y].noiseValue = Mathf.Lerp(minValue, maxValue, _mapData[x, y].noiseValue);
+                    _mapNodes[x, y].noiseValue = Mathf.Lerp(minValue, maxValue, _mapNodes[x, y].noiseValue);
                     foreach (var t in _terrainList)
                     {
-                        if (_mapData[x, y].noiseValue <= t.probability)
+                        if (_mapNodes[x, y].noiseValue <= t.probability)
                         {
-                            _mapData[x, y].type = t.type;
-                            _mapData[x, y].loadingTilemap = t.loadingTilemap;
+                            _mapNodes[x, y].type = t.type;
+                            _mapNodes[x, y].loadingTilemap = t.loadingTilemap;
                             break;
                         }
                     }
@@ -201,22 +149,22 @@ namespace MyMapGenerate
             }
         }
 
-        /// <summary>
-        /// 设置人物能否在这种瓦片上通行
-        /// </summary>
-        private void SetTileWalkable()
-        {
-            for (int x = 0; x < _mapWidth; x++)
-            {
-                for (int y = 0; y < _mapHeight; y++)
-                {
-                    if (_mapData[x, y].type == TileData.Type.water)
-                    {
-                        _mapData[x, y].walkAble = false;
-                    }
-                }
-            }
-        }
+        ///// <summary>
+        ///// 设置人物能否在这种瓦片上通行
+        ///// </summary>
+        //private void SetTileWalkable()
+        //{
+        //    for (int x = 0; x < _mapWidth; x++)
+        //    {
+        //        for (int y = 0; y < _mapHeight; y++)
+        //        {
+        //            if (_mapData[x, y].type == MapNode.Type.water)
+        //            {
+        //                _mapData[x, y].noObstacles = false;
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 最终的生成瓦片地图，给对应的地图设置瓦片
@@ -234,7 +182,7 @@ namespace MyMapGenerate
 
                     if (tile != null)
                     {
-                        _mapData[x, y].loadingTilemap.SetTile(new Vector3Int(x, y), tile);
+                        _mapNodes[x, y].loadingTilemap.SetTile(new Vector3Int(x, y), tile);
                     }
                 }
             }
@@ -247,10 +195,10 @@ namespace MyMapGenerate
         {
             // 统计有多少块草地
             int count = 0;
-            List<TileData> theGrassTile = new List<TileData>();
-            foreach (var md in _mapData)
+            List<MapNode> theGrassTile = new List<MapNode>();
+            foreach (var md in _mapNodes)
             {
-                if (md.type == TileData.Type.grass)
+                if (md.type == MapNode.Type.grass)
                 {
                     theGrassTile.Add(md);
                     count++;
@@ -275,29 +223,8 @@ namespace MyMapGenerate
             ItemData item = _itemList.FirstOrDefault(it => it.name == itemName);
             if (item.prefab != null)
             {
-                List<TileData> theEnvironmentTile = GetEnvironmentTileList(item);
-
-                // 计算是否满足空间
-                List<TileData> empty = new List<TileData>();
-
-                for (int x = 0; x < _mapWidth - item.width + 1; x++)
-                {
-                    for (int y = 0; y < _mapHeight - item.height + 1; y++)
-                    {
-                        if (theEnvironmentTile.Contains(_mapData[x, y]))
-                        {
-                            int temp = IsSpaceAvailable(x, y, item);
-                            if (temp == -1)
-                            {
-                                empty.Add(_mapData[x, y]);
-                            }
-                            else
-                            {
-                                y = temp;
-                            }
-                        }
-                    }
-                }
+                List<MapNode> theEnvironmentTile = GetEnvironmentTileList(item);
+                List<MapNode> empty = new(theEnvironmentTile);
 
                 // 生成
                 if (item.useNumber)
@@ -309,7 +236,7 @@ namespace MyMapGenerate
                     Create(item, empty, empty.Count * item.probability);
                 }
 
-                void Create(ItemData item, List<TileData> empty, float number)
+                void Create(ItemData item, List<MapNode> empty, float number)
                 {
                     GameObject parentObject = _environmentObject;
                     GameObject environmentObjs = new GameObject(item.name);
@@ -329,7 +256,7 @@ namespace MyMapGenerate
                         {
                             for (int y = tilePos.y - item.height / 2; y <= tilePos.y + item.height / 2; y++)
                             {
-                                if (_mapData[x, y].walkAble == false)
+                                if (_mapData.obstaclesPositionList.Contains(new Vector3(x,y)))
                                 {
                                     flag = false;
                                     break;
@@ -343,10 +270,10 @@ namespace MyMapGenerate
                             {
                                 for (int y = tilePos.y - item.height / 2; y <= tilePos.y + item.height / 2; y++)
                                 {
-                                    _mapData[x, y].walkAble = false;
-                                    if (empty.Contains(_mapData[x, y]))
+                                    _mapData.obstaclesPositionList.Add(new Vector3(x,y));
+                                    if (empty.Contains(_mapNodes[x, y]))
                                     {
-                                        empty.Remove(_mapData[x, y]);
+                                        empty.Remove(_mapNodes[x, y]);
                                     }
                                 }
                             }
@@ -358,37 +285,23 @@ namespace MyMapGenerate
 
                     }
                 }
-                List<TileData> GetEnvironmentTileList(ItemData item)
+                List<MapNode> GetEnvironmentTileList(ItemData item)
                 {
-                    List<TileData> theEnvironmentTile = new List<TileData>();
+                    List<MapNode> theEnvironmentTile = new List<MapNode>();
 
                     for (int x = 0; x < _mapWidth; x++)
                     {
                         for (int y = 0; y < _mapHeight; y++)
                         {
-                            if (_mapData[x, y].type == item.environment && CalculatNeighborGrass(x, y, TileData.Type.water) <= 0 && _mapData[x, y].walkAble)
+                            if (_mapNodes[x, y].type == item.environment && CalculatNeighborGrass(x, y, MapNode.Type.water) <= 0 
+                                && !_mapData.obstaclesPositionList.Contains(new Vector3(x, y)))
                             {
-                                theEnvironmentTile.Add(_mapData[x, y]);
+                                theEnvironmentTile.Add(_mapNodes[x, y]);
                             }
                         }
                     }
 
                     return theEnvironmentTile;
-                }
-                int IsSpaceAvailable(int startX, int startY, ItemData item)
-                {
-                    for (int x = startX - item.width / 2; x < startX + item.width / 2; x++)
-                    {
-                        for (int y = startY - item.height / 2; y < startY + item.height / 2; y++)
-                        {
-                            if (_mapData[x, y].walkAble == false && _mapData[x, y].type != item.environment)
-                            {
-                                return y;
-                            }
-                        }
-                    }
-
-                    return -1; // 如果满足条件
                 }
             }
         }
@@ -397,7 +310,7 @@ namespace MyMapGenerate
         {
             foreach (var t in _terrainList)
             {
-                if (t.type == _mapData[x, y].type) return t.tile;
+                if (t.type == _mapNodes[x, y].type) return t.tile;
             }
             return null;
         }
@@ -419,9 +332,9 @@ namespace MyMapGenerate
                 {
                     for (int y = 0; y < _mapHeight; y++)
                     {
-                        if (!CheckTileMapDataIndividual(x, y, TileData.Type.water, TileData.Type.none)) flag = false;
-                        if (!CheckTileMapDataIndividual(x, y, TileData.Type.ground, TileData.Type.none)) flag = false;
-                        if (!CheckTileMapDataOutline(x, y, TileData.Type.ground, TileData.Type.water, TileData.Type.none)) flag = false;
+                        if (!CheckTileMapDataIndividual(x, y, MapNode.Type.water, MapNode.Type.none)) flag = false;
+                        if (!CheckTileMapDataIndividual(x, y, MapNode.Type.ground, MapNode.Type.none)) flag = false;
+                        if (!CheckTileMapDataOutline(x, y, MapNode.Type.ground, MapNode.Type.water, MapNode.Type.none)) flag = false;
                     }
                 }
                 if (flag)
@@ -438,33 +351,33 @@ namespace MyMapGenerate
         /// </summary>
         /// <param name="check"></param>
         /// <param name="substitute"></param>
-        private bool CheckTileMapDataIndividual(int x, int y, TileData.Type check, TileData.Type substitute)
+        private bool CheckTileMapDataIndividual(int x, int y, MapNode.Type check, MapNode.Type substitute)
         {
 
-            if (_mapData[x, y].type == check)
+            if (_mapNodes[x, y].type == check)
             {
                 int count = CalculatNeighborGrass(x, y, check);
 
                 if (count <= 1)
                 {
-                    _mapData[x, y].type = substitute;
+                    _mapNodes[x, y].type = substitute;
                     return false;
                 }
 
                 if (count == 2)
                 {
                     // 计数为2且是只有上下两格
-                    if (y < _mapHeight - 1 && _mapData[x, y + 1].type == check &&
-                    y > 1 && _mapData[x, y - 1].type == check)
+                    if (y < _mapHeight - 1 && _mapNodes[x, y + 1].type == check &&
+                    y > 1 && _mapNodes[x, y - 1].type == check)
                     {
-                        _mapData[x, y].type = substitute;
+                        _mapNodes[x, y].type = substitute;
                         return false;
                     }
                     // 计数为2且是只有左右两格
-                    if (x < _mapWidth - 1 && _mapData[x + 1, y].type == check &&
-                     x > 1 && _mapData[x - 1, y].type == check)
+                    if (x < _mapWidth - 1 && _mapNodes[x + 1, y].type == check &&
+                     x > 1 && _mapNodes[x - 1, y].type == check)
                     {
-                        _mapData[x, y].type = substitute;
+                        _mapNodes[x, y].type = substitute;
                         return false;
                     }
                 }
@@ -483,29 +396,29 @@ namespace MyMapGenerate
         /// <param name="cannot"></param>
         /// <param name="substitute"></param>
         /// <returns></returns>
-        private bool CheckTileMapDataOutline(int x, int y, TileData.Type check, TileData.Type cannot, TileData.Type substitute)
+        private bool CheckTileMapDataOutline(int x, int y, MapNode.Type check, MapNode.Type cannot, MapNode.Type substitute)
         {
 
-            if (_mapData[x, y].type == check)
+            if (_mapNodes[x, y].type == check)
             {
                 int count = CalculatNeighborGrass(x, y, cannot);
 
                 if (count > 0)
                 {
-                    _mapData[x, y].type = substitute;
+                    _mapNodes[x, y].type = substitute;
                     return false;
                 }
             }
             return true;
         }
 
-        private int CalculatNeighborGrass(int x, int y, TileData.Type check)
+        private int CalculatNeighborGrass(int x, int y, MapNode.Type check)
         {
             int count = 0;
-            if (y < _mapHeight - 1 && _mapData[x, y + 1].type == check) { count++; }
-            if (y > 1 && _mapData[x, y - 1].type == check) { count++; }
-            if (x < _mapWidth - 1 && _mapData[x + 1, y].type == check) { count++; }
-            if (x > 1 && _mapData[x - 1, y].type == check) { count++; }
+            if (y < _mapHeight - 1 && _mapNodes[x, y + 1].type == check) { count++; }
+            if (y > 1 && _mapNodes[x, y - 1].type == check) { count++; }
+            if (x < _mapWidth - 1 && _mapNodes[x + 1, y].type == check) { count++; }
+            if (x > 1 && _mapNodes[x - 1, y].type == check) { count++; }
             return count;
         }
 

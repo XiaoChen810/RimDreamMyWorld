@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StateBase : IState
 {
     protected StateMachine _stateMachine { get; private set; }
 
-    public StateBase nextState {  get; private set; } 
+    public StateBase nextState {  get; private set; }
 
-    public StateBase(StateMachine machine,StateBase next)
+    public bool IsSuccess;
+    public bool IsError;
+
+    public StateBase(StateMachine machine,StateBase next = null)
     {
         this._stateMachine = machine;
         this.nextState = next;
@@ -16,7 +17,7 @@ public abstract class StateBase : IState
 
     public virtual void OnEnter()
     {
-
+        IsSuccess = true;
     }
 
     public virtual void OnExit()
@@ -26,9 +27,11 @@ public abstract class StateBase : IState
 
     public virtual StateType OnUpdate()
     {
-        // 运行
+        return StateType.Success;
+    }
 
-        // 当达到某条件时结束或暂停
+    public virtual StateType OnFixedUpdate()
+    {
         return StateType.Success;
     }
 

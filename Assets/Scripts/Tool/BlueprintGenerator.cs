@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using MyBuildingSystem;
+using ChenChen_BuildingSystem;
 
 public class BlueprintGenerator
 {
@@ -11,15 +11,12 @@ public class BlueprintGenerator
     public string blueprintName;
     [Header("类型")]
     public BlueprintType blueprintType;
-    [Header("长宽")]
-    public int blueprintWidth;
-    public int blueprintHeight;
     [Header("工作量")]
     public int blueprintWorkload;
     [Header("预览图")]
     public Sprite blueprintPreviewSprite;
-    [Header("是否可以在上方继续放东西")]
-    public bool blueprintStackable;
+    [Header("是否是障碍物")]
+    public bool blueprintIsObstacle;
     [Header("最后生成的瓦片")]
     public TileBase blueprintTileBase;
 
@@ -53,11 +50,9 @@ public class BlueprintGenerator
         // 设置基本信息
         blueprintData.Name = blueprintName;
         blueprintData.Type = blueprintType;
-        blueprintData.BuildingWidth = blueprintWidth;
-        blueprintData.BuildingHeight = blueprintHeight;
         blueprintData.Workload = blueprintWorkload;
         blueprintData.PreviewSprite = blueprintPreviewSprite;
-        blueprintData.Stackable = blueprintStackable;
+        blueprintData.IsObstacle = blueprintIsObstacle;
         blueprintData.TileBase = blueprintTileBase == null ? null : blueprintTileBase;
 
         // 创建文件夹
@@ -68,7 +63,7 @@ public class BlueprintGenerator
         string blueprintDataPath = $"{folderPath}/{blueprintName}_BlueprintData.asset";
         AssetDatabase.CreateAsset(blueprintData, blueprintDataPath);
 
-        CreateBlueprintPrefab<DefaultBlueprint>(blueprintName, blueprintData);
+        CreateBlueprintPrefab<Building>(blueprintName, blueprintData);
 
         CreateScript(folderPath);
 
@@ -97,7 +92,7 @@ public class BlueprintGenerator
                 boxCollider.isTrigger = true;
                 // 添加对应的蓝图基类
                 BlueprintBase blueprintBase = prefab.AddComponent<T>();
-                blueprintBase._BlueprintData = data;
+                blueprintBase.Data = data;
                 // 设置路径，保存为预制件
                 PrefabUtility.SaveAsPrefabAsset(prefab, $"{folderPath}/{blueprintName}_Prefab.prefab");
                 // 销毁临时预制件对象
@@ -116,30 +111,11 @@ public class BlueprintGenerator
             // 生成脚本的内容
             string scriptContent = $@"
 using UnityEngine;
-using 建筑系统;
-
-public class {blueprintName}_Script : BlueprintBase
+namespace ChenChen_BuildingSystem
 {{
-    protected override void OnEnable()
+    public class {blueprintName}_Script : Building
     {{
-        base.OnEnable();
-        Debug.LogError(""未设置正确的代码"");
-    }}
 
-    public override void Build(float thisWorkload)
-    {{
-    }}
-
-    public override void Cancel()
-    {{
-    }}
-
-    public override void Complete()
-    {{
-    }}
-
-    public override void Placed()
-    {{
     }}
 }}";
 

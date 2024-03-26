@@ -1,96 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-namespace MyMapGenerate
+namespace ChenChen_MapGenerator
 {
     public class PathFinder
     {
-        /// <summary>
-        ///  寻路算法的节点，要给出<see langword="bool"/> walkable 判断是否可以通行
-        /// </summary>
-        public class Node
-        {
-            public int cols, rows;
-            public float Fcost, Gcost, Hcost;
-            public Node father;
-            public bool walkable;
-
-            public Node(int x, int y, bool walkable)
-            {
-                this.cols = x;
-                this.rows = y;
-                this.walkable = walkable;
-            }
-        }
-
-        // 开启列表和关闭列表
-        //private List<Node> openSet;
-        //private List<Node> closeSet;
-
-        private HashSet<Node> openSet;
-        private HashSet<Node> closeSet;
-        private HashSet<Node> visited;
-
+        private HashSet<FinderNode> openSet;
+        private HashSet<FinderNode> closeSet;
 
         // 地图宽高
-        int mapWidth;
-        int mapHeight;
-
-        // 格子总长
-        int gridWidth;
-        int gridHeight;
-
-        // 单位网格数量
-        int numberUnitGrid;
+        private int mapWidth;
+        private int mapHeight;
 
         // 偏移量
-        float offset;
+        private float offset;
 
         // 全局的节点列表
-        Node[,] nodes;
+        private FinderNode[,] nodes;
 
-        public PathFinder(int mapWidth, int mapHeight, int numberUnitGrid)
+        public PathFinder(int mapWidth, int mapHeight)
         {
             this.mapWidth = mapWidth;
             this.mapHeight = mapHeight;
-            this.numberUnitGrid = numberUnitGrid;
-            this.gridWidth = mapWidth * numberUnitGrid;
-            this.gridHeight = mapHeight * numberUnitGrid;
-            offset = 1 / numberUnitGrid * 0.5f;
-            openSet = new HashSet<Node>();
-            closeSet = new HashSet<Node>();
+            offset = 0.5f;
+            openSet = new HashSet<FinderNode>();
+            closeSet = new HashSet<FinderNode>();
         }
 
         #region Public
 
         /// <summary>
-        ///  初始化一个节点列表
+        ///  初始化节点列表
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="numberUnitGrid"></param>
         /// <returns></returns>
-        public Node[,] InitNodes(int width, int height, int numberUnitGrid, MapCreator.TileData[,] mapTileDatas)
+        public SceneMapData InitNodes(int width, int height, SceneMapData mapData)
         {
-            Node[,] nodes = new Node[width * numberUnitGrid, height * numberUnitGrid];
+            FinderNode[,] nodes = new FinderNode[width, height];
 
-            for (int i = 0; i < width * numberUnitGrid; i++)
+            for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height * numberUnitGrid; j++)
+                for (int j = 0; j < height; j++)
                 {
                     bool set = true;
-                    if(mapTileDatas[i / numberUnitGrid, j / numberUnitGrid].type == MapCreator.TileData.Type.water)
+
+                    // 各种判断条件
+                    if(mapData.mapNodes[i, j ].type == MapNode.Type.water)
                         set = false;
-                    if(mapTileDatas[i / numberUnitGrid, j / numberUnitGrid].walkAble == false)
+                    if(mapData.obstaclesPositionList.Contains(new Vector3(i,j)))
                         set = false;
-                    nodes[i, j] = new Node(i, j, set);
+
+                    // 设置
+                    nodes[i, j] = new FinderNode(i, j, set);
                 }
             }
 
-            return nodes;
+            mapData.finderNodes = nodes;
+            return mapData;
         }
 
         /// <summary>
@@ -100,13 +69,13 @@ namespace MyMapGenerate
         /// <param name="targetPos"></param>
         /// <param name="mapName"></param>
         /// <returns></returns>
-        public List<Vector2> FindPath(Vector3 startPos, Vector3 targetPos, Node[,] mapNodes)
+        public List<Vector2> FindPath(Vector3 startPos, Vector3 targetPos, FinderNode[,] mapNodes)
         {
             nodes = mapNodes;
 
             // 从位置转换成节点信息
-            Node startNode = TransfromVectorToNode(startPos);
-            Node endNode = TransfromVectorToNode(targetPos);
+            FinderNode startNode = TransfromVectorToNode(startPos);
+            FinderNode endNode = TransfromVectorToNode(targetPos);
 
             // 判断是否可行
             if (endNode == null || endNode.walkable != true)
@@ -128,7 +97,7 @@ namespace MyMapGenerate
             while (openSet.Count > 0)
             {
                 // 寻找最小代价的节点
-                Node currentNode = null;
+                FinderNode currentNode = null;
 
                 foreach (var node in openSet)
                 {
@@ -150,7 +119,7 @@ namespace MyMapGenerate
                     while (endNode.father != null)
                     {
 
-                        Vector2 wayPoint = new Vector2(endNode.cols / numberUnitGrid, endNode.rows / numberUnitGrid)
+                        Vector2 wayPoint = new Vector2(endNode.cols , endNode.rows)
                             + new Vector2(offset, offset);
                         rawPath.Add(wayPoint);
                         endNode = endNode.father;
@@ -205,16 +174,14 @@ namespace MyMapGenerate
         }
 
         /// <summary>
-        /// 设置寻路节点是否可以通行 
+        /// 设置某个节点是否可以通行 
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="pos"></param>
         /// <param name="set"></param>
-        public void SetNodeWalkable(Node[,] nodes, Vector3Int pos, bool set = false)
+        public void SetNodeWalkable(FinderNode[,] nodes, Vector3Int pos, bool set = false)
         {
-            int x = pos.x * numberUnitGrid;
-            int y = pos.y * numberUnitGrid;
-            nodes[x, y].walkable = set;
+            nodes[pos.x, pos.y].walkable = set;
         }
 
 
@@ -222,29 +189,29 @@ namespace MyMapGenerate
 
         #region AStar
 
-        private Node TransfromVectorToNode(Vector3 pos)
+        private FinderNode TransfromVectorToNode(Vector3 pos)
         {
             // 判断范围 
             if (pos.x < 0 || pos.x >= mapWidth) return null;
             if (pos.y < 0 || pos.y >= mapHeight) return null;
 
-            int x = Mathf.FloorToInt(pos.x * numberUnitGrid);
-            int y = Mathf.FloorToInt(pos.y * numberUnitGrid);
+            int x = Mathf.FloorToInt(pos.x);
+            int y = Mathf.FloorToInt(pos.y);
 
-            if (x < 0 || x >= gridWidth) return null;
-            if (y < 0 || y >= gridHeight) return null;
+            if (x < 0 || x >= mapWidth) return null;
+            if (y < 0 || y >= mapHeight) return null;
 
             return nodes[x, y];
         }
 
-        private float GetDistance(Node a, Node b)
+        private float GetDistance(FinderNode a, FinderNode b)
         {
             float result;
             result = Mathf.Abs(a.cols - b.cols) + Mathf.Abs(a.rows - b.rows);
             return result;
         }
 
-        private void FindNeighborNodeEight(Node start, Node end)
+        private void FindNeighborNodeEight(FinderNode start, FinderNode end)
         {
             // 八个方向
             int x = start.cols;
@@ -254,22 +221,29 @@ namespace MyMapGenerate
             PutInOpenSet(x + 1, y, start, end);
             PutInOpenSet(x - 1, y, start, end);
 
-            if (nodes[x - 1, y].walkable && nodes[x, y + 1].walkable)
+            if (NodeWalkable(x - 1, y) && NodeWalkable(x, y + 1))
                 PutInOpenSet(x - 1, y + 1, start, end);
-            if (nodes[x + 1, y].walkable && nodes[x, y + 1].walkable)
+            if (NodeWalkable(x + 1, y) && NodeWalkable(x, y + 1))
                 PutInOpenSet(x + 1, y + 1, start, end);
-            if (nodes[x - 1, y].walkable && nodes[x, y - 1].walkable)
+            if (NodeWalkable(x - 1, y) && NodeWalkable(x, y - 1))
                 PutInOpenSet(x - 1, y - 1, start, end);
-            if (nodes[x + 1, y].walkable && nodes[x, y - 1].walkable)
+            if (NodeWalkable(x + 1, y) && NodeWalkable(x, y - 1))
                 PutInOpenSet(x + 1, y - 1, start, end);
         }
 
-        private void PutInOpenSet(int x, int y, Node fatherNode, Node targetNode)
+        private bool NodeWalkable(int x,int y)
         {
-            if (x < 0 || x >= gridWidth) return;
-            if (y < 0 || y >= gridHeight) return;
+            if (x < 0 || x >= mapWidth) return false;
+            if (y < 0 || y >= mapHeight) return false;
+            return nodes[x,y].walkable;
+        }
 
-            Node currentNode = nodes[x, y];
+        private void PutInOpenSet(int x, int y, FinderNode fatherNode, FinderNode targetNode)
+        {
+            if (x < 0 || x >= mapWidth) return;
+            if (y < 0 || y >= mapHeight) return;
+
+            FinderNode currentNode = nodes[x, y];
 
             if (openSet.Contains(currentNode) || !currentNode.walkable || closeSet.Contains(currentNode)) return;
 
@@ -281,7 +255,7 @@ namespace MyMapGenerate
             openSet.Add(currentNode);
         }
 
-        private void FindNeighborNodeFour(Node start, Node end)
+        private void FindNeighborNodeFour(FinderNode start, FinderNode end)
         {
             // 四个方向
             int x = start.cols;

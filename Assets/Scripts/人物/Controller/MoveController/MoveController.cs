@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyMapGenerate;
+using ChenChen_MapGenerator;
 using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(Animator))]
@@ -84,6 +84,12 @@ public abstract class MoveController : MonoBehaviour
         // 获取路径
         movePathList = MapManager.Instance.GetPath(transform.position, moveTargetPos, CurrentMapName);
 
+        if(movePathList == null)
+        {
+            EndMove();
+            return;
+        }
+
         // 重置路径点索引
         if (movePathList != null && movePathList.Count > 0) currentWaypointIndex = 0;
         lastMoveTargetPos = moveTargetPos;
@@ -103,6 +109,11 @@ public abstract class MoveController : MonoBehaviour
     #endregion
 
     #region Public
+
+    public void StopMove()
+    {
+        EndMove();
+    }
 
     public void GoToHere(Vector3 target)
     {
@@ -187,6 +198,18 @@ public abstract class MoveController : MonoBehaviour
         }
     }
 
+    public void FilpLeft()
+    {
+        lastTransPositon = transform.position;
+        transform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    public void FilpRight()
+    {
+        lastTransPositon = transform.position;
+        transform.localScale = Vector3.one;
+    }
+
     #endregion
 
     #region Move
@@ -253,6 +276,7 @@ public abstract class MoveController : MonoBehaviour
         IsNearAttackRange = false;
         moveTargetPos = target;
     }
+
     protected void EndMove()
     {
         CanMove = false;
@@ -264,6 +288,7 @@ public abstract class MoveController : MonoBehaviour
         lineRenderer.positionCount = 0;
         JustApproachAttackRange = false;
         JustApproachWorkRange = false;
+        movePathList = null;
     }
 
     #endregion

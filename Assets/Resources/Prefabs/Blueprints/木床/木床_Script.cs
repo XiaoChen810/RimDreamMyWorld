@@ -1,7 +1,9 @@
 
-            using UnityEngine;
+using UnityEngine;
+namespace ChenChen_BuildingSystem
+{
+    public class 木床_Script : Building
+    {
 
-            public class 木床_Script : MonoBehaviour
-            {
-
-            }
+    }
+}

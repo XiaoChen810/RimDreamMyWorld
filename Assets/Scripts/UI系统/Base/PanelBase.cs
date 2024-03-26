@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using MyBuildingSystem;
+using ChenChen_BuildingSystem;
 
 namespace MyUISystem
 {
@@ -136,11 +136,11 @@ namespace MyUISystem
             GameObject btnPrefab = Resources.Load("UI/Component/BtnBkueprintDefault/BtnBlueprintDefault") as GameObject;
             if (btnPrefab == null)
             {
-                Debug.Log("按钮的预制件为空");
+                Debug.LogWarning("按钮的预制件为空");
                 PanelManager.RemovePanel(this);
                 return;
             }
-            // 获取家具蓝图字典,设置成对应的按钮添加到内容中
+            // 根据蓝图字典,设置成对应的按钮添加到内容中
             foreach (var item in dict)
             {
                 GameObject btnInstance = Object.Instantiate(btnPrefab);

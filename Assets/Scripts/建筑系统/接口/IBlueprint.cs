@@ -1,4 +1,4 @@
-using MyBuildingSystem;
+using ChenChen_BuildingSystem;
 using UnityEngine;
 
 public interface IBlueprint
@@ -14,5 +14,8 @@ public interface IBlueprint
 
     // 取消建造时调用的方法
     void Cancel();
+
+    // 中断建造时调用的方法
+    void Interpret();
 }
 

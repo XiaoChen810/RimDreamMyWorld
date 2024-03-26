@@ -5,16 +5,13 @@ using AYellowpaper.SerializedCollections;
 using System;
 using UnityEditor;
 
-namespace MyBuildingSystem
+namespace ChenChen_BuildingSystem
 {
     /// <summary>
-    ///  记录全部蓝图
-    ///  记录当前建造队列
+    /// 记录全部蓝图
     /// </summary>
-    public class BuildingSystemManager : MonoBehaviour
+    public class BuildingSystemManager : SingletonMono<BuildingSystemManager>
     {
-        public static BuildingSystemManager Instance;
-
         [Header("全部地板蓝图的字典")]
         [SerializedDictionary("名称", "蓝图数据")]
         public SerializedDictionary<string, BlueprintData> _FloorBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
@@ -35,49 +32,20 @@ namespace MyBuildingSystem
         [SerializedDictionary("名称", "蓝图数据")]
         public SerializedDictionary<string, BlueprintData> _OtherBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
 
-        public BlueprintTool BlueprintTool { get; private set; }
+        private BuildingModeTool BuildingModeTool;
 
-        [Header("鼠标指示器")]
-        public GameObject MouseIndicator;
+        [Header("待分配列表")]
+        [SerializeField] private List<GameObject> _ToDoList = new();
+        [Header("已分配列表")]
+        [SerializeField] private List<GameObject> _DoingList = new();
+        [Header("已完成建筑的列表")]
+        [SerializeField] private List<GameObject> _DoneList = new();
 
-        // 当前待分配的列表
-        private Queue<BlueprintBase> _currentTaskQueue = new();
-        // 已经分配好的列表
-        private Queue<BlueprintBase> _alreadyTaskQueue = new();
-
-        public Action OnTaskQueueAdded;
-
-        public HashSet<Vector3> FloorHashSet = new HashSet<Vector3>();
-        public HashSet<Vector3> WallHashSet = new HashSet<Vector3>();
-        public HashSet<GameObject> BuildingHashSet = new HashSet<GameObject>();
-        public HashSet<GameObject> FurnitureHashSet = new HashSet<GameObject>();
-
-
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                Instance = this;
-                BlueprintTool = new BlueprintTool(this);
-                LoadBlueprintData();
-                DontDestroyOnLoad(gameObject);
-            }
-        }
-
-        private void Update()
-        {
-            BlueprintTool.BuildUpdate();
-
-            // 当任务队列里有任务时，通知全部建筑小人可以分配任务
-            if (_currentTaskQueue.Count > 0)
-            {
-                OnTaskQueueAdded?.Invoke();
-            }
-
+            base.Awake();
+            LoadBlueprintData();
+            BuildingModeTool = GetComponent<BuildingModeTool>();
         }
 
         private void LoadBlueprintData()
@@ -105,7 +73,7 @@ namespace MyBuildingSystem
                             Add(_FurnitureBlueprintsDict, blueprintData.Name, blueprintData); break;
                         case BlueprintType.Other:
                             Add(_OtherBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        default:                  
+                        default:
                             break;
                     }
 
@@ -126,6 +94,52 @@ namespace MyBuildingSystem
             }
         }
 
+        #region Public
+
+        #region ListCompleted
+
+        /// <summary>
+        /// 通过名字获取其中一个建筑的GameObject
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public GameObject GetBuildingObjFromListCompleted(string name)
+        {
+            foreach (var item in _DoneList)
+            {
+                Building building = item.GetComponent<Building>();
+                if (building.Data.Name == name && !building.IsUsed)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 添加建造完成的建筑到建筑列表，要确保建筑有BlueprintBase组件
+        /// </summary>
+        /// <param name="building"></param>
+        public void AddBuildingToListCompleted(GameObject building)
+        {
+            BlueprintBase blueprint = building.GetComponent<BlueprintBase>();
+            if (blueprint != null)
+            {
+                AddBuildingListDone(building);
+            }
+            else
+            {
+                Debug.LogWarning("检测到没有 BlueprintBase 的物体想添加进 BuildingHashSet ，已返回");
+            }
+        }
+
+        public void AddBuildingListDone(GameObject building)
+        {
+            _DoneList.Add(building);
+        }
+
+        #endregion
+
         #region  Task
 
         /// <summary>
@@ -137,39 +151,44 @@ namespace MyBuildingSystem
         {
             if (_FloorBlueprintsDict.TryGetValue(name, out var floorData))
             {
-                CreateBlueprintPrefab<FloorBlueprints>(name, floorData);
-                return _FloorBlueprintsDict[name];
+                CreateBlueprintPrefabIfNull<Building>(name, floorData);
+                if (floorData.Prefab != null)
+                    return _FloorBlueprintsDict[name];
             }
             if (_WallBlueprintsDict.TryGetValue(name, out var wallData))
             {
-                CreateBlueprintPrefab<WallBlueprints>(name, wallData);
-                return _WallBlueprintsDict[name];
+                CreateBlueprintPrefabIfNull<Building>(name, wallData);
+                if (wallData.Prefab != null)
+                    return _WallBlueprintsDict[name];
             }
             if (_BuildingBlueprintsDict.TryGetValue(name, out var buildingData))
             {
-                CreateBlueprintPrefab<DefaultBlueprint>(name, buildingData);
-                return _BuildingBlueprintsDict[name];
+                CreateBlueprintPrefabIfNull<Building>(name, buildingData);
+                if (buildingData.Prefab != null)
+                    return _BuildingBlueprintsDict[name];
             }
             if (_FurnitureBlueprintsDict.TryGetValue(name, out var furnitueData))
             {
-                CreateBlueprintPrefab<DefaultBlueprint>(name, furnitueData);
-                return _FurnitureBlueprintsDict[name];
+                CreateBlueprintPrefabIfNull<Building>(name, furnitueData);
+                if (furnitueData.Prefab != null)
+                    return _FurnitureBlueprintsDict[name];
             }
-            if(_OtherBlueprintsDict.TryGetValue(name,out var otherBlueprintData))
+            if (_OtherBlueprintsDict.TryGetValue(name, out var otherBlueprintData))
             {
-                CreateBlueprintPrefab<DefaultBlueprint>(name, otherBlueprintData);
-                return _OtherBlueprintsDict[name];
+                CreateBlueprintPrefabIfNull<Building>(name, otherBlueprintData);
+                if (otherBlueprintData.Prefab != null)
+                    return _OtherBlueprintsDict[name];
             }
 
-            Debug.LogWarning($"未能找到{name}数据");
+            Debug.LogWarning($"未能找到{name}的预制件数据");
             return null;
 
-            // 当没有对应的预制件时生成一个
-            void CreateBlueprintPrefab<T>(string name, BlueprintData data) where T : BlueprintBase
+            //当没有对应的预制件时生成一个
+            void CreateBlueprintPrefabIfNull<T>(string name, BlueprintData data) where T : BlueprintBase
             {
                 if (data.Prefab == null)
                 {
-                    Debug.Log("此数据预制件为空，已经生成临时预制件");
+                    Debug.LogWarning("此数据预制件为空，已经生成临时预制件");
 
                     // 创建并添加SpriteRenderer，设置显示层
                     GameObject prefab = new GameObject(name);
@@ -188,79 +207,90 @@ namespace MyBuildingSystem
                     boxCollider.isTrigger = true;
                     // 添加对应的蓝图基类
                     BlueprintBase blueprintBase = prefab.AddComponent<T>();
-                    blueprintBase._BlueprintData = data;
-                    // 设置路径，保存为预制件
-                    string path = "Assets/Resources/Prefabs/Blueprints/" + name + ".prefab";
+                    blueprintBase.Data = data;
+                    //// 设置路径，保存为预制件
+                    string path = "Assets/Prefabs/Buffer/" + name + ".prefab";
                     PrefabUtility.SaveAsPrefabAsset(prefab, path);
                     // 销毁临时预制件对象
                     Destroy(prefab);
                     // 存
-                    GameObject savedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefabs/Blueprints/" + name + ".prefab");
+                    GameObject savedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Buffer/" + name + ".prefab");
                     data.Prefab = savedPrefab;
                 }
             }
         }
 
         /// <summary>
-        ///  添加任务到待分配队列中
+        /// 把一个还未建造的建筑物添加到待分配队列中
         /// </summary>
         /// <param name="task"></param>
-        public void AddTask(BlueprintBase task)
+        public void AddTask(GameObject task)
         {
-            _currentTaskQueue.Enqueue(task);
+            _ToDoList.Add(task);
+            Debug.Log("Add task :" + task.name);
         }
 
         /// <summary>
-        ///  将该任务从已分配队列中移除
+        /// 完成任务，在已分配队列中移除任务
         /// </summary>
         /// <param name="task"></param>
-        public void CompleteTask(BlueprintBase task)
+        public void CompleteTask(GameObject task)
         {
-            for (int i = 0; i < _alreadyTaskQueue.Count; i++)
+            if (_DoingList.Contains(task))
             {
-                if (task != _alreadyTaskQueue.Peek())
-                {
-                    _alreadyTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
-                }
-                else
-                {
-                    _alreadyTaskQueue.Dequeue();
-                    break;
-                }
+                _DoingList.Remove(task);
+                _DoneList.Add(task);    
+                Debug.Log("Complete task :" + task.name);
+                return;
             }
+            Debug.Log("Don't find task :" + task.name);
         }
 
         /// <summary>
-        ///  重新将该任务放回待分配队列
+        /// 取消任务，将任务从待分配列表里删除
         /// </summary>
         /// <param name="task"></param>
-        public void CanelTask(BlueprintBase task)
+        public void CanelTask(GameObject task)
         {
-            for (int i = 0; i < _alreadyTaskQueue.Count; i++)
+            if (_ToDoList.Contains(task))
             {
-                if (task != _alreadyTaskQueue.Peek())
-                {
-                    _alreadyTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
-                }
-                else
-                {
-                    _currentTaskQueue.Enqueue(_alreadyTaskQueue.Dequeue());
-                    break;
-                }
+                _ToDoList.Remove(task);
+                Debug.Log("Cancel task :" + task.name);
+                return;
             }
+            Debug.Log("Don't find task :" + task.name);
         }
 
         /// <summary>
-        ///  从待分配队列中获取一个任务，并放到已分配队列中去
+        /// 中断任务，在已分配列表里找到放回待分配列表
+        /// </summary>
+        /// <param name="task"></param>
+        public void InterpretTask(GameObject task)
+        {
+            if (_DoingList.Contains(task))
+            {
+                _DoingList.Remove(task);
+                _ToDoList.Add(task);
+                Debug.Log("Interpret task :" + task.name);
+                return;
+            }
+            Debug.Log("Don't find task :" + task.name);
+        }
+
+        /// <summary>
+        ///  从待分配队列中获取一个任务，并放到已分配队列中去,返回一个建筑蓝图的物体
         /// </summary>
         /// <returns></returns>
-        public BlueprintBase GetTask()
+        public GameObject GetTask()
         {
-            if (_currentTaskQueue.Count > 0)
+            if (_ToDoList.Count > 0)
             {
-                BlueprintBase sult = _currentTaskQueue.Dequeue();
-                _alreadyTaskQueue.Enqueue(sult);
-                return sult;
+                int index = UnityEngine.Random.Range(0, _ToDoList.Count);
+                GameObject result = _ToDoList[index];
+                _ToDoList.RemoveAt(index);
+                _DoingList.Add(result);
+                BlueprintBase blueprint = result.GetComponent<BlueprintBase>();
+                return result;
             }
             return null;
         }
@@ -275,8 +305,10 @@ namespace MyBuildingSystem
         /// <param name="name"></param>
         public void UseBlueprint(string name)
         {
-            BlueprintTool.ToggleBlueprint(name);
+            BuildingModeTool.ToggleBlueprint(name);
         }
+
+        #endregion
 
         #endregion
     }

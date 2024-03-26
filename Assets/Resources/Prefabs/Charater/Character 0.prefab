@@ -290,17 +290,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isSelect: 0
-  CanGetTask: 1
-  IsOnWork: 0
-  CanBuild: 1
-  CurrentBuiltObject: {fileID: 0}
-  CanFishing: 1
-  buildSpeed: 0
-  combatEffect: 0
+  CurrentTaskList: []
   WorkRange: 1.2
   AttackRange: 1.5
-  CurrentTaskList: []
+  Attribute:
+    A_Combat:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Culinary:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Construction:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Survival:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Craftsmanship:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Medical:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Carrying:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Research:
+      _value: 0
+      _interest: 0
+      _exp: 0
+  CanGetJob: 1
+  IsOnWork: 0
+  CurJob: {fileID: 0}
+  WorkTab: []
+  _isSelect: 0
 --- !u!114 &798842648033601365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,9 +347,9 @@ MonoBehaviour:
   PathUpdateIntervalTime: 1
   CanMove: 0
   IsRun: 0
+  IsReach: 0
   IsNearWorkRange: 0
   IsNearAttackRange: 0
-  IsReach: 0
   JustApproachWorkRange: 0
   JustApproachAttackRange: 0
   lastMoveTargetPos: {x: 0, y: 0, z: 0}

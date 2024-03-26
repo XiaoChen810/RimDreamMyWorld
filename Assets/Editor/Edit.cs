@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using MyBuildingSystem;
-using static UnityEngine.GraphicsBuffer;
+using ChenChen_BuildingSystem;
 
 public class BlueprintGeneratorEditorWindow : EditorWindow
 {
@@ -16,7 +15,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
     private int blueprintHeight;
     private int blueprintWorkload;
     private Sprite blueprintPreviewSprite;
-    private bool blueprintStackable;
+    private bool blueprintIsObstacle;
     private TileBase blueprintTileBase;
 
     [MenuItem("Window/Blueprint Generator")]
@@ -35,14 +34,12 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
         GUILayout.Label("Blueprint Generator", EditorStyles.boldLabel);
 
         // 属性设置
-        blueprintName = EditorGUILayout.TextField("Name", blueprintName);
-        blueprintType = (BlueprintType)EditorGUILayout.EnumPopup("Type", blueprintType); 
-        blueprintWidth = EditorGUILayout.IntField("Width", blueprintWidth);
-        blueprintHeight = EditorGUILayout.IntField("Height", blueprintHeight);
-        blueprintWorkload = EditorGUILayout.IntField("Workload", blueprintWorkload);
-        blueprintPreviewSprite = (Sprite)EditorGUILayout.ObjectField("Preview Sprite", blueprintPreviewSprite, typeof(Sprite), false);
-        blueprintStackable = EditorGUILayout.Toggle("Stackable", blueprintStackable);
-        blueprintTileBase = (TileBase)EditorGUILayout.ObjectField("TileBase", blueprintTileBase, typeof(TileBase), false);
+        blueprintName = EditorGUILayout.TextField("名字", blueprintName);
+        blueprintType = (BlueprintType)EditorGUILayout.EnumPopup("类型", blueprintType); 
+        blueprintWorkload = EditorGUILayout.IntField("工作量", blueprintWorkload);
+        blueprintPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", blueprintPreviewSprite, typeof(Sprite), false);
+        blueprintIsObstacle = EditorGUILayout.Toggle("是否是障碍物", blueprintIsObstacle);
+        blueprintTileBase = (TileBase)EditorGUILayout.ObjectField("瓦片", blueprintTileBase, typeof(TileBase), false);
 
         // 生成按钮
         if (GUILayout.Button("Generate Blueprint"))
@@ -52,11 +49,9 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
                 // 设置蓝图生成器的属性
                 blueprintGenerator.blueprintName = blueprintName;
                 blueprintGenerator.blueprintType = blueprintType;
-                blueprintGenerator.blueprintWidth = blueprintWidth;
-                blueprintGenerator.blueprintHeight = blueprintHeight;
                 blueprintGenerator.blueprintWorkload = blueprintWorkload;
                 blueprintGenerator.blueprintPreviewSprite = blueprintPreviewSprite;
-                blueprintGenerator.blueprintStackable = blueprintStackable;
+                blueprintGenerator.blueprintIsObstacle = blueprintIsObstacle;
                 blueprintGenerator.blueprintTileBase = blueprintTileBase;
 
                 // 调用生成蓝图的方法

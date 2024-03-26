@@ -1,8 +1,9 @@
 
 using UnityEngine;
-using MyBuildingSystem;
-
-public class 木墙_Script : WallBlueprints
+namespace ChenChen_BuildingSystem
 {
+    public class 木墙_Script : Building
+    {
 
+    }
 }

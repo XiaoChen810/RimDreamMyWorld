@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: "\u6728\u5E8A_BlueprintData"
   m_EditorClassIdentifier: 
   Name: "\u6728\u5E8A"
-  Type: 3
-  BuildingWidth: 3
-  BuildingHeight: 3
-  Workload: 35
+  Type: 2
+  Workload: 100
   PreviewSprite: {fileID: -1472267505, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
-  Stackable: 0
-  Prefab: {fileID: 3199651320408163353, guid: e257a24cecd13dc419a444fc0ea08ae7, type: 3}
+  IsObstacle: 0
+  Prefab: {fileID: 0}
   TileBase: {fileID: 0}

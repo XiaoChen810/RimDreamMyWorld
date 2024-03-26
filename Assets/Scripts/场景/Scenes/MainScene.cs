@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MyUISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using MyMapGenerate;
+using ChenChen_MapGenerator;
 
 namespace MyScene
 {

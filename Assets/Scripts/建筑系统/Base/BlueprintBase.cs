@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
-using MyMapGenerate;
+using ChenChen_MapGenerator;
 
-namespace MyBuildingSystem
+namespace ChenChen_BuildingSystem
 {
     [System.Serializable]
     public abstract class BlueprintBase : MonoBehaviour, IBlueprint
     {
-        public BlueprintData _BlueprintData;
+        public BlueprintData Data;
+        public string MapName;
+        public float WorkLoad;
+
         public BoxCollider2D _myCollider { get; protected set; }
-        public string _myMapName { get; protected set; }
-
-        public float _workloadAlready;
-
 
         protected virtual void OnEnable()
         {
             gameObject.name = gameObject.name.Replace("(Clone)", "");
-            _workloadAlready = _BlueprintData.Workload;
-            _myMapName = MapManager.Instance.CurrentMapName;
+            WorkLoad = Data.Workload;
+            MapName = MapManager.Instance.CurrentMapName;
             _myCollider = GetComponent<BoxCollider2D>();
         }
 
@@ -26,13 +25,7 @@ namespace MyBuildingSystem
         public abstract void Build(float thisWorkload);
         public abstract void Complete();
         public abstract void Cancel();
+        public abstract void Interpret();
 
-        /// <summary>
-        /// 添加该物体到BuildingSystemManager.Instance.BuildingHashSet
-        /// </summary>
-        protected virtual void End()
-        {
-            BuildingSystemManager.Instance.BuildingHashSet.Add(this.gameObject);
-        }
     }
 }

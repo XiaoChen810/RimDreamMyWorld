@@ -2,16 +2,15 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System;
-using MyBuildingSystem;
+using ChenChen_BuildingSystem;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
-namespace MyMapGenerate
+namespace ChenChen_MapGenerator
 {
     [RequireComponent(typeof(MapCreator))]
-    public class MapManager : MonoBehaviour
+    public class MapManager : SingletonMono<MapManager>
     {
-        public static MapManager Instance;
-
         /// <summary>
         ///  地图生成器
         /// </summary>
@@ -28,45 +27,30 @@ namespace MyMapGenerate
         public string CurrentMapName { get; private set; }
 
         /// <summary>
-        /// 场景地图数据
-        /// </summary>
-        public class SceneMapData
-        {
-            public int width, height;
-            public int numberUnitGrid;
-            public int seed;
-            public MapCreator.TileData[,] mapTileDatas;
-            public PathFinder.Node[,] nodes;
-            public GameObject currentMap;
-            public Tilemap mainTilemap;
-        }
-
-        /// <summary>
         /// 不同场景的地图数据
         /// </summary>
         public Dictionary<string, SceneMapData> SceneMapDatasDict = new();
+        public SceneMapData CurrentSceneMapData;
+
 
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
         public int MapHeightOfGenerate = 100;
 
-        // 寻路器的单位网格数量,有点问题 
-        public int NumberUnitGrid = 1;
-
         // 当地图障碍物发生变化
         public Action MapObstaclesChange;
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance != null && Instance != this)
+            base.Awake();
+            Init();
+        }
+
+        private void Update()
+        {
+            if (CurrentMapName != null && SceneMapDatasDict.ContainsKey(CurrentMapName))
             {
-                Destroy(gameObject);
-            }
-            else
-            {
-                Instance = this;
-                Init();
-                DontDestroyOnLoad(gameObject);
+                CurrentSceneMapData = SceneMapDatasDict[CurrentMapName];
             }
         }
 
@@ -77,7 +61,7 @@ namespace MyMapGenerate
         {
             // 初始化组件
             MapCreator = GetComponent<MapCreator>();
-            PathFinder = new PathFinder(MapWidthOfGenerate, MapHeightOfGenerate, NumberUnitGrid);
+            PathFinder = new PathFinder(MapWidthOfGenerate, MapHeightOfGenerate);
         }
 
         /// <summary>
@@ -94,14 +78,14 @@ namespace MyMapGenerate
                 mapData.height = MapHeightOfGenerate;
                 // 生成一个随机的地图
                 mapData.seed = mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed;
-                mapData.mapTileDatas = MapCreator.GenerateMap(MapWidthOfGenerate, MapHeightOfGenerate, mapData.seed);
+                mapData = MapCreator.GenerateMap(MapWidthOfGenerate, MapHeightOfGenerate, mapData);
                 // 初始化寻路算法的节点
-                mapData.nodes = PathFinder.InitNodes(MapWidthOfGenerate, MapHeightOfGenerate, NumberUnitGrid, mapData.mapTileDatas);
+                mapData = PathFinder.InitNodes(MapWidthOfGenerate, MapHeightOfGenerate, mapData);
                 // 将地图数据用一个GameObject的形式保存
-                mapData.currentMap = Instantiate(transform.Find("当前地图").gameObject, transform);
-                mapData.currentMap.name = mapName;
-                mapData.currentMap.SetActive(true);
-                mapData.mainTilemap = mapData.currentMap.GetComponentInChildren<Tilemap>();
+                mapData.mapObject = Instantiate(transform.Find("当前地图").gameObject, transform);
+                mapData.mapObject.name = mapName;
+                mapData.mapObject.SetActive(true);
+                mapData.mainTilemap = mapData.mapObject.GetComponentInChildren<Tilemap>();
                 // 添加进字典
                 SceneMapDatasDict.Add(mapName, mapData);
                 Debug.Log("已经生成地图" + mapName);
@@ -170,7 +154,7 @@ namespace MyMapGenerate
             }
             else
             {
-                return PathFinder.FindPath(startPos, endtPos, SceneMapDatasDict[mapName].nodes);
+                return PathFinder.FindPath(startPos, endtPos, SceneMapDatasDict[mapName].finderNodes);
             }
         }
 
@@ -217,14 +201,14 @@ namespace MyMapGenerate
         /// </summary>
         /// <param name="mapName"> 地图的名字 </param>
         /// <param name="pos"> 坐标 </param>
-        /// <param name="set"> 默认为false </param>
+        /// <param name="set"> 是障碍物则设置为false，默认为false </param>
         public void SetNodeWalkable(string mapName, Vector3Int pos,bool set = false)
         {
             if(SceneMapDatasDict.ContainsKey(mapName))
             {
                 //int unit = SceneMapDatasDict[mapName].numberUnitGrid;
                 //SceneMapDatasDict[mapName].nodes[pos.x * unit,pos.y * unit].walkable = set;
-                PathFinder.SetNodeWalkable(SceneMapDatasDict[mapName].nodes, pos, set);
+                PathFinder.SetNodeWalkable(SceneMapDatasDict[mapName].finderNodes, pos, set);
                 MapObstaclesChange?.Invoke();
             }
             else
@@ -234,37 +218,86 @@ namespace MyMapGenerate
         }
 
         /// <summary>
-        /// 设置地图上方已经有建筑物
+        /// 设置地图某位置有建筑物
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="pos"></param>
         /// <param name="set"></param>
-        public void SetMapDataWalkable(string mapName, Vector3Int pos, bool set = false)
+        public void AddToObstaclesList(string mapName, Vector3Int pos)
         {
-            SceneMapDatasDict[mapName].mapTileDatas[pos.x, pos.y].walkAble = set;
+            if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
+            {
+                SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+                SetNodeWalkable(mapName, pos, false);
+            }
         }
 
         /// <summary>
-        /// 检查蓝图能否放置在这个位置
+        /// 设置地图某位置已经没有障碍物
         /// </summary>
-        /// <param name="blueprint"></param>
+        /// <param name="mapName"></param>
         /// <param name="pos"></param>
-        /// <returns></returns>
-        public bool CheckBlueprintCanPlaced(BlueprintData blueprint, Vector2 pos)
+        /// <param name="set"></param>
+        public void RemoveFromObstaclesList(string mapName, Vector3Int pos)
         {
-            int x = blueprint.BuildingWidth;
-            int y = blueprint.BuildingHeight;
-
-            for (int i = -x / 2; i <= x / 2; i++)
+            if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
-                for (int j = -y / 2; j <= y / 2; j++)
+                SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
+                SetNodeWalkable(mapName, pos, false);
+            }
+        }
+
+        /// <summary>
+        /// 检查物体能否放置在这个位置上
+        /// </summary>
+        /// <param name="obj">请确保物体上有Collider组件</param>
+        /// <returns></returns>
+        public bool CheckObjectWhetherCanPlaceOnHere(GameObject obj)
+        {
+            // 获取当前场景的地图数据
+            SceneMapData currentMapData = SceneMapDatasDict[CurrentMapName];
+            MapNode[,] mapNodes = currentMapData.mapNodes;
+            // 获取物体的世界边界
+            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+            Vector3 maxNum = bounds.max;
+            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+            {
+                maxNum -= Vector3.one;
+            }
+            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+
+            // 特殊处理
+            //BlueprintBase blueprintBase = obj.GetComponent<BlueprintBase>();
+            //if(blueprintBase != null && blueprintBase.Data.Name.Equals("钓鱼点"))
+            //{
+            //    Vector3Int pos = currentMapData.mainTilemap.WorldToCell(obj.transform.position);
+            //    if (SceneMapDatasDict[CurrentMapName].obstaclesPositionList.Contains(pos)) return false;
+            //    for (int x = minCell.x; x <= maxCell.x; x++)
+            //    {
+            //        for (int y = minCell.y; y <= maxCell.y; y++)
+            //        {
+            //            // 在这里处理每个占据的格子
+            //            if (x > currentMapData.width || x < 0) return false;
+            //            if (y > currentMapData.height || y < 0) return false;
+            //            if (mapNodes[x, y].type != MapNode.Type.water) return false;
+            //        }
+            //    }
+
+            //    return true;
+            //}
+
+            // 遍历占据的格子并进行处理
+            for (int x = minCell.x; x <= maxCell.x; x++)
+            {
+                for (int y = minCell.y; y <= maxCell.y; y++)
                 {
-                    SceneMapData currentMapData = SceneMapDatasDict[CurrentMapName];
-                    MapCreator.TileData[,] tileDatas = currentMapData.mapTileDatas;
-                    if (pos.x > currentMapData.width || pos.x < 0) return false;
-                    if (pos.y > currentMapData.height || pos.y < 0) return false;
-                    Vector3Int cellPos = currentMapData.mainTilemap.WorldToCell(pos);
-                    if (tileDatas[cellPos.x, cellPos.y].walkAble == false) return false;
+                    // 在这里处理每个占据的格子
+                    if (x > currentMapData.width || x < 0) return false;
+                    if (y > currentMapData.height || y < 0) return false;
+                    if (SceneMapDatasDict[CurrentMapName].obstaclesPositionList.Contains(new Vector3(x, y))) return false;
                 }
             }
 

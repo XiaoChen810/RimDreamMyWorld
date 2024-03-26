@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using MyBuildingSystem;
+using ChenChen_BuildingSystem;
 
 namespace MyUISystem
 {
@@ -13,10 +13,7 @@ namespace MyUISystem
 
         public override void OnEnter()
         {
-            UITool.GetOrAddChildComponent<Button>("BtnBlueprintÄ¾µØ°å").onClick.AddListener(() =>
-            {
-                mf_UseBlueprint("Ä¾µØ°å");
-            });
+            InitContent(BuildingSystemManager.Instance._FloorBlueprintsDict);
         }
 
     }

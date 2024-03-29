@@ -2650,8 +2650,9 @@ MonoBehaviour:
     _serializedList: []
   _OtherBlueprintsDict:
     _serializedList: []
-  BuildingListCompleted: []
-  FurnitureListCompleted: []
+  _ToDoList: []
+  _DoingList: []
+  _DoneList: []
 --- !u!4 &2026675290
 Transform:
   m_ObjectHideFlags: 0

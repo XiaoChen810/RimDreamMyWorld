@@ -290,8 +290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentTaskList: []
-  WorkRange: 1.2
+  CurrentStateList: []
+  WorkRange: 1.35
   AttackRange: 1.5
   Attribute:
     A_Combat:
@@ -329,7 +329,6 @@ MonoBehaviour:
   CanGetJob: 1
   IsOnWork: 0
   CurJob: {fileID: 0}
-  WorkTab: []
   _isSelect: 0
 --- !u!114 &798842648033601365
 MonoBehaviour:
@@ -352,7 +351,6 @@ MonoBehaviour:
   IsNearAttackRange: 0
   JustApproachWorkRange: 0
   JustApproachAttackRange: 0
-  lastMoveTargetPos: {x: 0, y: 0, z: 0}
 --- !u!1 &7653739362490491805
 GameObject:
   m_ObjectHideFlags: 0

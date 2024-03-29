@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     /// <summary>
     /// 管理面板的
     /// </summary>
-    public class PanelManager
+    public class PanelManager : Singleton<PanelManager>
     {
         private Stack<PanelBase> _panelsStack;
 
@@ -51,6 +51,8 @@ namespace MyUISystem
         /// <param name="removedPanel"></param>
         public void RemovePanel(PanelBase removedPanel)
         {
+            if (removedPanel == null) return;
+
             // 移除顶点面板
             if(_panelsStack.Count > 0)
             {
@@ -68,6 +70,19 @@ namespace MyUISystem
             {
                 _panelsStack.Peek().OnResume();
             }
+        }
+
+        /// <summary>
+        /// 获取顶层面板
+        /// </summary>
+        public PanelBase GetTopPanel()
+        {
+            _panelsStack.TryPeek(out var panel);
+            if(panel != null )
+            {
+                return panel;
+            }
+            return null;
         }
     }
 }

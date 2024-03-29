@@ -7,7 +7,6 @@ public abstract class StateBase : IState
     public StateBase nextState {  get; private set; }
 
     public bool IsSuccess;
-    public bool IsError;
 
     public StateBase(StateMachine machine,StateBase next = null)
     {
@@ -15,9 +14,10 @@ public abstract class StateBase : IState
         this.nextState = next;
     }
 
-    public virtual void OnEnter()
+    public virtual bool OnEnter()
     {
         IsSuccess = true;
+        return true;
     }
 
     public virtual void OnExit()

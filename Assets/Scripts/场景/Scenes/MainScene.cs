@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using MyUISystem;
+using ChenChen_UISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ChenChen_MapGenerator;

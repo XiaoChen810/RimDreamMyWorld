@@ -73,7 +73,7 @@ public class BlueprintGenerator
         Debug.Log("Blueprint and Prefab generated successfully!\n" +
             "But also need to setting actually BlueprintBase script");
 
-        void CreateBlueprintPrefab<T>(string name, BlueprintData data) where T : BlueprintBase
+        void CreateBlueprintPrefab<T>(string name, BlueprintData data) where T : ThingBase
         {
             if (data.Prefab == null)
             {
@@ -91,7 +91,7 @@ public class BlueprintGenerator
                 BoxCollider2D boxCollider = prefab.AddComponent<BoxCollider2D>();
                 boxCollider.isTrigger = true;
                 // 添加对应的蓝图基类
-                BlueprintBase blueprintBase = prefab.AddComponent<T>();
+                ThingBase blueprintBase = prefab.AddComponent<T>();
                 blueprintBase.Data = data;
                 // 设置路径，保存为预制件
                 PrefabUtility.SaveAsPrefabAsset(prefab, $"{folderPath}/{blueprintName}_Prefab.prefab");

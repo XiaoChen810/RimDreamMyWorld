@@ -146,4 +146,7 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: d9f3889f5de17c64eb6770f9562005ef, type: 2}
   MapName: 
   WorkLoad: 0
-  IsUsed: 0
+  isCompletely: 0
+  TheUsingPawn: {fileID: 0}
+  isUsed: 0
+  _detailView: {fileID: 0}

@@ -19,3 +19,4 @@ MonoBehaviour:
   IsObstacle: 1
   Prefab: {fileID: 4368588907954385581, guid: 12b81951b48d6fc41a6f722bc9325112, type: 3}
   TileBase: {fileID: 11400000, guid: 26fb8ba0cafb2ee4d80ab21085bfdfb1, type: 2}
+  Durability: 50

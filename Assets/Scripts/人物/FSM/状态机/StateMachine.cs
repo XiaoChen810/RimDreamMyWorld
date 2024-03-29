@@ -56,8 +56,14 @@ public class StateMachine
         TryChangeState();
     }
 
-    private void TryChangeState()
+    public void TryChangeState(StateBase newState = null)
     {
+        if (newState != null)
+        {
+            ChangeState(newState);
+            return;
+        }
+
         //如果下一个目标状态不为空，则切换成下一个状态
         if (nextState != null)
         {
@@ -92,7 +98,6 @@ public class StateMachine
 
     public Queue<StateBase> GetStateQueue()
     {
-        StateQueue ??= new Queue<StateBase>();
         return StateQueue;
     }
 
@@ -121,14 +126,14 @@ public class StateMachine
     /// 切换当前状态为 newState
     /// </summary>
     /// <param name="newState"></param>
-    public void ChangeState(StateBase newState)
+    private void ChangeState(StateBase newState)
     {
         // 如果当前状态未完成
         if (currentState != null && !currentState.IsSuccess)
         {
-            currentState.OnInterrupt();
+            InterruptState();
         }
-        else if(currentState != null) 
+        else if (currentState != null)
         {
             // 退出当前状态
             currentState.OnExit();
@@ -138,21 +143,23 @@ public class StateMachine
         currentState = newState;
         if (currentState != null)
         {
-            currentState.OnEnter();
-            Debug.Log("已经切换成状态: " + newState);
+            if (currentState.OnEnter())
+            {
+                Debug.Log("已经切换成状态: " + currentState);
+                return;
+            }
+            // 未成功进入
+            Debug.Log("进入状态失败：" + currentState.ToString());
+            currentState = null;
         }
-        else
-        {
-            Debug.Log("切换成空状态");
-        }
-
+        Debug.Log("切换成空状态");
     }
 
     /// <summary>
     /// 中断当前状态
     /// </summary>
     /// <param name="newState"></param>
-    public void InterruptState()
+    private void InterruptState()
     {
         // 中断当前状态
         if (currentState != null)

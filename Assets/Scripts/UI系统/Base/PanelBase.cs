@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ChenChen_BuildingSystem;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     /// <summary>
     /// UI面板的基类
@@ -108,8 +108,8 @@ namespace MyUISystem
         /// </summary>
         public virtual void OnExit()
         {
-            GameObject.Destroy(UITool.GetOrAddComponent<Transform>().gameObject);
             onExitCallback?.Invoke();
+            GameObject.Destroy(UITool.GetOrAddComponent<Transform>().gameObject);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace MyUISystem
         /// 然后关闭面板
         /// </summary>
         /// <param name="name"></param>
-        protected void mf_UseBlueprint(string name)
+        protected void UseBlueprintByName(string name)
         {
             BuildingSystemManager.Instance.UseBlueprint(name);
             PanelManager.RemovePanel(this);
@@ -158,7 +158,7 @@ namespace MyUISystem
                 btn.onClick.AddListener(() =>
                 {
                     string name = btn.name.Replace("BtnBlueprint", "");
-                    mf_UseBlueprint(name);
+                    UseBlueprintByName(name);
                 });
             }
         }

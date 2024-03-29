@@ -33,13 +33,16 @@ namespace ChenChen_BuildingSystem
         public SerializedDictionary<string, BlueprintData> _OtherBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
 
         private BuildingModeTool BuildingModeTool;
+        public bool OnBuildingMode
+        {
+            get
+            {
+                return BuildingModeTool.OnBuildMode;
+            }
+        }
 
-        [Header("待分配列表")]
-        [SerializeField] private List<GameObject> _ToDoList = new();
-        [Header("已分配列表")]
-        [SerializeField] private List<GameObject> _DoingList = new();
-        [Header("已完成建筑的列表")]
-        [SerializeField] private List<GameObject> _DoneList = new();
+        [Header("建筑列表")]
+        [SerializeField] private List<GameObject> _BuildingList = new();
 
         protected override void Awake()
         {
@@ -96,51 +99,56 @@ namespace ChenChen_BuildingSystem
 
         #region Public
 
-        #region ListCompleted
-
-        /// <summary>
-        /// 通过名字获取其中一个建筑的GameObject
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public GameObject GetBuildingObjFromListCompleted(string name)
+        public void AddBuildingToList(GameObject obj)
         {
-            foreach (var item in _DoneList)
+            if(obj.TryGetComponent<Building>(out var building))
+            {
+                _BuildingList.Add(obj);
+            }
+            else
+            {
+                Debug.LogWarning("检测到没有 Building 组件的物体想添加进 _BuildingList ，已返回");
+                return;
+            }
+        }
+
+        public void RemoveBuildingToList(GameObject obj)
+        {
+            if (obj.TryGetComponent<Building>(out var building))
+            {
+                _BuildingList.Remove(obj);
+            }
+            else
+            {
+                Debug.LogWarning("检测到没有 Building 组件的物体想添加进 _BuildingList ，已返回");
+                return;
+            }
+        }
+
+        public GameObject GetBuildingObj(string name = null, bool needFree = true)
+        {
+            foreach (var item in _BuildingList)
             {
                 Building building = item.GetComponent<Building>();
-                if (building.Data.Name == name && !building.IsUsed)
-                {
-                    return item;
-                }
+                if (name != null && building.Data.Name != name) continue;
+                if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
+                return item;
             }
             return null;
         }
 
-        /// <summary>
-        /// 添加建造完成的建筑到建筑列表，要确保建筑有BlueprintBase组件
-        /// </summary>
-        /// <param name="building"></param>
-        public void AddBuildingToListCompleted(GameObject building)
+        public GameObject GetBuildingObj(BuildingStateType state, string name = null, bool needFree = true)
         {
-            BlueprintBase blueprint = building.GetComponent<BlueprintBase>();
-            if (blueprint != null)
+            foreach (var item in _BuildingList)
             {
-                AddBuildingListDone(building);
+                Building building = item.GetComponent<Building>();
+                if (building.State != state) continue;
+                if (name != null && building.Data.Name != name) continue;
+                if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
+                return item;             
             }
-            else
-            {
-                Debug.LogWarning("检测到没有 BlueprintBase 的物体想添加进 BuildingHashSet ，已返回");
-            }
+            return null;
         }
-
-        public void AddBuildingListDone(GameObject building)
-        {
-            _DoneList.Add(building);
-        }
-
-        #endregion
-
-        #region  Task
 
         /// <summary>
         ///  依次访问字典，找对存在的蓝图数据并返回
@@ -151,31 +159,31 @@ namespace ChenChen_BuildingSystem
         {
             if (_FloorBlueprintsDict.TryGetValue(name, out var floorData))
             {
-                CreateBlueprintPrefabIfNull<Building>(name, floorData);
+                GetBlueprintPrefabIfNull<Building>(name, floorData);
                 if (floorData.Prefab != null)
                     return _FloorBlueprintsDict[name];
             }
             if (_WallBlueprintsDict.TryGetValue(name, out var wallData))
             {
-                CreateBlueprintPrefabIfNull<Building>(name, wallData);
+                GetBlueprintPrefabIfNull<Building>(name, wallData);
                 if (wallData.Prefab != null)
                     return _WallBlueprintsDict[name];
             }
             if (_BuildingBlueprintsDict.TryGetValue(name, out var buildingData))
             {
-                CreateBlueprintPrefabIfNull<Building>(name, buildingData);
+                GetBlueprintPrefabIfNull<Building>(name, buildingData);
                 if (buildingData.Prefab != null)
                     return _BuildingBlueprintsDict[name];
             }
             if (_FurnitureBlueprintsDict.TryGetValue(name, out var furnitueData))
             {
-                CreateBlueprintPrefabIfNull<Building>(name, furnitueData);
+                GetBlueprintPrefabIfNull<Building>(name, furnitueData);
                 if (furnitueData.Prefab != null)
                     return _FurnitureBlueprintsDict[name];
             }
             if (_OtherBlueprintsDict.TryGetValue(name, out var otherBlueprintData))
             {
-                CreateBlueprintPrefabIfNull<Building>(name, otherBlueprintData);
+                GetBlueprintPrefabIfNull<Building>(name, otherBlueprintData);
                 if (otherBlueprintData.Prefab != null)
                     return _OtherBlueprintsDict[name];
             }
@@ -184,118 +192,24 @@ namespace ChenChen_BuildingSystem
             return null;
 
             //当没有对应的预制件时生成一个
-            void CreateBlueprintPrefabIfNull<T>(string name, BlueprintData data) where T : BlueprintBase
+            void GetBlueprintPrefabIfNull<T>(string name, BlueprintData data) where T : ThingBase
             {
                 if (data.Prefab == null)
                 {
-                    Debug.LogWarning("此数据预制件为空，已经生成临时预制件");
-
-                    // 创建并添加SpriteRenderer，设置显示层
-                    GameObject prefab = new GameObject(name);
-                    SpriteRenderer spriteRenderer = prefab.AddComponent<SpriteRenderer>();
-                    if (data.PreviewSprite != null) spriteRenderer.sprite = data.PreviewSprite;
+                    string path = $"Prefabs/Blueprints/{name}/{name}_Prefab.prefab";
+                    Debug.LogWarning("此数据预制件为空，尝试获取预制件从: " + path);
+                    GameObject prefab = Resources.Load<GameObject>(path);
+                    if (prefab != null)
+                    {
+                        data.Prefab = prefab;
+                    }
                     else
                     {
-                        spriteRenderer.sprite = null;
-                        Debug.LogWarning("生成的预览图为空");
+                        Debug.LogError("未发现预制件数据");
                     }
-                    spriteRenderer.sortingLayerName = "Above";
-                    // 使用 Instantiate 进行实例化
-                    prefab = Instantiate(prefab);
-                    // 添加触发器
-                    BoxCollider2D boxCollider = prefab.AddComponent<BoxCollider2D>();
-                    boxCollider.isTrigger = true;
-                    // 添加对应的蓝图基类
-                    BlueprintBase blueprintBase = prefab.AddComponent<T>();
-                    blueprintBase.Data = data;
-                    //// 设置路径，保存为预制件
-                    string path = "Assets/Prefabs/Buffer/" + name + ".prefab";
-                    PrefabUtility.SaveAsPrefabAsset(prefab, path);
-                    // 销毁临时预制件对象
-                    Destroy(prefab);
-                    // 存
-                    GameObject savedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Buffer/" + name + ".prefab");
-                    data.Prefab = savedPrefab;
                 }
             }
         }
-
-        /// <summary>
-        /// 把一个还未建造的建筑物添加到待分配队列中
-        /// </summary>
-        /// <param name="task"></param>
-        public void AddTask(GameObject task)
-        {
-            _ToDoList.Add(task);
-            Debug.Log("Add task :" + task.name);
-        }
-
-        /// <summary>
-        /// 完成任务，在已分配队列中移除任务
-        /// </summary>
-        /// <param name="task"></param>
-        public void CompleteTask(GameObject task)
-        {
-            if (_DoingList.Contains(task))
-            {
-                _DoingList.Remove(task);
-                _DoneList.Add(task);    
-                Debug.Log("Complete task :" + task.name);
-                return;
-            }
-            Debug.Log("Don't find task :" + task.name);
-        }
-
-        /// <summary>
-        /// 取消任务，将任务从待分配列表里删除
-        /// </summary>
-        /// <param name="task"></param>
-        public void CanelTask(GameObject task)
-        {
-            if (_ToDoList.Contains(task))
-            {
-                _ToDoList.Remove(task);
-                Debug.Log("Cancel task :" + task.name);
-                return;
-            }
-            Debug.Log("Don't find task :" + task.name);
-        }
-
-        /// <summary>
-        /// 中断任务，在已分配列表里找到放回待分配列表
-        /// </summary>
-        /// <param name="task"></param>
-        public void InterpretTask(GameObject task)
-        {
-            if (_DoingList.Contains(task))
-            {
-                _DoingList.Remove(task);
-                _ToDoList.Add(task);
-                Debug.Log("Interpret task :" + task.name);
-                return;
-            }
-            Debug.Log("Don't find task :" + task.name);
-        }
-
-        /// <summary>
-        ///  从待分配队列中获取一个任务，并放到已分配队列中去,返回一个建筑蓝图的物体
-        /// </summary>
-        /// <returns></returns>
-        public GameObject GetTask()
-        {
-            if (_ToDoList.Count > 0)
-            {
-                int index = UnityEngine.Random.Range(0, _ToDoList.Count);
-                GameObject result = _ToDoList[index];
-                _ToDoList.RemoveAt(index);
-                _DoingList.Add(result);
-                BlueprintBase blueprint = result.GetComponent<BlueprintBase>();
-                return result;
-            }
-            return null;
-        }
-
-        #endregion
 
         #region BuildingSystem
 

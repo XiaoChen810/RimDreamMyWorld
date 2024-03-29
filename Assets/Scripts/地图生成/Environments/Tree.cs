@@ -1,9 +1,10 @@
+using ChenChen_BuildingSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Tree : MonoBehaviour
+public class Tree : ThingBase
 {
     private Collider2D coll;
     private SpriteRenderer sr;
@@ -29,5 +30,45 @@ public class Tree : MonoBehaviour
         {
             sr.color = new Color(1, 1, 1, 1);
         }
+    }
+
+    public override void Placed()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Build(int thisWorkload)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Complete()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Cancel()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Interpret()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void OnMarkDemolish()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Demolish(int value)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void OnDemolished()
+    {
+        throw new System.NotImplementedException();
     }
 }

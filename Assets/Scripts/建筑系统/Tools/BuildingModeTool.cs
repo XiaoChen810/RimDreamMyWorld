@@ -16,17 +16,17 @@ namespace ChenChen_BuildingSystem
         /// <summary>
         /// 所属BuildingSystemManager
         /// </summary>
-        [SerializeField] private BuildingSystemManager buildingSystemManager;
+        private BuildingSystemManager buildingSystemManager;
 
         /// <summary>
         ///  当前地图的放建筑物的瓦片地图
         /// </summary>
-        [SerializeField] private Tilemap BuildingTilemap;
+        private Tilemap BuildingTilemap;
 
         /// <summary>
         ///  当前地图的放墙体的瓦片地图
         /// </summary>
-        [SerializeField] private Tilemap WallTilemap;
+        private Tilemap WallTilemap;
 
         /// <summary>
         /// 当前蓝图的名字
@@ -43,10 +43,8 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         [SerializeField] private GameObject MouseIndicator;
 
-        /// <summary>
-        /// 是否在建造模式下
-        /// </summary>
-        [SerializeField] private bool OnBuildMode;
+
+        public bool OnBuildMode;
 
         public BuildingModeTool()
         {
@@ -102,7 +100,6 @@ namespace ChenChen_BuildingSystem
                     return;
                 }
                 MouseIndicator.SetActive(true);
-
             }
         }
 
@@ -131,7 +128,7 @@ namespace ChenChen_BuildingSystem
                                                                               placePosition,
                                                                               MouseIndicator.transform.rotation,
                                                                               buildingSystemManager.transform);
-                        BlueprintBase blueprint = newObject.GetComponent<BlueprintBase>();
+                        ThingBase blueprint = newObject.GetComponent<ThingBase>();
                         blueprint.Placed();
                     }
                 }

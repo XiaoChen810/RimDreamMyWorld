@@ -1,4 +1,5 @@
 using ChenChen_MapGenerator;
+using ChenChen_UISystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,29 +7,64 @@ using UnityEngine.Tilemaps;
 
 namespace ChenChen_BuildingSystem
 {
-    public class Building : BlueprintBase
+    public class Building : ThingBase, IDetailView
     {
         private Tilemap _wallTilemap;
         private Vector3Int _completePos;
-        public bool isCompletely;
 
-        /// <summary>
-        /// 判断是否已经有棋子在使用
-        /// </summary>
-        [SerializeField] protected Pawn TheUsingPawn;
-        [SerializeField] protected bool isUsed;
+        [SerializeField] protected Pawn _theUsingPawn;
+        public Pawn TheUsingPawn
+        {
+            get
+            {
+                return _theUsingPawn;
+            }
+            protected set
+            {
+                _theUsingPawn = value;
+            }
+        }
 
+        [SerializeField] protected bool _isUsed;
         public bool IsUsed
         {
             get
             {
-                return isUsed;
+                return _isUsed;
             }
             protected set
             {
-                isUsed = value;
+                _isUsed = value;
             }
         }
+
+        [SerializeField] private DetailView _detailView;
+        public DetailView DetailView
+        {
+            get
+            {
+                if( _detailView == null)
+                {
+                    if(!TryGetComponent<DetailView>(out _detailView))
+                    {
+                        _detailView = gameObject.AddComponent<DetailView_Building>();
+                    }
+                }
+                return _detailView;
+            }
+        }
+
+        [SerializeField] private BuildingStateType _buildingState;
+        public BuildingStateType State
+        {
+            get
+            {
+                return _buildingState;
+            }
+        }
+
+
+        #region Life_Built
 
         public override void Placed()
         {
@@ -38,16 +74,6 @@ namespace ChenChen_BuildingSystem
             // 变成半透明，表示还未完成
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             sr.color = new Color(1, 1, 1, 0.5f);
-
-            // 添加到建筑管理系统中
-            if(WorkLoad <= 0)
-            {
-                BuildingSystemManager.Instance.AddBuildingListDone(this.gameObject);
-            }
-            else
-            {
-                BuildingSystemManager.Instance.AddTask(this.gameObject);
-            }
 
             // 设置碰撞体
             if(TryGetComponent<Collider2D>(out Collider2D coll))
@@ -62,11 +88,15 @@ namespace ChenChen_BuildingSystem
                     coll.isTrigger = true;
                 }
             }
+
+            NeedWorkload = WorkloadBuilt;
+            _buildingState = NeedWorkload <= 0 ? BuildingStateType.FinishedBuilding : BuildingStateType.WaitingBuilt;
+            BuildingSystemManager.Instance.AddBuildingToList(this.gameObject);
         }
 
-        public override void Build(float thisWorkload)
+        public override void Build(int thisWorkload)
         {
-            WorkLoad -= thisWorkload;
+            NeedWorkload -= thisWorkload;
         }
 
         public override void Complete()
@@ -91,39 +121,63 @@ namespace ChenChen_BuildingSystem
                 if (Data.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
             }
 
-            // 在BuildingSystemManager上完成建造
-            BuildingSystemManager.Instance.CompleteTask(this.gameObject);
-
-            isCompletely = true;
+            IsDismantlable = true;
+            _buildingState = BuildingStateType.FinishedBuilding;
         }
 
         public override void Cancel()
         {
-            BuildingSystemManager.Instance.CanelTask(this.gameObject);
+            BuildingSystemManager.Instance.RemoveBuildingToList(this.gameObject);
             Destroy(gameObject);
         }
 
         public override void Interpret()
         {
-            BuildingSystemManager.Instance.InterpretTask(this.gameObject);
+            _buildingState = BuildingStateType.WaitingBuilt;
         }
 
-        public virtual void Demolished()
+        #endregion
+
+        #region Life_Demolish
+
+        public override void OnMarkDemolish()
         {
-            // 给所在的地图的该位置撤销已存在建筑物
-            if (Data.IsObstacle)
-                MapManager.Instance.RemoveFromObstaclesList(MapName, _completePos);
+            _buildingState = BuildingStateType.WaitingDemolished;
+            _needWorkload = Mathf.CeilToInt(Data.Workload * 0.5f);
         }
+
+        public override void Demolish(int value)
+        {
+            _needWorkload -= value;
+        }
+
+        public override void OnDemolished()
+        {
+            if (Data.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(MapName, _completePos);
+            if (Data.TileBase != null) _wallTilemap.SetTile(_completePos, null);
+            if(_detailView.onShow)
+            {
+                DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
+                PanelManager.Instance.RemovePanel(detail);
+            }
+            BuildingSystemManager.Instance.RemoveBuildingToList(this.gameObject);
+            Debug.Log($"移除建筑：" + gameObject.name);
+            Destroy(gameObject);
+        }
+
+        #endregion
+
+        #region Privilege
 
         /// <summary>
         /// 获取使用权限
         /// </summary>
         public virtual bool GetPrivilege(Pawn pawn)
         {
-            if(isUsed) return false;
+            if(_isUsed) return false;
 
-            isUsed = true;
-            TheUsingPawn = pawn;
+            _isUsed = true;
+            _theUsingPawn = pawn;
             return true;
         }
 
@@ -134,20 +188,38 @@ namespace ChenChen_BuildingSystem
         /// <returns></returns>
         public virtual bool RevokePrivilege(Pawn pawn)
         {
-            if(TheUsingPawn != pawn) return false;
+            if(_theUsingPawn != pawn) return false;
 
-            isUsed = false;
-            TheUsingPawn = null;
+            _isUsed = false;
+            _theUsingPawn = null;
             return true;
         }
 
+        #endregion
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _detailView = gameObject.AddComponent<DetailView_Building>();
+        }         
+
         private void Update()
         {
-            if(WorkLoad <= 0 && !isCompletely)
+            if(NeedWorkload <= 0 && _buildingState == BuildingStateType.WaitingBuilt)
             {
-                isCompletely = true;
-                Complete();            
+                Complete();
+                _buildingState = BuildingStateType.FinishedBuilding;
+                return;
+            }
+
+            if(NeedWorkload <= 0 && _buildingState == BuildingStateType.WaitingDemolished)
+            {
+                OnDemolished();
+                _buildingState = BuildingStateType.None;
+                return;
             }
         }
+
+
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     /// <summary>
     ///  管理UI面板里面的组件工具
@@ -82,6 +82,7 @@ namespace MyUISystem
                 return child.GetComponent<T>();
             }
 
+            Debug.LogWarning("No Find The Component name of : " + componentName);
             return null;
         }
     }

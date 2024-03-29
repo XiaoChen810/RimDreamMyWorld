@@ -75,8 +75,8 @@ public class Ability
     /// <summary>
     /// 能力具体数值
     /// </summary>
-    [SerializeField] private float _value;
-    public float Value
+    [SerializeField] private int _value;
+    public int Value
     {
         get { return _value; }
         set
@@ -111,7 +111,7 @@ public class Ability
         }
     }
 
-    public Ability(int interest, int exp, int value)
+    public Ability(int interest, float exp, int value)
     {
         _interest = interest;
         _exp = exp;

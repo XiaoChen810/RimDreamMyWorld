@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     public class BuildingMenuPanel : PanelBase
     {

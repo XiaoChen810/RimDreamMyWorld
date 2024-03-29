@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ChenChen_BuildingSystem;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     public class OthersPanel : PanelBase
     {
@@ -14,12 +14,10 @@ namespace MyUISystem
         public override void OnEnter()
         {
             InitContent(BuildingSystemManager.Instance._BuildingBlueprintsDict);
-
-            //UITool.GetOrAddChildComponent<Button>("BtnBlueprintµöÓãµã").onClick.AddListener(() =>
-            //{
-            //    mf_UseBlueprint("µöÓãµã");
-            //});
-
+            UITool.GetOrAddChildComponent<Button>("Btn¹Ø±Õ").onClick.AddListener(() =>
+            {
+                PanelManager.RemovePanel(this);
+            });
         }
     }
 }

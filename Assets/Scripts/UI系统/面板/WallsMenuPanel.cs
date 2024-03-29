@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ChenChen_BuildingSystem;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     public class WallsMenuPanel : PanelBase
     {
@@ -14,7 +14,10 @@ namespace MyUISystem
         public override void OnEnter()
         {
             InitContent(BuildingSystemManager.Instance._WallBlueprintsDict);
-
+            UITool.GetOrAddChildComponent<Button>("Btn¹Ø±Õ").onClick.AddListener(() =>
+            {
+                PanelManager.RemovePanel(this);
+            });
         }
     }
 }

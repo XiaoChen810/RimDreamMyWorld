@@ -42,7 +42,7 @@ public abstract class MoveController : MonoBehaviour
     // 所要移动到的目标点
     protected Vector3 moveTargetPos;
     // 上一个所要移动的目标点
-    [SerializeField] protected Vector3 lastMoveTargetPos;
+    protected Vector3 lastMoveTargetPos;
     // 路径列表
     protected List<Vector2> movePathList = null;
     // 当前路径点索引序号
@@ -76,16 +76,14 @@ public abstract class MoveController : MonoBehaviour
         Move();
     }
 
-    /// <summary>
-    /// 重新获取路径
-    /// </summary>
     protected void ResetPath()
     {
         // 获取路径
         movePathList = MapManager.Instance.GetPath(transform.position, moveTargetPos, CurrentMapName);
 
-        if(movePathList == null)
+        if (movePathList == null)
         {
+            Debug.Log("无法找到路径：" + moveTargetPos);
             EndMove();
             return;
         }
@@ -93,6 +91,28 @@ public abstract class MoveController : MonoBehaviour
         // 重置路径点索引
         if (movePathList != null && movePathList.Count > 0) currentWaypointIndex = 0;
         lastMoveTargetPos = moveTargetPos;
+        return;
+    }
+
+    /// <summary>
+    /// 重新获取路径
+    /// </summary>
+    protected bool ResetPath(Vector3 target)
+    {
+        // 获取路径
+        movePathList = MapManager.Instance.GetPath(transform.position, target, CurrentMapName);
+
+        if(movePathList == null)
+        {
+            Debug.Log("无法找到路径：" + target);
+            EndMove();
+            return false;
+        }
+
+        // 重置路径点索引
+        if (movePathList != null && movePathList.Count > 0) currentWaypointIndex = 0;
+        lastMoveTargetPos = moveTargetPos = target;
+        return true;
     }
 
     #region Virtual
@@ -102,7 +122,7 @@ public abstract class MoveController : MonoBehaviour
         // 如果目标点改变，重新获取路径
         if (lastMoveTargetPos != moveTargetPos)
         {
-            ResetPath();
+            ResetPath(moveTargetPos);
         }
     }
 
@@ -115,10 +135,31 @@ public abstract class MoveController : MonoBehaviour
         EndMove();
     }
 
-    public void GoToHere(Vector3 target)
+    public bool GoToHere(Vector3 target, bool findBetterPosIfFailed = false)
     {
-        StartMove(target);
-        ResetPath();
+        if(!ResetPath(target))
+        {
+            if(findBetterPosIfFailed)
+            {
+                if (TryFindBetterPos(target))
+                {
+                    StartMove();
+                    return true;
+                }
+            }
+            return false;
+        }
+        StartMove();
+        return true;
+    }
+
+    public bool TryFindBetterPos(Vector3 target)
+    {
+        if (ResetPath(target + new Vector3(1, 0))) return true;
+        if (ResetPath(target + new Vector3(-1, 0))) return true;
+        if (ResetPath(target + new Vector3(0, 1))) return true;
+        if (ResetPath(target + new Vector3(0, -1))) return true;
+        return false;
     }
 
     /// <summary>
@@ -268,17 +309,17 @@ public abstract class MoveController : MonoBehaviour
         }
     }
 
-    protected void StartMove(Vector3 target)
+    protected void StartMove()
     {
         CanMove = true;
         IsReach = false;
         IsNearWorkRange = false;
         IsNearAttackRange = false;
-        moveTargetPos = target;
     }
 
     protected void EndMove()
     {
+        Debug.Log("停止移动");
         CanMove = false;
         IsReach = true;
         currentWaypointIndex = -1;

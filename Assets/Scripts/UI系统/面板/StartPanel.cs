@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MyScene;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     public class StartPanel : PanelBase
     {

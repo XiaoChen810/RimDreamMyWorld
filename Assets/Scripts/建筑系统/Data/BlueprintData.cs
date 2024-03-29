@@ -8,6 +8,9 @@ namespace ChenChen_BuildingSystem
         Floor,Wall,Building,Furniture,Other
     }
 
+    /// <summary>
+    /// The data for thing
+    /// </summary>
     [CreateAssetMenu(menuName = "蓝图数据", fileName = "蓝图数据", order = 0)]
     public class BlueprintData : ScriptableObject
     {
@@ -34,5 +37,9 @@ namespace ChenChen_BuildingSystem
 
         [Header("最后生成的瓦片")]
         public TileBase TileBase;
+
+        [Header("耐久度")]
+        public int Durability;
+
     }
 }

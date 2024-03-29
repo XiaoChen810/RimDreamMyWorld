@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyUISystem
+namespace ChenChen_UISystem
 {
     /// <summary>
     /// 管理UI的创建与销毁

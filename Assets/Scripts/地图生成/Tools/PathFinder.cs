@@ -80,7 +80,7 @@ namespace ChenChen_MapGenerator
             // 判断是否可行
             if (endNode == null || endNode.walkable != true)
             {
-                // UnityEngine.Debug.Log($"目标点{targetPos}不可达");
+                Debug.Log($"目标点{targetPos}不可达");
                 return null;
             }
 

@@ -9,7 +9,7 @@ public enum StateType
 
 public interface IState
 {
-    void OnEnter();
+    bool OnEnter();
     StateType OnUpdate();
     void OnExit();
     void OnPause();

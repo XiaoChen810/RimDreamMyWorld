@@ -1,4 +1,4 @@
-using PawnStates;
+using ChenChen_AI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,12 +33,18 @@ public class CharacterMoveController : MoveController
         // 选中情况下, 鼠标右击，改变目标点
         if (_characterMain.IsSelect && Input.GetMouseButtonDown(1))
         {
-            _characterMain.StateMachine.InterruptState();
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _characterMain.StateMachine.SetNextState(
+                    new PawnJob_Move(_characterMain, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
 
-            _characterMain.StateMachine.SetNextState(new PawnState_Move(
-                _characterMain, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+                _characterMain.IsSelect = false;
+                return;
+            }
+            _characterMain.StateMachine.TryChangeState(
+                new PawnJob_Move(_characterMain, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
 
             _characterMain.IsSelect = false;
-        }        
+        }
     }
 }

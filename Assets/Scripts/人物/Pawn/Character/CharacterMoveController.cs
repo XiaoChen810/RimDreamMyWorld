@@ -35,7 +35,7 @@ public class CharacterMoveController : MoveController
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                _characterMain.StateMachine.SetNextState(
+                _characterMain.StateMachine.StateQueue.Enqueue(
                     new PawnJob_Move(_characterMain, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
 
                 _characterMain.IsSelect = false;

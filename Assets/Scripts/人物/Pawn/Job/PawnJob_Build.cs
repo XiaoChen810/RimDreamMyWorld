@@ -5,8 +5,8 @@ namespace ChenChen_AI
 {
     public class PawnJob_Build : JobBase
     {
-        private GameObject building;
-        private Building currentWorkObject;
+        private GameObject target;
+        private Building curTargetComponent;
         private float _time;
 
         /// <summary>
@@ -14,34 +14,39 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="buildPos"></param>
-        public PawnJob_Build(Pawn pawn, GameObject building = null) : base(pawn)
+        public PawnJob_Build(Pawn pawn, GameObject target = null) : base(pawn)
         {
-            this.building = building;
+            this.target = target;
         }
 
         public override bool OnEnter()
         {
-            if (building == null) return false;
+            if (target == null) return false;
 
             // 尝试获取蓝图
-            currentWorkObject = building.GetComponent<Building>();
-            if (currentWorkObject == null)
+            curTargetComponent = target.GetComponent<Building>();
+            if (curTargetComponent == null)
             {
                 Debug.LogWarning("The Building Don't Have Building Component");
                 return false;
             }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!currentWorkObject.GetPrivilege(pawn))
+            if (!curTargetComponent.GetPrivilege(pawn))
             {
                 return false;
             }
 
             // 设置人物目标点，前往目标，跑过去
-            pawn.MoveControl.GoToHere(building.transform.position);
+            if (!pawn.MoveControl.GoToHere(target.transform.position, true))
+            {
+                Debug.LogWarning("The building can't arrive");
+                return false;
+            }
+
             pawn.MoveControl.IsRun = true;
             // 设置人物无法接取工作
-            pawn.JobToDo(building);
+            pawn.JobToDo(target);
 
             return true;
         }
@@ -49,7 +54,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点附近
-            if (Vector2.Distance(pawn.transform.position, building.transform.position) < pawn.WorkRange)
+            if (Vector2.Distance(pawn.transform.position, target.transform.position) < pawn.WorkRange)
             {
                 pawn.MoveControl.StopMove();
 
@@ -60,7 +65,7 @@ namespace ChenChen_AI
                 _time += Time.deltaTime;
                 if(_time > 2)
                 {
-                    currentWorkObject.Build(pawn.Attribute.A_Construction.Value);
+                    curTargetComponent.Build(pawn.Attribute.A_Construction.Value);
                     _time = 0;
                 }
 
@@ -69,7 +74,7 @@ namespace ChenChen_AI
             }
 
             // 如果完成了建造，状态机结束暂停，可以进入下一个状态
-            if (currentWorkObject.NeedWorkload <= 0)
+            if (curTargetComponent.NeedWorkload <= 0)
             {
                 return StateType.Success;
             }
@@ -79,9 +84,9 @@ namespace ChenChen_AI
 
         public override void OnExit()
         {
-            Debug.Log($"已经完成建造" + currentWorkObject.name);
+            Debug.Log($"{pawn.name} 已经完成建造: " + curTargetComponent.name);
             // 归还目标使用权限
-            currentWorkObject.RevokePrivilege(pawn);
+            curTargetComponent.RevokePrivilege(pawn);
 
             // 设置人物状态
             pawn.JobDone();
@@ -93,7 +98,7 @@ namespace ChenChen_AI
 
         public override void OnInterrupt()
         {
-            currentWorkObject.Interpret();
+            curTargetComponent.Interpret();
             OnExit();
         }
     }

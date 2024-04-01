@@ -54,7 +54,7 @@ namespace ChenChen_MapGenerator
                         set = false;
 
                     // 设置
-                    nodes[i, j] = new FinderNode(i, j, set);
+                    nodes[i, j] = new FinderNode(i, j, set ? 0 : FinderNode.s_MaxIntoCost);
                 }
             }
 
@@ -78,9 +78,9 @@ namespace ChenChen_MapGenerator
             FinderNode endNode = TransfromVectorToNode(targetPos);
 
             // 判断是否可行
-            if (endNode == null || endNode.walkable != true)
+            if (endNode == null || !endNode.walkable)
             {
-                Debug.Log($"目标点{targetPos}不可达");
+                Debug.LogWarning($"目标点{targetPos}不可达");
                 return null;
             }
 
@@ -101,6 +101,11 @@ namespace ChenChen_MapGenerator
 
                 foreach (var node in openSet)
                 {
+                    if (node == endNode)
+                    {
+                        currentNode = node;
+                        break;
+                    }
                     if (currentNode == null || node.Fcost < currentNode.Fcost || (node.Fcost == currentNode.Fcost && node.Hcost < currentNode.Hcost))
                     {
                         currentNode = node;
@@ -174,14 +179,14 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置某个节点是否可以通行 
+        /// 设置某个节点的进入消耗，默认为最大，即设置为为不可通行 
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="pos"></param>
         /// <param name="set"></param>
-        public void SetNodeWalkable(FinderNode[,] nodes, Vector3Int pos, bool set = false)
+        public void SetNodeIntoCost(FinderNode[,] nodes, Vector3Int pos, float set = FinderNode.s_MaxIntoCost)
         {
-            nodes[pos.x, pos.y].walkable = set;
+            nodes[pos.x, pos.y].intoCost = set;
         }
 
 
@@ -220,6 +225,10 @@ namespace ChenChen_MapGenerator
             PutInOpenSet(x, y - 1, start, end);
             PutInOpenSet(x + 1, y, start, end);
             PutInOpenSet(x - 1, y, start, end);
+            //PutInOpenSet(x - 1, y + 1, start, end);
+            //PutInOpenSet(x + 1, y + 1, start, end);
+            //PutInOpenSet(x - 1, y - 1, start, end);
+            //PutInOpenSet(x + 1, y - 1, start, end);
 
             if (NodeWalkable(x - 1, y) && NodeWalkable(x, y + 1))
                 PutInOpenSet(x - 1, y + 1, start, end);
@@ -248,7 +257,7 @@ namespace ChenChen_MapGenerator
             if (openSet.Contains(currentNode) || !currentNode.walkable || closeSet.Contains(currentNode)) return;
 
             currentNode.father = fatherNode;
-            currentNode.Gcost = currentNode.father.Gcost + GetDistance(currentNode.father, currentNode);
+            currentNode.Gcost = currentNode.father.Gcost + GetDistance(currentNode.father, currentNode) + currentNode.intoCost;
             currentNode.Hcost = GetDistance(currentNode, targetNode);
             currentNode.Fcost = currentNode.Gcost + currentNode.Hcost;
 

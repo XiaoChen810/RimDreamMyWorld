@@ -5,8 +5,8 @@ namespace ChenChen_AI
 {
     public class PawnJob_Fishing : JobBase
     {
-        private GameObject fishing;
-        private Building currentWorkObject;
+        private GameObject target;
+        private Building curTargetComponent;
 
         private float _time;
         private float animTime1 = 1.135f;
@@ -19,35 +19,35 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="fishPos"></param>
-        public PawnJob_Fishing(Pawn pawn, GameObject fishing = null) : base(pawn, null)
+        public PawnJob_Fishing(Pawn pawn, GameObject target = null) : base(pawn, null)
         {
             this.pawn = pawn;
-            this.fishing = fishing;
+            this.target = target;
         }
 
         public override bool OnEnter()
         {
-            if (fishing == null) return false;
+            if (target == null) return false;
 
-            currentWorkObject = fishing.GetComponent<Building>();
-            if (currentWorkObject == null)
+            curTargetComponent = target.GetComponent<Building>();
+            if (curTargetComponent == null)
             {
                 Debug.LogWarning("The FishingPoint Don't Have Building Component");
                 return false;
             }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!currentWorkObject.GetPrivilege(pawn))
+            if (!curTargetComponent.GetPrivilege(pawn))
             {
                 //未取得权限则退出
                 return false;
             }
 
             // 设置目标点
-            pawn.MoveControl.GoToHere(fishing.transform.position);
+            pawn.MoveControl.GoToHere(target.transform.position);
 
             // 设置人物状态
-            pawn.JobToDo(fishing);
+            pawn.JobToDo(target);
 
             return true;
         }   
@@ -55,7 +55,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 到达后
-            if (pawn.MoveControl.IsReach || Vector2.Distance(pawn.transform.position, fishing.transform.position) < 0.01)
+            if (pawn.MoveControl.IsReach || Vector2.Distance(pawn.transform.position, target.transform.position) < 0.01)
             {
                 pawn.JobDoing();
                 _time += Time.deltaTime;
@@ -88,7 +88,7 @@ namespace ChenChen_AI
         {
             pawn.JobDone();
 
-            currentWorkObject.RevokePrivilege(pawn);
+            curTargetComponent.RevokePrivilege(pawn);
         }
     }
 }

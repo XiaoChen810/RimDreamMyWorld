@@ -163,7 +163,7 @@ namespace ChenChen_MapGenerator
         /// </summary>
         /// <param name="Name"> 子物体名字 </param>
         /// <returns></returns>
-        public GameObject GetChildObject(string Name)
+        public GameObject GetChildObjectFromCurMap(string Name)
         {
             if (CurrentMapName != null)
             {
@@ -197,18 +197,18 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置寻路节点是否可以行走
+        /// 设置某地图某点的进入所需消耗
         /// </summary>
         /// <param name="mapName"> 地图的名字 </param>
         /// <param name="pos"> 坐标 </param>
-        /// <param name="set"> 是障碍物则设置为false，默认为false </param>
-        public void SetNodeWalkable(string mapName, Vector3Int pos,bool set = false)
+        /// <param name="set"> </param>
+        public void SetNodeIntoCost(string mapName, Vector3Int pos,float set = FinderNode.s_MaxIntoCost)
         {
             if(SceneMapDatasDict.ContainsKey(mapName))
             {
                 //int unit = SceneMapDatasDict[mapName].numberUnitGrid;
                 //SceneMapDatasDict[mapName].nodes[pos.x * unit,pos.y * unit].walkable = set;
-                PathFinder.SetNodeWalkable(SceneMapDatasDict[mapName].finderNodes, pos, set);
+                PathFinder.SetNodeIntoCost(SceneMapDatasDict[mapName].finderNodes, pos, set);
                 MapObstaclesChange?.Invoke();
             }
             else
@@ -218,7 +218,7 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置地图某位置有建筑物
+        /// 设置地图某位置有障碍
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="pos"></param>
@@ -228,12 +228,51 @@ namespace ChenChen_MapGenerator
             if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-                SetNodeWalkable(mapName, pos, false);
+                SetNodeIntoCost(mapName, pos);
             }
         }
 
         /// <summary>
-        /// 设置地图某位置已经没有障碍物
+        /// 设置地图某位置有建筑物
+        /// </summary>
+        /// <param name="obj"></param>
+        public void AddToObstaclesList(GameObject obj, string mapName = null, float set = FinderNode.s_MaxIntoCost)
+        {
+            mapName = mapName == null ? CurrentMapName : mapName;
+            // 获取当前场景的地图数据
+            SceneMapData currentMapData = SceneMapDatasDict[mapName];
+            // 获取物体的世界边界
+            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+            Vector3 maxNum = bounds.max;
+            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+            {
+                maxNum -= Vector3.one;
+            }
+            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+            // 遍历占据的格子并进行处理
+            for (int x = minCell.x; x <= maxCell.x; x++)
+            {
+                for (int y = minCell.y; y <= maxCell.y; y++)
+                {
+                    // 在这里处理每个占据的格子
+                    if (x > currentMapData.width || x < 0) continue;
+                    if (y > currentMapData.height || y < 0) continue;
+
+                    Vector3Int pos = new Vector3Int(x, y);
+                    SetNodeIntoCost(mapName, pos, set);
+
+                    if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
+                    SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// 设置地图某位置已经没有障碍
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="pos"></param>
@@ -243,7 +282,46 @@ namespace ChenChen_MapGenerator
             if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
-                SetNodeWalkable(mapName, pos, false);
+                SetNodeIntoCost(mapName, pos, 0);
+            }
+        }
+
+        /// <summary>
+        /// 设置地图某位置已经没有障碍物
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="mapName"></param>
+        public void RemoveFromObstaclesList(GameObject obj, string mapName = null)
+        {
+            mapName = mapName == null ? CurrentMapName : mapName;
+            // 获取当前场景的地图数据
+            SceneMapData currentMapData = SceneMapDatasDict[mapName];
+            // 获取物体的世界边界
+            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+            Vector3 maxNum = bounds.max;
+            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+            {
+                maxNum -= Vector3.one;
+            }
+            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+            // 遍历占据的格子并进行处理
+            for (int x = minCell.x; x <= maxCell.x; x++)
+            {
+                for (int y = minCell.y; y <= maxCell.y; y++)
+                {
+                    // 在这里处理每个占据的格子
+                    if (x > currentMapData.width || x < 0) continue;
+                    if (y > currentMapData.height || y < 0) continue;
+
+                    Vector3Int pos = new Vector3Int(x, y);
+                    SetNodeIntoCost(mapName, pos, 0);
+
+                    if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
+                    SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+                }
             }
         }
 
@@ -256,7 +334,6 @@ namespace ChenChen_MapGenerator
         {
             // 获取当前场景的地图数据
             SceneMapData currentMapData = SceneMapDatasDict[CurrentMapName];
-            MapNode[,] mapNodes = currentMapData.mapNodes;
             // 获取物体的世界边界
             Bounds bounds = obj.GetComponent<Collider2D>().bounds;
             // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
@@ -268,26 +345,6 @@ namespace ChenChen_MapGenerator
                 maxNum -= Vector3.one;
             }
             Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
-
-            // 特殊处理
-            //BlueprintBase blueprintBase = obj.GetComponent<BlueprintBase>();
-            //if(blueprintBase != null && blueprintBase.Data.Name.Equals("钓鱼点"))
-            //{
-            //    Vector3Int pos = currentMapData.mainTilemap.WorldToCell(obj.transform.position);
-            //    if (SceneMapDatasDict[CurrentMapName].obstaclesPositionList.Contains(pos)) return false;
-            //    for (int x = minCell.x; x <= maxCell.x; x++)
-            //    {
-            //        for (int y = minCell.y; y <= maxCell.y; y++)
-            //        {
-            //            // 在这里处理每个占据的格子
-            //            if (x > currentMapData.width || x < 0) return false;
-            //            if (y > currentMapData.height || y < 0) return false;
-            //            if (mapNodes[x, y].type != MapNode.Type.water) return false;
-            //        }
-            //    }
-
-            //    return true;
-            //}
 
             // 遍历占据的格子并进行处理
             for (int x = minCell.x; x <= maxCell.x; x++)

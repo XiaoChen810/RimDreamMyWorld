@@ -28,7 +28,7 @@ public class CharacterMain : Pawn
     private void Start()
     {
         /* 在游戏开始添加这个人物可以存在的状态 */
-        StateMachine = new StateMachine(new ChenChen_AI.PawnJob_Idle(this));
+        StateMachine = new StateMachine(new ChenChen_AI.PawnJob_Idle(this), this);
 
         /* 在游戏开始添加这个人物的移动组件 */
         MoveControl = GetComponent<CharacterMoveController>();
@@ -58,21 +58,21 @@ public class CharacterMain : Pawn
             job = BuildingSystemManager.Instance.GetBuildingObj(BuildingStateType.WaitingBuilt, needFree: true);
             if (job != null)
             {
-                StateMachine.SetNextState(new ChenChen_AI.PawnJob_Build(this, job));
+                StateMachine.NextState = new ChenChen_AI.PawnJob_Build(this, job);
                 return;
             }
 
             job = BuildingSystemManager.Instance.GetBuildingObj("钓鱼点", needFree: true);
             if (job != null)
             {
-                StateMachine.SetNextState(new ChenChen_AI.PawnJob_Fishing(this, job));
+                StateMachine.NextState = new ChenChen_AI.PawnJob_Fishing(this, job);
                 return;
             }
 
             job = BuildingSystemManager.Instance.GetBuildingObj(BuildingStateType.WaitingDemolished, needFree: true);
             if (job != null)
             {
-                StateMachine.SetNextState(new ChenChen_AI.PawnJob_Demolished(this, job));
+                StateMachine.NextState = new ChenChen_AI.PawnJob_Demolished(this, job);
                 return;
             }
         }

@@ -1,7 +1,5 @@
 using ChenChen_MapGenerator;
 using ChenChen_UISystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,7 +7,7 @@ namespace ChenChen_BuildingSystem
 {
     public class Building : ThingBase, IDetailView
     {
-        private Tilemap _wallTilemap;
+        private Tilemap _buildingTilemap;
         private Vector3Int _completePos;
 
         [SerializeField] protected Pawn _theUsingPawn;
@@ -68,8 +66,11 @@ namespace ChenChen_BuildingSystem
 
         public override void Placed()
         {
-            _wallTilemap = MapManager.Instance.GetChildObject("Building").GetComponent<Tilemap>();
-            _completePos = _wallTilemap.WorldToCell(transform.position);
+            // 设置初始值
+            NeedWorkload = WorkloadBuilt;
+            _buildingState = NeedWorkload <= 0 ? BuildingStateType.FinishedBuilding : BuildingStateType.WaitingBuilt;
+            _buildingTilemap = BuildingSystemManager.Instance.Tool.BuildingTilemap;
+            _completePos = _buildingTilemap.WorldToCell(transform.position);
 
             // 变成半透明，表示还未完成
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
@@ -89,8 +90,7 @@ namespace ChenChen_BuildingSystem
                 }
             }
 
-            NeedWorkload = WorkloadBuilt;
-            _buildingState = NeedWorkload <= 0 ? BuildingStateType.FinishedBuilding : BuildingStateType.WaitingBuilt;
+            // 设置完一切后
             BuildingSystemManager.Instance.AddBuildingToList(this.gameObject);
         }
 
@@ -106,7 +106,7 @@ namespace ChenChen_BuildingSystem
             // 在瓦片地图设置瓦片
             if (Data.TileBase != null)
             {
-                _wallTilemap.SetTile(_completePos, Data.TileBase);
+                _buildingTilemap.SetTile(_completePos, Data.TileBase);
                 sr.color = new Color(1, 1, 1, 0f);
             }
             else
@@ -114,12 +114,10 @@ namespace ChenChen_BuildingSystem
                 sr.color = new Color(1, 1, 1, 1f);
             }
 
-            // 如果是障碍物，则设置碰撞体,给所在的地图的该位置设置存在障碍物
-            if (Data.IsObstacle)
-            {
-                MapManager.Instance.AddToObstaclesList(MapName, _completePos);
-                if (Data.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
-            }
+            // 如果是障碍物,给所在的地图的该位置设置存在障碍物
+            if (Data.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject, set: FinderNode.s_MaxIntoCost);
+            // 如果是障碍物，则设置碰撞体
+            if (Data.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
 
             IsDismantlable = true;
             _buildingState = BuildingStateType.FinishedBuilding;
@@ -153,8 +151,8 @@ namespace ChenChen_BuildingSystem
 
         public override void OnDemolished()
         {
-            if (Data.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(MapName, _completePos);
-            if (Data.TileBase != null) _wallTilemap.SetTile(_completePos, null);
+            if (Data.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(this.gameObject);
+            if (Data.TileBase != null) _buildingTilemap.SetTile(_completePos, null);
             if(_detailView.onShow)
             {
                 DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
@@ -205,14 +203,14 @@ namespace ChenChen_BuildingSystem
 
         private void Update()
         {
-            if(NeedWorkload <= 0 && _buildingState == BuildingStateType.WaitingBuilt)
+            if(_buildingState == BuildingStateType.WaitingBuilt && NeedWorkload <= 0)
             {
                 Complete();
                 _buildingState = BuildingStateType.FinishedBuilding;
                 return;
             }
 
-            if(NeedWorkload <= 0 && _buildingState == BuildingStateType.WaitingDemolished)
+            if(_buildingState == BuildingStateType.WaitingDemolished && NeedWorkload <= 0)
             {
                 OnDemolished();
                 _buildingState = BuildingStateType.None;

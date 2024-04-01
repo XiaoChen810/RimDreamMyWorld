@@ -64,10 +64,12 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
+    private static int nameIndex = 0;
     public void 生成一个基础小人()
     {
         Vector3 createPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
         GameObject newCharacter = Instantiate(CharacterTest, createPos, Quaternion.identity);
+        newCharacter.name = "小光头" + nameIndex++;
         CharactersList.Add(newCharacter);   
     }
 

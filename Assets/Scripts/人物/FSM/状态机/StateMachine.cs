@@ -5,42 +5,68 @@ using UnityEngine;
 [System.Serializable]
 public class StateMachine 
 {
-    public StateBase currentState = null;
-    protected StateBase nextState = null;
+    protected StateBase _currentState = null;
+    protected StateBase _nextState = null;
+    protected Queue<StateBase> _StateQueue;
     protected StateBase defaultState;
 
     /// <summary>
-    ///  状态队列，当有新的状态添加时，可以添加到状态队列里
+    /// 当前状态
     /// </summary>
-    protected Queue<StateBase> StateQueue;
+    public StateBase CurState
+    {
+        get { return _currentState; }
+        set { _currentState = value; }
+    }
 
     /// <summary>
-    ///  状态库，订阅的状态
+    /// 下一个状态
     /// </summary>
-    public Dictionary<string, StateBase> StateDictionary;
-
-    public StateMachine(StateBase defaultState)
+    public StateBase NextState
     {
-        StateQueue = new Queue<StateBase>();
-        StateDictionary = new Dictionary<string, StateBase>();
+        get { return _nextState; }
+        set
+        {
+            _nextState = value;
+        }
+    }
+
+    /// <summary>
+    /// 状态队列，当有新的状态添加时，可以添加到状态队列里
+    /// </summary>
+    public Queue<StateBase> StateQueue
+    {
+        get { return _StateQueue; }
+        set
+        {
+            _StateQueue = value;
+        }
+    }
+
+    public Pawn Owner;
+
+    public StateMachine(StateBase defaultState, Pawn owner)
+    {
+        _StateQueue = new Queue<StateBase>();
+        this.Owner = owner;
         this.defaultState = defaultState;
     }
 
     public void Update()
     {
-        if (currentState != null)
+        if (_currentState != null)
         {
-            switch (currentState.OnUpdate())
+            switch (_currentState.OnUpdate())
             {
                 //状态完成
                 case StateType.Success:
-                    currentState.IsSuccess = true;
+                    _currentState.IsSuccess = true;
                     TryChangeState();
                     break;
                 //状态失败把当前状态设为空
                 case StateType.Failed:
-                    Debug.Log("状态失败：" + currentState.ToString());
-                    currentState = null;
+                    Debug.Log("状态失败：" + _currentState.ToString());
+                    _currentState = null;
                     break;
                 //状态正在进行什么也不处理
                 case StateType.Doing:
@@ -65,61 +91,22 @@ public class StateMachine
         }
 
         //如果下一个目标状态不为空，则切换成下一个状态
-        if (nextState != null)
+        if (_nextState != null)
         {
-            ChangeState(nextState);
-            nextState = null;
+            ChangeState(_nextState);
+            _nextState = null;
             return;
         }
 
         //如果当前队列不为空，则从队列中抽一个状态出来
-        if (StateQueue.Count > 0)
+        if (_StateQueue.Count > 0)
         {
-            ChangeState(StateQueue.Dequeue());
+            ChangeState(_StateQueue.Dequeue());
             return;
         }
 
         //都为空则设置为默认
         ChangeState(defaultState);
-    }
-
-    /// <summary>
-    /// 登记一个状态
-    /// </summary>
-    /// <param name="state"></param>
-    /// <param name="stateName"></param>
-    public void RegisteredState(StateBase state,string stateName)
-    {
-        if (!StateDictionary.ContainsKey(stateName))
-        {
-            StateDictionary.Add(stateName, state);
-        }
-    }
-
-    public Queue<StateBase> GetStateQueue()
-    {
-        return StateQueue;
-    }
-
-    public bool SpaceStateQueue()
-    {
-        return StateQueue.Count == 0;
-    }
-
-    public void AddStateToQueue(StateBase state)
-    {
-        StateQueue.Enqueue(state);
-        // Debug.Log("已经添加状态" + state + "进入队列");
-    }
-
-    public StateBase GetNextState()
-    {
-        return nextState;
-    }
-
-    public void SetNextState(StateBase next)
-    {
-        nextState = next;
     }
 
     /// <summary>
@@ -129,30 +116,29 @@ public class StateMachine
     private void ChangeState(StateBase newState)
     {
         // 如果当前状态未完成
-        if (currentState != null && !currentState.IsSuccess)
+        if (_currentState != null && !_currentState.IsSuccess)
         {
             InterruptState();
         }
-        else if (currentState != null)
+        else if (_currentState != null)
         {
             // 退出当前状态
-            currentState.OnExit();
+            _currentState.OnExit();
         }
 
         // 切换到新状态
-        currentState = newState;
-        if (currentState != null)
+        _currentState = newState;
+        if (_currentState != null)
         {
-            if (currentState.OnEnter())
+            if (_currentState.OnEnter())
             {
-                Debug.Log("已经切换成状态: " + currentState);
+                Debug.Log($"{Owner.name}切换成状态: " + _currentState);
                 return;
             }
             // 未成功进入
-            Debug.Log("进入状态失败：" + currentState.ToString());
-            currentState = null;
+            Debug.Log($"{Owner.name}进入状态失败，当前状态自动切换为空：" + _currentState.ToString());
+            _currentState = null;
         }
-        Debug.Log("切换成空状态");
     }
 
     /// <summary>
@@ -162,12 +148,12 @@ public class StateMachine
     private void InterruptState()
     {
         // 中断当前状态
-        if (currentState != null)
+        if (_currentState != null)
         {
-            currentState.OnInterrupt();
+            _currentState.OnInterrupt();
         }
 
-        currentState = null;
+        _currentState = null;
     }
 }
 

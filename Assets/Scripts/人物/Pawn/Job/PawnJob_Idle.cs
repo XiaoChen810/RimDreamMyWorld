@@ -22,7 +22,7 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            if (pawn.StateMachine.GetNextState() != null || !pawn.StateMachine.SpaceStateQueue())
+            if (pawn.StateMachine.NextState != null || !(pawn.StateMachine.StateQueue.Count == 0))
             {
                 return StateType.Success;
             }
@@ -32,7 +32,7 @@ namespace ChenChen_AI
             {
                 Vector2 p = pawn.transform.position;
                 p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
-                pawn.StateMachine.SetNextState(new PawnJob_Move(pawn, p));
+                pawn.StateMachine.NextState = new PawnJob_Move(pawn, p);
                 return StateType.Success;
             }
             return StateType.Doing;

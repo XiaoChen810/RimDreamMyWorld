@@ -2650,9 +2650,7 @@ MonoBehaviour:
     _serializedList: []
   _OtherBlueprintsDict:
     _serializedList: []
-  _ToDoList: []
-  _DoingList: []
-  _DoneList: []
+  _BuildingList: []
 --- !u!4 &2026675290
 Transform:
   m_ObjectHideFlags: 0
@@ -2680,13 +2678,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3869b4afb4e7bb4cbc56c3c683e26bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSystemManager: {fileID: 0}
   BuildingTilemap: {fileID: 0}
-  WallTilemap: {fileID: 0}
-  CurBuildingName: 
-  blueprintData: {fileID: 0}
-  MouseIndicator: {fileID: 0}
   OnBuildMode: 0
+  CurBuildingName: 
+  MouseIndicator: {fileID: 0}
 --- !u!1001 &783524068151732711
 PrefabInstance:
   m_ObjectHideFlags: 0

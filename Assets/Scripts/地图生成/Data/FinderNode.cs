@@ -9,16 +9,24 @@ namespace ChenChen_MapGenerator
     /// </summary>
     public class FinderNode
     {
+        public const float s_MaxIntoCost = 99999;
         public int cols, rows;
         public float Fcost, Gcost, Hcost;
+        public float intoCost;
+        public bool walkable
+        {
+            get
+            {
+                return intoCost < s_MaxIntoCost;
+            }
+        }
         public FinderNode father;
-        public bool walkable;
 
-        public FinderNode(int x, int y, bool walkable)
+        public FinderNode(int x, int y, float intoCost)
         {
             this.cols = x;
             this.rows = y;
-            this.walkable = walkable;
+            this.intoCost = intoCost;
         }
     }
 }

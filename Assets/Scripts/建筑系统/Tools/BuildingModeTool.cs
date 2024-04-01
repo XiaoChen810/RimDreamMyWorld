@@ -19,36 +19,30 @@ namespace ChenChen_BuildingSystem
         private BuildingSystemManager buildingSystemManager;
 
         /// <summary>
-        ///  当前地图的放建筑物的瓦片地图
+        /// 当前的蓝图数据
         /// </summary>
-        private Tilemap BuildingTilemap;
+        private BlueprintData curBlueprintData;
 
         /// <summary>
-        ///  当前地图的放墙体的瓦片地图
+        /// 当前地图的放建筑物的瓦片地图
         /// </summary>
-        private Tilemap WallTilemap;
+        public Tilemap BuildingTilemap;
+
+        /// <summary>
+        /// 是否正处于建造模式中
+        /// </summary>
+
+        public bool OnBuildMode;
 
         /// <summary>
         /// 当前蓝图的名字
         /// </summary>
-        [SerializeField] private string CurBuildingName;
-
-        /// <summary>
-        /// 当前的蓝图数据
-        /// </summary>
-        [SerializeField] private BlueprintData blueprintData;
+        public string CurBuildingName;
 
         /// <summary>
         /// 当前鼠标上的蓝图预览
         /// </summary>
         [SerializeField] private GameObject MouseIndicator;
-
-
-        public bool OnBuildMode;
-
-        public BuildingModeTool()
-        {
-        }
 
         private void Start()
         {
@@ -78,8 +72,8 @@ namespace ChenChen_BuildingSystem
         private void BuildStart(string name)
         {
             //  找到当前应该放置的蓝图
-            blueprintData = BuildingSystemManager.Instance.GetData(name);
-            if (blueprintData == null)
+            curBlueprintData = BuildingSystemManager.Instance.GetData(name);
+            if (curBlueprintData == null)
             {
                 Debug.LogWarning($"不存在蓝图: {name}, 已返回");
                 OnBuildMode = false;
@@ -87,13 +81,12 @@ namespace ChenChen_BuildingSystem
             }
             else
             {
-                // 获取TileMap
-                BuildingTilemap = MapManager.Instance.GetChildObject("Building").GetComponent<Tilemap>();
-                WallTilemap = MapManager.Instance.GetChildObject("Wall").GetComponent<Tilemap>();
+                // 获取当前地图的TileMap
+                BuildingTilemap = MapManager.Instance.GetChildObjectFromCurMap("Building").GetComponent<Tilemap>();
 
                 // 配置鼠标指示器信息
                 OnBuildMode = true;
-                MouseIndicator = UnityEngine.Object.Instantiate(blueprintData.Prefab);
+                MouseIndicator = UnityEngine.Object.Instantiate(curBlueprintData.Prefab);
                 if (!MouseIndicator.GetComponent<BoxCollider2D>())
                 {
                     Debug.LogError("ERROR");
@@ -124,12 +117,7 @@ namespace ChenChen_BuildingSystem
                     // 放置
                     if (Input.GetMouseButtonDown(0))
                     {
-                        GameObject newObject = UnityEngine.Object.Instantiate(blueprintData.Prefab,
-                                                                              placePosition,
-                                                                              MouseIndicator.transform.rotation,
-                                                                              buildingSystemManager.transform);
-                        ThingBase blueprint = newObject.GetComponent<ThingBase>();
-                        blueprint.Placed();
+                        TryPlaced(placePosition);
                     }
                 }
                 else
@@ -152,6 +140,17 @@ namespace ChenChen_BuildingSystem
                     BuildEnd();
                 }
             }
+        }
+
+        protected void TryPlaced(Vector3 placePosition)
+        {
+            GameObject newObject = UnityEngine.Object.Instantiate(curBlueprintData.Prefab,
+                                                      placePosition,
+                                                      MouseIndicator.transform.rotation,
+                                                      buildingSystemManager.transform);
+            ThingBase blueprint = newObject.GetComponent<ThingBase>();
+            MapManager.Instance.AddToObstaclesList(newObject, set: 0);
+            blueprint.Placed();
         }
 
         private void BuildEnd()

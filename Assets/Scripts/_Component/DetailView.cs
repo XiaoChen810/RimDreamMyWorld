@@ -35,12 +35,10 @@ public abstract class DetailView : MonoBehaviour
     public void StartShow()
     {
         onShow = true;
-        Debug.Log($"{(gameObject != null ? gameObject.name : null)} is on show");
     }
 
     public void EndShow()
     {
         onShow = false;
-        Debug.Log($"{(gameObject != null ? gameObject.name : null)} stop show");
     }
 }

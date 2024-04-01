@@ -104,7 +104,7 @@ public abstract class MoveController : MonoBehaviour
 
         if(movePathList == null)
         {
-            Debug.Log("无法找到路径：" + target);
+            Debug.LogWarning("无法找到路径：" + target);
             EndMove();
             return false;
         }
@@ -319,7 +319,6 @@ public abstract class MoveController : MonoBehaviour
 
     protected void EndMove()
     {
-        Debug.Log("停止移动");
         CanMove = false;
         IsReach = true;
         currentWaypointIndex = -1;

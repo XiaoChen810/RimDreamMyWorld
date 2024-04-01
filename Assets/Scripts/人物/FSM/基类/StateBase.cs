@@ -4,19 +4,15 @@ public abstract class StateBase : IState
 {
     protected StateMachine _stateMachine { get; private set; }
 
-    public StateBase nextState {  get; private set; }
-
     public bool IsSuccess;
 
     public StateBase(StateMachine machine,StateBase next = null)
     {
         this._stateMachine = machine;
-        this.nextState = next;
     }
 
     public virtual bool OnEnter()
     {
-        IsSuccess = true;
         return true;
     }
 

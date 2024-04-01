@@ -31,24 +31,21 @@ namespace ChenChen_BuildingSystem
         [Header("全部关于其他蓝图的字典")]
         [SerializedDictionary("名称", "蓝图数据")]
         public SerializedDictionary<string, BlueprintData> _OtherBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
-
-        private BuildingModeTool BuildingModeTool;
-        public bool OnBuildingMode
-        {
-            get
-            {
-                return BuildingModeTool.OnBuildMode;
-            }
-        }
-
+        
         [Header("建筑列表")]
         [SerializeField] private List<GameObject> _BuildingList = new();
+
+        protected BuildingModeTool _tool;
+        public BuildingModeTool Tool
+        {
+            get { return _tool; }
+        }
 
         protected override void Awake()
         {
             base.Awake();
             LoadBlueprintData();
-            BuildingModeTool = GetComponent<BuildingModeTool>();
+            _tool = GetComponent<BuildingModeTool>();
         }
 
         private void LoadBlueprintData()
@@ -219,7 +216,7 @@ namespace ChenChen_BuildingSystem
         /// <param name="name"></param>
         public void UseBlueprint(string name)
         {
-            BuildingModeTool.ToggleBlueprint(name);
+            _tool.ToggleBlueprint(name);
         }
 
         #endregion

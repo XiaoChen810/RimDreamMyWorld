@@ -81,9 +81,9 @@ public abstract class Pawn : MonoBehaviour
     protected void 任务列表Debug()
     {
         CurrentStateList.Clear();
-        CurrentStateList.Add("正在：" + StateMachine.currentState?.ToString());
-        CurrentStateList.Add("下一个：" + StateMachine.GetNextState()?.ToString());
-        foreach (var task in StateMachine.GetStateQueue())
+        CurrentStateList.Add("正在：" + StateMachine.CurState?.ToString());
+        CurrentStateList.Add("下一个：" + StateMachine.NextState?.ToString());
+        foreach (var task in StateMachine.StateQueue)
         {
             CurrentStateList.Add("准备" + task.ToString());
         }

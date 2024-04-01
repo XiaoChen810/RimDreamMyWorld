@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 55446121862510356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -115,10 +115,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.15330517, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.25, y: 1.875}
+  m_Size: {x: 1.1445959, y: 1.875}
   m_EdgeRadius: 0
 --- !u!114 &8297485171711544642
 MonoBehaviour:
@@ -145,7 +145,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 128e8e8c634b03345a610964c8b32281, type: 2}
   MapName: 
-  WorkLoad: 0
-  isCompletely: 0
-  TheUsingPawn: {fileID: 0}
-  isUsed: 0
+  IsDismantlable: 0
+  CurDurability: 0
+  _needWorkload: 0
+  _theUsingPawn: {fileID: 0}
+  _isUsed: 0
+  _detailView: {fileID: 0}
+  _buildingState: 0

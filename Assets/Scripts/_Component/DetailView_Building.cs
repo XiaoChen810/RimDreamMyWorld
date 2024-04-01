@@ -14,7 +14,7 @@ public class DetailView_Building : DetailView
 
     protected override void OnMouseDown()
     {
-        if (BuildingSystemManager.Instance.OnBuildingMode) return;
+        if (BuildingSystemManager.Instance.Tool.OnBuildMode) return;
         base.OnMouseDown();
     }
 

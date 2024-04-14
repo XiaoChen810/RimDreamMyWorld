@@ -18,9 +18,9 @@ public class GameManagerEditor : Editor
         {
             GameManager.Instance.退回开始场景();
         }
-        if (GUILayout.Button("在周围生成一个敌人"))
+        if (GUILayout.Button("生成一个敌人"))
         {
-            GameManager.Instance.在周围生成一个敌人();
+            GameManager.Instance.生成一个敌人();
         }
     }
 }

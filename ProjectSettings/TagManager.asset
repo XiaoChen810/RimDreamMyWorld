@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - BuildingSystem
-  - Character
+  - Pawn
   layers:
   - Default
   - TransparentFX
@@ -14,7 +14,7 @@ TagManager:
   - Water
   - UI
   - Character
-  - 
+  - Pawn
   - 
   - 
   - 

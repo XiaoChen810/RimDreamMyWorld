@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 7821635637095143993}
   - component: {fileID: 7220269546119906233}
   - component: {fileID: 3153273640110790588}
-  - component: {fileID: 2926435332564681284}
-  - component: {fileID: 4589089587250687947}
+  - component: {fileID: 2264959377735515721}
+  - component: {fileID: 2320182449586295257}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -100,7 +100,7 @@ Animator:
   m_GameObject: {fileID: 4211871020731615996}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: feaacfc6a9701e947a2d7b3a21f8dbde, type: 2}
+  m_Controller: {fileID: 22100000, guid: 986a54667dc266148a8a0e2c66b9e33e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -277,7 +277,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &2926435332564681284
+--- !u!114 &2264959377735515721
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,25 +286,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4211871020731615996}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419964ce1e36ffe47998bb80ddbcba08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackTarget: {fileID: 0}
-  AttackRange: 1.5
-  ChaseRange: 10
-  AttackCast: 0.1
-  AttackBackswing: 0.76
-  CurrentTaskList: []
---- !u!114 &4589089587250687947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4211871020731615996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94c5402b066d7e34b866e038069e6a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e62db0b82f4a8f4d90c416199cf747f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 100
@@ -316,4 +298,63 @@ MonoBehaviour:
   IsNearAttackRange: 0
   JustApproachWorkRange: 0
   JustApproachAttackRange: 0
-  lastMoveTargetPos: {x: 0, y: 0, z: 0}
+--- !u!114 &2320182449586295257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4211871020731615996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a05a55a9444644ab084da7e32e2e4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentStateList: []
+  WorkRange: 1
+  AttackRange: 1
+  AttackSpeed: 0.76
+  AttackSpeedWait: 1
+  Hp: 100
+  Attribute:
+    A_Combat:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Culinary:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Construction:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Survival:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Craftsmanship:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Medical:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Carrying:
+      _value: 0
+      _interest: 0
+      _exp: 0
+    A_Research:
+      _value: 0
+      _interest: 0
+      _exp: 0
+  PawnName: 
+  FactionName: 
+  CanGetJob: 0
+  IsOnWork: 0
+  IsOnBattle: 0
+  IsDead: 0
+  CanDrafted: 0
+  IsDrafted: 0
+  CurJobTarget: {fileID: 0}

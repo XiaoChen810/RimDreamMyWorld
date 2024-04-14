@@ -976,7 +976,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33.81, y: 15.04, z: -10}
+  m_LocalPosition: {x: 37, y: 30, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1802,10 +1802,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17f1fc02b984040489a20e21b516facb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharactersList: []
-  EnemyList: []
+  _pawnsList: []
   CharacterTest: {fileID: 6258274224586722765, guid: a2b56aab754280d408178f81b95b3599, type: 3}
   GoblinPrefab: {fileID: 4211871020731615996, guid: 0a86a649487e85c49b78a8f617578f83, type: 3}
+  isOnTestMode: 1
 --- !u!4 &1154968097
 Transform:
   m_ObjectHideFlags: 0

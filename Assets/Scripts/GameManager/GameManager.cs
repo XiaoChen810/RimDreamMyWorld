@@ -1,23 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
-using ChenChen_UISystem;
 using UnityEngine;
+using ChenChen_UISystem;
 using ChenChen_MapGenerator;
-using MyScene;
+using ChenChen_Scene;
 
 public class GameManager : SingletonMono<GameManager>
 {
-    public SceneSystem SceneSystem {  get; private set; }
-
     public PanelManager PanelManager { get; private set; }
 
     private bool isMenuPanelCreated;
 
-    public List<GameObject> CharactersList;
-    public List<GameObject> EnemyList;
+    [SerializeField]
+    private List<GameObject> _pawnsList = new List<GameObject>();
+
+    /// <summary>
+    /// 游戏内全部的Pawn的GameObject列表
+    /// </summary>
+    public IReadOnlyList<GameObject> PawnsList   
+    {
+        get { return _pawnsList.AsReadOnly(); }
+    }
 
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
+
+    public bool isOnTestMode;
 
     protected override void Awake()
     {
@@ -27,22 +35,60 @@ public class GameManager : SingletonMono<GameManager>
 
     private void Init()
     {
-        SceneSystem = new();
         PanelManager = new PanelManager();
-        CharactersList = new List<GameObject>();
-
         DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void Start()
-    {
-        SceneSystem.SetScene(new StartScene());
     }
 
     private void Update()
     {
         OpenBuildingMenuPanel();
+        if (isOnSelectPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
+        {
+            isOnSelectPawnCreatePos_WhenTest = false;
+            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            createPos.z = 0;
+            GeneratePawn(createPos, CharacterTest, "小光头" + nameIndex++, "殖民地");
+        }
+        if(isOnSelectEnenyPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
+        {
+            isOnSelectEnenyPawnCreatePos_WhenTest= false;
+            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            createPos.z = 0;
+            GeneratePawn(createPos, GoblinPrefab, "哥布林", "哥布林", canGetJob: false, canSelect: false);
+        }
     }
+
+    #region Pwan
+
+    public bool CanSelect = true;
+    public bool CanGetJob = true;
+    public bool CanBattle = true;
+    public bool CanDrafted = true;
+    public void GeneratePawn(Vector3 position, GameObject prefab, string pawnName, string factionName,
+        bool canSelect = true, bool canGetJob = true, bool canBattle = true, bool canDrafted = true)
+    {
+
+        GameObject newPawn = Instantiate(prefab, position, Quaternion.identity);
+        if (newPawn.TryGetComponent<Pawn>(out Pawn pawn))
+        {
+            newPawn.name = pawnName;
+            pawn.PawnName = pawnName;
+            pawn.FactionName = factionName;
+            pawn.CanSelect = canSelect;
+            pawn.CanGetJob = canGetJob;
+            pawn.CanBattle = canBattle;
+            pawn.CanDrafted = canDrafted;
+            _pawnsList.Add(newPawn);
+        }
+        else
+        {
+            Debug.LogError("Pawn prefab lost or don't have component in need ");
+        }
+    }
+
+    #endregion
 
     private void OpenBuildingMenuPanel()
     {
@@ -65,25 +111,39 @@ public class GameManager : SingletonMono<GameManager>
     }
 
     private static int nameIndex = 0;
+    private bool isOnSelectPawnCreatePos_WhenTest;
+    private bool isOnSelectEnenyPawnCreatePos_WhenTest;
+
+#if UNITY_EDITOR
+
     public void 生成一个基础小人()
     {
-        Vector3 createPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-        GameObject newCharacter = Instantiate(CharacterTest, createPos, Quaternion.identity);
-        newCharacter.name = "小光头" + nameIndex++;
-        CharactersList.Add(newCharacter);   
+        if(!isOnSelectPawnCreatePos_WhenTest)
+        {
+            isOnSelectPawnCreatePos_WhenTest = true;
+        }
     }
 
-    public void 在周围生成一个敌人()
+    public void 生成一个敌人()
     {
-        Vector3 createPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-        createPos += new Vector3(Random.Range(15, 20), Random.Range(15, 20));
-        GameObject newEnemy = Instantiate(GoblinPrefab, createPos, Quaternion.identity);
-        EnemyList.Add(newEnemy);
+        if(!isOnSelectEnenyPawnCreatePos_WhenTest)
+        {
+            isOnSelectEnenyPawnCreatePos_WhenTest= true;
+        }
     }
 
     public void 退回开始场景()
     {
         MapManager.Instance.CloseSceneMap(MapManager.Instance.CurrentMapName);
-        SceneSystem.SetScene(new StartScene());
+        SceneSystem.Instance.SetScene(new StartScene());
     }
+
+    public void 生成测试棋子()
+    {
+        if (!isOnTestMode) return;
+        GeneratePawn(new Vector3(30, 30), CharacterTest, "小光头" + nameIndex++, "殖民地");
+        GeneratePawn(new Vector3(45, 30), GoblinPrefab, "哥布林", "哥布林");
+    }
+
+#endif
 }

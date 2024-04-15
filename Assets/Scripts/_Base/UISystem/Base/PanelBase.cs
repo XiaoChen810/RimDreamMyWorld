@@ -131,7 +131,7 @@ namespace ChenChen_UISystem
             // 获取装内容的子物体
             GameObject content = UITool.GetChildByName("Content");
             // 检查是否有GridLayoutGroup组件
-            GridLayoutGroup glg = UITool.GetOrAddChildComponent<GridLayoutGroup>("Content");
+            GridLayoutGroup glg = UITool.TryGetChildComponentByName<GridLayoutGroup>("Content");
             // 获取按钮的预制件
             GameObject btnPrefab = Resources.Load("UI/Component/BtnBkueprintDefault/BtnBlueprintDefault") as GameObject;
             if (btnPrefab == null)

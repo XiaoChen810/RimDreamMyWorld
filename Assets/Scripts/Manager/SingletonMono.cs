@@ -4,16 +4,26 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
 
+    private static bool applicationIsQutting = false;
     public static T Instance
     {
         get
         {
-            if (instance == null)
+            if (applicationIsQutting)
             {
-                GameObject obj = new GameObject();
-                obj.name = typeof(T).ToString();
-                DontDestroyOnLoad(obj);
-                instance = obj.AddComponent<T>();
+                return instance;
+            }
+            if (instance == null && Application.isPlaying) 
+            {
+                instance = FindObjectOfType<T>();
+                if(instance == null)
+                {
+                    GameObject obj = new GameObject();
+                    obj.name = typeof(T).ToString();
+                    Debug.Log("Create a Singleton: " + obj.name);
+                    DontDestroyOnLoad(obj);
+                    instance = obj.AddComponent<T>();
+                }
             }
             return instance;
         }
@@ -32,5 +42,10 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             instance = this as T;
         }
+    }
+
+    private void OnDestroy()
+    {
+        applicationIsQutting = true;
     }
 }

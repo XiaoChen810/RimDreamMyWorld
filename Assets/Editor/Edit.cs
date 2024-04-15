@@ -11,9 +11,8 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
 
     private string blueprintName;
     private BlueprintType blueprintType;
-    private int blueprintWidth;
-    private int blueprintHeight;
     private int blueprintWorkload;
+    private int blueprintDurability;
     private Sprite blueprintPreviewSprite;
     private bool blueprintIsObstacle;
     private TileBase blueprintTileBase;
@@ -37,6 +36,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
         blueprintName = EditorGUILayout.TextField("名字", blueprintName);
         blueprintType = (BlueprintType)EditorGUILayout.EnumPopup("类型", blueprintType); 
         blueprintWorkload = EditorGUILayout.IntField("工作量", blueprintWorkload);
+        blueprintDurability = EditorGUILayout.IntField("耐久度",blueprintDurability);
         blueprintPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", blueprintPreviewSprite, typeof(Sprite), false);
         blueprintIsObstacle = EditorGUILayout.Toggle("是否是障碍物", blueprintIsObstacle);
         blueprintTileBase = (TileBase)EditorGUILayout.ObjectField("瓦片", blueprintTileBase, typeof(TileBase), false);
@@ -50,6 +50,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
                 blueprintGenerator.blueprintName = blueprintName;
                 blueprintGenerator.blueprintType = blueprintType;
                 blueprintGenerator.blueprintWorkload = blueprintWorkload;
+                blueprintGenerator.blueprintDurability = blueprintDurability;
                 blueprintGenerator.blueprintPreviewSprite = blueprintPreviewSprite;
                 blueprintGenerator.blueprintIsObstacle = blueprintIsObstacle;
                 blueprintGenerator.blueprintTileBase = blueprintTileBase;

@@ -72,7 +72,7 @@ namespace ChenChen_UISystem
         /// <typeparam name="T"></typeparam>
         /// <param name="componentName"></param>
         /// <returns></returns>
-        public T GetOrAddChildComponent<T>(string componentName) where T : Component
+        public T TryGetChildComponentByName<T>(string componentName) where T : Component
         {
             GameObject child = GetChildByName(componentName);
             if (child != null)
@@ -83,6 +83,61 @@ namespace ChenChen_UISystem
             }
 
             Debug.LogWarning("No Find The Component name of : " + componentName);
+            return null;
+        }
+
+        /// <summary>
+        /// 通过路径获取子物体
+        /// </summary>
+        /// <param name="path">路径，使用/分割</param>
+        /// <returns>查找到的子物体</returns>
+        public GameObject GetChildByPath(string path)
+        {
+            Transform child = FindChildByPathRecursively(currentPanel.transform, path);
+            if (child != null)
+            {
+                return child.gameObject;
+            }
+
+            Debug.LogWarning("找不到该路径下的子物体：" + path);
+            return null;
+        }
+
+        private Transform FindChildByPathRecursively(Transform parent, string path)
+        {
+            string[] pathSegments = path.Split('/');
+            Transform child = parent;
+
+            foreach (string segment in pathSegments)
+            {
+                child = child.Find(segment);
+                if (child == null)
+                {
+                    Debug.LogWarning("找不到路径中的子物体：" + segment);
+                    return null;
+                }
+            }
+
+            return child;
+        }
+
+        /// <summary>
+        ///  通过路径获取一个子物体的组件，例如获取<see href="Button"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="componentPath"></param>
+        /// <returns></returns>
+        public T TryGetChildComponentByPath<T>(string componentPath) where T : Component
+        {
+            GameObject child = GetChildByPath(componentPath);
+            if (child != null)
+            {
+                if (child.GetComponent<T>() == null) child.AddComponent<T>();
+
+                return child.GetComponent<T>();
+            }
+
+            Debug.LogWarning("No Find The Component name of : " + componentPath);
             return null;
         }
     }

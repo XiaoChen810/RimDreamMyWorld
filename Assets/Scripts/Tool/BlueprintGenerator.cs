@@ -13,6 +13,8 @@ public class BlueprintGenerator
     public BlueprintType blueprintType;
     [Header("工作量")]
     public int blueprintWorkload;
+    [Header("耐久度")]
+    public int blueprintDurability;
     [Header("预览图")]
     public Sprite blueprintPreviewSprite;
     [Header("是否是障碍物")]
@@ -51,6 +53,7 @@ public class BlueprintGenerator
         blueprintData.Name = blueprintName;
         blueprintData.Type = blueprintType;
         blueprintData.Workload = blueprintWorkload;
+        blueprintData.Durability = blueprintDurability;
         blueprintData.PreviewSprite = blueprintPreviewSprite;
         blueprintData.IsObstacle = blueprintIsObstacle;
         blueprintData.TileBase = blueprintTileBase == null ? null : blueprintTileBase;

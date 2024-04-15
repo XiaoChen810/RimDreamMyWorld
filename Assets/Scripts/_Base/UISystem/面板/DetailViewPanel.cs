@@ -25,21 +25,21 @@ namespace ChenChen_UISystem
         {
             base.OnEnter();
             // 关闭菜单的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn关闭").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
                 PanelManager.RemovePanel(this);
             });
             // 拆除功能的按钮
-            DemolishBtn = UITool.GetOrAddChildComponent<Button>("Btn拆除");
+            DemolishBtn = UITool.TryGetChildComponentByName<Button>("Btn拆除");
             DemolishBtn.onClick.AddListener(() =>
             {
                 thing.OnMarkDemolish();
             });
             DemolishBtn.gameObject.SetActive(thing.IsDismantlable);
-            ItemName = UITool.GetOrAddChildComponent<Text>("ItemName");
-            Durability = UITool.GetOrAddChildComponent<Text>("Durability");
-            Workload = UITool.GetOrAddChildComponent<Text>("Workload");
-            UserName = UITool.GetOrAddChildComponent<Text>("UserName");
+            ItemName = UITool.TryGetChildComponentByName<Text>("ItemName");
+            Durability = UITool.TryGetChildComponentByName<Text>("Durability");
+            Workload = UITool.TryGetChildComponentByName<Text>("Workload");
+            UserName = UITool.TryGetChildComponentByName<Text>("UserName");
 
         }      
 

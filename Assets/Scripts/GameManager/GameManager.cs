@@ -4,6 +4,7 @@ using UnityEngine;
 using ChenChen_UISystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
+using System;
 
 public class GameManager : SingletonMono<GameManager>
 {
@@ -62,10 +63,54 @@ public class GameManager : SingletonMono<GameManager>
 
     #region Pwan
 
-    public bool CanSelect = true;
-    public bool CanGetJob = true;
-    public bool CanBattle = true;
-    public bool CanDrafted = true;
+    public void GeneratePawn(PawnKindDef kindDef, Vector3 position, PawnAttribute attribute, GameObject prefab = null)
+    {
+        if (prefab == null)
+        {
+            if(kindDef.PrefabPath == null)
+            {
+                prefab = CharacterTest;
+            }
+            else
+            {
+                prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
+            }
+        }
+        if (prefab == null)
+        {
+            Debug.LogWarning("Prefab is null");
+        }
+        GameObject newPawn = Instantiate(prefab, position, Quaternion.identity);
+        if (newPawn.TryGetComponent<Pawn>(out Pawn pawn))
+        {
+            newPawn.name = kindDef.PawnName;
+            InitPawn(pawn, kindDef, attribute);
+            _pawnsList.Add(newPawn);
+        }
+        else
+        {
+            Debug.LogError("Pawn prefab lost or don't have component in need ");
+        }
+    }
+
+    public static void InitPawn(Pawn pawn, PawnKindDef def, PawnAttribute attribute)
+    {
+        pawn.PawnName = def.PawnName;
+        pawn.FactionName = def.PawnFaction;
+        pawn.CanSelect = def.CanSelect;
+        pawn.CanGetJob = def.CanGetJob;
+        pawn.CanBattle = def.CanBattle;
+        pawn.CanDrafted = def.CanDrafted;
+        if (attribute == null)
+        {
+            pawn.Attribute.InitPawnAttribute();
+        }
+        else
+        {
+            pawn.Attribute = attribute;
+        }
+    }
+
     public void GeneratePawn(Vector3 position, GameObject prefab, string pawnName, string factionName,
         bool canSelect = true, bool canGetJob = true, bool canBattle = true, bool canDrafted = true)
     {

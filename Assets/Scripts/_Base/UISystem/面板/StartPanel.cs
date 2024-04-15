@@ -13,10 +13,10 @@ namespace ChenChen_UISystem
 
         public override void OnEnter()
         {
-            UITool.GetOrAddChildComponent<Button>("BtnPlay").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("BtnPlay").onClick.AddListener(() =>
             {
                 // 当按下这个按钮时进行的方法
-                SceneSystem.Instance.SetScene(new MainScene());
+                SceneSystem.Instance.SetScene(new InitScene());
             });
         }
     }

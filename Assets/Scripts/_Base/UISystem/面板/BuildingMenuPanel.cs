@@ -18,27 +18,27 @@ namespace ChenChen_UISystem
         {
             base.OnEnter();
             // 选择建造墙体类型的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn墙体").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn墙体").onClick.AddListener(() =>
             {
                 PanelManager.AddPanel(new WallsMenuPanel());
             });
             // 选择建造地板类型的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn地板").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn地板").onClick.AddListener(() =>
             {
                 PanelManager.AddPanel(new FloorsMenuPanel());
             });
             // 选择建造其他类型的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn其他").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn其他").onClick.AddListener(() =>
             {
                 PanelManager.AddPanel(new OthersPanel());
             });
             // 选择建造家具类型的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn家具").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn家具").onClick.AddListener(() =>
             {
                 PanelManager.AddPanel(new FurniturePanel());
             });
             // 关闭菜单的按钮
-            UITool.GetOrAddChildComponent<Button>("Btn关闭").onClick.AddListener(() =>
+            UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
                 PanelManager.RemovePanel(this);
             });

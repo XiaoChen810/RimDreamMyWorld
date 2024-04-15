@@ -44,7 +44,6 @@ public class PawnAttribute
     /// </summary>
     public void InitPawnAttribute()
     {
-        UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
         A_Combat = new Ability(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
         A_Culinary = new Ability(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
         A_Construction = new Ability(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));

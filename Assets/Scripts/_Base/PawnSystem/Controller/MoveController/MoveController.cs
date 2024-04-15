@@ -76,6 +76,11 @@ public abstract class MoveController : MonoBehaviour
         Move();
     }
 
+    protected virtual void OnDestroy()
+    {
+        MapManager.Instance.MapObstaclesChange -= ResetPath;
+    }
+
     protected void ResetPath()
     {
         // »ñÈ¡Â·¾¶

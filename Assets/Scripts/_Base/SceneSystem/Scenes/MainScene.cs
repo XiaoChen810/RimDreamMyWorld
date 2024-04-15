@@ -4,6 +4,7 @@ using ChenChen_UISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ChenChen_MapGenerator;
+using System;
 
 namespace ChenChen_Scene
 {
@@ -11,6 +12,12 @@ namespace ChenChen_Scene
     {
         readonly string sceneName = "Main";
         private PanelManager panelManager;
+        public Action OnCompleteAction;
+        public MainScene(Action action = null)
+        {
+            this.OnCompleteAction = action;
+        }
+
         public override void OnEnter()
         {
             // 加载场景
@@ -36,9 +43,12 @@ namespace ChenChen_Scene
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             panelManager = new PanelManager();
-            // panelManager.AddPanel(new MainPanel());
-            MapManager.Instance.LoadSceneMap("MainMap", StaticDef.Seed_PlayerSelect_WhenMapGenerate);
-            GameManager.Instance.生成测试棋子();
+            if (MapManager.Instance.CurrentMapName == null)
+            {
+                MapManager.Instance.LoadSceneMap("MainMap", StaticDef.Seed_PlayerSelect_WhenMapGenerate);
+            }
+            //GameManager.Instance.生成测试棋子();
+            OnCompleteAction();
             Debug.Log($"{sceneName}场景加载完毕");
         }
     }

@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(MoveController))]
 [RequireComponent(typeof(Animator))]
@@ -248,9 +247,6 @@ public abstract class Pawn : MonoBehaviour
 
         /* 配置状态机 */
         StateMachine = new StateMachine(new ChenChen_AI.PawnJob_Idle(this), this);
-
-        /* 人物能力值 */
-        Attribute.InitPawnAttribute();
 
         /* 设置图层Pawn和标签 */
         gameObject.layer = 7;

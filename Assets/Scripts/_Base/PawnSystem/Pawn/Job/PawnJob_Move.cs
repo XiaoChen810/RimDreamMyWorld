@@ -48,7 +48,6 @@ namespace ChenChen_AI
 
         public override void OnInterrupt()
         {
-            Debug.Log($"{pawn.name} interrupt Move To" + targetPos);
             pawn.JobDone();
         }
     }

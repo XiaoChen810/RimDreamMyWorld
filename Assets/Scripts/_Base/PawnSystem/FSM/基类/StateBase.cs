@@ -43,6 +43,6 @@ public abstract class StateBase : IState
 
     public virtual void OnInterrupt()
     {
-        Debug.LogWarning("Interrupt");
+        Debug.Log("Interrupt" + this.ToString());
     }
 }

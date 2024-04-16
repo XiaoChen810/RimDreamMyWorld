@@ -32,7 +32,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断目标是否到达攻击距离
-            if (pawn.MoveControl.reachedDestination)
+            if (pawn.MoveControl.IsReach)
             {
                 // 设置人物正在工作
                 pawn.JobDoing();               

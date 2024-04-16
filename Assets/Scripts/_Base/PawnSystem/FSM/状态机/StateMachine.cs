@@ -132,7 +132,7 @@ public class StateMachine
         {
             if (_currentState.OnEnter())
             {
-                Debug.Log($"{Owner.name}切换成状态: " + _currentState);
+                //Debug.Log($"{Owner.name}切换成状态: " + _currentState);
                 return;
             }
             // 未成功进入

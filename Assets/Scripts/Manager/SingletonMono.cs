@@ -15,7 +15,7 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
             }
             if (instance == null && Application.isPlaying) 
             {
-                instance = FindObjectOfType<T>();
+                instance = FindAnyObjectByType<T>();
                 if(instance == null)
                 {
                     GameObject obj = new GameObject();
@@ -24,6 +24,10 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
                     DontDestroyOnLoad(obj);
                     instance = obj.AddComponent<T>();
                 }
+            }
+            if (instance == null && !Application.isPlaying)
+            {
+                instance = FindAnyObjectByType<T>();
             }
             return instance;
         }

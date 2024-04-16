@@ -22,7 +22,6 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            pawn.MoveControl.StopMove();
             pawn.JobDoing();
             
             //返回成功

@@ -6,7 +6,7 @@ namespace ChenChen_AI
     public class PawnJob_Building : PawnJob
     {
         private GameObject target;
-        private Building curTargetComponent;
+        private Thing_Building curTargetComponent;
         private float _time;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace ChenChen_AI
             if (target == null) return false;
 
             // 尝试获取蓝图
-            curTargetComponent = target.GetComponent<Building>();
+            curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
                 Debug.LogWarning("The Building Don't Have Building Component");
@@ -38,13 +38,12 @@ namespace ChenChen_AI
             }
 
             // 设置人物目标点，前往目标，跑过去
-            if (!pawn.MoveControl.GoToHere(target.transform.position, true))
+            if (!pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, pawn.WorkRange))
             {
                 Debug.LogWarning("The building can't arrive");
                 return false;
             }
 
-            pawn.MoveControl.IsRun = true;
             // 设置人物无法接取工作
             pawn.JobToDo(target);
 
@@ -54,10 +53,8 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点附近
-            if (Vector2.Distance(pawn.transform.position, target.transform.position) < pawn.WorkRange)
+            if (pawn.MoveControl.reachedDestination)
             {
-                pawn.MoveControl.StopMove();
-
                 // 设置人物正在工作
                 pawn.JobDoing();
 
@@ -90,7 +87,6 @@ namespace ChenChen_AI
 
             // 设置人物状态
             pawn.JobDone();
-            pawn.MoveControl.IsRun = false;
 
             // 结束动画
             pawn.Animator.SetBool("IsDoing", false);

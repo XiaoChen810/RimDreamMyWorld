@@ -17,11 +17,6 @@ namespace ChenChen_MapGenerator
         public MapCreator MapCreator { get; private set; }
 
         /// <summary>
-        ///  寻路算法器
-        /// </summary>
-        public PathFinder PathFinder { get; private set; }
-
-        /// <summary>
         ///  当前场景的地图名字
         /// </summary>
         public string CurrentMapName { get; private set; }
@@ -61,7 +56,6 @@ namespace ChenChen_MapGenerator
         {
             // 初始化组件
             MapCreator = GetComponent<MapCreator>();
-            PathFinder = new PathFinder(MapWidthOfGenerate, MapHeightOfGenerate);
         }
 
         /// <summary>
@@ -70,7 +64,8 @@ namespace ChenChen_MapGenerator
         /// <param name="mapName"></param>
         /// <param name="mapSeed">是否使用随机种子，默认为随机</param>
         private void MapDataDictAdd(string mapName,int mapSeed = -1)
-        {                          
+        {      
+            Init();
             if (!SceneMapDatasDict.ContainsKey(mapName))
             {
                 SceneMapData mapData = new();
@@ -79,8 +74,6 @@ namespace ChenChen_MapGenerator
                 // 生成一个随机的地图
                 mapData.seed = mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed;
                 mapData = MapCreator.GenerateMap(MapWidthOfGenerate, MapHeightOfGenerate, mapData);
-                // 初始化寻路算法的节点
-                mapData = PathFinder.InitNodes(MapWidthOfGenerate, MapHeightOfGenerate, mapData);
                 // 将地图数据用一个GameObject的形式保存
                 mapData.mapObject = Instantiate(transform.Find("当前地图").gameObject, transform);
                 mapData.mapObject.name = mapName;
@@ -102,7 +95,7 @@ namespace ChenChen_MapGenerator
         /// 加载场景地图，若没有则会创建一个
         /// </summary>
         /// <param name="mapName"></param>
-        public void LoadSceneMap(string mapName, int seed)
+        public void LoadOrGenerateSceneMap(string mapName, int seed = -1)
         {
             // 如果加载的是新场景要先把旧场景关了
             if (CurrentMapName != mapName && CurrentMapName != null)
@@ -120,6 +113,8 @@ namespace ChenChen_MapGenerator
 
             MapDataDictAdd(mapName, seed);
             CurrentMapName = mapName;
+            // 初始化寻路算法的节点
+            FindAnyObjectByType<AstarPath>().Scan();
         }
 
         /// <summary>
@@ -140,12 +135,34 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
+        /// 彻底删除场景
+        /// </summary>
+        /// <param name="mapName"></param>
+        public void DeleteSceneMap(string mapName)
+        {
+#if UNITY_EDITOR
+            DestroyImmediate(transform.Find(mapName).gameObject);
+            if (SceneMapDatasDict.ContainsKey(mapName))
+            {
+                SceneMapDatasDict.Remove(mapName);
+            }
+#else
+            Destroy(transform.Find(mapName).gameObject);
+            if (SceneMapDatasDict.ContainsKey(mapName))
+            {
+                SceneMapDatasDict.Remove(mapName);
+            }
+#endif
+        }
+
+        /// <summary>
         /// 从某场景的地图数据中获取寻路路径
         /// </summary>
         /// <param name="startPos"></param>
         /// <param name="endtPos"></param>
         /// <param name="mapName"></param>
         /// <returns></returns>
+        [Obsolete]
         public List<Vector2> GetPath(Vector3 startPos, Vector3 endtPos, string mapName)
         {
             if (!SceneMapDatasDict.ContainsKey(mapName))
@@ -155,7 +172,7 @@ namespace ChenChen_MapGenerator
             }
             else
             {
-                return PathFinder.FindPath(startPos, endtPos, SceneMapDatasDict[mapName].finderNodes);
+                return null;
             }
         }
 
@@ -203,13 +220,11 @@ namespace ChenChen_MapGenerator
         /// <param name="mapName"> 地图的名字 </param>
         /// <param name="pos"> 坐标 </param>
         /// <param name="set"> </param>
+        [Obsolete]
         public void SetNodeIntoCost(string mapName, Vector3Int pos,float set = FinderNode.s_MaxIntoCost)
         {
             if(SceneMapDatasDict.ContainsKey(mapName))
             {
-                //int unit = SceneMapDatasDict[mapName].numberUnitGrid;
-                //SceneMapDatasDict[mapName].nodes[pos.x * unit,pos.y * unit].walkable = set;
-                PathFinder.SetNodeIntoCost(SceneMapDatasDict[mapName].finderNodes, pos, set);
                 MapObstaclesChange?.Invoke();
             }
             else
@@ -229,7 +244,6 @@ namespace ChenChen_MapGenerator
             if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-                SetNodeIntoCost(mapName, pos);
             }
         }
 
@@ -263,8 +277,6 @@ namespace ChenChen_MapGenerator
                     if (y > currentMapData.height || y < 0) continue;
 
                     Vector3Int pos = new Vector3Int(x, y);
-                    SetNodeIntoCost(mapName, pos, set);
-
                     if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
                     SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
 
@@ -283,7 +295,6 @@ namespace ChenChen_MapGenerator
             if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
-                SetNodeIntoCost(mapName, pos, 0);
             }
         }
 
@@ -318,7 +329,6 @@ namespace ChenChen_MapGenerator
                     if (y > currentMapData.height || y < 0) continue;
 
                     Vector3Int pos = new Vector3Int(x, y);
-                    SetNodeIntoCost(mapName, pos, 0);
 
                     if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
                     SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
@@ -362,6 +372,6 @@ namespace ChenChen_MapGenerator
             return true;
         }
 
-        #endregion
+#endregion
     }
 }

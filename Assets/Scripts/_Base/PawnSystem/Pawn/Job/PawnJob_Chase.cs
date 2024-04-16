@@ -21,7 +21,7 @@ namespace ChenChen_AI
             if (targetPawnComponent == null) return false;
 
             // 设置人物目标点，前往目标，走过去
-            pawn.MoveControl.GoToTargetSustainably(target);
+            pawn.MoveControl.GoToHere(target, Urgency.Normal, pawn.AttackRange);
 
             // 设置人物无法接取工作
             pawn.JobToDo(target);
@@ -32,10 +32,8 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断目标是否到达攻击距离
-            if (Vector2.Distance(pawn.transform.position, target.transform.position) < pawn.AttackRange)
+            if (pawn.MoveControl.reachedDestination)
             {
-                pawn.MoveControl.StopMove();
-
                 // 设置人物正在工作
                 pawn.JobDoing();               
 

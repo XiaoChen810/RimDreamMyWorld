@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering.Universal;
+
 
 public class CameraController : MonoBehaviour
 {
     private PixelPerfectCamera PixelPerfectCamera;
     public float Speed;
-    public float zoomSpeed = 5f; // µ÷ÕûËõ·ÅËÙ¶È
+    public float zoomSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 
 
     private void Start()
@@ -25,25 +26,25 @@ public class CameraController : MonoBehaviour
             transform.position += new Vector3(horizontal, vertical, 0) * Speed * Time.deltaTime;
         }
 
-        // »ñÈ¡Êó±ê¹öÂÖÊäÈë
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
 
-        // µ÷Õû¾µÍ·Ô¶½ü
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·Ô¶ï¿½ï¿½
         ZoomCamera(scrollWheelInput);
     }
 
     void ZoomCamera(float scrollInput)
     {
-        // »ñÈ¡µ±Ç°¾µÍ·µÄorthographicSize
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Í·ï¿½ï¿½orthographicSize
         float currentSize = PixelPerfectCamera.assetsPPU;
 
-        // ¸ù¾Ý¹öÂÖÊäÈëµ÷Õû¾µÍ·Ô¶½ü
+        // ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·Ô¶ï¿½ï¿½
         currentSize -= scrollInput * zoomSpeed * Time.deltaTime;
 
-        // ÉèÖÃÐÂµÄPixelPerfectCameraµÄassetsPPU£¬È·±£²»Ð¡ÓÚÄ³¸ö×îÐ¡Öµ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½PixelPerfectCameraï¿½ï¿½assetsPPUï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½Ð¡Öµ
         currentSize = Mathf.Max(currentSize, 1f);
 
-        // ÉèÖÃÐÂµÄPixelPerfectCameraµÄassetsPPU
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½PixelPerfectCameraï¿½ï¿½assetsPPU
         PixelPerfectCamera.assetsPPU = Mathf.RoundToInt(currentSize);
 
     }

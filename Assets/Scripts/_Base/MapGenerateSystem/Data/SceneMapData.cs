@@ -18,7 +18,6 @@ namespace ChenChen_MapGenerator
         public int width, height;
         public int seed;
         public MapNode[,] mapNodes;
-        public FinderNode[,] finderNodes;
         public GameObject mapObject;
         public Tilemap mainTilemap;
         public List<Vector3> obstaclesPositionList;

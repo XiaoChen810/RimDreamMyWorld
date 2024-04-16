@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class DetailView_Tree : DetailView
 {
-    protected Tree tree;
+    protected Thing_Trees tree;
 
     private void OnEnable()
     {
-        tree = GetComponent<Tree>();
+        tree = GetComponent<Thing_Trees>();
     }
 
     protected override void UpdateShow(DetailViewPanel panel)

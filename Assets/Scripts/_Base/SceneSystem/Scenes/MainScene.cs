@@ -45,7 +45,7 @@ namespace ChenChen_Scene
             panelManager = new PanelManager();
             if (MapManager.Instance.CurrentMapName == null)
             {
-                MapManager.Instance.LoadSceneMap("MainMap", StaticDef.Seed_PlayerSelect_WhenMapGenerate);
+                MapManager.Instance.LoadOrGenerateSceneMap("MainMap", StaticDef.Seed_PlayerSelect_WhenMapGenerate);
             }
             //GameManager.Instance.Éú³É²âÊÔÆå×Ó();
             OnCompleteAction();

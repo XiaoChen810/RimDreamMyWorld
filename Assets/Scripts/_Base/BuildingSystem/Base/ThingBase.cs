@@ -8,6 +8,7 @@ namespace ChenChen_BuildingSystem
     {
         public BlueprintData Data;
         public string MapName;
+        // 是可以拆除的
         public bool IsDismantlable;
 
         public int WorkloadBuilt

@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class DetailView_Building : DetailView
 {
-    protected Building building;
+    protected Thing_Building building;
 
     private void OnEnable()
     {
-        building = GetComponent<Building>();
+        building = GetComponent<Thing_Building>();
     }
 
     protected override void OnMouseDown()

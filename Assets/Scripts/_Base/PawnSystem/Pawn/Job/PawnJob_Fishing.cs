@@ -6,7 +6,7 @@ namespace ChenChen_AI
     public class PawnJob_Fishing : PawnJob
     {
         private GameObject target;
-        private Building curTargetComponent;
+        private Thing_Building curTargetComponent;
 
         private float _time;
         private float animTime1 = 1.135f;
@@ -29,7 +29,7 @@ namespace ChenChen_AI
         {
             if (target == null) return false;
 
-            curTargetComponent = target.GetComponent<Building>();
+            curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
                 Debug.LogWarning("The FishingPoint Don't Have Building Component");
@@ -44,7 +44,7 @@ namespace ChenChen_AI
             }
 
             // 设置目标点
-            pawn.MoveControl.GoToHere(target.transform.position);
+            pawn.MoveControl.GoToHere(target.transform.position, Urgency.Normal);
 
             // 设置人物状态
             pawn.JobToDo(target);

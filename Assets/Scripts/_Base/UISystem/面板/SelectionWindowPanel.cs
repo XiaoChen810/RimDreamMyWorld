@@ -29,13 +29,13 @@ namespace ChenChen_UISystem {
                 SceneSystem.Instance.SetScene(new MainScene(() =>
                 {
                     GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(25,25,0),
+                        new Vector3(50, 50, 0),
                         p0.Attribute);
                     GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(24, 24, 0),
+                        new Vector3(51, 51, 0),
                         p1.Attribute);
                     GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(23, 23, 0),
+                        new Vector3(49, 49, 0),
                         p2.Attribute);
                 }));
             });

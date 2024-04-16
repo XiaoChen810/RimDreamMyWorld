@@ -66,7 +66,7 @@ public class BlueprintGenerator
         string blueprintDataPath = $"{folderPath}/{blueprintName}_BlueprintData.asset";
         AssetDatabase.CreateAsset(blueprintData, blueprintDataPath);
 
-        CreateBlueprintPrefab<Building>(blueprintName, blueprintData);
+        CreateBlueprintPrefab<Thing_Building>(blueprintName, blueprintData);
 
         CreateScript(folderPath);
 

@@ -6,10 +6,10 @@ namespace ChenChen_AI
 {
     public class PawnJob_Chase : PawnJob
     {
+        private readonly static float tick = 500;
         private GameObject target;
         private Pawn targetPawnComponent;
-
-        public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn)
+        public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn, tick)
         {
             this.target = target;
         }

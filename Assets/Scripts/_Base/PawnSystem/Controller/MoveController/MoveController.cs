@@ -7,13 +7,11 @@ using TMPro;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(LineRenderer))]
 public abstract class MoveController : MonoBehaviour
 {
     protected Animator _anim;
     protected Rigidbody2D _rb;
     protected Seeker _seeker;
-    protected LineRenderer _lineRenderer;
 
     [Header("Debug")]
     // 自身上一个位置
@@ -28,8 +26,13 @@ public abstract class MoveController : MonoBehaviour
     [SerializeField] protected bool targetIsAObject = false;
     [SerializeField] protected bool reachedEndOfPath = true;
     [SerializeField] protected bool reachDestination = true;
-    [SerializeField] protected int currentWaypoint = 0;    
-    protected Path path;    // Current path;
+    [SerializeField] protected int currentWaypoint = 0;
+    [SerializeField] protected Urgency curUrgency = Urgency.Normal;
+
+    /// <summary>
+    /// Current path;
+    /// </summary>
+    protected Path path;    
 
     public bool ReachDestination
     {
@@ -40,14 +43,13 @@ public abstract class MoveController : MonoBehaviour
     }
 
     private float lastRepath = float.NegativeInfinity;
-    private Urgency curUrgency = Urgency.Normal;
+
 
     protected virtual void Start()
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _seeker = GetComponent<Seeker>();
-        _lineRenderer = GetComponent<LineRenderer>();
         
         // init
         lastTransPositon = transform.position;
@@ -111,7 +113,6 @@ public abstract class MoveController : MonoBehaviour
 
         // 其他逻辑
         Filp();
-        DrawPathUpdate();
         UpdateUrgency(curUrgency);
     }
 
@@ -217,41 +218,6 @@ public abstract class MoveController : MonoBehaviour
             _anim.SetBool("IsRun", true);
         }
     }
-
-    #region DrawPath
-
-    protected void DrawPathUpdate()
-    {
-        List<Vector3> pathDraw = new List<Vector3>();
-        if(path != null)
-        {
-            for(int i = currentWaypoint; i < path.vectorPath.Count; i++)
-            {
-                pathDraw.Add(path.vectorPath[i]);
-            }
-            DrawPath(pathDraw);
-        }
-    }
-
-    protected void DrawPath(List<Vector3> points)
-    {
-        // 设置线的宽度等属性
-        _lineRenderer.startWidth = 0.1f;
-        _lineRenderer.endWidth = 0.1f;
-
-        // 设置路径点
-        Vector3[] draw = new Vector3[points.Count];
-        for (int i = 0; i < points.Count; i++)
-        {
-            draw[i] = new Vector3(points[i].x, points[i].y);
-        }
-
-        // 绘制路径
-        _lineRenderer.positionCount = draw.Length;
-        _lineRenderer.SetPositions(draw);
-    }
-
-    #endregion
 
     #region Flip
 

@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 230710092576638547}
   - component: {fileID: 727953698976762662}
   m_Layer: 5
-  m_Name: InputName
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,13 +279,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 230710092576638547}
   m_TextComponent: {fileID: 1762433373478488589}
   m_Placeholder: {fileID: 1245672698824147939}
-  m_ContentType: 5
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -2533,7 +2533,7 @@ GameObject:
   - component: {fileID: 6719472191214147778}
   - component: {fileID: 4698475192405872487}
   m_Layer: 5
-  m_Name: InputName
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2641,13 +2641,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6719472191214147778}
   m_TextComponent: {fileID: 1641624755735702055}
   m_Placeholder: {fileID: 5308926146621728671}
-  m_ContentType: 5
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -4215,7 +4215,7 @@ GameObject:
   - component: {fileID: 8397067575053372262}
   - component: {fileID: 682199750065133189}
   m_Layer: 5
-  m_Name: InputName
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4323,13 +4323,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8397067575053372262}
   m_TextComponent: {fileID: 650559993112886929}
   m_Placeholder: {fileID: 1605203532478086999}
-  m_ContentType: 5
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:

@@ -26,16 +26,17 @@ namespace ChenChen_UISystem {
         {
             UITool.TryGetChildComponentByName<Button>("EnterGame").onClick.AddListener(() =>
             {
+
                 SceneSystem.Instance.SetScene(new MainScene(() =>
                 {
-                    GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(50, 50, 0),
+                    GameManager.Instance.GeneratePawn(new PawnKindDef(p0.PawnName, "殖民地", "", null),
+                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
                         p0.Attribute);
-                    GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(51, 51, 0),
+                    GameManager.Instance.GeneratePawn(new PawnKindDef(p1.PawnName, "殖民地", "", null),
+                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
                         p1.Attribute);
-                    GameManager.Instance.GeneratePawn(new PawnKindDef("unname", "殖民地", "", null),
-                        new Vector3(49, 49, 0),
+                    GameManager.Instance.GeneratePawn(new PawnKindDef(p2.PawnName, "殖民地", "", null),
+                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
                         p2.Attribute);
                 }));
             });
@@ -57,6 +58,18 @@ namespace ChenChen_UISystem {
             UpdateAttributeValue(0, p0);
             UpdateAttributeValue(1, p1);
             UpdateAttributeValue(2, p2);
+            UITool.TryGetChildComponentByPath<InputField>("PawnBox0/Name").onValueChanged.AddListener((string content) =>
+            {
+                p0.PawnName = content;
+            });
+            UITool.TryGetChildComponentByPath<InputField>("PawnBox1/Name").onValueChanged.AddListener((string content) =>
+            {
+                p1.PawnName = content;
+            });
+            UITool.TryGetChildComponentByPath<InputField>("PawnBox2/Name").onValueChanged.AddListener((string content) =>
+            {
+                p2.PawnName = content;
+            });
         }
 
         private void UpdateAttributeValue(int index,Pawn p)

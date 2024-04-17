@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class StateBase : IState
 {
     protected StateMachine _stateMachine { get; private set; }
-
+    public float MaxTick;
     public bool IsSuccess;
 
     public StateBase(StateMachine machine,StateBase next = null)

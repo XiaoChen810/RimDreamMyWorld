@@ -5,6 +5,7 @@ namespace ChenChen_AI
 {
     public class PawnJob_Fishing : PawnJob
     {
+        private readonly static float tick = 50;
         private GameObject target;
         private Thing_Building curTargetComponent;
 
@@ -19,7 +20,7 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="fishPos"></param>
-        public PawnJob_Fishing(Pawn pawn, GameObject target = null) : base(pawn, null)
+        public PawnJob_Fishing(Pawn pawn, GameObject target = null) : base(pawn, tick)
         {
             this.pawn = pawn;
             this.target = target;

@@ -7,8 +7,9 @@ public class StateMachine
 {
     protected StateBase _currentState = null;
     protected StateBase _nextState = null;
+    protected StateBase _defaultState = null;
     protected Queue<StateBase> _StateQueue;
-    protected StateBase defaultState;
+    protected float _maxTick = -1;
 
     /// <summary>
     /// 当前状态
@@ -16,7 +17,10 @@ public class StateMachine
     public StateBase CurState
     {
         get { return _currentState; }
-        set { _currentState = value; }
+        set 
+        { 
+            _currentState = value; 
+        }
     }
 
     /// <summary>
@@ -32,6 +36,18 @@ public class StateMachine
     }
 
     /// <summary>
+    /// 当前状态的默认状态
+    /// </summary>
+    public StateBase DefaultState
+    {
+        get { return _defaultState; }
+        set
+        {
+            _defaultState = value;
+        }
+    }
+
+    /// <summary>
     /// 状态队列，当有新的状态添加时，可以添加到状态队列里
     /// </summary>
     public Queue<StateBase> StateQueue
@@ -43,13 +59,28 @@ public class StateMachine
         }
     }
 
+    /// <summary>
+    /// 当前状态的最大运行时间
+    /// </summary>
+    public float MaxTick
+    {
+        get { return _maxTick; }
+        set
+        {
+            _tickTime = Time.time;
+            _maxTick = value;
+        }
+    }
+
     public Pawn Owner;
+    private float _tickTime;
 
     public StateMachine(StateBase defaultState, Pawn owner)
     {
         _StateQueue = new Queue<StateBase>();
-        this.Owner = owner;
-        this.defaultState = defaultState;
+        _defaultState = defaultState;       
+        Owner = owner;
+
     }
 
     public void Update()
@@ -68,8 +99,13 @@ public class StateMachine
                     _currentState.OnExit();
                     _currentState = null;
                     break;
-                //状态正在进行什么也不处理
+                //状态正在进行,计时,超时切换
                 case StateType.Doing:
+                    if( _tickTime > Time.time + _maxTick)
+                    {
+                        _tickTime = Time.time;
+                        TryChangeState();
+                    }
                     break;
                 //状态中断触发中断函数
                 case StateType.Interrupt:
@@ -106,7 +142,7 @@ public class StateMachine
         }
 
         //都为空则设置为默认
-        ChangeState(defaultState);
+        ChangeState(_defaultState);
     }
 
     /// <summary>
@@ -133,6 +169,7 @@ public class StateMachine
             if (_currentState.OnEnter())
             {
                 //Debug.Log($"{Owner.name}切换成状态: " + _currentState);
+                _maxTick = newState.MaxTick;
                 return;
             }
             // 未成功进入

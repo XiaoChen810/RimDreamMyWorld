@@ -5,11 +5,12 @@ namespace ChenChen_AI
 {
     public class PawnJob_Demolished : PawnJob
     {
+        private readonly static float tick = 50;
         private GameObject building;
         private Thing_Building currentWorkObject;
         private float _time;
 
-        public PawnJob_Demolished(Pawn pawn, GameObject building = null) : base(pawn)
+        public PawnJob_Demolished(Pawn pawn, GameObject building = null) : base(pawn, tick)
         {
             this.building = building;
         }

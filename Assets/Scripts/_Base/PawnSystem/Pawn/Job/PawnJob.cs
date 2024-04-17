@@ -4,11 +4,14 @@ namespace ChenChen_AI
 {
     public abstract class PawnJob : StateBase
     {
+        /// <summary>
+        /// 做这个工作的棋子
+        /// </summary>
         protected Pawn pawn;
-
-        public PawnJob(Pawn pawn, StateBase next = null) : base(pawn.StateMachine, next)
+        public PawnJob(Pawn pawn, float maxTick, StateBase next = null) : base(pawn.StateMachine, next)
         {
             this.pawn = pawn;
+            this.MaxTick = maxTick;
         }
     }
 }

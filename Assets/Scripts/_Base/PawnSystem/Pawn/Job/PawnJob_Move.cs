@@ -4,6 +4,7 @@ namespace ChenChen_AI
 {
     public class PawnJob_Move : PawnJob
     {
+        private readonly static float tick = 50;
         private Vector2 targetPos;
 
         /// <summary>
@@ -11,7 +12,7 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="targetPos"></param>
-        public PawnJob_Move(Pawn pawn, Vector2 targetPos) : base(pawn)
+        public PawnJob_Move(Pawn pawn, Vector2 targetPos) : base(pawn, tick)
         {
             this.pawn = pawn;
             this.targetPos = targetPos;

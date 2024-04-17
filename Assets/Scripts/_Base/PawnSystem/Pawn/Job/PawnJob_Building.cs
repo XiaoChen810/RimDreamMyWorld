@@ -5,6 +5,7 @@ namespace ChenChen_AI
 {
     public class PawnJob_Building : PawnJob
     {
+        private readonly static float tick = 50;
         private GameObject target;
         private Thing_Building curTargetComponent;
         private float _time;
@@ -14,7 +15,7 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="buildPos"></param>
-        public PawnJob_Building(Pawn pawn, GameObject target = null) : base(pawn)
+        public PawnJob_Building(Pawn pawn, GameObject target = null) : base(pawn, tick)
         {
             this.target = target;
         }

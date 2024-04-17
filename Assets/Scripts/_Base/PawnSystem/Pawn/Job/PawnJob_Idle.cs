@@ -4,12 +4,13 @@ namespace ChenChen_AI
 {
     public class PawnJob_Idle : PawnJob
     {
+        private readonly static float tick = 10;
         float _time;
         float _waitTime = 5;
         /// <summary>
         /// 闲置
         /// </summary>
-        public PawnJob_Idle(Pawn pawn) : base(pawn)
+        public PawnJob_Idle(Pawn pawn) : base(pawn, tick)
         {
             this.pawn = pawn;
         }

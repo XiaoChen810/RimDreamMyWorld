@@ -5,7 +5,7 @@ namespace ChenChen_AI
     public class PawnJob_Idle : PawnJob
     {
         float _time;
-        float _waitTime = 3;
+        float _waitTime = 5;
         /// <summary>
         /// 闲置
         /// </summary>

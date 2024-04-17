@@ -44,6 +44,7 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             pawn.TryToEndBattle();
+            pawn.JobDone();
         }
 
         public override void OnInterrupt()

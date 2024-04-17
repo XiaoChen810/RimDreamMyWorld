@@ -3,71 +3,122 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using ChenChen_AI;
+using TMPro;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(LineRenderer))]
-public abstract class MoveController : AIPath
+public abstract class MoveController : MonoBehaviour
 {
     protected Animator _anim;
     protected Rigidbody2D _rb;
-    protected LineRenderer lineRenderer;
+    protected Seeker _seeker;
+    protected LineRenderer _lineRenderer;
 
+    [Header("Debug")]
     // 自身上一个位置
     protected Vector3 lastTransPositon;
+    [SerializeField] protected bool isStart = false;
+    [SerializeField] protected bool canMove = true;
+    [SerializeField] protected float speed = 2f;
+    [SerializeField] protected float endReachedDistance = 0.2f;
+    [SerializeField] protected float repathRate = 0.5f;
+    [SerializeField] protected Vector3 destination;
+    [SerializeField] protected Transform targetDestination;
+    [SerializeField] protected bool targetIsAObject = false;
+    [SerializeField] protected bool reachedEndOfPath = true;
+    [SerializeField] protected bool reachDestination = true;
+    [SerializeField] protected int currentWaypoint = 0;    
+    protected Path path;    // Current path;
 
-    public bool IsReach
+    public bool ReachDestination
     {
         get
         {
-            return reachedDestination;
+            return reachDestination;
         }
     }
 
-    protected override void Start()
+    private float lastRepath = float.NegativeInfinity;
+    private Urgency curUrgency = Urgency.Normal;
+
+    protected virtual void Start()
     {
-        base.Start();
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
-        lineRenderer = GetComponent<LineRenderer>();
-
+        _seeker = GetComponent<Seeker>();
+        _lineRenderer = GetComponent<LineRenderer>();
+        
         // init
         lastTransPositon = transform.position;
         destination = transform.position;
     }
 
-    private float _time = 0;
     protected virtual void Update()
     {
-        if(lastTransPositon == transform.position && !reachedDestination)
+        if (!isStart) return;
+
+        if (!targetIsAObject)
         {
-            _time += Time.deltaTime;
+            targetDestination = null;
         }
-        if(lastTransPositon != transform.position)
+
+        // 定时刷新
+        if (Time.time > lastRepath + repathRate && _seeker.IsDone())
         {
-            _time = 0;
+            lastRepath = Time.time;
+            ReflashDestination(targetDestination != null ? targetDestination.position : destination, curUrgency, endReachedDistance);
         }
-        if(_time > 2)
+        //Debug.Log($"Time.time  {Time.time} > lastRepath + repathRate {lastRepath + repathRate} _seeker.IsDone() {_seeker.IsDone()}");
+        
+
+        if (path == null)
         {
-            Debug.Log("wait out time");
-            _time = 0;
-            destination = transform.position;
-            CancelCurrentPathRequest();
-            // Release current path so that it can be pooled
-            if (path != null) path.Release(this);
-            path = null;
-            interpolatorPath.SetPath(null);
-            reachedEndOfPath = true;
+            return;
         }
+
+        reachedEndOfPath = false;
+
+        float distanceToWaypoint;
+        distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
+        if (distanceToWaypoint < endReachedDistance)
+        {
+            if (currentWaypoint + 1 < path.vectorPath.Count)
+            {
+                currentWaypoint++;
+            }
+            else
+            {
+                if(targetIsAObject)
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, targetDestination.position);
+                    if(distanceToTarget > endReachedDistance)
+                    {
+                        return;
+                    }
+                }
+                reachedEndOfPath = true;
+                OnTargetReached();
+            }
+        }
+
+        // 移动
+        var speedFactor = !reachedEndOfPath ? speed : 0;
+        speedFactor = !reachDestination ? speedFactor : 0;
+        speedFactor = canMove ? speedFactor : 0;
+        Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+        transform.position += dir * speedFactor * Time.deltaTime;
+
+        // 其他逻辑
         Filp();
         DrawPathUpdate();
+        UpdateUrgency(curUrgency);
     }
 
-    public override void OnTargetReached()
+    protected virtual void OnTargetReached()
     {
-        _anim.SetBool("IsWalk", false);
-        _anim.SetBool("IsRun", false);
-        maxSpeed = 1;
+        reachDestination = true;
+        isStart = false;
     }
 
     /// <summary>
@@ -75,12 +126,11 @@ public abstract class MoveController : AIPath
     /// </summary>
     /// <param name="target"></param>
     /// <returns></returns>
-    public bool GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    public void GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
     {
-        InitUrgency(urgency);
-        this.endReachedDistance = endReachedDistance;
-        destination = target;
-        return true;
+        targetDestination = null;
+        targetIsAObject = false;
+        ReflashDestination(target, urgency, endReachedDistance);
     }
 
     /// <summary>
@@ -88,31 +138,77 @@ public abstract class MoveController : AIPath
     /// </summary>
     /// <param name="target"></param>
     /// <returns></returns>
-    public bool GoToHere(GameObject target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    public void GoToHere(GameObject target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
     {
-        GetComponent<AIDestinationSetter>().target = target.transform;  
-        destination = target.transform.position;     
-        return true;
+        // 设置要追踪的目标
+        targetDestination = target.transform;
+        targetIsAObject = true;
+        ReflashDestination(targetDestination.position, urgency, endReachedDistance);
+    }
+    private void ReflashDestination(Vector3 target, Urgency urgency, float endReachedDistance)
+    {
+        Debug.Log("Reflash Destination");
+        // 新建路径
+        ABPath newPath = ABPath.Construct(transform.position, target);
+        // 开始计算路径
+        _seeker.StartPath(newPath, callback: (Path p) =>
+        {
+            p.Claim(this);
+            if (!p.error)
+            {
+                // 判断路径是否可达
+                Vector3 end = p.vectorPath[p.vectorPath.Count - 1];
+                if (Vector2.Distance(end, target) < endReachedDistance)
+                {
+                    destination = target;
+                    curUrgency = urgency;
+                    this.endReachedDistance = endReachedDistance;
+                    canMove = true;
+                    reachDestination = false;
+                    if (path != null) path.Release(this);
+                    path = p;
+                    currentWaypoint = 0;
+                    isStart = true;
+                }
+                else
+                {
+                    //Debug.Log("This point don't has path can reach: " + target
+                    //    + " the path end node is: " + end);
+                    return;
+                }
+            }
+            else
+            {
+                p.Release(this);
+            }
+        });
     }
 
-    private void InitUrgency(Urgency urgency)
+    private void UpdateUrgency(Urgency urgency)
     {
+        if (!isStart)
+        {
+            speed = 0;
+            _anim.SetBool("IsWalk", false);
+            _anim.SetBool("IsRun", false);
+            return;
+        }
         switch (urgency)
         {
             case Urgency.Wander:
-                maxSpeed = 1;
+                speed = 1;
                 break;
             case Urgency.Normal:
-                maxSpeed = 2;
+                speed = 2;
                 break;
             case Urgency.Urge:
-                maxSpeed = 3;
+                speed = 3;
                 break;
             default:
-                maxSpeed = 1;
+                speed = 1;
                 break;
         }
-        if (maxSpeed <= 1)
+        if (speed <= 1)
         {
             _anim.SetBool("IsWalk", true);
         }
@@ -129,7 +225,10 @@ public abstract class MoveController : AIPath
         List<Vector3> pathDraw = new List<Vector3>();
         if(path != null)
         {
-            pathDraw = path.vectorPath;
+            for(int i = currentWaypoint; i < path.vectorPath.Count; i++)
+            {
+                pathDraw.Add(path.vectorPath[i]);
+            }
             DrawPath(pathDraw);
         }
     }
@@ -137,19 +236,19 @@ public abstract class MoveController : AIPath
     protected void DrawPath(List<Vector3> points)
     {
         // 设置线的宽度等属性
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        _lineRenderer.startWidth = 0.1f;
+        _lineRenderer.endWidth = 0.1f;
 
         // 设置路径点
-        Vector3[] path = new Vector3[points.Count - 1];
-        for (int i = 0; i < points.Count - 1; i++)
+        Vector3[] draw = new Vector3[points.Count];
+        for (int i = 0; i < points.Count; i++)
         {
-            path[i] = new Vector3(points[i + 1].x, points[i + 1].y);
+            draw[i] = new Vector3(points[i].x, points[i].y);
         }
 
         // 绘制路径
-        lineRenderer.positionCount = path.Length;
-        lineRenderer.SetPositions(path);
+        _lineRenderer.positionCount = draw.Length;
+        _lineRenderer.SetPositions(draw);
     }
 
     #endregion

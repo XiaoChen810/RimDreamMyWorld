@@ -9,7 +9,7 @@ public class GoblinMain : Pawn
         if (!IsOnWork && CanGetJob)
         {
             job = new JobGiver_FindEnemy().TryIssueJobPackage(this);
-            if (job != null)
+            if (job != null && !IsOnBattle)
             {
                 StateMachine.NextState = new ChenChen_AI.PawnJob_Chase(this, job);
                 return;

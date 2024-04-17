@@ -38,11 +38,12 @@ namespace ChenChen_AI
             }
 
             // 设置人物目标点，前往目标，跑过去
-            if (!pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, pawn.WorkRange))
-            {
-                Debug.LogWarning("The building can't arrive");
-                return false;
-            }
+            pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, pawn.WorkRange);
+            //if (!)
+            //{
+            //    Debug.LogWarning("The building can't arrive");
+            //    return false;
+            //}
 
             // 设置人物无法接取工作
             pawn.JobToDo(target);
@@ -53,7 +54,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点附近
-            if (pawn.MoveControl.IsReach)
+            if (pawn.MoveControl.ReachDestination)
             {
                 // 设置人物正在工作
                 pawn.JobDoing();

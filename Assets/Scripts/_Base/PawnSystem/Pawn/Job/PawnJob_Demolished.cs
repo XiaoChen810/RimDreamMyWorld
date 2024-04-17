@@ -54,7 +54,7 @@ namespace ChenChen_AI
             }
 
             // 判断是否到达目标点附近
-            if (pawn.MoveControl.IsReach)
+            if (pawn.MoveControl.ReachDestination)
             {
                 // 设置人物正在工作
                 pawn.JobDoing();

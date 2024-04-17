@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MoveController))]
 [RequireComponent(typeof(Animator))]
 public abstract class Pawn : MonoBehaviour
 {
@@ -110,16 +109,19 @@ public abstract class Pawn : MonoBehaviour
 
     #region Battle
 
+    private Coroutine AttackCoroutine;
+    private bool isTriggerAttack = false;
+
     public bool TryToEnterBattle(Pawn battleTarget)
     {
+        if (isTriggerAttack) return false;
         IsOnBattle = true;
         CurJobTarget = battleTarget.gameObject;
 
         // …Ë÷√Œª÷√
         Vector3 me = transform.position;
         Vector3 him = battleTarget.gameObject.transform.position;
-        Vector3 min = (me + him) / 2;
-        if (me.x < min.x)
+        if (me.x < him.x)
         {
             MoveControl.FilpRight();
         }
@@ -128,7 +130,8 @@ public abstract class Pawn : MonoBehaviour
             MoveControl.FilpLeft();
         }
 
-        Animator.SetTrigger("IsAttack");
+        if (AttackCoroutine != null) StopCoroutine(AttackAnimCo());
+        AttackCoroutine = StartCoroutine(AttackAnimCo());
         return true;
     }
 
@@ -137,6 +140,22 @@ public abstract class Pawn : MonoBehaviour
         IsOnBattle = false;
         CurJobTarget = null;
         return true;
+    }
+
+    IEnumerator AttackAnimCo()
+    {
+        Debug.Log("Enter");
+        while(IsOnBattle)
+        {
+            yield return null;  
+            if(!isTriggerAttack)
+            {
+                isTriggerAttack = true;
+                Animator.SetTrigger("IsAttack");
+            }
+            yield return new WaitForSeconds(0.76f + AttackSpeedWait);
+            isTriggerAttack = false;
+        }
     }
 
     public void GetDamage(float damage)

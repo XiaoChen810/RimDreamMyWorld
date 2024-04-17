@@ -55,7 +55,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 到达后
-            if (pawn.MoveControl.IsReach)
+            if (pawn.MoveControl.ReachDestination)
             {
                 pawn.JobDoing();
                 _time += Time.deltaTime;

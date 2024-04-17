@@ -32,7 +32,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点
-            if (pawn.MoveControl.IsReach)
+            if (pawn.MoveControl.ReachDestination)
             {
                 return StateType.Success;
             }

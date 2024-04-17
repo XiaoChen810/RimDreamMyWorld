@@ -65,7 +65,7 @@ public class StateMachine
                     break;
                 //状态失败把当前状态设为空
                 case StateType.Failed:
-                    Debug.Log("状态失败：" + _currentState.ToString());
+                    _currentState.OnExit();
                     _currentState = null;
                     break;
                 //状态正在进行什么也不处理

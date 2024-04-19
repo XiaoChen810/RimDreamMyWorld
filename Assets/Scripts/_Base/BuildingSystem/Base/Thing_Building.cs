@@ -115,7 +115,7 @@ namespace ChenChen_BuildingSystem
             }
 
             // 如果是障碍物,给所在的地图的该位置设置存在障碍物
-            if (Data.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject, set: FinderNode.s_MaxIntoCost);
+            if (Data.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject);
             // 如果是障碍物，则设置碰撞体
             if (Data.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
             FindAnyObjectByType<AstarPath>().Scan();

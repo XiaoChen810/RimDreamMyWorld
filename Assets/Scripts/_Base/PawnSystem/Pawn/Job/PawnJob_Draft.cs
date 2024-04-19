@@ -24,7 +24,6 @@ namespace ChenChen_AI
             {
                 return StateType.Doing;
             }
-
             return StateType.Success;
         }
 
@@ -35,6 +34,7 @@ namespace ChenChen_AI
 
         public override void OnInterrupt()
         {
+            // 征兆情况下，进入其他状态时，会加进队列前面，等状态完成，还是征兆状态
             if (pawn.IsDrafted)
             {
                 _stateMachine.StateQueue.Enqueue(new PawnJob_Draft(pawn, true));

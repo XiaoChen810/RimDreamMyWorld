@@ -111,7 +111,7 @@ namespace ChenChen_BuildingSystem
 
                 SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
                 // 如果能建造则设置主体为绿色，否则为红色
-                if (MapManager.Instance.CheckObjectWhetherCanPlaceOnHere(MouseIndicator))
+                if (MapManager.Instance.ContainsObstaclesList(MouseIndicator))
                 {
                     sr.color = Color.green;
                     // 放置
@@ -149,7 +149,7 @@ namespace ChenChen_BuildingSystem
                                                       MouseIndicator.transform.rotation,
                                                       buildingSystemManager.transform);
             ThingBase blueprint = newObject.GetComponent<ThingBase>();
-            MapManager.Instance.AddToObstaclesList(newObject, set: 0);
+            MapManager.Instance.AddToObstaclesList(newObject);
             blueprint.Placed();
         }
 

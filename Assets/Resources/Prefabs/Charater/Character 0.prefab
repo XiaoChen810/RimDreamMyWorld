@@ -342,11 +342,11 @@ MonoBehaviour:
   CanGetJob: 1
   CanBattle: 0
   CanDrafted: 1
-  IsDead: 0
-  IsSelect: 0
-  IsOnWork: 0
-  IsOnBattle: 0
-  IsDrafted: 0
+  _isDead: 0
+  _isSelect: 0
+  _isOnWork: 0
+  _isOnBattle: 0
+  _isDrafted: 0
   CurJobTarget: {fileID: 0}
 --- !u!114 &3998445696871861264
 MonoBehaviour:
@@ -421,3 +421,4 @@ MonoBehaviour:
   reachedEndOfPath: 0
   reachDestination: 0
   currentWaypoint: 0
+  curUrgency: 1

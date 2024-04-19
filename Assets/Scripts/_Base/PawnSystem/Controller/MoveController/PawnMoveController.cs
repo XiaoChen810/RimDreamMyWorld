@@ -10,7 +10,10 @@ public class PawnMoveController : MoveController
 {
     private Collider2D _collider;
     private Pawn _pawn;
-    protected LineRenderer _lineRenderer;
+    private LineRenderer _lineRenderer;
+
+    // 紧迫程度
+    [SerializeField] protected Urgency curUrgency = Urgency.Normal;
 
     protected override void Start()
     {
@@ -23,18 +26,69 @@ public class PawnMoveController : MoveController
     protected override void Update()
     {
         base.Update();
-        // 征兆情况下, 鼠标右击，强制移动到目标点,&& _pawn.IsDrafted
+        // 选中情况下，按下R征兆
+        if (_pawn.IsSelect && Input.GetKeyDown(KeyCode.R))
+        {
+            _pawn.StateMachine.TryChangeState(new PawnJob_Draft(_pawn, !_pawn.IsDrafted));
+        }
+        // 征兆情况下, 鼠标右击，移动到鼠标点
         if (_pawn.IsSelect && _pawn.IsDrafted && Input.GetMouseButtonDown(1))
         {
             _pawn.StateMachine.TryChangeState(
                 new PawnJob_Move(_pawn, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
         }
-        if(_pawn.IsSelect && Input.GetKeyDown(KeyCode.R))
-        {
-            _pawn.StateMachine.TryChangeState(new PawnJob_Draft(_pawn, !_pawn.IsDrafted));
-        }
         // 选中情况下会绘制路径
         DrawPathUpdate();
+    }
+
+    /// <summary>
+    /// 前往到目标点
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public void GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    {
+        switch (urgency)
+        {
+            case Urgency.Wander:
+                speed = 1;
+                break;
+            case Urgency.Normal:
+                speed = 2;
+                break;
+            case Urgency.Urge:
+                speed = 3;
+                break;
+            default:
+                speed = 2;
+                break;
+        }
+        StartPath(target, speed, endReachedDistance);
+    }
+
+    /// <summary>
+    /// 跟随目标
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public void GoToHere(GameObject target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    {
+        switch (urgency)
+        {
+            case Urgency.Wander:
+                speed = 1;
+                break;
+            case Urgency.Normal:
+                speed = 2;
+                break;
+            case Urgency.Urge:
+                speed = 3;
+                break;
+            default:
+                speed = 2;
+                break;
+        }
+        StartPath(target, speed, endReachedDistance);
     }
 
     #region DrawPath

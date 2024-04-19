@@ -11,42 +11,58 @@ namespace ChenChen_MapGenerator
     [RequireComponent(typeof(MapCreator))]
     public class MapManager : SingletonMono<MapManager>
     {
+        private string _currentMapName;
+        private SceneMapData _currentSceneMapData;
+
         /// <summary>
         ///  地图生成器
         /// </summary>
         public MapCreator MapCreator { get; private set; }
 
         /// <summary>
-        ///  当前场景的地图名字
-        /// </summary>
-        public string CurrentMapName { get; private set; }
-
-        /// <summary>
         /// 不同场景的地图数据
         /// </summary>
-        public Dictionary<string, SceneMapData> SceneMapDatasDict = new();
-        public SceneMapData CurrentSceneMapData;
+        public Dictionary<string, SceneMapData> SceneMapDatasDict = new Dictionary<string, SceneMapData>();
+
+        /// <summary>
+        ///  当前场景的地图名字
+        /// </summary>
+        public string CurrentMapName
+        {
+            get
+            {
+                return _currentMapName;
+            }
+            private set
+            {
+                _currentMapName = value;
+                if (SceneMapDatasDict.ContainsKey(value))
+                {
+                    _currentSceneMapData = SceneMapDatasDict[_currentMapName];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 当前场景的地图数据
+        /// </summary>
+        public SceneMapData CurrentSceneMapData
+        {
+            get
+            {
+                return _currentSceneMapData;
+            }
+        }
 
 
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
         public int MapHeightOfGenerate = 100;
 
-        // 当地图障碍物发生变化
-        public Action MapObstaclesChange;
-
         protected override void Awake()
         {
             base.Awake();
             Init();
-        }
-
-        private void Update()
-        {
-            if (CurrentMapName != null && SceneMapDatasDict.ContainsKey(CurrentMapName))
-            {
-                CurrentSceneMapData = SceneMapDatasDict[CurrentMapName];
-            }
         }
 
         /// <summary>
@@ -56,6 +72,7 @@ namespace ChenChen_MapGenerator
         {
             // 初始化组件
             MapCreator = GetComponent<MapCreator>();
+            SceneMapDatasDict = new Dictionary<string, SceneMapData>();
         }
 
         /// <summary>
@@ -98,21 +115,21 @@ namespace ChenChen_MapGenerator
         public void LoadOrGenerateSceneMap(string mapName, int seed = -1)
         {
             // 如果加载的是新场景要先把旧场景关了
-            if (CurrentMapName != mapName && CurrentMapName != null)
+            if (_currentMapName != mapName && _currentMapName != null)
             {
-                CloseSceneMap(CurrentMapName);
+                CloseSceneMap(_currentMapName);
             }
 
             // 如果已经存在场景，则直接启用
             if (SceneMapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(true);
-                CurrentMapName = mapName;
+                _currentMapName = mapName;
                 return;
             }
 
             MapDataDictAdd(mapName, seed);
-            CurrentMapName = mapName;
+            _currentMapName = mapName;
             // 初始化寻路算法的节点
             FindAnyObjectByType<AstarPath>().Scan();
         }
@@ -156,37 +173,16 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 从某场景的地图数据中获取寻路路径
-        /// </summary>
-        /// <param name="startPos"></param>
-        /// <param name="endtPos"></param>
-        /// <param name="mapName"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public List<Vector2> GetPath(Vector3 startPos, Vector3 endtPos, string mapName)
-        {
-            if (!SceneMapDatasDict.ContainsKey(mapName))
-            {
-                Debug.LogWarning($"未能找到{mapName}这个地图的节点数据，已退出");
-                return null;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///  获取当前地图的一个子物体
+        ///  获取当前地图的一个瓦片地图子物体
         /// </summary>
         /// <param name="Name"> 子物体名字 </param>
         /// <returns></returns>
         public GameObject GetChildObjectFromCurMap(string Name)
         {
-            if (CurrentMapName != null)
+            if (_currentMapName != null)
             {
                 // 返回当前地图的所要找的子物体
-                GameObject parent = transform.Find(CurrentMapName).gameObject;
+                GameObject parent = transform.Find(_currentMapName).gameObject;
                 return FindChildRecursively(parent.transform, Name).gameObject;
             }
 
@@ -215,32 +211,14 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置某地图某点的进入所需消耗
-        /// </summary>
-        /// <param name="mapName"> 地图的名字 </param>
-        /// <param name="pos"> 坐标 </param>
-        /// <param name="set"> </param>
-        [Obsolete]
-        public void SetNodeIntoCost(string mapName, Vector3Int pos,float set = FinderNode.s_MaxIntoCost)
-        {
-            if(SceneMapDatasDict.ContainsKey(mapName))
-            {
-                MapObstaclesChange?.Invoke();
-            }
-            else
-            {
-                Debug.Log("没有这个地图数据");
-            }
-        }
-
-        /// <summary>
-        /// 设置地图某位置有障碍
+        /// 设置某地图某位置有障碍
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="pos"></param>
         /// <param name="set"></param>
-        public void AddToObstaclesList(string mapName, Vector3Int pos)
+        public void AddToObstaclesList(Vector3Int pos, string mapName = null)
         {
+            mapName = mapName == null ? _currentMapName : mapName;
             if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
@@ -248,12 +226,12 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置地图某位置有建筑物
+        /// 设置某地图某位置有建筑物
         /// </summary>
         /// <param name="obj"></param>
-        public void AddToObstaclesList(GameObject obj, string mapName = null, float set = FinderNode.s_MaxIntoCost)
+        public void AddToObstaclesList(GameObject obj, string mapName = null)
         {
-            mapName = mapName == null ? CurrentMapName : mapName;
+            mapName = mapName == null ? _currentMapName : mapName;
             // 获取当前场景的地图数据
             SceneMapData currentMapData = SceneMapDatasDict[mapName];
             // 获取物体的世界边界
@@ -279,19 +257,19 @@ namespace ChenChen_MapGenerator
                     Vector3Int pos = new Vector3Int(x, y);
                     if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
                     SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-
                 }
             }
         }
 
         /// <summary>
-        /// 设置地图某位置已经没有障碍
+        /// 设置某地图某位置已经没有障碍
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="pos"></param>
         /// <param name="set"></param>
-        public void RemoveFromObstaclesList(string mapName, Vector3Int pos)
+        public void RemoveFromObstaclesList(Vector3Int pos, string mapName = null)
         {
+            mapName = mapName == null ? _currentMapName : mapName;
             if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
             {
                 SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
@@ -299,13 +277,13 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 设置地图某位置已经没有障碍物
+        /// 设置某地图某位置已经没有障碍物
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="mapName"></param>
         public void RemoveFromObstaclesList(GameObject obj, string mapName = null)
         {
-            mapName = mapName == null ? CurrentMapName : mapName;
+            mapName = mapName == null ? _currentMapName : mapName;
             // 获取当前场景的地图数据
             SceneMapData currentMapData = SceneMapDatasDict[mapName];
             // 获取物体的世界边界
@@ -337,14 +315,28 @@ namespace ChenChen_MapGenerator
         }
 
         /// <summary>
-        /// 检查物体能否放置在这个位置上
+        /// 检查某地图这个位置上是否有障碍物
         /// </summary>
-        /// <param name="obj">请确保物体上有Collider组件</param>
+        /// <param name="pos"></param>
+        /// <param name="mapName"></param>
         /// <returns></returns>
-        public bool CheckObjectWhetherCanPlaceOnHere(GameObject obj)
+        public bool ContainsObstaclesList(Vector3Int pos, string mapName = null)
         {
+            mapName = mapName == null ? _currentMapName : mapName;
+            return SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos);
+        }
+
+        /// <summary>
+        /// 检查某地图这个物体要放的位置上是否有障碍物
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="mapName"></param>
+        /// <returns></returns>
+        public bool ContainsObstaclesList(GameObject obj, string mapName = null)
+        {
+            mapName = mapName == null ? _currentMapName : mapName;
             // 获取当前场景的地图数据
-            SceneMapData currentMapData = SceneMapDatasDict[CurrentMapName];
+            SceneMapData currentMapData = SceneMapDatasDict[_currentMapName];
             // 获取物体的世界边界
             Bounds bounds = obj.GetComponent<Collider2D>().bounds;
             // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
@@ -365,7 +357,7 @@ namespace ChenChen_MapGenerator
                     // 在这里处理每个占据的格子
                     if (x > currentMapData.width || x < 0) return false;
                     if (y > currentMapData.height || y < 0) return false;
-                    if (SceneMapDatasDict[CurrentMapName].obstaclesPositionList.Contains(new Vector3(x, y))) return false;
+                    if (SceneMapDatasDict[_currentMapName].obstaclesPositionList.Contains(new Vector3(x, y))) return false;
                 }
             }
 

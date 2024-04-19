@@ -83,7 +83,7 @@ public class SelectManager : MonoBehaviour
                 // Ö´ÐÐÑ¡ÖÐÂß¼­
                 Pawn controller = collider.GetComponent<Pawn>();
 
-                controller.TrySelect();           
+                controller.IsSelect = !controller.IsSelect;           
             }
         }
     }

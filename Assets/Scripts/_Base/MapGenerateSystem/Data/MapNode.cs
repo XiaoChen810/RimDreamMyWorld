@@ -10,15 +10,14 @@ namespace ChenChen_MapGenerator
     /// </summary>
     public class MapNode
     {
-        public MapNode(int x, int y, float noiseValue)
+        public MapNode(Vector2Int postion, float noiseValue)
         {
-            this.x = x; this.y = y;
+            this.postion = postion;
             this.noiseValue = noiseValue;
         }
 
         // 位置
-        public int x;
-        public int y;
+        public Vector2Int postion;
         // 噪声值
         public float noiseValue;
         // 瓦片类型
@@ -29,7 +28,5 @@ namespace ChenChen_MapGenerator
         public Type type = Type.none;
         // 附属的瓦片地图
         public Tilemap loadingTilemap;
-        // 是否有障碍物
-        // public bool noObstacles;
     }
 }

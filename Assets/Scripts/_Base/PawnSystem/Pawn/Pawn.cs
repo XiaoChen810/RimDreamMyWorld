@@ -47,11 +47,89 @@ public abstract class Pawn : MonoBehaviour
     public bool CanDrafted = true;
 
     [Header("人物状态 Is")]
-    public bool IsDead;
-    public bool IsSelect;
-    public bool IsOnWork;   
-    public bool IsOnBattle;
-    public bool IsDrafted;
+    [SerializeField] protected bool _isDead;
+    [SerializeField] protected bool _isSelect;
+    [SerializeField] protected bool _isOnWork;
+    [SerializeField] protected bool _isOnBattle;
+    [SerializeField] protected bool _isDrafted;
+    public bool IsDead
+    {
+        get
+        {
+            return _isDead;
+        }
+        set
+        {
+            _isDead = value;
+        }
+    }
+    public bool IsSelect
+    {
+        get 
+        { 
+            return _isSelect;
+        }
+        set
+        {
+            if (_isSelect == value) return;
+            if(!CanSelect) return;
+            if(value)
+            {
+                Indicator_DOFadeOne();
+            }
+            else
+            {
+                Indicator_DOFadeZero();
+                IsDrafted = false;              
+            }
+            _isSelect = value;
+        }
+    }
+    public bool IsOnWork
+    {
+        get 
+        { 
+            return _isOnWork; 
+        }
+        set
+        {
+            _isOnWork = value;
+        }
+    }
+    public bool IsOnBattle
+    {
+        get
+        {
+            return _isOnBattle;
+        }
+        set
+        {
+            _isOnBattle = value;
+        }
+    }
+    public bool IsDrafted
+    {
+        get
+        {
+            return _isDrafted;
+        }
+        set
+        {
+            if (_isDrafted == value) return;
+            if (!CanDrafted) return;
+
+            if (value)
+            {
+                Indicator_DOColorRed();
+            }
+            else
+            {
+                Indicator_DOColorWhite();
+                IsSelect = false;
+            }
+            _isDrafted = value;
+        }
+    }
 
     [Header("人物指向")]
     public GameObject CurJobTarget;
@@ -173,24 +251,12 @@ public abstract class Pawn : MonoBehaviour
 
     #endregion
 
-    #region Select
+    #region Indicator
 
-    public void TrySelect()
+    // 获取人物的指示器，如果不存在则创建
+    private bool TryGetIndicator(out GameObject indicator)
     {
-        if (!IsSelect)
-        {
-            WhenPawnSelected();
-        }
-        else
-        {
-            WhenPawnCanelSelected();
-        }
-    }
-
-    private void WhenPawnSelected()
-    {
-        if (!CanSelect) return;
-        GameObject indicator = null;
+        indicator = null;
         if (transform.Find("SelectionBox"))
         {
             indicator = transform.Find("SelectionBox").gameObject;
@@ -204,54 +270,44 @@ public abstract class Pawn : MonoBehaviour
         }
         if (indicator == null)
         {
-            Debug.LogError("No Find the SelectionBox");
-            return;
+            Debug.LogError("Failed to find or create the SelectionBox GameObject.");
+            return false;
         }
-        SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
-        sr.DOFade(1, 1);
-        IsSelect = true;
+        return true;
     }
 
-    private void WhenPawnCanelSelected()
+    // Animation
+    protected void Indicator_DOFadeOne()
     {
-        if (!CanSelect) return;
-        GameObject indicator = null;
-        if (transform.Find("SelectionBox"))
+        if (TryGetIndicator(out GameObject indicator))
         {
-            indicator = transform.Find("SelectionBox").gameObject;
-            indicator.SetActive(true);
-        }
-        if (indicator == null)
-        {
-            indicator = Instantiate(Resources.Load<GameObject>("Views/SelectionBox"), gameObject.transform);
-            indicator.name = "SelectionBox";
-            indicator.SetActive(true);
-        }
-        if (indicator == null)
-        {
-            Debug.LogError("No Find the SelectionBox");
-            return;
-        }
-        SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
-        sr.DOFade(0, 1);
-        IsSelect = false;
-    }
-
-    #endregion
-
-    #region Draft
-
-    public void TryDraft()
-    {
-        if(CanDrafted)
-        {
-            IsDrafted = true;
+            SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+            sr.DOFade(1, 1);
         }
     }
-
-    public void CaneclDraft()
+    protected void Indicator_DOFadeZero()
     {
-        IsDrafted = false;
+        if (TryGetIndicator(out GameObject indicator))
+        {
+            SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+            sr.DOFade(0, 1);
+        }
+    }
+    protected void Indicator_DOColorRed()
+    {
+        if (TryGetIndicator(out GameObject indicator))
+        {
+            SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+            sr.DOColor(Color.red, 1);
+        }
+    }
+    protected void Indicator_DOColorWhite()
+    {
+        if (TryGetIndicator(out GameObject indicator))
+        {
+            SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+            sr.DOColor(Color.white, 1);
+        }
     }
 
     #endregion

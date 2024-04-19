@@ -16,18 +16,29 @@ public abstract class MoveController : MonoBehaviour
     [Header("Debug")]
     // 自身上一个位置
     protected Vector3 lastTransPositon;
+    // 开始寻路
     [SerializeField] protected bool isStart = false;
+    // 能否移动，isStart 和 canMove同时为 true 才会动
     [SerializeField] protected bool canMove = true;
+    // 移动速度
     [SerializeField] protected float speed = 2f;
+    // 移动点更新的距离，也是判断到达目标点的距离
     [SerializeField] protected float endReachedDistance = 0.2f;
+    // 开启动态刷新时，每次刷新的间隔时间
     [SerializeField] protected float repathRate = 0.5f;
+    // 目标点
     [SerializeField] protected Vector3 destination;
+    // 目标Transform
     [SerializeField] protected Transform targetDestination;
+    // 目标是否是个物体
     [SerializeField] protected bool targetIsAObject = false;
+    // 到达路径末尾
     [SerializeField] protected bool reachedEndOfPath = true;
+    // 到达目标点
     [SerializeField] protected bool reachDestination = true;
+    // 当前在路径的哪个点
     [SerializeField] protected int currentWaypoint = 0;
-    [SerializeField] protected Urgency curUrgency = Urgency.Normal;
+
 
     /// <summary>
     /// Current path;
@@ -69,7 +80,7 @@ public abstract class MoveController : MonoBehaviour
         if (Time.time > lastRepath + repathRate && _seeker.IsDone())
         {
             lastRepath = Time.time;
-            ReflashDestination(targetDestination != null ? targetDestination.position : destination, curUrgency, endReachedDistance);
+            ReflashDestination(targetDestination != null ? targetDestination.position : destination, speed, endReachedDistance);
         }
         //Debug.Log($"Time.time  {Time.time} > lastRepath + repathRate {lastRepath + repathRate} _seeker.IsDone() {_seeker.IsDone()}");
         
@@ -113,7 +124,7 @@ public abstract class MoveController : MonoBehaviour
 
         // 其他逻辑
         Filp();
-        UpdateUrgency(curUrgency);
+        UpdateMoveAnimation();
     }
 
     protected virtual void OnTargetReached()
@@ -122,16 +133,37 @@ public abstract class MoveController : MonoBehaviour
         isStart = false;
     }
 
+    private void UpdateMoveAnimation()
+    {
+        if (!isStart || !canMove)
+        {
+            speed = 0;
+            _anim.SetBool("IsWalk", false);
+            _anim.SetBool("IsRun", false);
+            return;
+        }
+        if (speed > 0 && speed <= 1)
+        {
+            _anim.SetBool("IsWalk", true);
+        }
+        if (speed > 1)
+        {
+            _anim.SetBool("IsRun", true);
+        }
+    }
+
+    #region Path
+
     /// <summary>
     /// 前往到目标点
     /// </summary>
     /// <param name="target"></param>
     /// <returns></returns>
-    public void GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    protected void StartPath(Vector3 destination, float speed, float endReachedDistance = 0.2f)
     {
         targetDestination = null;
         targetIsAObject = false;
-        ReflashDestination(target, urgency, endReachedDistance);
+        ReflashDestination(destination, speed, endReachedDistance);
     }
 
     /// <summary>
@@ -139,18 +171,19 @@ public abstract class MoveController : MonoBehaviour
     /// </summary>
     /// <param name="target"></param>
     /// <returns></returns>
-    public void GoToHere(GameObject target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+    protected void StartPath(GameObject destination, float speed, float endReachedDistance = 0.2f)
     {
         // 设置要追踪的目标
-        targetDestination = target.transform;
+        targetDestination = destination.transform;
         targetIsAObject = true;
-        ReflashDestination(targetDestination.position, urgency, endReachedDistance);
+        ReflashDestination(targetDestination.position, speed, endReachedDistance);
     }
-    private void ReflashDestination(Vector3 target, Urgency urgency, float endReachedDistance)
+
+    private void ReflashDestination(Vector3 destination, float speed, float endReachedDistance)
     {
-        Debug.Log("Reflash Destination");
+        //Debug.Log("Reflash Destination");
         // 新建路径
-        ABPath newPath = ABPath.Construct(transform.position, target);
+        ABPath newPath = ABPath.Construct(transform.position, destination);
         // 开始计算路径
         _seeker.StartPath(newPath, callback: (Path p) =>
         {
@@ -159,17 +192,17 @@ public abstract class MoveController : MonoBehaviour
             {
                 // 判断路径是否可达
                 Vector3 end = p.vectorPath[p.vectorPath.Count - 1];
-                if (Vector2.Distance(end, target) < endReachedDistance)
+                if (Vector2.Distance(end, destination) < endReachedDistance)
                 {
-                    destination = target;
-                    curUrgency = urgency;
+                    this.destination = destination;
+                    this.speed = speed;
                     this.endReachedDistance = endReachedDistance;
-                    canMove = true;
-                    reachDestination = false;
                     if (path != null) path.Release(this);
                     path = p;
-                    currentWaypoint = 0;
                     isStart = true;
+                    canMove = true;
+                    reachDestination = false;
+                    currentWaypoint = 0;
                 }
                 else
                 {
@@ -185,39 +218,7 @@ public abstract class MoveController : MonoBehaviour
         });
     }
 
-    private void UpdateUrgency(Urgency urgency)
-    {
-        if (!isStart)
-        {
-            speed = 0;
-            _anim.SetBool("IsWalk", false);
-            _anim.SetBool("IsRun", false);
-            return;
-        }
-        switch (urgency)
-        {
-            case Urgency.Wander:
-                speed = 1;
-                break;
-            case Urgency.Normal:
-                speed = 2;
-                break;
-            case Urgency.Urge:
-                speed = 3;
-                break;
-            default:
-                speed = 1;
-                break;
-        }
-        if (speed <= 1)
-        {
-            _anim.SetBool("IsWalk", true);
-        }
-        else
-        {
-            _anim.SetBool("IsRun", true);
-        }
-    }
+#endregion
 
     #region Flip
 

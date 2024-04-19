@@ -124,7 +124,7 @@ namespace ChenChen_MapGenerator
                 {
                     float nosieValue = Mathf.PerlinNoise(x * lacunarrty + randomOffset, y * lacunarrty + randomOffset);
 
-                    _mapNodes[x, y] = new MapNode(x, y, nosieValue);
+                    _mapNodes[x, y] = new MapNode(new Vector2Int(x, y), nosieValue);
 
                     if (nosieValue < minValue) minValue = nosieValue;
                     if (nosieValue > maxValue) maxValue = nosieValue;
@@ -209,7 +209,7 @@ namespace ChenChen_MapGenerator
             {
                 if (theGrassTile.Count == 0) return;
                 int randomIndex = Random.Range(0, theGrassTile.Count);
-                leavesMap.SetTile(new Vector3Int(theGrassTile[randomIndex].x, theGrassTile[randomIndex].y)
+                leavesMap.SetTile(new Vector3Int(theGrassTile[randomIndex].postion.x, theGrassTile[randomIndex].postion.y)
                     , _leavesTileBaseList[Random.Range(0, _leavesTileBaseList.Count)]);
             }
         }
@@ -247,7 +247,7 @@ namespace ChenChen_MapGenerator
 
                         // 确定生成位置
                         int randomIndex = Random.Range(0, empty.Count);
-                        Vector3Int tilePos = new Vector3Int(empty[randomIndex].x, empty[randomIndex].y);
+                        Vector3Int tilePos = new Vector3Int(empty[randomIndex].postion.x, empty[randomIndex].postion.y);
                         Vector3 createPos = tilePos + item.offset;
 
                         // 检测生成位置是否可行

@@ -75,12 +75,15 @@ public abstract class Pawn : MonoBehaviour
             if(!CanSelect) return;
             if(value)
             {
+                // 选择框显现
                 Indicator_DOFadeOne();
             }
             else
             {
+                // 选择框隐藏, 并解除征兆
+                Indicator_DOColorWhite();
                 Indicator_DOFadeZero();
-                IsDrafted = false;              
+                _isDrafted = false;              
             }
             _isSelect = value;
         }
@@ -120,12 +123,15 @@ public abstract class Pawn : MonoBehaviour
 
             if (value)
             {
+                // 选择框变红
                 Indicator_DOColorRed();
             }
             else
             {
+                // 选择框复原，并取消选择
                 Indicator_DOColorWhite();
-                IsSelect = false;
+                Indicator_DOFadeZero();
+                _isSelect = false;
             }
             _isDrafted = value;
         }

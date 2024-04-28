@@ -126,8 +126,9 @@ namespace ChenChen_UISystem
         /// <summary>
         /// 初始化内容
         /// </summary>
-        protected void InitContent(Dictionary<string, BlueprintData> dict) 
+        protected void InitContent(ThingType type) 
         {
+            Dictionary<string, ThingDef> dict = BuildingSystemManager.Instance.ThingDefDictionary;
             // 获取装内容的子物体
             GameObject content = UITool.GetChildByName("Content");
             // 检查是否有GridLayoutGroup组件
@@ -143,12 +144,15 @@ namespace ChenChen_UISystem
             // 根据蓝图字典,设置成对应的按钮添加到内容中
             foreach (var item in dict)
             {
-                GameObject btnInstance = Object.Instantiate(btnPrefab);
-                btnInstance.name = $"BtnBlueprint{item.Value.Name}";
-                GameObject btnImage = btnInstance.transform.Find("Image").gameObject;
-                btnImage.GetComponent<Image>().sprite = item.Value.PreviewSprite;
+                if (item.Value.Type == type)
+                {
+                    GameObject btnInstance = Object.Instantiate(btnPrefab);
+                    btnInstance.name = $"BtnBlueprint{item.Value.Name}";
+                    GameObject btnImage = btnInstance.transform.Find("Image").gameObject;
+                    btnImage.GetComponent<Image>().sprite = item.Value.PreviewSprite;
 
-                btnInstance.transform.SetParent(content.transform, false);
+                    btnInstance.transform.SetParent(content.transform, false);
+                }
             }
 
             // 获取内容中的全部子物体

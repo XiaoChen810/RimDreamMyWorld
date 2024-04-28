@@ -14,19 +14,14 @@ namespace ChenChen_BuildingSystem
     public class BuildingModeTool : MonoBehaviour
     {
         /// <summary>
-        /// 所属BuildingSystemManager
-        /// </summary>
-        private BuildingSystemManager buildingSystemManager;
-
-        /// <summary>
         /// 当前的蓝图数据
         /// </summary>
-        private BlueprintData curBlueprintData;
+        private ThingDef curBlueprintData;
 
         /// <summary>
         /// 当前地图的放建筑物的瓦片地图
         /// </summary>
-        public Tilemap BuildingTilemap;
+        //public Tilemap BuildingTilemap;
 
         /// <summary>
         /// 是否正处于建造模式中
@@ -43,11 +38,6 @@ namespace ChenChen_BuildingSystem
         /// 当前鼠标上的蓝图预览
         /// </summary>
         [SerializeField] private GameObject MouseIndicator;
-
-        private void Start()
-        {
-            buildingSystemManager = GetComponent<BuildingSystemManager>();
-        }
 
         private void Update()
         {
@@ -72,7 +62,7 @@ namespace ChenChen_BuildingSystem
         private void BuildStart(string name)
         {
             //  找到当前应该放置的蓝图
-            curBlueprintData = BuildingSystemManager.Instance.GetData(name);
+            curBlueprintData = BuildingSystemManager.Instance.GetThingDef(name);
             if (curBlueprintData == null)
             {
                 Debug.LogWarning($"不存在蓝图: {name}, 已返回");
@@ -82,7 +72,8 @@ namespace ChenChen_BuildingSystem
             else
             {
                 // 获取当前地图的TileMap
-                BuildingTilemap = MapManager.Instance.GetChildObjectFromCurMap("Building").GetComponent<Tilemap>();
+                //BuildingTilemap = MapManager.Instance.GetChildObjectFromCurMap("Building").GetComponent<Tilemap>();
+                Tilemap main = MapManager.Instance.CurMapMainTilemap;
 
                 // 配置鼠标指示器信息
                 OnBuildMode = true;
@@ -105,8 +96,9 @@ namespace ChenChen_BuildingSystem
             {
                 // 监听鼠标位置信息转换成世界坐标
                 Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector3Int cellPosition = BuildingTilemap.WorldToCell(mousePosition);
-                Vector3 placePosition = BuildingTilemap.CellToWorld(cellPosition) + new Vector3(0.5f, 0.5f);
+                Tilemap main = MapManager.Instance.CurMapMainTilemap;
+                Vector3Int cellPosition = main.WorldToCell(mousePosition);
+                Vector3 placePosition = main.CellToWorld(cellPosition) + new Vector3(0.5f, 0.5f);
                 MouseIndicator.transform.position = placePosition;
 
                 SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
@@ -147,10 +139,10 @@ namespace ChenChen_BuildingSystem
             GameObject newObject = UnityEngine.Object.Instantiate(curBlueprintData.Prefab,
                                                       placePosition,
                                                       MouseIndicator.transform.rotation,
-                                                      buildingSystemManager.transform);
-            ThingBase blueprint = newObject.GetComponent<ThingBase>();
+                                                      BuildingSystemManager.Instance.transform);
+            ThingBase Thing = newObject.GetComponent<ThingBase>();
             MapManager.Instance.AddToObstaclesList(newObject);
-            blueprint.Placed();
+            Thing.Placed();
         }
 
         private void BuildEnd()

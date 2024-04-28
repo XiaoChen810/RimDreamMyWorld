@@ -11,9 +11,6 @@ namespace ChenChen_MapGenerator
     [RequireComponent(typeof(MapCreator))]
     public class MapManager : SingletonMono<MapManager>
     {
-        private string _currentMapName;
-        private SceneMapData _currentSceneMapData;
-
         /// <summary>
         ///  地图生成器
         /// </summary>
@@ -24,6 +21,8 @@ namespace ChenChen_MapGenerator
         /// </summary>
         public Dictionary<string, SceneMapData> SceneMapDatasDict = new Dictionary<string, SceneMapData>();
 
+
+        private string _currentMapName;
         /// <summary>
         ///  当前场景的地图名字
         /// </summary>
@@ -36,24 +35,16 @@ namespace ChenChen_MapGenerator
             private set
             {
                 _currentMapName = value;
-                if (SceneMapDatasDict.ContainsKey(value))
-                {
-                    _currentSceneMapData = SceneMapDatasDict[_currentMapName];
-                }
             }
         }
 
-        /// <summary>
-        /// 当前场景的地图数据
-        /// </summary>
-        public SceneMapData CurrentSceneMapData
+        public Tilemap CurMapMainTilemap
         {
             get
             {
-                return _currentSceneMapData;
+                return SceneMapDatasDict[_currentMapName].mainTilemap;
             }
         }
-
 
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
@@ -85,16 +76,15 @@ namespace ChenChen_MapGenerator
             Init();
             if (!SceneMapDatasDict.ContainsKey(mapName))
             {
-                SceneMapData mapData = new();
+                Data_MapSave mapSave = new Data_MapSave(mapName,
+                                                        MapWidthOfGenerate,
+                                                        MapHeightOfGenerate,
+                                                        mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed);
+                SceneMapData mapData = new(mapSave);
                 mapData.width = MapWidthOfGenerate;
                 mapData.height = MapHeightOfGenerate;
-                // 生成一个随机的地图
                 mapData.seed = mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed;
-                mapData = MapCreator.GenerateMap(MapWidthOfGenerate, MapHeightOfGenerate, mapData);
-                // 将地图数据用一个GameObject的形式保存
-                mapData.mapObject = Instantiate(transform.Find("当前地图").gameObject, transform);
-                mapData.mapObject.name = mapName;
-                mapData.mapObject.SetActive(true);
+                mapData.mapObject = MapCreator.GenerateMap(mapSave);
                 mapData.mainTilemap = mapData.mapObject.GetComponentInChildren<Tilemap>();
                 // 添加进字典
                 SceneMapDatasDict.Add(mapName, mapData);

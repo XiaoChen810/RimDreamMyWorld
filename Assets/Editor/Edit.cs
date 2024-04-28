@@ -7,15 +7,15 @@ using ChenChen_BuildingSystem;
 
 public class BlueprintGeneratorEditorWindow : EditorWindow
 {
-    private BlueprintGenerator blueprintGenerator;
+    private ThingDefGenerator ThingGenerator;
 
-    private string blueprintName;
-    private BlueprintType blueprintType;
-    private int blueprintWorkload;
-    private int blueprintDurability;
-    private Sprite blueprintPreviewSprite;
-    private bool blueprintIsObstacle;
-    private TileBase blueprintTileBase;
+    private string ThingName;
+    private ThingType ThingType;
+    private int ThingWorkload;
+    private int ThingDurability;
+    private Sprite ThingPreviewSprite;
+    private bool ThingIsObstacle;
+    private TileBase ThingTileBase;
 
     [MenuItem("Window/Blueprint Generator")]
     public static void ShowWindow()
@@ -25,7 +25,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        blueprintGenerator = new BlueprintGenerator();
+        ThingGenerator = new ThingDefGenerator();
     }
 
     private void OnGUI()
@@ -33,30 +33,30 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
         GUILayout.Label("Blueprint Generator", EditorStyles.boldLabel);
 
         // 属性设置
-        blueprintName = EditorGUILayout.TextField("名字", blueprintName);
-        blueprintType = (BlueprintType)EditorGUILayout.EnumPopup("类型", blueprintType); 
-        blueprintWorkload = EditorGUILayout.IntField("工作量", blueprintWorkload);
-        blueprintDurability = EditorGUILayout.IntField("耐久度",blueprintDurability);
-        blueprintPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", blueprintPreviewSprite, typeof(Sprite), false);
-        blueprintIsObstacle = EditorGUILayout.Toggle("是否是障碍物", blueprintIsObstacle);
-        blueprintTileBase = (TileBase)EditorGUILayout.ObjectField("瓦片", blueprintTileBase, typeof(TileBase), false);
+        ThingName = EditorGUILayout.TextField("名字", ThingName);
+        ThingType = (ThingType)EditorGUILayout.EnumPopup("类型", ThingType); 
+        ThingWorkload = EditorGUILayout.IntField("工作量", ThingWorkload);
+        ThingDurability = EditorGUILayout.IntField("耐久度",ThingDurability);
+        ThingPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", ThingPreviewSprite, typeof(Sprite), false);
+        ThingIsObstacle = EditorGUILayout.Toggle("是否是障碍物", ThingIsObstacle);
+        ThingTileBase = (TileBase)EditorGUILayout.ObjectField("瓦片", ThingTileBase, typeof(TileBase), false);
 
         // 生成按钮
         if (GUILayout.Button("Generate Blueprint"))
         {
-            if (blueprintGenerator != null)
+            if (ThingGenerator != null)
             {
                 // 设置蓝图生成器的属性
-                blueprintGenerator.blueprintName = blueprintName;
-                blueprintGenerator.blueprintType = blueprintType;
-                blueprintGenerator.blueprintWorkload = blueprintWorkload;
-                blueprintGenerator.blueprintDurability = blueprintDurability;
-                blueprintGenerator.blueprintPreviewSprite = blueprintPreviewSprite;
-                blueprintGenerator.blueprintIsObstacle = blueprintIsObstacle;
-                blueprintGenerator.blueprintTileBase = blueprintTileBase;
+                ThingGenerator.ThingName = ThingName;
+                ThingGenerator.ThingType = ThingType;
+                ThingGenerator.ThingWorkload = ThingWorkload;
+                ThingGenerator.ThingDurability = ThingDurability;
+                ThingGenerator.ThingPreviewSprite = ThingPreviewSprite;
+                ThingGenerator.ThingIsObstacle = ThingIsObstacle;
+                ThingGenerator.ThingTileBase = ThingTileBase;
 
                 // 调用生成蓝图的方法
-                blueprintGenerator.GenerateBlueprint();
+                ThingGenerator.GenerateBlueprint();
             }
             else
             {

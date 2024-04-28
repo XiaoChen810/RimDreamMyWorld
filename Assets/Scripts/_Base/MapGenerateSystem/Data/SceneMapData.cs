@@ -12,14 +12,21 @@ namespace ChenChen_MapGenerator
     {
         public SceneMapData()
         {
-            this.obstaclesPositionList = new List<Vector3>();
         }
 
+        public SceneMapData(Data_MapSave save)
+        {
+            this.name = save.mapName;
+            this.width = save.width;
+            this.height = save.height;
+            this.seed = save.seed;
+        }
+        public string name;
         public int width, height;
         public int seed;
         public MapNode[,] mapNodes;
         public GameObject mapObject;
         public Tilemap mainTilemap;
-        public List<Vector3> obstaclesPositionList;
+        public List<Vector3> obstaclesPositionList = new List<Vector3>();
     }
 }

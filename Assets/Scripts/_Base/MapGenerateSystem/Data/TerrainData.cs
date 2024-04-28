@@ -14,10 +14,14 @@ namespace ChenChen_MapGenerator
         [Range(0, 1f)]
         public float probability;
 
+        public string tilemapName;
+
+        public int layerSort;
+
+        public bool isObstacle;
+
         public TileBase tile;
 
-        public MapNode.Type type;
-
-        public Tilemap loadingTilemap;
+        public NodeType type;
     }
 }

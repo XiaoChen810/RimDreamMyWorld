@@ -21,12 +21,6 @@ namespace ChenChen_MapGenerator
         // 噪声值
         public float noiseValue;
         // 瓦片类型
-        public enum Type
-        {
-            none, grass, water, ground, mountain
-        }
-        public Type type = Type.none;
-        // 附属的瓦片地图
-        public Tilemap loadingTilemap;
+        public NodeType type = NodeType.none;
     }
 }

@@ -10,7 +10,5 @@ public class Data_GameSave
 
     // ´æµµÃû×Ö
     public string SaveName;
-    // ´æµµÖÖ×Ó
-    public string SaveSeed;
 
 }

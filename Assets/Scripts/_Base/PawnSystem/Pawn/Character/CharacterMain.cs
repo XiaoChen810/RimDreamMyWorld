@@ -21,14 +21,14 @@ public class CharacterMain : Pawn
                 return;
             }
 
-            job = BuildingSystemManager.Instance.GetBuildingObj("µöÓãµã", needFree: true);
+            job = BuildingSystemManager.Instance.GetThingGenerated("µöÓãµã", needFree: true);
             if (job != null)
             {
                 StateMachine.NextState = new ChenChen_AI.PawnJob_Fishing(this, job);
                 return;
             }
 
-            job = BuildingSystemManager.Instance.GetBuildingObj(BuildingStateType.WaitingDemolished, needFree: true);
+            job = BuildingSystemManager.Instance.GetThingGenerated(BuildingStateType.WaitingDemolished, needFree: true);
             if (job != null)
             {
                 StateMachine.NextState = new ChenChen_AI.PawnJob_Demolished(this, job);

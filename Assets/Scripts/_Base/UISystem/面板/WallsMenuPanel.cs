@@ -13,7 +13,7 @@ namespace ChenChen_UISystem
 
         public override void OnEnter()
         {
-            InitContent(BuildingSystemManager.Instance._WallBlueprintsDict);
+            InitContent(ThingType.Wall);
             UITool.TryGetChildComponentByName<Button>("Btn¹Ø±Õ").onClick.AddListener(() =>
             {
                 PanelManager.RemovePanel(this);

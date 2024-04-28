@@ -6,24 +6,34 @@ namespace ChenChen_BuildingSystem
     [System.Serializable]
     public abstract class ThingBase : MonoBehaviour, IBlueprint, IDismantlable
     {
-        public BlueprintData Data;
+        /// <summary>
+        /// 物品自身的蓝图定义
+        /// </summary>
+        public ThingDef Def;
+
+        /// <summary>
+        /// 物品所在的地图名
+        /// </summary>
         public string MapName;
-        // 是可以拆除的
+
+        /// <summary>
+        /// 物品是可以拆除的
+        /// </summary>
         public bool IsDismantlable;
 
         public int WorkloadBuilt
         {
-            get { return Data.Workload; }
+            get { return Def.Workload; }
         }
 
         public int WorkloadDemolished
         {
-            get { return Mathf.CeilToInt(Data.Workload * 0.5f); }
+            get { return Mathf.CeilToInt(Def.Workload * 0.5f); }
         }
 
         public int MaxDurability
         {
-            get { return Data.Durability; }
+            get { return Def.Durability; }
         }
 
         public int CurDurability;

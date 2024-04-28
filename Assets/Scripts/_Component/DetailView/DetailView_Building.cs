@@ -24,7 +24,7 @@ public class DetailView_Building : DetailView
         if (building == null) return;
 
         panel.SetView(
-            building.Data.Name,
+            building.Def.Name,
             building.MaxDurability,
             building.CurDurability,
             building.NeedWorkload,

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
-using System;
 using UnityEditor;
 
 namespace ChenChen_BuildingSystem
@@ -12,28 +11,12 @@ namespace ChenChen_BuildingSystem
     /// </summary>
     public class BuildingSystemManager : SingletonMono<BuildingSystemManager>
     {
-        [Header("全部地板蓝图的字典")]
-        [SerializedDictionary("名称", "蓝图数据")]
-        public SerializedDictionary<string, BlueprintData> _FloorBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
-
-        [Header("全部墙体蓝图的字典")]
-        [SerializedDictionary("名称", "蓝图数据")]
-        public SerializedDictionary<string, BlueprintData> _WallBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
-
-        [Header("全部建筑蓝图的字典")]
-        [SerializedDictionary("名称", "蓝图数据")]
-        public SerializedDictionary<string, BlueprintData> _BuildingBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
-
-        [Header("全部家具蓝图的字典")]
-        [SerializedDictionary("名称", "蓝图数据")]
-        public SerializedDictionary<string, BlueprintData> _FurnitureBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
-
-        [Header("全部关于其他蓝图的字典")]
-        [SerializedDictionary("名称", "蓝图数据")]
-        public SerializedDictionary<string, BlueprintData> _OtherBlueprintsDict = new SerializedDictionary<string, BlueprintData>();
+        [Header("包含全部物品定义的字典")]
+        [SerializedDictionary("名称", "物品定义")]
+        public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
         
-        [Header("建筑列表")]
-        [SerializeField] private List<GameObject> _BuildingList = new();
+        [Header("包含全部已经生成的物体列表")]
+        [SerializeField] private List<GameObject> ThingGeneratedList = new();
 
         protected BuildingModeTool _tool;
         public BuildingModeTool Tool
@@ -50,57 +33,40 @@ namespace ChenChen_BuildingSystem
 
         private void LoadBlueprintData()
         {
-            // 获取指定路径下的所有BlueprintData文件
-            string[] blueprintDataFiles = AssetDatabase.FindAssets("t:BlueprintData", new[] { "Assets/Resources/Prefabs/Blueprints" });
+            // 获取指定路径下的所有ThingDef文件
+            string[] ThingDataFiles = AssetDatabase.FindAssets("t:ThingDef", new[] { "Assets/Resources/Prefabs/ThingDef" });
 
-            foreach (var blueprintDataFile in blueprintDataFiles)
+            foreach (var ThingDataFile in ThingDataFiles)
             {
-                // 根据GUID加载BlueprintData
-                string blueprintDataAssetPath = AssetDatabase.GUIDToAssetPath(blueprintDataFile);
-                BlueprintData blueprintData = AssetDatabase.LoadAssetAtPath<BlueprintData>(blueprintDataAssetPath);
+                // 根据GUID加载ThingDef
+                string ThingDataAssetPath = AssetDatabase.GUIDToAssetPath(ThingDataFile);
+                ThingDef ThingData = AssetDatabase.LoadAssetAtPath<ThingDef>(ThingDataAssetPath);
 
-                if (blueprintData != null)
+                if (ThingData != null)
                 {
-                    switch (blueprintData.Type)
+                    if (!ThingDefDictionary.ContainsKey(ThingData.Name))
                     {
-                        case BlueprintType.Floor:
-                            Add(_FloorBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        case BlueprintType.Wall:
-                            Add(_WallBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        case BlueprintType.Building:
-                            Add(_BuildingBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        case BlueprintType.Furniture:
-                            Add(_FurnitureBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        case BlueprintType.Other:
-                            Add(_OtherBlueprintsDict, blueprintData.Name, blueprintData); break;
-                        default:
-                            break;
+                        ThingDefDictionary.Add(ThingData.Name, ThingData);
                     }
-
-                }
-            }
-
-            void Add(SerializedDictionary<string, BlueprintData> dict, string key, BlueprintData value)
-            {
-                // 将BlueprintData添加到字典中
-                if (!dict.ContainsKey(key))
-                {
-                    dict.Add(key, value);
-                }
-                else
-                {
-                    Debug.LogWarning($"BlueprintData with name '{key}' already exists. Skipping.");
+                    else
+                    {
+                        Debug.LogWarning($"BlueprintData with name '{ThingData.Name}' already exists. Skipping.");
+                    }
                 }
             }
         }
 
         #region Public
 
-        public void AddBuildingToList(GameObject obj)
+        /// <summary>
+        /// 将物体添加到已生成列表
+        /// </summary>
+        /// <param name="obj"></param>
+        public void AddThingToList(GameObject obj)
         {
             if(obj.TryGetComponent<Thing_Building>(out var building))
             {
-                _BuildingList.Add(obj);
+                ThingGeneratedList.Add(obj);
             }
             else
             {
@@ -108,12 +74,15 @@ namespace ChenChen_BuildingSystem
                 return;
             }
         }
-
-        public void RemoveBuildingToList(GameObject obj)
+        /// <summary>
+        /// 将物体移除到已生成列表
+        /// </summary>
+        /// <param name="obj"></param>
+        public void RemoveThingToList(GameObject obj)
         {
             if (obj.TryGetComponent<Thing_Building>(out var building))
             {
-                _BuildingList.Remove(obj);
+                ThingGeneratedList.Remove(obj);
             }
             else
             {
@@ -121,95 +90,58 @@ namespace ChenChen_BuildingSystem
                 return;
             }
         }
-
-        public GameObject GetBuildingObj(string name = null, bool needFree = true)
+        /// <summary>
+        /// 获取物体从已生成列表
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="needFree"></param>
+        /// <returns></returns>
+        public GameObject GetThingGenerated(string name = null, bool needFree = true)
         {
-            foreach (var item in _BuildingList)
+            foreach (var item in ThingGeneratedList)
             {
                 Thing_Building building = item.GetComponent<Thing_Building>();
-                if (name != null && building.Data.Name != name) continue;
+                if (name != null && building.Def.Name != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
                 return item;
             }
             return null;
         }
-
-        public GameObject GetBuildingObj(BuildingStateType state, string name = null, bool needFree = true)
+        /// <summary>
+        /// 获取物体从已生成列表
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="name"></param>
+        /// <param name="needFree"></param>
+        /// <returns></returns>
+        public GameObject GetThingGenerated(BuildingStateType state, string name = null, bool needFree = true)
         {
-            foreach (var item in _BuildingList)
+            foreach (var item in ThingGeneratedList)
             {
                 Thing_Building building = item.GetComponent<Thing_Building>();
                 if (building.State != state) continue;
-                if (name != null && building.Data.Name != name) continue;
+                if (name != null && building.Def.Name != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
                 return item;             
             }
             return null;
         }
-
         /// <summary>
-        ///  依次访问字典，找对存在的蓝图数据并返回
+        /// 访问字典，找到存在的物品定义并返回
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public BlueprintData GetData(string name)
+        public ThingDef GetThingDef(string name)
         {
-            if (_FloorBlueprintsDict.TryGetValue(name, out var floorData))
+            if (ThingDefDictionary.TryGetValue(name, out var def))
             {
-                GetBlueprintPrefabIfNull<Thing_Building>(name, floorData);
-                if (floorData.Prefab != null)
-                    return _FloorBlueprintsDict[name];
-            }
-            if (_WallBlueprintsDict.TryGetValue(name, out var wallData))
-            {
-                GetBlueprintPrefabIfNull<Thing_Building>(name, wallData);
-                if (wallData.Prefab != null)
-                    return _WallBlueprintsDict[name];
-            }
-            if (_BuildingBlueprintsDict.TryGetValue(name, out var buildingData))
-            {
-                GetBlueprintPrefabIfNull<Thing_Building>(name, buildingData);
-                if (buildingData.Prefab != null)
-                    return _BuildingBlueprintsDict[name];
-            }
-            if (_FurnitureBlueprintsDict.TryGetValue(name, out var furnitueData))
-            {
-                GetBlueprintPrefabIfNull<Thing_Building>(name, furnitueData);
-                if (furnitueData.Prefab != null)
-                    return _FurnitureBlueprintsDict[name];
-            }
-            if (_OtherBlueprintsDict.TryGetValue(name, out var otherBlueprintData))
-            {
-                GetBlueprintPrefabIfNull<Thing_Building>(name, otherBlueprintData);
-                if (otherBlueprintData.Prefab != null)
-                    return _OtherBlueprintsDict[name];
+                if (def.Prefab != null)
+                    return ThingDefDictionary[name];
             }
 
             Debug.LogWarning($"未能找到{name}的预制件数据");
             return null;
-
-            //当没有对应的预制件时生成一个
-            void GetBlueprintPrefabIfNull<T>(string name, BlueprintData data) where T : ThingBase
-            {
-                if (data.Prefab == null)
-                {
-                    string path = $"Prefabs/Blueprints/{name}/{name}_Prefab.prefab";
-                    Debug.LogWarning("此数据预制件为空，尝试获取预制件从: " + path);
-                    GameObject prefab = Resources.Load<GameObject>(path);
-                    if (prefab != null)
-                    {
-                        data.Prefab = prefab;
-                    }
-                    else
-                    {
-                        Debug.LogError("未发现预制件数据");
-                    }
-                }
-            }
         }
-
-        #region BuildingSystem
-
         /// <summary>
         ///  使用蓝图，通过name
         /// </summary>
@@ -218,8 +150,6 @@ namespace ChenChen_BuildingSystem
         {
             _tool.ToggleBlueprint(name);
         }
-
-        #endregion
 
         #endregion
     }

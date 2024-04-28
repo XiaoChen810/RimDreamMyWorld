@@ -69,7 +69,7 @@ namespace ChenChen_BuildingSystem
             // 设置初始值
             NeedWorkload = WorkloadBuilt;
             _buildingState = NeedWorkload <= 0 ? BuildingStateType.FinishedBuilding : BuildingStateType.WaitingBuilt;
-            _buildingTilemap = BuildingSystemManager.Instance.Tool.BuildingTilemap;
+            _buildingTilemap = MapManager.Instance.CurMapMainTilemap;
             _completePos = _buildingTilemap.WorldToCell(transform.position);
 
             // 变成半透明，表示还未完成
@@ -91,7 +91,7 @@ namespace ChenChen_BuildingSystem
             }
 
             // 设置完一切后
-            BuildingSystemManager.Instance.AddBuildingToList(this.gameObject);
+            BuildingSystemManager.Instance.AddThingToList(this.gameObject);
         }
 
         public override void Build(int thisWorkload)
@@ -104,9 +104,9 @@ namespace ChenChen_BuildingSystem
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
             // 在瓦片地图设置瓦片
-            if (Data.TileBase != null)
+            if (Def.TileBase != null)
             {
-                _buildingTilemap.SetTile(_completePos, Data.TileBase);
+                _buildingTilemap.SetTile(_completePos, Def.TileBase);
                 sr.color = new Color(1, 1, 1, 0f);
             }
             else
@@ -115,9 +115,9 @@ namespace ChenChen_BuildingSystem
             }
 
             // 如果是障碍物,给所在的地图的该位置设置存在障碍物
-            if (Data.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject);
+            if (Def.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject);
             // 如果是障碍物，则设置碰撞体
-            if (Data.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
+            if (Def.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
             FindAnyObjectByType<AstarPath>().Scan();
             IsDismantlable = true;
             _buildingState = BuildingStateType.FinishedBuilding;
@@ -125,7 +125,7 @@ namespace ChenChen_BuildingSystem
 
         public override void Cancel()
         {
-            BuildingSystemManager.Instance.RemoveBuildingToList(this.gameObject);
+            BuildingSystemManager.Instance.RemoveThingToList(this.gameObject);
             Destroy(gameObject);
         }
 
@@ -141,7 +141,7 @@ namespace ChenChen_BuildingSystem
         public override void OnMarkDemolish()
         {
             _buildingState = BuildingStateType.WaitingDemolished;
-            _needWorkload = Mathf.CeilToInt(Data.Workload * 0.5f);
+            _needWorkload = Mathf.CeilToInt(Def.Workload * 0.5f);
         }
 
         public override void Demolish(int value)
@@ -151,14 +151,14 @@ namespace ChenChen_BuildingSystem
 
         public override void OnDemolished()
         {
-            if (Data.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(this.gameObject);
-            if (Data.TileBase != null) _buildingTilemap.SetTile(_completePos, null);
+            if (Def.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(this.gameObject);
+            if (Def.TileBase != null) _buildingTilemap.SetTile(_completePos, null);
             if(_detailView.onShow)
             {
                 DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
                 PanelManager.Instance.RemovePanel(detail);
             }
-            BuildingSystemManager.Instance.RemoveBuildingToList(this.gameObject);
+            BuildingSystemManager.Instance.RemoveThingToList(this.gameObject);
             FindAnyObjectByType<AstarPath>().Scan();
             Debug.Log($"移除建筑：" + gameObject.name);
             Destroy(gameObject);

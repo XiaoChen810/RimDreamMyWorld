@@ -12,9 +12,14 @@ namespace ChenChen_MapGenerator
     public class MapManager : SingletonMono<MapManager>
     {
         /// <summary>
-        ///  地图生成器
+        /// 地图生成器
         /// </summary>
         public MapCreator MapCreator { get; private set; }
+
+        /// <summary>
+        /// 物品生成器
+        /// </summary>
+        public ItemCreator ItemCreator { get; private set; }
 
         /// <summary>
         /// 不同场景的地图数据
@@ -54,6 +59,7 @@ namespace ChenChen_MapGenerator
         {
             base.Awake();
             Init();
+            ItemCreator = new ItemCreator();
         }
 
         /// <summary>
@@ -77,8 +83,7 @@ namespace ChenChen_MapGenerator
             if (!SceneMapDatasDict.ContainsKey(mapSave.mapName))
             {
                 SceneMapData mapData = new(mapSave);
-                mapData.mapObject = MapCreator.GenerateMap(mapSave);
-                mapData.mainTilemap = mapData.mapObject.GetComponentInChildren<Tilemap>();
+                mapData = MapCreator.GenerateMap(mapData);               
                 // 添加进字典
                 SceneMapDatasDict.Add(mapSave.mapName, mapData);
                 Debug.Log("已经生成地图" + mapSave.mapName);
@@ -109,6 +114,7 @@ namespace ChenChen_MapGenerator
             if (SceneMapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(true);
+                Debug.Log($"场景已经存在{mapName},直接启用");
             }
             else
             {
@@ -117,16 +123,31 @@ namespace ChenChen_MapGenerator
                                         MapHeightOfGenerate,
                                         seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
                 MapDataDictAdd(mapSave);
+                for (int i = 0; i < 100; i++)
+                {
+                    Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
+                    if (SceneMapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
+                        ItemCreator.GenerateItem("常青树", pos, mapName, false);
+                }
             }
 
             _currentMapName = mapName;
         }
 
-        public void LoadSceneMapFromSave(Data_MapSave mapSave)
+        /// <summary>
+        /// 加载地图场景从存档中
+        /// </summary>
+        /// <param name="mapSave"></param>
+        public void LoadSceneMapFromSave(Data_GameSave gameSave)
         {
+            Data_MapSave mapSave = gameSave.MapSave;
             MapDataDictAdd(mapSave);
             _currentMapName = mapSave.mapName;
             SceneMapDatasDict[_currentMapName].mapObject.SetActive(false);
+            foreach(var thing in gameSave.Things)
+            {
+                ItemCreator.GenerateItem("常青树", thing.ThingPos, thing.MapName, true);                   
+            }
         }
 
         /// <summary>

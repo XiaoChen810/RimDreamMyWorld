@@ -7,9 +7,9 @@ namespace ChenChen_BuildingSystem
     /// </summary>
     internal interface IDismantlable
     {
-        int NeedWorkload { get; set; }
+        //int Workload { get; set; }
         void OnMarkDemolish();
-        void Demolish(int value);
+        void OnDemolish(int value);
         void OnDemolished();
     }
 }

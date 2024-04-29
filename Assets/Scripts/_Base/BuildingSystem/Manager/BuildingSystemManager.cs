@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using UnityEditor;
+using UnityEditor.Rendering;
+using ChenChen_MapGenerator;
 
 namespace ChenChen_BuildingSystem
 {
@@ -18,17 +20,21 @@ namespace ChenChen_BuildingSystem
         [Header("包含全部已经生成的物体列表")]
         [SerializeField] private List<GameObject> ThingGeneratedList = new();
 
-        protected BuildingModeTool _tool;
-        public BuildingModeTool Tool
-        {
-            get { return _tool; }
-        }
+        [Header("Data_ThingSave")]
+        public List<Data_ThingSave> ThingSaveList = new();
+
+        public BuildingModeTool Tool { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             LoadBlueprintData();
-            _tool = GetComponent<BuildingModeTool>();
+            Tool = new BuildingModeTool();
+        }
+
+        public void Update()
+        {
+            Tool.BuildUpdate();
         }
 
         private void LoadBlueprintData()
@@ -141,7 +147,7 @@ namespace ChenChen_BuildingSystem
                 }
                 if(def.Prefab == null)
                 {
-                    Debug.LogError($"{name}的定义的预制件为空");
+                    Debug.LogError($"定义 {name}的预制件为空");
                 }
                 return ThingDefDictionary[name];
             }
@@ -155,9 +161,31 @@ namespace ChenChen_BuildingSystem
         /// <param name="name"></param>
         public void OpenBuildingMode(string name)
         {
-            _tool.BuildStart(GetThingDef(name));
+            Tool.BuildStart(GetThingDef(name));
         }
-
+        /// <summary>
+        /// 尝试生成一个物体
+        /// </summary>
+        /// <param name="thingSave"></param>
+        /// <returns></returns>
+        public bool TryGenerateThing(Data_ThingSave thingSave)
+        {
+            GameObject prefab = thingSave.ThingDef.Prefab;
+            if (prefab == null)
+            {
+                thingSave.ThingDef.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{thingSave.ThingDef.Name}/{thingSave.ThingDef.Name}_Prefab");
+                prefab = thingSave.ThingDef.Prefab;
+            }
+            if (prefab == null)
+            {
+                Debug.LogError($"定义 {thingSave.ThingDef.Name}定义的预制件为空");
+                return false;
+            }
+            GameObject thingObj = Instantiate(prefab, thingSave.ThingPos + thingSave.ThingDef.offset, thingSave.ThingRot, transform);
+            MapManager.Instance.AddToObstaclesList(thingObj, thingSave.MapName);
+            thingObj.GetComponent<ThingBase>().OnPlaced();
+            return true;
+        }
         #endregion
     }
 }

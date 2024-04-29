@@ -7,7 +7,7 @@ namespace ChenChen_BuildingSystem
     public abstract class ThingBase : MonoBehaviour, IBlueprint, IDismantlable
     {
         /// <summary>
-        /// 物品自身的蓝图定义
+        /// 物品自身的定义
         /// </summary>
         public ThingDef Def;
 
@@ -21,38 +21,43 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         public bool IsDismantlable;
 
+        // 物品建造所需工作量
         public int WorkloadBuilt
         {
             get { return Def.Workload; }
         }
 
+        // 物品拆除所需工作量
         public int WorkloadDemolished
         {
             get { return Mathf.CeilToInt(Def.Workload * 0.5f); }
         }
 
+        // 物品最大耐久度
         public int MaxDurability
         {
             get { return Def.Durability; }
         }
 
+        // 物品当前耐久度
         public int CurDurability;
 
-
-        [SerializeField] protected int _needWorkload;
-        public int NeedWorkload
+        // 物品工作量
+        [SerializeField] protected int _workload;
+        public int Workload
         {
             get
             {
-                return _needWorkload;
+                return _workload;
             }
             set
             {
-                _needWorkload = value > 0 ? value : 0;
+                _workload = value > 0 ? value : 0;
             }
         }
 
-        public BoxCollider2D _myCollider { get; protected set; }
+        // 物品碰撞体
+        public BoxCollider2D ColliderSelf { get; protected set; }
 
 
         protected virtual void OnEnable()
@@ -60,17 +65,18 @@ namespace ChenChen_BuildingSystem
             gameObject.name = gameObject.name.Replace("(Clone)", "");
             MapName = MapManager.Instance.CurrentMapName;
             CurDurability = MaxDurability;
-            _myCollider = GetComponent<BoxCollider2D>();
+            ColliderSelf = GetComponent<BoxCollider2D>();
         }
 
         // 实现接口中定义的属性和方法
-        public abstract void Placed();
-        public abstract void Build(int thisWorkload);
-        public abstract void Complete();
-        public abstract void Cancel();
-        public abstract void Interpret();
+        public abstract void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None);
+        public abstract void OnMarkBuild();
+        public abstract void OnBuild(int value);
+        public abstract void OnComplete();
+        public abstract void OnCancel();
+        public abstract void OnInterpret();
         public abstract void OnMarkDemolish();
-        public abstract void Demolish(int value);
+        public abstract void OnDemolish(int value);
         public abstract void OnDemolished();
     }
 }

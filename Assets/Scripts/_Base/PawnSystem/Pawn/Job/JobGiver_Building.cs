@@ -9,7 +9,7 @@ namespace ChenChen_AI
     {
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            return BuildingSystemManager.Instance.GetThingGenerated(BuildingLifeStateType.WaitingBuilt, needFree: true);
+            return BuildingSystemManager.Instance.GetThingGenerated(BuildingLifeStateType.MarkBuilding, needFree: true);
         }
     }
 }

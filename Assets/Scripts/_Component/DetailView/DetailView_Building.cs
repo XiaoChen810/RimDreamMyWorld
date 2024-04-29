@@ -27,7 +27,7 @@ public class DetailView_Building : DetailView
             building.Def.Name,
             building.MaxDurability,
             building.CurDurability,
-            building.NeedWorkload,
+            building.Workload,
             userName: (building.TheUsingPawn != null) ? building.TheUsingPawn.name : null
             );
     }

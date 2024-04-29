@@ -17,7 +17,7 @@ MonoBehaviour:
   Workload: 500
   PreviewSprite: {fileID: 21300000, guid: 28b64d072c43f424ba7d3fb0aedc5c12, type: 3}
   IsObstacle: 0
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 3552662489425600228, guid: 74eb6070f67600349bc4e5cf7337faee, type: 3}
   TileBase: {fileID: 0}
   Durability: 100
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0}

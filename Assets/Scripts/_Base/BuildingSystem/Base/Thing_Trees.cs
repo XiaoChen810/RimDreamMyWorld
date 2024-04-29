@@ -32,27 +32,32 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        public override void Placed()
+        public override void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None)
+        {
+            Debug.Log("生成了一颗树在：" + transform.position);
+        }
+
+        public override void OnMarkBuild()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Build(int thisWorkload)
+        public override void OnBuild(int thisWorkload)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Complete()
+        public override void OnComplete()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Cancel()
+        public override void OnCancel()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Interpret()
+        public override void OnInterpret()
         {
             throw new System.NotImplementedException();
         }
@@ -62,7 +67,7 @@ namespace ChenChen_BuildingSystem
             throw new System.NotImplementedException();
         }
 
-        public override void Demolish(int value)
+        public override void OnDemolish(int value)
         {
             throw new System.NotImplementedException();
         }

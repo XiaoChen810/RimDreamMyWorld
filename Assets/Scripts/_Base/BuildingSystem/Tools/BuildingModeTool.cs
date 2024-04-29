@@ -11,7 +11,7 @@ namespace ChenChen_BuildingSystem
     /// <summary>
     /// 打开建造模式，放置建筑什么的
     /// </summary>
-    public class BuildingModeTool : MonoBehaviour
+    public class BuildingModeTool
     {
         /// <summary>
         /// 当前蓝图的名字
@@ -30,9 +30,9 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         public GameObject MouseIndicator;
 
-        private void Update()
+        public BuildingModeTool()
         {
-            BuildUpdate();
+
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ChenChen_BuildingSystem
             if (!MouseIndicator.GetComponent<Collider2D>())
             {
                 Debug.LogError("ERROR: MouseIndicator no Collider2D");
-                Destroy(MouseIndicator);
+                GameObject.Destroy(MouseIndicator);
                 return;
             }
             MouseIndicator.SetActive(true);
@@ -63,7 +63,7 @@ namespace ChenChen_BuildingSystem
         /// <summary>
         /// Update，监听鼠标信息，放置蓝图等
         /// </summary>
-        private void BuildUpdate()
+        public void BuildUpdate()
         {
             if (OnBuildMode && MouseIndicator != null)
             {
@@ -107,23 +107,27 @@ namespace ChenChen_BuildingSystem
             }
         }
 
+        /// <summary>
+        /// End
+        /// </summary>
+        public void BuildEnd()
+        {
+            OnBuildMode = false;
+            MouseIndicator.SetActive(false);
+            UnityEngine.Object.Destroy(MouseIndicator);
+        }
+
         protected void TryPlaced(Vector3 placePosition)
         {
             GameObject newObject = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab,
                                                       placePosition,
                                                       MouseIndicator.transform.rotation,
                                                       BuildingSystemManager.Instance.transform);
-            ThingBase Thing = newObject.GetComponent<ThingBase>();
+            
             MapManager.Instance.AddToObstaclesList(newObject);
-            Thing.Placed();
+            ThingBase Thing = newObject.GetComponent<ThingBase>();
+            Thing.OnPlaced();
             //Todo
-        }
-
-        private void BuildEnd()
-        {
-            OnBuildMode = false;
-            MouseIndicator.SetActive(false);
-            UnityEngine.Object.Destroy(MouseIndicator);
         }
     }
 }

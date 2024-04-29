@@ -16,12 +16,12 @@ namespace ChenChen_MapGenerator
 
         public SceneMapData(Data_MapSave save)
         {
-            this.name = save.mapName;
+            this.mapName = save.mapName;
             this.width = save.width;
             this.height = save.height;
             this.seed = save.seed;
         }
-        public string name;
+        public string mapName;
         public int width, height;
         public int seed;
         public MapNode[,] mapNodes;

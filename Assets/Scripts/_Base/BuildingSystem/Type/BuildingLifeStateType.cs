@@ -7,10 +7,12 @@ namespace ChenChen_BuildingSystem
     {
         None,
         //等待建造
-        WaitingBuilt,
+        MarkBuilding,
         //完成建造
         FinishedBuilding,
         //等待拆除
-        WaitingDemolished
+        MarkDemolished,
+        //完成拆除
+        FinishedDemolished
     }
 }

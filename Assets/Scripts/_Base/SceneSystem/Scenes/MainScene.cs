@@ -42,12 +42,7 @@ namespace ChenChen_Scene
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             panelManager = new PanelManager();
-            if (MapManager.Instance.CurrentMapName == null)
-            {
-                MapManager.Instance.LoadOrGenerateSceneMap("MainMap");
-            }
-            // 初始化寻路算法的节点
-            AstarPath.active.Scan();
+            MapManager.Instance.LoadOrGenerateSceneMap("MainMap");
             OnCompleteAction();
             Debug.Log($"{sceneName}场景加载完毕");
         }

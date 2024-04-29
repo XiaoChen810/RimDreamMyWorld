@@ -28,7 +28,7 @@ public class CharacterMain : Pawn
                 return;
             }
 
-            job = BuildingSystemManager.Instance.GetThingGenerated(BuildingLifeStateType.WaitingDemolished, needFree: true);
+            job = BuildingSystemManager.Instance.GetThingGenerated(BuildingLifeStateType.MarkDemolished, needFree: true);
             if (job != null)
             {
                 StateMachine.NextState = new ChenChen_AI.PawnJob_Demolished(this, job);

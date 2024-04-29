@@ -38,7 +38,7 @@ namespace ChenChen_BuildingSystem
         public int Durability;
 
         [Header("ÆäËûÊôĞÔ")]
-        public Vector3 offset;
+        public Vector2 offset;
 
     }
 }

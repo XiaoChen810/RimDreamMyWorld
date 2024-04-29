@@ -27,16 +27,17 @@ namespace ChenChen_MapGenerator
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
         /// </summary>
-        public GameObject GenerateMap(Data_MapSave mapSave)
+        public SceneMapData GenerateMap(SceneMapData mapData)
         {
+            SceneMapData result = mapData;
             // 全局参数
-            _width = mapSave.width;
-            _height = mapSave.height;
+            _width = mapData.width;
+            _height = mapData.height;
             _nodes = new MapNode[_width, _height];
-            Random.InitState(mapSave.seed);
+            Random.InitState(mapData.seed);
             LayerDict = new Dictionary<string, Tilemap>();
             // 地图的Object
-            _mapObj = new GameObject(mapSave.mapName);
+            _mapObj = new GameObject(mapData.mapName);
             _mapObj.transform.parent = transform;
             // 添加Grid组件
             GameObject grid = new GameObject("Grid");
@@ -75,7 +76,10 @@ namespace ChenChen_MapGenerator
             GenerateTileMap();
             GenerateFlowers();
 
-            return _mapObj;
+            result.mapNodes = _nodes;
+            result.mapObject = _mapObj;
+            result.mainTilemap = _mapObj.GetComponentInChildren<Tilemap>();
+            return result;
         }
 
         #region 地图生成

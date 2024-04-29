@@ -1,13 +1,12 @@
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using ChenChen_UISystem;
-using CI.QuickSave;
 using UnityEngine;
 
 public class PlayManager : SingletonMono<PlayManager>
 {
-    private static readonly string test_save = "TEST_SAVE";
     private static readonly string root_save_name = "GameSave";
+
     public Data_GameSave SaveDate;
 
     private void Start()
@@ -34,26 +33,24 @@ public class PlayManager : SingletonMono<PlayManager>
 
     public void Save()
     {
-        var writer = QuickSaveWriter.Create(root_save_name);
-        writer.Write(test_save, SaveDate).Commit();
-        Debug.Log($"成功保存存档{test_save}于{Application.persistentDataPath}");
+        ES3.Save(root_save_name, SaveDate);
+        Debug.Log($"成功保存存档{root_save_name}资源");
     }
 
     public bool Load()
     {
-        var reader = QuickSaveReader.Create(root_save_name);
         // 加载存档资源
-        if (reader.Exists(test_save))
+        if (ES3.KeyExists(root_save_name))
         {
-            Debug.Log($"成功加载存档{test_save}资源于{Application.persistentDataPath}");
-            SaveDate = reader.Read<Data_GameSave>(test_save);
-            MapManager.Instance.LoadSceneMapFromSave(SaveDate.MapSave);
+            SaveDate = ES3.Load<Data_GameSave>(root_save_name);
+            MapManager.Instance.LoadSceneMapFromSave(SaveDate);
+            Debug.Log($"成功加载存档{root_save_name}资源");
             return true;
         }
         else
         {
-            Debug.Log($"未能加载存档{test_save}资源于{Application.persistentDataPath}");
-            SaveDate = new Data_GameSave(test_save);
+            Debug.Log($"未能加载存档{root_save_name}资源");
+            SaveDate = new Data_GameSave(root_save_name);
             return false;
         }
     }

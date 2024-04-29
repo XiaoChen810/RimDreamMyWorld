@@ -64,7 +64,7 @@ namespace ChenChen_AI
                 _time += Time.deltaTime;
                 if (_time > 2)
                 {
-                    currentWorkObject.Demolish(pawn.Attribute.A_Construction.Value);
+                    currentWorkObject.OnDemolish(pawn.Attribute.A_Construction.Value);
                     _time = 0;
                 }
 

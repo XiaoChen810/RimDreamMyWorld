@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,4 +13,6 @@ public class Data_GameSave
     public string SaveName;
 
     public Data_MapSave MapSave;
+
+    public List<Data_ThingSave> Things;
 }

@@ -64,7 +64,7 @@ namespace ChenChen_AI
                 _time += Time.deltaTime;
                 if(_time > 2)
                 {
-                    curTargetComponent.Build(pawn.Attribute.A_Construction.Value);
+                    curTargetComponent.OnBuild(pawn.Attribute.A_Construction.Value);
                     _time = 0;
                 }
 
@@ -73,7 +73,7 @@ namespace ChenChen_AI
             }
 
             // 如果完成了建造，状态机结束暂停，可以进入下一个状态
-            if (curTargetComponent.NeedWorkload <= 0)
+            if (curTargetComponent.Workload <= 0)
             {
                 return StateType.Success;
             }
@@ -96,7 +96,7 @@ namespace ChenChen_AI
 
         public override void OnInterrupt()
         {
-            curTargetComponent.Interpret();
+            curTargetComponent.OnInterpret();
             OnExit();
         }
     }

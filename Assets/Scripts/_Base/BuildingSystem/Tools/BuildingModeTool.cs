@@ -14,91 +14,64 @@ namespace ChenChen_BuildingSystem
     public class BuildingModeTool : MonoBehaviour
     {
         /// <summary>
-        /// 当前的蓝图数据
-        /// </summary>
-        private ThingDef curBlueprintData;
-
-        /// <summary>
-        /// 当前地图的放建筑物的瓦片地图
-        /// </summary>
-        //public Tilemap BuildingTilemap;
-
-        /// <summary>
-        /// 是否正处于建造模式中
-        /// </summary>
-
-        public bool OnBuildMode;
-
-        /// <summary>
         /// 当前蓝图的名字
         /// </summary>
         public string CurBuildingName;
-
+        /// <summary>
+        /// 当前的物体定义
+        /// </summary>
+        public ThingDef CurBuildingDef;
+        /// <summary>
+        /// 是否正处于建造模式中
+        /// </summary>
+        public bool OnBuildMode;
         /// <summary>
         /// 当前鼠标上的蓝图预览
         /// </summary>
-        [SerializeField] private GameObject MouseIndicator;
+        public GameObject MouseIndicator;
 
         private void Update()
         {
             BuildUpdate();
         }
 
-        #region  Public
-
         /// <summary>
-        /// 根据 name 切换蓝图
+        /// Start
         /// </summary>
-        /// <param name="name"></param>
-        public void ToggleBlueprint(string name)
+        /// <param name="def">建筑的定义</param>
+        public void BuildStart(ThingDef def)
         {
-            BuildStart(name);
-            CurBuildingName = name;
-        }
+            CurBuildingDef = def;
+            CurBuildingName = def.Name;
 
-        #endregion
+            // 获取当前地图的TileMap
+            Tilemap main = MapManager.Instance.CurMapMainTilemap;
 
-
-        private void BuildStart(string name)
-        {
-            //  找到当前应该放置的蓝图
-            curBlueprintData = BuildingSystemManager.Instance.GetThingDef(name);
-            if (curBlueprintData == null)
+            // 配置鼠标指示器信息
+            OnBuildMode = true;
+            MouseIndicator = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab);
+            if (!MouseIndicator.GetComponent<Collider2D>())
             {
-                Debug.LogWarning($"不存在蓝图: {name}, 已返回");
-                OnBuildMode = false;
+                Debug.LogError("ERROR: MouseIndicator no Collider2D");
+                Destroy(MouseIndicator);
                 return;
             }
-            else
-            {
-                // 获取当前地图的TileMap
-                //BuildingTilemap = MapManager.Instance.GetChildObjectFromCurMap("Building").GetComponent<Tilemap>();
-                Tilemap main = MapManager.Instance.CurMapMainTilemap;
+            MouseIndicator.SetActive(true);
 
-                // 配置鼠标指示器信息
-                OnBuildMode = true;
-                MouseIndicator = UnityEngine.Object.Instantiate(curBlueprintData.Prefab);
-                if (!MouseIndicator.GetComponent<BoxCollider2D>())
-                {
-                    Debug.LogError("ERROR");
-                    return;
-                }
-                MouseIndicator.SetActive(true);
-            }
         }
 
         /// <summary>
-        /// 建造的Update，监听鼠标信息，放置蓝图等
+        /// Update，监听鼠标信息，放置蓝图等
         /// </summary>
         private void BuildUpdate()
         {
             if (OnBuildMode && MouseIndicator != null)
             {
                 // 监听鼠标位置信息转换成世界坐标
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Tilemap main = MapManager.Instance.CurMapMainTilemap;
-                Vector3Int cellPosition = main.WorldToCell(mousePosition);
-                Vector3 placePosition = main.CellToWorld(cellPosition) + new Vector3(0.5f, 0.5f);
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Tilemap curTilemap = MapManager.Instance.CurMapMainTilemap;
+                Vector3Int cellPosition = curTilemap.WorldToCell(mousePosition);
+                Vector3 placePosition = curTilemap.CellToWorld(cellPosition) + new Vector3(0.5f, 0.5f);
                 MouseIndicator.transform.position = placePosition;
 
                 SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
@@ -136,13 +109,14 @@ namespace ChenChen_BuildingSystem
 
         protected void TryPlaced(Vector3 placePosition)
         {
-            GameObject newObject = UnityEngine.Object.Instantiate(curBlueprintData.Prefab,
+            GameObject newObject = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab,
                                                       placePosition,
                                                       MouseIndicator.transform.rotation,
                                                       BuildingSystemManager.Instance.transform);
             ThingBase Thing = newObject.GetComponent<ThingBase>();
             MapManager.Instance.AddToObstaclesList(newObject);
             Thing.Placed();
+            //Todo
         }
 
         private void BuildEnd()

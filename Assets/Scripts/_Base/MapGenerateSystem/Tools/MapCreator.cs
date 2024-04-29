@@ -52,7 +52,8 @@ namespace ChenChen_MapGenerator
                 {
                     newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    newObj.AddComponent<CompositeCollider2D>();
+                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                    newObj.layer = 8; //Obstacle Layer
                 }
                 newObj.transform.parent = grid.transform;
                 if (!LayerDict.ContainsKey(t.tilemapName)) LayerDict.Add(t.tilemapName, tilemap);
@@ -205,14 +206,22 @@ namespace ChenChen_MapGenerator
             return null;
         }
 
-        private Tilemap GetTileamp(string name)
+        public Tilemap GetTileamp(string name, GameObject parent = null)
         {
             if(LayerDict.ContainsKey(name))
             {
                 return LayerDict[name];
             }
-            Debug.Log($"未能找到对应的Tilemap : {name}");
-            return null;
+            else
+            {
+                Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
+                GameObject newObj = new GameObject(name);
+                Tilemap tilemap = newObj.AddComponent<Tilemap>();
+                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Above";
+                newObj.transform.parent = parent.transform;
+                LayerDict.Add(name, tilemap);
+                return tilemap;
+            }
         }
 
         #endregion

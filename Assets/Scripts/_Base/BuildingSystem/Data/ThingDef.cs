@@ -9,7 +9,7 @@ namespace ChenChen_BuildingSystem
     }
 
     /// <summary>
-    /// 蓝图定义
+    /// 物品定义
     /// </summary>
     [CreateAssetMenu(menuName = "蓝图数据", fileName = "蓝图数据", order = 0)]
     public class ThingDef : ScriptableObject

@@ -11,4 +11,5 @@ public class Data_GameSave
     // ´æµµÃû×Ö
     public string SaveName;
 
+    public Data_MapSave MapSave;
 }

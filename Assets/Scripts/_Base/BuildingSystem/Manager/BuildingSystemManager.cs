@@ -114,7 +114,7 @@ namespace ChenChen_BuildingSystem
         /// <param name="name"></param>
         /// <param name="needFree"></param>
         /// <returns></returns>
-        public GameObject GetThingGenerated(BuildingStateType state, string name = null, bool needFree = true)
+        public GameObject GetThingGenerated(BuildingLifeStateType state, string name = null, bool needFree = true)
         {
             foreach (var item in ThingGeneratedList)
             {
@@ -135,20 +135,27 @@ namespace ChenChen_BuildingSystem
         {
             if (ThingDefDictionary.TryGetValue(name, out var def))
             {
-                if (def.Prefab != null)
-                    return ThingDefDictionary[name];
+                if (def.Prefab == null)
+                {
+                    def.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{def.Name}/{def.Name}_Prefab");
+                }
+                if(def.Prefab == null)
+                {
+                    Debug.LogError($"{name}的定义的预制件为空");
+                }
+                return ThingDefDictionary[name];
             }
 
-            Debug.LogWarning($"未能找到{name}的预制件数据");
+            Debug.LogWarning($"未能找到{name}的定义");
             return null;
         }
         /// <summary>
-        ///  使用蓝图，通过name
+        /// 打开建造模式，通过name放置蓝图
         /// </summary>
         /// <param name="name"></param>
-        public void UseBlueprint(string name)
+        public void OpenBuildingMode(string name)
         {
-            _tool.ToggleBlueprint(name);
+            _tool.BuildStart(GetThingDef(name));
         }
 
         #endregion

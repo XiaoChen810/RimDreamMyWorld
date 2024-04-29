@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChenChen_BuildingSystem
 {
-    public enum BuildingStateType : Byte
+    public enum BuildingLifeStateType : Byte
     {
         None,
         //µÈ´ý½¨Ôì

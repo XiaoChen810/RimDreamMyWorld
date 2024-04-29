@@ -23,7 +23,7 @@ namespace ChenChen_Scene
             // 加载场景
             if (SceneManager.GetActiveScene().name != sceneName)
             {
-                SceneManager.LoadScene(sceneName);
+                SceneManager.LoadSceneAsync(sceneName);
                 SceneManager.sceneLoaded += WhenSceneLoaded;
             }
             else
@@ -39,15 +39,15 @@ namespace ChenChen_Scene
             SceneManager.sceneLoaded -= WhenSceneLoaded;
         }
 
-
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             panelManager = new PanelManager();
             if (MapManager.Instance.CurrentMapName == null)
             {
-                MapManager.Instance.LoadOrGenerateSceneMap("MainMap", StaticDef.Seed_PlayerSelect_WhenMapGenerate);
+                MapManager.Instance.LoadOrGenerateSceneMap("MainMap");
             }
-            //GameManager.Instance.生成测试棋子();
+            // 初始化寻路算法的节点
+            AstarPath.active.Scan();
             OnCompleteAction();
             Debug.Log($"{sceneName}场景加载完毕");
         }

@@ -52,8 +52,8 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        [SerializeField] private BuildingStateType _buildingState;
-        public BuildingStateType State
+        [SerializeField] private BuildingLifeStateType _buildingState;
+        public BuildingLifeStateType State
         {
             get
             {
@@ -68,8 +68,7 @@ namespace ChenChen_BuildingSystem
         {
             // 设置初始值
             NeedWorkload = WorkloadBuilt;
-            _buildingState = NeedWorkload <= 0 ? BuildingStateType.FinishedBuilding : BuildingStateType.WaitingBuilt;
-            _buildingTilemap = MapManager.Instance.CurMapMainTilemap;
+            _buildingState = NeedWorkload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.WaitingBuilt;
             _completePos = _buildingTilemap.WorldToCell(transform.position);
 
             // 变成半透明，表示还未完成
@@ -114,13 +113,16 @@ namespace ChenChen_BuildingSystem
                 sr.color = new Color(1, 1, 1, 1f);
             }
 
-            // 如果是障碍物,给所在的地图的该位置设置存在障碍物
-            if (Def.IsObstacle) MapManager.Instance.AddToObstaclesList(this.gameObject);
-            // 如果是障碍物，则设置碰撞体
-            if (Def.IsObstacle) GetComponent<Collider2D>().isTrigger = false;
+            // 如果是障碍物,给所在的地图的该位置设置存在障碍物,设置碰撞体
+            if (Def.IsObstacle)
+            {
+                MapManager.Instance.AddToObstaclesList(this.gameObject);
+                GetComponent<Collider2D>().isTrigger = false;
+                gameObject.layer = 8; //"Obstacle"
+            }
             FindAnyObjectByType<AstarPath>().Scan();
             IsDismantlable = true;
-            _buildingState = BuildingStateType.FinishedBuilding;
+            _buildingState = BuildingLifeStateType.FinishedBuilding;
         }
 
         public override void Cancel()
@@ -131,7 +133,7 @@ namespace ChenChen_BuildingSystem
 
         public override void Interpret()
         {
-            _buildingState = BuildingStateType.WaitingBuilt;
+            _buildingState = BuildingLifeStateType.WaitingBuilt;
         }
 
         #endregion
@@ -140,7 +142,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnMarkDemolish()
         {
-            _buildingState = BuildingStateType.WaitingDemolished;
+            _buildingState = BuildingLifeStateType.WaitingDemolished;
             _needWorkload = Mathf.CeilToInt(Def.Workload * 0.5f);
         }
 
@@ -200,21 +202,22 @@ namespace ChenChen_BuildingSystem
         {
             base.OnEnable();
             _detailView = gameObject.AddComponent<DetailView_Building>();
+            _buildingTilemap = MapManager.Instance.GetTilemap("Building");
         }         
 
         private void Update()
         {
-            if(_buildingState == BuildingStateType.WaitingBuilt && NeedWorkload <= 0)
+            if(_buildingState == BuildingLifeStateType.WaitingBuilt && NeedWorkload <= 0)
             {
                 Complete();
-                _buildingState = BuildingStateType.FinishedBuilding;
+                _buildingState = BuildingLifeStateType.FinishedBuilding;
                 return;
             }
 
-            if(_buildingState == BuildingStateType.WaitingDemolished && NeedWorkload <= 0)
+            if(_buildingState == BuildingLifeStateType.WaitingDemolished && NeedWorkload <= 0)
             {
                 OnDemolished();
-                _buildingState = BuildingStateType.None;
+                _buildingState = BuildingLifeStateType.None;
                 return;
             }
         }

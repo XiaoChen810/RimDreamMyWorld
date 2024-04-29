@@ -84,5 +84,22 @@ namespace ChenChen_UISystem
             }
             return null;
         }
+
+
+        /// <summary>
+        /// ªÒ»°∂•≤„√Ê∞Â
+        /// </summary>
+        public PanelBase GetTopPanel(out PanelBase top)
+        {
+            _panelsStack.TryPeek(out var panel);
+            if (panel != null)
+            {
+                top = panel;
+                return panel;
+            }
+            top = null;
+            return null;
+        }
+
     }
 }

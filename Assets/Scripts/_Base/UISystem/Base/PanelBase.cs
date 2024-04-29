@@ -119,7 +119,7 @@ namespace ChenChen_UISystem
         /// <param name="name"></param>
         protected void UseBlueprintByName(string name)
         {
-            BuildingSystemManager.Instance.UseBlueprint(name);
+            BuildingSystemManager.Instance.OpenBuildingMode(name);
             PanelManager.RemovePanel(this);
         }
 

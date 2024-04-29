@@ -71,24 +71,19 @@ namespace ChenChen_MapGenerator
         /// </summary>
         /// <param name="mapName"></param>
         /// <param name="mapSeed">是否使用随机种子，默认为随机</param>
-        private void MapDataDictAdd(string mapName,int mapSeed = -1)
+        private void MapDataDictAdd(Data_MapSave mapSave)
         {      
             Init();
-            if (!SceneMapDatasDict.ContainsKey(mapName))
+            if (!SceneMapDatasDict.ContainsKey(mapSave.mapName))
             {
-                Data_MapSave mapSave = new Data_MapSave(mapName,
-                                                        MapWidthOfGenerate,
-                                                        MapHeightOfGenerate,
-                                                        mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed);
                 SceneMapData mapData = new(mapSave);
-                mapData.width = MapWidthOfGenerate;
-                mapData.height = MapHeightOfGenerate;
-                mapData.seed = mapSeed == -1 ? System.DateTime.Now.GetHashCode() : mapSeed;
                 mapData.mapObject = MapCreator.GenerateMap(mapSave);
                 mapData.mainTilemap = mapData.mapObject.GetComponentInChildren<Tilemap>();
                 // 添加进字典
-                SceneMapDatasDict.Add(mapName, mapData);
-                Debug.Log("已经生成地图" + mapName);
+                SceneMapDatasDict.Add(mapSave.mapName, mapData);
+                Debug.Log("已经生成地图" + mapSave.mapName);
+                // 保存
+                PlayManager.Instance.SaveDate.MapSave = mapSave;
             }
             else
             {
@@ -114,14 +109,24 @@ namespace ChenChen_MapGenerator
             if (SceneMapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(true);
-                _currentMapName = mapName;
-                return;
+            }
+            else
+            {
+                Data_MapSave mapSave = new Data_MapSave(mapName,
+                                        MapWidthOfGenerate,
+                                        MapHeightOfGenerate,
+                                        seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
+                MapDataDictAdd(mapSave);
             }
 
-            MapDataDictAdd(mapName, seed);
             _currentMapName = mapName;
-            // 初始化寻路算法的节点
-            FindAnyObjectByType<AstarPath>().Scan();
+        }
+
+        public void LoadSceneMapFromSave(Data_MapSave mapSave)
+        {
+            MapDataDictAdd(mapSave);
+            _currentMapName = mapSave.mapName;
+            SceneMapDatasDict[_currentMapName].mapObject.SetActive(false);
         }
 
         /// <summary>
@@ -352,6 +357,11 @@ namespace ChenChen_MapGenerator
             }
 
             return true;
+        }
+
+        public Tilemap GetTilemap(string name)
+        {
+            return MapCreator.GetTileamp(name, SceneMapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject);
         }
 
 #endregion

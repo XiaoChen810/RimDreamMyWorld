@@ -34,7 +34,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None)
         {
-            Debug.Log("生成了一颗树在：" + transform.position);
+            //Debug.Log("生成了一颗树在：" + transform.position);
         }
 
         public override void OnMarkBuild()

@@ -27,6 +27,5 @@ namespace ChenChen_MapGenerator
         public MapNode[,] mapNodes;
         public GameObject mapObject;
         public Tilemap mainTilemap;
-        public List<Vector3> obstaclesPositionList = new List<Vector3>();
     }
 }

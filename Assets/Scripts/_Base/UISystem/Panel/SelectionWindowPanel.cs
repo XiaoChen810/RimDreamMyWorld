@@ -1,10 +1,12 @@
+using ChenChen_AI;
 using ChenChen_Scene;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenChen_UISystem {
+namespace ChenChen_UISystem
+{
     public class SelectionWindowPanel : PanelBase
     {
         static readonly string path = "UI/Panel/Init/SelectionWindowPanel";

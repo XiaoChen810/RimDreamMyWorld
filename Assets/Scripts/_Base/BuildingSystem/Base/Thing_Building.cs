@@ -1,3 +1,4 @@
+using ChenChen_AI;
 using ChenChen_MapGenerator;
 using ChenChen_UISystem;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace ChenChen_BuildingSystem
     {
         private Tilemap _buildingTilemap;
         private Vector3Int _completePos;
+        private bool _drawOutline;
 
         [SerializeField] protected Pawn _theUsingPawn;
         public Pawn TheUsingPawn
@@ -119,7 +121,8 @@ namespace ChenChen_BuildingSystem
         {
             // 变成半透明，表示还未完成
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            sr.color = new Color(1, 1, 1, 0.3f);
+            sr.color = new Color(1, 1, 1, 0f);
+            _drawOutline = true;
         }
 
         public override void OnBuild(int value)
@@ -150,11 +153,11 @@ namespace ChenChen_BuildingSystem
             // 如果是障碍物,给所在的地图的该位置设置存在障碍物,设置碰撞体
             if (Def.IsObstacle)
             {
-                MapManager.Instance.AddToObstaclesList(this.gameObject);
                 GetComponent<Collider2D>().isTrigger = false;
                 gameObject.layer = 8; //"Obstacle"
             }
             IsDismantlable = true;
+            _drawOutline = false;
         }
 
         public override void OnCancel()
@@ -189,7 +192,6 @@ namespace ChenChen_BuildingSystem
 
         public override void OnDemolished()
         {
-            if (Def.IsObstacle) MapManager.Instance.RemoveFromObstaclesList(this.gameObject);
             if (Def.TileBase != null) _buildingTilemap.SetTile(_completePos, null);
             if(_detailView.onShow)
             {
@@ -234,10 +236,49 @@ namespace ChenChen_BuildingSystem
 
         #endregion
 
+
+        public Color centerColor = new Color(0f, 0f, 1f, 0f); // 透明蓝色
+        public Color outlineColor = Color.white; // 纯白色
+        public float outlineWidth = 2f;
+
+        private Texture2D centerTexture;
+        private Texture2D outlineTexture;
+
         protected override void OnEnable()
         {
             base.OnEnable();
-        }         
+            // 创建中心透明蓝色纹理
+            centerTexture = new Texture2D(1, 1);
+            centerTexture.SetPixel(0, 0, centerColor);
+            centerTexture.Apply();
 
+            // 创建纯白色纹理用于绘制边框
+            outlineTexture = new Texture2D(1, 1);
+            outlineTexture.SetPixel(0, 0, outlineColor);
+            outlineTexture.Apply();
+        }
+
+        private void OnGUI()
+        {
+            if (_drawOutline)
+            {
+                // 计算建造物体的边界框
+                Bounds bounds = GetComponent<Collider2D>().bounds;
+
+                // 计算建造物体边界框在屏幕上的位置和大小
+                Vector3 screenBoundsMin = Camera.main.WorldToScreenPoint(bounds.min);
+                Vector3 screenBoundsMax = Camera.main.WorldToScreenPoint(bounds.max);
+                Vector3 screenSize = screenBoundsMax - screenBoundsMin;
+
+                // 绘制中心透明蓝色矩形
+                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, screenSize.y), centerTexture);
+
+                // 绘制边框
+                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, outlineWidth), outlineTexture); // 上边框
+                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 左边框
+                GUI.DrawTexture(new Rect(screenBoundsMax.x - outlineWidth, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 右边框
+                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMin.y, screenSize.x, outlineWidth), outlineTexture); // 下边框
+            }
+        }
     }
 }

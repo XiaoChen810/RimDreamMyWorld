@@ -130,7 +130,7 @@ namespace ChenChen_MapGenerator
                         ItemCreator.GenerateItem("常青树", pos, mapName, false);
                 }
             }
-
+            AstarPath.active.Scan();
             _currentMapName = mapName;
         }
 
@@ -226,159 +226,159 @@ namespace ChenChen_MapGenerator
             }
         }
 
-        /// <summary>
-        /// 设置某地图某位置有障碍
-        /// </summary>
-        /// <param name="mapName"></param>
-        /// <param name="pos"></param>
-        /// <param name="set"></param>
-        public void AddToObstaclesList(Vector3Int pos, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
-            {
-                SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-            }
-        }
+        ///// <summary>
+        ///// 设置某地图某位置有障碍
+        ///// </summary>
+        ///// <param name="mapName"></param>
+        ///// <param name="pos"></param>
+        ///// <param name="set"></param>
+        //public void AddToObstaclesList(Vector3Int pos, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    if (!SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
+        //    {
+        //        SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+        //    }
+        //}
 
-        /// <summary>
-        /// 设置某地图某位置有建筑物
-        /// </summary>
-        /// <param name="obj"></param>
-        public void AddToObstaclesList(GameObject obj, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            // 获取当前场景的地图数据
-            SceneMapData currentMapData = SceneMapDatasDict[mapName];
-            // 获取物体的世界边界
-            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
-            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
-            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
-            Vector3 maxNum = bounds.max;
-            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
-                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
-            {
-                maxNum -= Vector3.one;
-            }
-            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
-            // 遍历占据的格子并进行处理
-            for (int x = minCell.x; x <= maxCell.x; x++)
-            {
-                for (int y = minCell.y; y <= maxCell.y; y++)
-                {
-                    // 在这里处理每个占据的格子
-                    if (x > currentMapData.width || x < 0) continue;
-                    if (y > currentMapData.height || y < 0) continue;
+        ///// <summary>
+        ///// 设置某地图某位置有建筑物
+        ///// </summary>
+        ///// <param name="obj"></param>
+        //public void AddToObstaclesList(GameObject obj, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    // 获取当前场景的地图数据
+        //    SceneMapData currentMapData = SceneMapDatasDict[mapName];
+        //    // 获取物体的世界边界
+        //    Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+        //    // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+        //    Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+        //    Vector3 maxNum = bounds.max;
+        //    if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+        //        && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+        //    {
+        //        maxNum -= Vector3.one;
+        //    }
+        //    Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+        //    // 遍历占据的格子并进行处理
+        //    for (int x = minCell.x; x <= maxCell.x; x++)
+        //    {
+        //        for (int y = minCell.y; y <= maxCell.y; y++)
+        //        {
+        //            // 在这里处理每个占据的格子
+        //            if (x > currentMapData.width || x < 0) continue;
+        //            if (y > currentMapData.height || y < 0) continue;
 
-                    Vector3Int pos = new Vector3Int(x, y);
-                    if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
-                    SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-                }
-            }
-        }
+        //            Vector3Int pos = new Vector3Int(x, y);
+        //            if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
+        //            SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+        //        }
+        //    }
+        //}
 
-        /// <summary>
-        /// 设置某地图某位置已经没有障碍
-        /// </summary>
-        /// <param name="mapName"></param>
-        /// <param name="pos"></param>
-        /// <param name="set"></param>
-        public void RemoveFromObstaclesList(Vector3Int pos, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
-            {
-                SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
-            }
-        }
+        ///// <summary>
+        ///// 设置某地图某位置已经没有障碍
+        ///// </summary>
+        ///// <param name="mapName"></param>
+        ///// <param name="pos"></param>
+        ///// <param name="set"></param>
+        //public void RemoveFromObstaclesList(Vector3Int pos, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos))
+        //    {
+        //        SceneMapDatasDict[mapName].obstaclesPositionList.Remove(pos);
+        //    }
+        //}
 
-        /// <summary>
-        /// 设置某地图某位置已经没有障碍物
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="mapName"></param>
-        public void RemoveFromObstaclesList(GameObject obj, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            // 获取当前场景的地图数据
-            SceneMapData currentMapData = SceneMapDatasDict[mapName];
-            // 获取物体的世界边界
-            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
-            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
-            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
-            Vector3 maxNum = bounds.max;
-            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
-                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
-            {
-                maxNum -= Vector3.one;
-            }
-            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
-            // 遍历占据的格子并进行处理
-            for (int x = minCell.x; x <= maxCell.x; x++)
-            {
-                for (int y = minCell.y; y <= maxCell.y; y++)
-                {
-                    // 在这里处理每个占据的格子
-                    if (x > currentMapData.width || x < 0) continue;
-                    if (y > currentMapData.height || y < 0) continue;
+        ///// <summary>
+        ///// 设置某地图某位置已经没有障碍物
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <param name="mapName"></param>
+        //public void RemoveFromObstaclesList(GameObject obj, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    // 获取当前场景的地图数据
+        //    SceneMapData currentMapData = SceneMapDatasDict[mapName];
+        //    // 获取物体的世界边界
+        //    Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+        //    // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+        //    Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+        //    Vector3 maxNum = bounds.max;
+        //    if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+        //        && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+        //    {
+        //        maxNum -= Vector3.one;
+        //    }
+        //    Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+        //    // 遍历占据的格子并进行处理
+        //    for (int x = minCell.x; x <= maxCell.x; x++)
+        //    {
+        //        for (int y = minCell.y; y <= maxCell.y; y++)
+        //        {
+        //            // 在这里处理每个占据的格子
+        //            if (x > currentMapData.width || x < 0) continue;
+        //            if (y > currentMapData.height || y < 0) continue;
 
-                    Vector3Int pos = new Vector3Int(x, y);
+        //            Vector3Int pos = new Vector3Int(x, y);
 
-                    if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
-                    SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
-                }
-            }
-        }
+        //            if (SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos)) continue;
+        //            SceneMapDatasDict[mapName].obstaclesPositionList.Add(pos);
+        //        }
+        //    }
+        //}
 
-        /// <summary>
-        /// 检查某地图这个位置上是否有障碍物
-        /// </summary>
-        /// <param name="pos"></param>
-        /// <param name="mapName"></param>
-        /// <returns></returns>
-        public bool ContainsObstaclesList(Vector3Int pos, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            return SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos);
-        }
+        ///// <summary>
+        ///// 检查某地图这个位置上是否有障碍物
+        ///// </summary>
+        ///// <param name="pos"></param>
+        ///// <param name="mapName"></param>
+        ///// <returns></returns>
+        //public bool ContainsObstaclesList(Vector3Int pos, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    return SceneMapDatasDict[mapName].obstaclesPositionList.Contains(pos);
+        //}
 
-        /// <summary>
-        /// 检查某地图这个物体要放的位置上是否有障碍物
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="mapName"></param>
-        /// <returns></returns>
-        public bool ContainsObstaclesList(GameObject obj, string mapName = null)
-        {
-            mapName = mapName == null ? _currentMapName : mapName;
-            // 获取当前场景的地图数据
-            SceneMapData currentMapData = SceneMapDatasDict[_currentMapName];
-            // 获取物体的世界边界
-            Bounds bounds = obj.GetComponent<Collider2D>().bounds;
-            // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
-            Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
-            Vector3 maxNum = bounds.max;
-            if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
-                && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
-            {
-                maxNum -= Vector3.one;
-            }
-            Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
+        ///// <summary>
+        ///// 检查某地图这个物体要放的位置上是否有障碍物
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <param name="mapName"></param>
+        ///// <returns></returns>
+        //public bool ContainsObstaclesList(GameObject obj, string mapName = null)
+        //{
+        //    mapName = mapName == null ? _currentMapName : mapName;
+        //    // 获取当前场景的地图数据
+        //    SceneMapData currentMapData = SceneMapDatasDict[_currentMapName];
+        //    // 获取物体的世界边界
+        //    Bounds bounds = obj.GetComponent<Collider2D>().bounds;
+        //    // 将物体的包围盒范围转换为Tilemap上的格子坐标范围
+        //    Vector3Int minCell = currentMapData.mainTilemap.WorldToCell(bounds.min);
+        //    Vector3 maxNum = bounds.max;
+        //    if (Mathf.Approximately(maxNum.x, Mathf.Round(maxNum.x))
+        //        && Mathf.Approximately(maxNum.y, Mathf.Round(maxNum.y)))
+        //    {
+        //        maxNum -= Vector3.one;
+        //    }
+        //    Vector3Int maxCell = currentMapData.mainTilemap.WorldToCell(maxNum);
 
-            // 遍历占据的格子并进行处理
-            for (int x = minCell.x; x <= maxCell.x; x++)
-            {
-                for (int y = minCell.y; y <= maxCell.y; y++)
-                {
-                    // 在这里处理每个占据的格子
-                    if (x > currentMapData.width || x < 0) return false;
-                    if (y > currentMapData.height || y < 0) return false;
-                    if (SceneMapDatasDict[_currentMapName].obstaclesPositionList.Contains(new Vector3(x, y))) return false;
-                }
-            }
+        //    // 遍历占据的格子并进行处理
+        //    for (int x = minCell.x; x <= maxCell.x; x++)
+        //    {
+        //        for (int y = minCell.y; y <= maxCell.y; y++)
+        //        {
+        //            // 在这里处理每个占据的格子
+        //            if (x > currentMapData.width || x < 0) return false;
+        //            if (y > currentMapData.height || y < 0) return false;
+        //            if (SceneMapDatasDict[_currentMapName].obstaclesPositionList.Contains(new Vector3(x, y))) return false;
+        //        }
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public Tilemap GetTilemap(string name)
         {

@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 8216285898473938149}
   - component: {fileID: 6204162736436200241}
   - component: {fileID: 4453147200628381016}
+  - component: {fileID: 960917627947803231}
   - component: {fileID: 3998445696871861264}
   - component: {fileID: 1337221778356476412}
-  - component: {fileID: 960917627947803231}
   m_Layer: 7
   m_Name: Character 0
   m_TagString: Pawn
@@ -146,7 +146,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -348,6 +348,30 @@ MonoBehaviour:
   _isOnBattle: 0
   _isDrafted: 0
   CurJobTarget: {fileID: 0}
+--- !u!114 &960917627947803231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6258274224586722765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e62db0b82f4a8f4d90c416199cf747f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStart: 0
+  canMove: 1
+  speed: 3
+  endReachedDistance: 0.2
+  repathRate: 1
+  destination: {x: 0, y: 0, z: 0}
+  targetDestination: {fileID: 0}
+  targetIsAObject: 0
+  reachedEndOfPath: 0
+  reachDestination: 0
+  currentWaypoint: 0
+  curUrgency: 1
 --- !u!114 &3998445696871861264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,27 +422,3 @@ MonoBehaviour:
   bezierTangentLength: 0.3
   offset: 0.2
   factor: 0.1
---- !u!114 &960917627947803231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6258274224586722765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e62db0b82f4a8f4d90c416199cf747f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isStart: 0
-  canMove: 1
-  speed: 3
-  endReachedDistance: 0.2
-  repathRate: 1
-  destination: {x: 0, y: 0, z: 0}
-  targetDestination: {fileID: 0}
-  targetIsAObject: 0
-  reachedEndOfPath: 0
-  reachDestination: 0
-  currentWaypoint: 0
-  curUrgency: 1

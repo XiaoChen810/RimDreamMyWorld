@@ -5,6 +5,7 @@ using ChenChen_UISystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using System;
+using ChenChen_AI;
 
 public class GameManager : SingletonMono<GameManager>
 {

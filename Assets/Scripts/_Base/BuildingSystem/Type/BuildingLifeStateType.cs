@@ -3,16 +3,17 @@ using UnityEngine;
 
 namespace ChenChen_BuildingSystem
 {
-    public enum BuildingLifeStateType : Byte
+    [Flags]
+    public enum BuildingLifeStateType : byte
     {
-        None,
+        None = 0,
         //等待建造
-        MarkBuilding,
+        MarkBuilding = 1,
         //完成建造
-        FinishedBuilding,
+        FinishedBuilding = 2,
         //等待拆除
-        MarkDemolished,
+        MarkDemolished = 3,
         //完成拆除
-        FinishedDemolished
+        FinishedDemolished = 4,
     }
 }

@@ -29,7 +29,7 @@ namespace ChenChen_BuildingSystem
         {
             base.Awake();
             LoadBlueprintData();
-            Tool = new BuildingModeTool();
+            Tool = new BuildingModeTool(this);
         }
 
         public void Update()
@@ -147,7 +147,8 @@ namespace ChenChen_BuildingSystem
                 }
                 if(def.Prefab == null)
                 {
-                    Debug.LogError($"定义 {name}的预制件为空");
+                    Debug.LogError($"返回了一个定义 {name}，但其的预制件为空");
+                    return ThingDefDictionary[name];
                 }
                 return ThingDefDictionary[name];
             }
@@ -166,7 +167,7 @@ namespace ChenChen_BuildingSystem
         /// <summary>
         /// 尝试生成一个物体
         /// </summary>
-        /// <param name="thingSave"></param>
+        /// <param name="thingSave"> 从存档 </param>
         /// <returns></returns>
         public bool TryGenerateThing(Data_ThingSave thingSave)
         {
@@ -182,10 +183,23 @@ namespace ChenChen_BuildingSystem
                 return false;
             }
             GameObject thingObj = Instantiate(prefab, thingSave.ThingPos + thingSave.ThingDef.offset, thingSave.ThingRot, transform);
-            MapManager.Instance.AddToObstaclesList(thingObj, thingSave.MapName);
             thingObj.GetComponent<ThingBase>().OnPlaced();
             return true;
         }
+        public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation)
+        {
+            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
+            thingObj.GetComponent<ThingBase>().OnPlaced();
+            return true;
+        }
+        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation)
+        {
+            ThingDef thingDef = GetThingDef(thingName);
+            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
+            thingObj.GetComponent<ThingBase>().OnPlaced();
+            return true;
+        }
+
         #endregion
     }
 }

@@ -49,16 +49,22 @@ namespace ChenChen_MapGenerator
                 GameObject newObj = new GameObject(t.tilemapName);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 newObj.AddComponent<TilemapRenderer>().sortingOrder = t.layerSort;
-                if(t.isObstacle)
+                newObj.transform.parent = grid.transform;
+                if (t.isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
                     newObj.layer = 8; //Obstacle Layer
                 }
-                newObj.transform.parent = grid.transform;
-                if (!LayerDict.ContainsKey(t.tilemapName)) LayerDict.Add(t.tilemapName, tilemap);
-
+                if (!LayerDict.ContainsKey(t.tilemapName))
+                {
+                    LayerDict.Add(t.tilemapName, tilemap);
+                }
+                if (t.type == NodeType.water)
+                {
+                    newObj.tag = "Water";
+                }
             }
             // 添加Flower相关的Tilemap
             foreach (var f in _flowersList)

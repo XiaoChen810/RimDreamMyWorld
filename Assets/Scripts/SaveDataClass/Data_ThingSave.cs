@@ -10,11 +10,11 @@ using UnityEngine;
 public class Data_ThingSave
 {
     public ThingDef ThingDef;
-    public Vector2Int ThingPos;
+    public Vector2 ThingPos;
     public Quaternion ThingRot;
     public string MapName;
 
-    public Data_ThingSave(ThingDef thingDef, Vector2Int thingPos, Quaternion thingRot, string mapName)
+    public Data_ThingSave(ThingDef thingDef, Vector2 thingPos, Quaternion thingRot, string mapName)
     {
         ThingDef = thingDef;
         ThingPos = thingPos;

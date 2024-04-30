@@ -11,7 +11,6 @@ namespace ChenChen_Scene
     public class MainScene : SceneBase
     {
         readonly string sceneName = "Main";
-        private PanelManager panelManager;
         public Action OnCompleteAction;
         public MainScene(Action action = null)
         {
@@ -23,16 +22,10 @@ namespace ChenChen_Scene
             // 加载场景
             if (SceneManager.GetActiveScene().name != sceneName)
             {
-                SceneManager.LoadSceneAsync(sceneName);
+                SceneManager.LoadScene(sceneName);
                 SceneManager.sceneLoaded += WhenSceneLoaded;
             }
-            else
-            {
-                panelManager = new PanelManager();
-                // panelManager.AddPanel(new MainPanel());
-            }
         }
-
 
         public override void OnExit()
         {
@@ -41,7 +34,6 @@ namespace ChenChen_Scene
 
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            panelManager = new PanelManager();
             MapManager.Instance.LoadOrGenerateSceneMap("MainMap");
             OnCompleteAction();
             Debug.Log($"{sceneName}场景加载完毕");

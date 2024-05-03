@@ -8,7 +8,7 @@ namespace ChenChen_UISystem
 {
     public class StartPanel : PanelBase
     {
-        static readonly string path = "UI/Panel/StartPanel";
+        static readonly string path = "UI/Panel/Scene/StartPanel";
         public StartPanel() : base(new UIType(path)) { }
 
         public override void OnEnter()

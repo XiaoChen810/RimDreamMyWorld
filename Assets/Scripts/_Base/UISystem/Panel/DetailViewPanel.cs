@@ -6,7 +6,7 @@ namespace ChenChen_UISystem
 {
     public class DetailViewPanel: PanelBase
     {
-        static readonly string path = "UI/Panel/DetailViewPanel";
+        static readonly string path = "UI/Panel/Menus/DetailViewPanel";
         private ThingBase thing;
 
         public Text ItemName { get; private set; }

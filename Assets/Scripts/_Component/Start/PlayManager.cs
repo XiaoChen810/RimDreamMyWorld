@@ -2,19 +2,44 @@ using ChenChen_BuildingSystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using ChenChen_UISystem;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayManager : SingletonMono<PlayManager>
 {
     private static readonly string root_save_name = "GameSave";
 
-    public Data_GameSave SaveData;
+    public List<Data_GameSave> SaveList = new List<Data_GameSave>();
+
+    // 本次游戏生成地图的数据
+    private Data_MapSave _mapSaveThisPlay;
+    public Data_MapSave MapSaveThisPlay
+    {
+        get { return _mapSaveThisPlay; }
+        set
+        {
+            if(_mapSaveThisPlay == null)
+            {
+                _mapSaveThisPlay = value;
+            }
+        }
+    }
 
     private void Start()
     {
         //加载开始场景
         SceneSystem.Instance.SetScene(new StartScene());
+
+        if (ES3.KeyExists(root_save_name))
+        {
+            SaveList = ES3.Load<List<Data_GameSave>>(root_save_name);
+            Debug.Log($"成功加载存档{root_save_name}资源");
+        }
+        else
+        {
+            Debug.Log($"未能加载存档{root_save_name}资源");
+        }
     }
 
     private void Update()
@@ -33,9 +58,15 @@ public class PlayManager : SingletonMono<PlayManager>
         }
     }
 
-    public void Save()
+    /// <summary>
+    /// 保存一个游戏存档到列表
+    /// </summary>
+    /// <param name="saveName"></param>
+    public void Save(string saveName = "unnamed")
     {
-        SaveData.SaveThings.Clear();
+        string saveDate = DateTime.Now.ToString();
+        Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
+        saveData.SaveMap = MapSaveThisPlay;
         foreach (var thing in BuildingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
         {
             // 保存
@@ -46,34 +77,26 @@ public class PlayManager : SingletonMono<PlayManager>
                 thing.transform.rotation,
                 thing.MapName,
                 thing.LifeState);
-            SaveData.SaveThings.Add(newThingSave);
+            saveData.SaveThings.Add(newThingSave);
             Debug.Log($"Save a thing: {thingDef.DefName}");
         }
-
-        ES3.Save(root_save_name, SaveData);
-        Debug.Log($"成功保存存档{root_save_name}资源");
+        SaveList.Add(saveData);
+        ES3.Save(root_save_name, SaveList);
+        Debug.Log($"成功保存存档{saveName}资源, 日期{saveDate}");
     }
 
-    public bool Load()
+    /// <summary>
+    /// 加载一个游戏存档
+    /// </summary>
+    /// <param name="gameSave"></param>
+    public void Load(Data_GameSave gameSave)
     {
-        // 加载存档资源
-        if (ES3.KeyExists(root_save_name))
-        {
-            SaveData = ES3.Load<Data_GameSave>(root_save_name);
-            MapManager.Instance.LoadSceneMapFromSave(SaveData);
-            Debug.Log($"成功加载存档{root_save_name}资源");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"未能加载存档{root_save_name}资源");
-            SaveData = new Data_GameSave(root_save_name);
-            return false;
-        }
+        MapManager.Instance.LoadSceneMapFromSave(gameSave);
     }
 
     private void OnApplicationQuit()
     {
-        //Save();
+        ES3.Save(root_save_name, SaveList);
+        Debug.Log("游戏退出，自动保存");
     }
 }

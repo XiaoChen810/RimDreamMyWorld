@@ -9,6 +9,7 @@ namespace ChenChen_AI
         private GameObject target;
         private Thing_Building curTargetComponent;
         private float _time;
+        private float _timeOne;
 
         /// <summary>
         /// 创建一个新的建造任务，需要设置建筑坐标
@@ -18,6 +19,9 @@ namespace ChenChen_AI
         public PawnJob_Building(Pawn pawn, GameObject target = null) : base(pawn, tick)
         {
             this.target = target;
+            float ability = pawn.Attribute.A_Construction.Value;
+            if (ability == 0) _timeOne = 10;
+            _timeOne = 1f / ability;
         }
 
         public override bool OnEnter()
@@ -62,9 +66,9 @@ namespace ChenChen_AI
 
                 // 执行工作
                 _time += Time.deltaTime;
-                if(_time > 1)
+                if(_time > _timeOne)
                 {
-                    curTargetComponent.OnBuild(pawn.Attribute.A_Construction.Value);
+                    curTargetComponent.OnBuild(1);
                     _time = 0;
                 }
 

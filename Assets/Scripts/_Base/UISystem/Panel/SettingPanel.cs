@@ -9,7 +9,7 @@ namespace ChenChen_UISystem
 {
     public class SettingPanel : PanelBase
     {
-        static readonly string path = "UI/Panel/SettingPanel";
+        static readonly string path = "UI/Panel/Menus/SettingPanel";
         public SettingPanel() : base(new UIType(path)) { }
 
         public override void OnEnter()
@@ -20,7 +20,7 @@ namespace ChenChen_UISystem
             });
             UITool.TryGetChildComponentByName<Button>("LoadBtn").onClick.AddListener(() =>
             {
-                PlayManager.Instance.Load();
+                PanelManager.Instance.AddPanel(new SavesPanel());
             });
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {

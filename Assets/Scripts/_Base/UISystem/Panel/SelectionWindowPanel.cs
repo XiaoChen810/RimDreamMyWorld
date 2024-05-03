@@ -9,7 +9,7 @@ namespace ChenChen_UISystem
 {
     public class SelectionWindowPanel : PanelBase
     {
-        static readonly string path = "UI/Panel/Init/SelectionWindowPanel";
+        static readonly string path = "UI/Panel/Scene/SelectionWindowPanel";
         public SelectionWindowPanel() : base(new UIType(path))
         {
             p0 = GameObject.Find("SelectionPawn0").GetComponent<Pawn>();

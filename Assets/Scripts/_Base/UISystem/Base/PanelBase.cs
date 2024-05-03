@@ -134,10 +134,10 @@ namespace ChenChen_UISystem
             // 检查是否有GridLayoutGroup组件
             GridLayoutGroup glg = UITool.TryGetChildComponentByName<GridLayoutGroup>("Content");
             // 获取按钮的预制件
-            GameObject btnPrefab = Resources.Load("UI/Component/BtnBkueprintDefault/BtnBlueprintDefault") as GameObject;
+            GameObject btnPrefab = Resources.Load("UI/Component/BtnBlueprintDefault") as GameObject;
             if (btnPrefab == null)
             {
-                Debug.LogWarning("按钮的预制件为空");
+                Debug.LogError("按钮的预制件为空, 检查位置: UI/Component/BtnBlueprintDefault");
                 PanelManager.RemovePanel(this);
                 return;
             }

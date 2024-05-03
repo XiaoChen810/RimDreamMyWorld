@@ -123,7 +123,7 @@ namespace ChenChen_MapGenerator
                         ItemCreator.GenerateItem("常青树", pos, mapName);
                 }
                 // 保存
-                PlayManager.Instance.SaveData.SaveMap = mapSave;
+                PlayManager.Instance.MapSaveThisPlay = mapSave;
             }
             AstarPath.active.Scan();
         }

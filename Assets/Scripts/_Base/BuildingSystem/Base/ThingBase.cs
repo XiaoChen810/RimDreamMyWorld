@@ -56,6 +56,43 @@ namespace ChenChen_BuildingSystem
             }
         }
 
+        [SerializeField] private BuildingLifeStateType _lifeState = 0;
+
+        public BuildingLifeStateType LifeState
+        {
+            get
+            {
+                return _lifeState;
+            }
+            set
+            {
+                if (value != _lifeState)
+                {
+                    switch (value)
+                    {
+                        case BuildingLifeStateType.MarkBuilding:
+                            OnMarkBuild();
+                            break;
+                        case BuildingLifeStateType.FinishedBuilding:
+                            OnComplete();
+                            break;
+                        case BuildingLifeStateType.MarkDemolished:
+                            OnMarkDemolish();
+                            break;
+                        case BuildingLifeStateType.FinishedDemolished:
+                            OnDemolished();
+                            break;
+
+                    }
+                    _lifeState = value;
+                }
+                else
+                {
+                    Debug.LogWarning($"The building life state has been {value}");
+                }
+            }
+        }
+
         // 物品碰撞体
         public BoxCollider2D ColliderSelf { get; protected set; }
 
@@ -63,13 +100,12 @@ namespace ChenChen_BuildingSystem
         protected virtual void OnEnable()
         {
             gameObject.name = gameObject.name.Replace("(Clone)", "");
-            MapName = MapManager.Instance.CurrentMapName;
             CurDurability = MaxDurability;
             ColliderSelf = GetComponent<BoxCollider2D>();
         }
 
         // 实现接口中定义的属性和方法
-        public abstract void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None);
+        public abstract void OnPlaced(BuildingLifeStateType initial_State, string mapName);
         public abstract void OnMarkBuild();
         public abstract void OnBuild(int value);
         public abstract void OnComplete();

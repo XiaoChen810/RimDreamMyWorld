@@ -9,7 +9,7 @@ namespace ChenChen_BuildingSystem
     [CreateAssetMenu(menuName = "蓝图数据", fileName = "蓝图数据", order = 0)]
     public class ThingDef : ScriptableObject
     {
-        public string Name;
+        public string DefName;
 
         [Header("类型")]
         public ThingType Type;

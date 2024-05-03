@@ -16,7 +16,7 @@ namespace ChenChen_BuildingSystem
         [Header("包含全部物品定义的字典")]
         [SerializedDictionary("名称", "物品定义")]
         public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
-        
+
         [Header("包含全部已经生成的物体列表")]
         [SerializeField] private List<GameObject> ThingGeneratedList = new();
 
@@ -50,13 +50,13 @@ namespace ChenChen_BuildingSystem
 
                 if (ThingData != null)
                 {
-                    if (!ThingDefDictionary.ContainsKey(ThingData.Name))
+                    if (!ThingDefDictionary.ContainsKey(ThingData.DefName))
                     {
-                        ThingDefDictionary.Add(ThingData.Name, ThingData);
+                        ThingDefDictionary.Add(ThingData.DefName, ThingData);
                     }
                     else
                     {
-                        Debug.LogWarning($"BlueprintData with name '{ThingData.Name}' already exists. Skipping.");
+                        Debug.LogWarning($"BlueprintData with name '{ThingData.DefName}' already exists. Skipping.");
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace ChenChen_BuildingSystem
         /// <param name="obj"></param>
         public void AddThingToList(GameObject obj)
         {
-            if(obj.TryGetComponent<Thing_Building>(out var building))
+            if (obj.TryGetComponent<Thing_Building>(out var building))
             {
                 ThingGeneratedList.Add(obj);
             }
@@ -107,7 +107,7 @@ namespace ChenChen_BuildingSystem
             foreach (var item in ThingGeneratedList)
             {
                 Thing_Building building = item.GetComponent<Thing_Building>();
-                if (name != null && building.Def.Name != name) continue;
+                if (name != null && building.Def.DefName != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
                 return item;
             }
@@ -125,10 +125,10 @@ namespace ChenChen_BuildingSystem
             foreach (var item in ThingGeneratedList)
             {
                 Thing_Building building = item.GetComponent<Thing_Building>();
-                if (building.State != state) continue;
-                if (name != null && building.Def.Name != name) continue;
+                if (building.LifeState != state) continue;
+                if (name != null && building.Def.DefName != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
-                return item;             
+                return item;
             }
             return null;
         }
@@ -143,9 +143,9 @@ namespace ChenChen_BuildingSystem
             {
                 if (def.Prefab == null)
                 {
-                    def.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{def.Name}/{def.Name}_Prefab");
+                    def.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{def.DefName}/{def.DefName}_Prefab");
                 }
-                if(def.Prefab == null)
+                if (def.Prefab == null)
                 {
                     Debug.LogError($"返回了一个定义 {name}，但其的预制件为空");
                     return ThingDefDictionary[name];
@@ -167,37 +167,43 @@ namespace ChenChen_BuildingSystem
         /// <summary>
         /// 尝试生成一个物体
         /// </summary>
-        /// <param name="thingSave"> 从存档 </param>
+        /// <param name="thingSave"> 物体存档 </param>
         /// <returns></returns>
         public bool TryGenerateThing(Data_ThingSave thingSave)
         {
-            GameObject prefab = thingSave.ThingDef.Prefab;
+            ThingDef thingDef = GetThingDef(thingSave.DefName);
+            GameObject prefab = thingDef.Prefab;
             if (prefab == null)
             {
-                thingSave.ThingDef.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{thingSave.ThingDef.Name}/{thingSave.ThingDef.Name}_Prefab");
-                prefab = thingSave.ThingDef.Prefab;
+                thingDef.Prefab = Resources.Load<GameObject>($"Prefabs/ThingDef/{thingDef.DefName}/{thingDef.DefName}_Prefab");
+                prefab = thingDef.Prefab;
             }
             if (prefab == null)
             {
-                Debug.LogError($"定义 {thingSave.ThingDef.Name}定义的预制件为空");
+                Debug.LogError($"定义 {thingDef.DefName}定义的预制件为空");
                 return false;
             }
-            GameObject thingObj = Instantiate(prefab, thingSave.ThingPos + thingSave.ThingDef.offset, thingSave.ThingRot, transform);
-            thingObj.GetComponent<ThingBase>().OnPlaced();
+            GameObject thingObj = Instantiate(prefab, thingSave.ThingPos, thingSave.ThingRot, transform);
+            thingObj.GetComponent<ThingBase>().OnPlaced(thingSave.LifeState, thingSave.MapName);
             return true;
         }
-        public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation)
+        public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
-            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
-            thingObj.GetComponent<ThingBase>().OnPlaced();
+            Generate(thingDef, position, routation, initLifdState, mapName);
             return true;
         }
-        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation)
+        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
             ThingDef thingDef = GetThingDef(thingName);
-            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
-            thingObj.GetComponent<ThingBase>().OnPlaced();
+            Generate(thingDef, position, routation, initLifdState, mapName);
             return true;
+        }
+        private void Generate(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
+        {
+            // 生成
+            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
+            ThingBase thing = thingObj.GetComponent<ThingBase>();
+            thing.OnPlaced(initLifdState, mapName);
         }
 
         #endregion

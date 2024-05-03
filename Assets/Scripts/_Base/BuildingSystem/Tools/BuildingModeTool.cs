@@ -43,7 +43,7 @@ namespace ChenChen_BuildingSystem
         public void BuildStart(ThingDef def)
         {
             CurBuildingDef = def;
-            CurBuildingName = def.Name;
+            CurBuildingName = def.DefName;
 
             // 获取当前地图的TileMap
             Tilemap main = MapManager.Instance.CurMapMainTilemap;
@@ -85,7 +85,7 @@ namespace ChenChen_BuildingSystem
                     {
                         Vector2 posInt = new Vector2(placePosition.x,placePosition.y);
                         Quaternion rot = MouseIndicator.transform.rotation;
-                        BuildingSystemManager.TryGenerateThing(CurBuildingDef, posInt, rot);
+                        BuildingSystemManager.TryGenerateThing(CurBuildingDef, posInt, rot, 0, MapManager.Instance.CurrentMapName);
                     }
                 }
                 else

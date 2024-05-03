@@ -9,16 +9,18 @@ using UnityEngine;
 [System.Serializable]
 public class Data_ThingSave
 {
-    public ThingDef ThingDef;
+    public string DefName;
     public Vector2 ThingPos;
     public Quaternion ThingRot;
     public string MapName;
+    public BuildingLifeStateType LifeState;
 
-    public Data_ThingSave(ThingDef thingDef, Vector2 thingPos, Quaternion thingRot, string mapName)
+    public Data_ThingSave(string defName, Vector2 thingPos, Quaternion thingRot, string mapName, BuildingLifeStateType lifeState)
     {
-        ThingDef = thingDef;
+        DefName = defName;
         ThingPos = thingPos;
         ThingRot = thingRot;
         MapName = mapName;
+        LifeState = lifeState;
     }
 }

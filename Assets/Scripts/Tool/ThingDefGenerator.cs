@@ -50,7 +50,7 @@ public class ThingDefGenerator
         ThingDef thingDef = ScriptableObject.CreateInstance<ThingDef>();
 
         // 设置基本信息
-        thingDef.Name = ThingName;
+        thingDef.DefName = ThingName;
         thingDef.Type = ThingType;
         thingDef.Workload = ThingWorkload;
         thingDef.Durability = ThingDurability;

@@ -216,6 +216,12 @@ namespace ChenChen_MapGenerator
             return null;
         }
 
+        /// <summary>
+        /// 获取已经生成的Tilemap，如果没有则新生成一个，参数parent作为其父类
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public Tilemap GetTileamp(string name, GameObject parent = null)
         {
             if(LayerDict.ContainsKey(name))

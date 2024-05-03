@@ -1,15 +1,15 @@
 using ChenChen_AI;
 using ChenChen_MapGenerator;
 using ChenChen_UISystem;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEngine.Networking.UnityWebRequest;
 
 namespace ChenChen_BuildingSystem
 {
     public class Thing_Building : ThingBase, IDetailView
     {
-        private Tilemap _buildingTilemap;
-        private Vector3Int _completePos;
         private bool _drawOutline;
 
         [SerializeField] protected Pawn _theUsingPawn;
@@ -54,47 +54,13 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        [SerializeField] private BuildingLifeStateType _state;
-        public BuildingLifeStateType State
-        {
-            get
-            {
-                return _state;
-            }
-            set
-            {
-                if(value != _state )
-                {
-                    switch (value)
-                    {
-                        case BuildingLifeStateType.MarkBuilding:
-                            OnMarkBuild();
-                            break;
-                        case BuildingLifeStateType.FinishedBuilding:
-                            OnComplete();
-                            break;
-                        case BuildingLifeStateType.MarkDemolished:
-                            OnMarkDemolish();
-                            break;
-                        case BuildingLifeStateType.FinishedDemolished:
-                            OnDemolished();
-                            break;
-
-                    }
-                    _state = value;
-                }
-            }
-        }
-
-
         #region Life_Built
 
-        public override void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None)
+        public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
         {
             // 设置初始值
             _workload = WorkloadBuilt;
-            _buildingTilemap = MapManager.Instance.GetTilemap("Building");
-            _completePos = _buildingTilemap.WorldToCell(transform.position);
+            MapName = mapName;
             // 设置碰撞体
             if (TryGetComponent<Collider2D>(out Collider2D coll))
             {
@@ -109,10 +75,10 @@ namespace ChenChen_BuildingSystem
                 }
             }
             // 判断初始状态，需不需要标志建造
-            State = initial_State;
-            if(State == BuildingLifeStateType.None)
+            LifeState = initial_State;
+            if(LifeState == BuildingLifeStateType.None)
             {
-                State = Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding;
+                LifeState = Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding;
             }      
             // 设置完一切后
             BuildingSystemManager.Instance.AddThingToList(this.gameObject);
@@ -131,7 +97,7 @@ namespace ChenChen_BuildingSystem
             if(Workload <= 0)
             {
                 Workload = 0;
-                State = BuildingLifeStateType.FinishedBuilding;
+                LifeState = BuildingLifeStateType.FinishedBuilding;
             }
         }
 
@@ -142,8 +108,18 @@ namespace ChenChen_BuildingSystem
             // 在瓦片地图设置瓦片
             if (Def.TileBase != null)
             {
-                _buildingTilemap.SetTile(_completePos, Def.TileBase);
-                sr.color = new Color(1, 1, 1, 0f);
+                if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
+                {
+                    Vector3Int setPosition = new Vector3Int((int)transform.position.x, (int)transform.position.y);
+                    buildingTilemap.SetTile(setPosition, Def.TileBase);
+                    sr.color = new Color(1, 1, 1, 0f);
+                    Debug.Log("Compele");
+                }
+                else
+                {
+                    Debug.LogError("Error in set tile");
+                }
+
             }
             else
             {
@@ -168,7 +144,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnInterpret()
         {
-            State = BuildingLifeStateType.MarkBuilding;
+            LifeState = BuildingLifeStateType.MarkBuilding;
         }
 
         #endregion
@@ -186,14 +162,21 @@ namespace ChenChen_BuildingSystem
             if(_workload <= 0)
             {
                 _workload = 0;
-                State = BuildingLifeStateType.FinishedDemolished;
+                LifeState = BuildingLifeStateType.FinishedDemolished;
             }
         }
 
         public override void OnDemolished()
         {
-            if (Def.TileBase != null) _buildingTilemap.SetTile(_completePos, null);
-            if(_detailView.onShow)
+            if (Def.TileBase != null)
+            {
+                if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
+                {
+                    Vector3Int setPosition = new Vector3Int((int)transform.position.x, (int)transform.position.y);
+                    buildingTilemap.SetTile(setPosition, null);
+                }
+            }
+            if (_detailView.onShow)
             {
                 DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
                 PanelManager.Instance.RemovePanel(detail);

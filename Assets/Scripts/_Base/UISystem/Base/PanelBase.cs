@@ -147,7 +147,7 @@ namespace ChenChen_UISystem
                 if (item.Value.Type == type)
                 {
                     GameObject btnInstance = Object.Instantiate(btnPrefab);
-                    btnInstance.name = $"BtnBlueprint{item.Value.Name}";
+                    btnInstance.name = $"BtnBlueprint{item.Value.DefName}";
                     GameObject btnImage = btnInstance.transform.Find("Image").gameObject;
                     btnImage.GetComponent<Image>().sprite = item.Value.PreviewSprite;
 

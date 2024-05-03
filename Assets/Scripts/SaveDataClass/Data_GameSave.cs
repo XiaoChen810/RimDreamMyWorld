@@ -12,7 +12,7 @@ public class Data_GameSave
     // ´æµµÃû×Ö
     public string SaveName;
 
-    public Data_MapSave MapSave;
+    public Data_MapSave SaveMap;
 
-    public List<Data_ThingSave> Things;
+    public List<Data_ThingSave> SaveThings;
 }

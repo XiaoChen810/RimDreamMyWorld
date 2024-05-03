@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e26f88b41b3c3409fec8a9b2881016, type: 3}
   m_Name: "ThingDef_\u6728\u5899"
   m_EditorClassIdentifier: 
-  Name: "\u6728\u5899"
+  DefName: "\u6728\u5899"
   Type: 1
   Workload: 25
   PreviewSprite: {fileID: -137808568, guid: babd89580c43728438b90485b1e9f689, type: 3}

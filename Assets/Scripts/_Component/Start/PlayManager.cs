@@ -1,13 +1,15 @@
+using ChenChen_BuildingSystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using ChenChen_UISystem;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayManager : SingletonMono<PlayManager>
 {
     private static readonly string root_save_name = "GameSave";
 
-    public Data_GameSave SaveDate;
+    public Data_GameSave SaveData;
 
     private void Start()
     {
@@ -33,7 +35,21 @@ public class PlayManager : SingletonMono<PlayManager>
 
     public void Save()
     {
-        ES3.Save(root_save_name, SaveDate);
+        SaveData.SaveThings.Clear();
+        foreach (var thing in BuildingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
+        {
+            // 保存
+            ThingDef thingDef = thing.Def;
+            Data_ThingSave newThingSave = new Data_ThingSave(
+                thingDef.DefName,
+                thing.transform.position,
+                thing.transform.rotation,
+                thing.MapName,
+                thing.LifeState);
+            SaveData.SaveThings.Add(newThingSave);
+            Debug.Log($"Save a thing: {thingDef.DefName}");
+        }
+        ES3.Save(root_save_name, SaveData);
         Debug.Log($"成功保存存档{root_save_name}资源");
     }
 
@@ -42,15 +58,15 @@ public class PlayManager : SingletonMono<PlayManager>
         // 加载存档资源
         if (ES3.KeyExists(root_save_name))
         {
-            SaveDate = ES3.Load<Data_GameSave>(root_save_name);
-            MapManager.Instance.LoadSceneMapFromSave(SaveDate);
+            SaveData = ES3.Load<Data_GameSave>(root_save_name);
+            MapManager.Instance.LoadSceneMapFromSave(SaveData);
             Debug.Log($"成功加载存档{root_save_name}资源");
             return true;
         }
         else
         {
             Debug.Log($"未能加载存档{root_save_name}资源");
-            SaveDate = new Data_GameSave(root_save_name);
+            SaveData = new Data_GameSave(root_save_name);
             return false;
         }
     }

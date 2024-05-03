@@ -32,9 +32,10 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        public override void OnPlaced(BuildingLifeStateType initial_State = BuildingLifeStateType.None)
+        public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
         {
-            //Debug.Log("生成了一颗树在：" + transform.position);
+            LifeState = initial_State;
+            MapName = mapName;
         }
 
         public override void OnMarkBuild()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace ChenChen_AI
 {
@@ -52,7 +53,6 @@ namespace ChenChen_AI
                 speed = 0;
                 _pawn.Animator.SetBool("IsWalk", false);
                 _pawn.Animator.SetBool("IsRun", false);
-                _pawn.Animator.SetBool("IsSwimming", false);
                 return;
             }
             if (!_isSwimming)
@@ -86,8 +86,16 @@ namespace ChenChen_AI
         {
             if (collision != null && collision.CompareTag("Water"))
             {
-                _isSwimming = true;
+                // 判断是否完全浸没水中
+                bool fullyOverlapped = CheckFullyContained(collision, _collider);
+                if (fullyOverlapped) _isSwimming = true;
             }
+
+            bool CheckFullyContained(Collider2D colliderA, Collider2D colliderB)
+            {
+                return true;
+            }
+
         }
         private void OnTriggerExit2D(Collider2D collision)
         {
@@ -96,20 +104,6 @@ namespace ChenChen_AI
                 _isSwimming = false;
             }
         }
-        //private void OnCollisionStay2D(Collision2D collision)
-        //{
-        //    if (collision != null && collision.collider.CompareTag("Water"))
-        //    {
-        //        _isSwimming = true;
-        //    }
-        //}
-        //private void OnCollisionExit2D(Collision2D collision)
-        //{
-        //    if (collision != null && collision.collider.CompareTag("Water"))
-        //    {
-        //        _isSwimming = false;
-        //    }
-        //}
 
         /// <summary>
         /// 前往到目标点

@@ -27,9 +27,9 @@ namespace ChenChen_MapGenerator
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
         /// </summary>
-        public SceneMapData GenerateMap(SceneMapData mapData)
+        public MapData GenerateMap(MapData mapData)
         {
-            SceneMapData result = mapData;
+            MapData result = mapData;
             // 全局参数
             _width = mapData.width;
             _height = mapData.height;
@@ -84,7 +84,6 @@ namespace ChenChen_MapGenerator
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
-            result.mainTilemap = _mapObj.GetComponentInChildren<Tilemap>();
             return result;
         }
 

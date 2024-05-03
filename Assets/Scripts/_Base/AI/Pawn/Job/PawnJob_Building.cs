@@ -62,7 +62,7 @@ namespace ChenChen_AI
 
                 // 执行工作
                 _time += Time.deltaTime;
-                if(_time > 2)
+                if(_time > 1)
                 {
                     curTargetComponent.OnBuild(pawn.Attribute.A_Construction.Value);
                     _time = 0;

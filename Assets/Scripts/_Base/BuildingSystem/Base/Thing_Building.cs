@@ -8,51 +8,9 @@ using static UnityEngine.Networking.UnityWebRequest;
 
 namespace ChenChen_BuildingSystem
 {
-    public class Thing_Building : ThingBase, IDetailView
+    public class Thing_Building : ThingBase
     {
         private bool _drawOutline;
-
-        [SerializeField] protected Pawn _theUsingPawn;
-        public Pawn TheUsingPawn
-        {
-            get
-            {
-                return _theUsingPawn;
-            }
-            protected set
-            {
-                _theUsingPawn = value;
-            }
-        }
-
-        [SerializeField] protected bool _isUsed;
-        public bool IsUsed
-        {
-            get
-            {
-                return _isUsed;
-            }
-            protected set
-            {
-                _isUsed = value;
-            }
-        }
-
-        [SerializeField] private DetailView _detailView;
-        public DetailView DetailView
-        {
-            get
-            {
-                if( _detailView == null)
-                {
-                    if(!TryGetComponent<DetailView>(out _detailView))
-                    {
-                        _detailView = gameObject.AddComponent<DetailView_Building>();
-                    }
-                }
-                return _detailView;
-            }
-        }
 
         #region Life_Built
 
@@ -110,8 +68,7 @@ namespace ChenChen_BuildingSystem
             {
                 if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
                 {
-                    Vector3Int setPosition = new Vector3Int((int)transform.position.x, (int)transform.position.y);
-                    buildingTilemap.SetTile(setPosition, Def.TileBase);
+                    buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
                     sr.color = new Color(1, 1, 1, 0f);
                     Debug.Log("Compele");
                 }
@@ -172,8 +129,7 @@ namespace ChenChen_BuildingSystem
             {
                 if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
                 {
-                    Vector3Int setPosition = new Vector3Int((int)transform.position.x, (int)transform.position.y);
-                    buildingTilemap.SetTile(setPosition, null);
+                    buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
             }
             if (_detailView.onShow)
@@ -220,9 +176,9 @@ namespace ChenChen_BuildingSystem
         #endregion
 
 
-        public Color centerColor = new Color(0f, 0f, 1f, 0f); // 透明蓝色
-        public Color outlineColor = Color.white; // 纯白色
-        public float outlineWidth = 2f;
+        private Color centerColor = new Color(0f, 0f, 1f, 0f); // 透明蓝色
+        private Color outlineColor = Color.white; // 纯白色
+        private float outlineWidth = 2f;
 
         private Texture2D centerTexture;
         private Texture2D outlineTexture;

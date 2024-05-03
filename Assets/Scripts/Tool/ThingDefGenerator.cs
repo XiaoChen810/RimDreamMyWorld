@@ -21,6 +21,8 @@ public class ThingDefGenerator
     public bool ThingIsObstacle;
     [Header("最后生成的瓦片")]
     public TileBase ThingTileBase;
+    [Header("是否生成独立脚本")]
+    public bool CreateIndividualScript;
 
     private readonly string saveRootPath = "Assets/Resources/Prefabs/ThingDef";
 
@@ -86,7 +88,7 @@ public class ThingDefGenerator
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("ThingDef and Prefab generated successfully!\n" +
+        Debug.Log($"ThingDef {thingDef.DefName} and Prefab generated successfully!\n" +
             "But also need to setting actually BlueprintBase script");
 
         void CreateThingPrefab<T>(string name, ThingDef def) where T : ThingBase
@@ -121,6 +123,8 @@ public class ThingDefGenerator
 
         void CreateScript(string folderPath, string classBase)
         {
+            if (!CreateIndividualScript) return;
+
             // 生成脚本的路径
             string scriptPath = $"{folderPath}/{ThingName}_Script.cs";
 

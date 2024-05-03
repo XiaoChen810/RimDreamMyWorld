@@ -122,7 +122,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.003481567, y: -0.033168063}
+  m_Offset: {x: -0.00013166666, y: -0.000649333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,7 +132,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.76009405, y: 0.80846226}
+  m_Size: {x: 0.8781251, y: 0.87349975}
   m_EdgeRadius: 0
 --- !u!114 &4132640834712195906
 MonoBehaviour:
@@ -147,11 +147,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Def: {fileID: 11400000, guid: d4ee0207e91f5b146827a24c31a78dfa, type: 2}
-  MapName: 
-  IsDismantlable: 0
-  CurDurability: 0
-  _workload: 0
-  _theUsingPawn: {fileID: 0}
-  _isUsed: 0
-  _detailView: {fileID: 0}
-  _state: 0

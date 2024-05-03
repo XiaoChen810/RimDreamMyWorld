@@ -15,13 +15,10 @@ namespace ChenChen_BuildingSystem
     {
         [Header("包含全部物品定义的字典")]
         [SerializedDictionary("名称", "物品定义")]
-        public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
+        public SerializedDictionary<string, ThingDef> ThingDefDictionary;
 
         [Header("包含全部已经生成的物体列表")]
-        [SerializeField] private List<GameObject> ThingGeneratedList = new();
-
-        [Header("Data_ThingSave")]
-        public List<Data_ThingSave> ThingSaveList = new();
+        [SerializeField] private List<GameObject> ThingGeneratedList;
 
         public BuildingModeTool Tool { get; private set; }
 
@@ -29,6 +26,7 @@ namespace ChenChen_BuildingSystem
         {
             base.Awake();
             LoadBlueprintData();
+            ThingGeneratedList = new List<GameObject>();
             Tool = new BuildingModeTool(this);
         }
 
@@ -39,6 +37,8 @@ namespace ChenChen_BuildingSystem
 
         private void LoadBlueprintData()
         {
+            ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
+
             // 获取指定路径下的所有ThingDef文件
             string[] ThingDataFiles = AssetDatabase.FindAssets("t:ThingDef", new[] { "Assets/Resources/Prefabs/ThingDef" });
 
@@ -201,7 +201,7 @@ namespace ChenChen_BuildingSystem
         private void Generate(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
             // 生成
-            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.offset, routation, transform);
+            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.Offset, routation, transform);
             ThingBase thing = thingObj.GetComponent<ThingBase>();
             thing.OnPlaced(initLifdState, mapName);
         }

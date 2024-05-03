@@ -34,7 +34,7 @@ namespace ChenChen_Scene
 
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            MapManager.Instance.LoadOrGenerateSceneMap("MainMap");
+            MapManager.Instance.LoadOrGenerateSceneMap(StaticDef.Map_Default_Name);
             OnCompleteAction();
             Debug.Log($"{sceneName}≥°æ∞º”‘ÿÕÍ±œ");
         }

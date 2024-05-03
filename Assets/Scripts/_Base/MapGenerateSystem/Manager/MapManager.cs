@@ -24,8 +24,7 @@ namespace ChenChen_MapGenerator
         /// <summary>
         /// 不同场景的地图数据
         /// </summary>
-        public Dictionary<string, SceneMapData> SceneMapDatasDict = new Dictionary<string, SceneMapData>();
-
+        public Dictionary<string, MapData> MapDatasDict = new Dictionary<string, MapData>();
 
         private string _currentMapName;
         /// <summary>
@@ -35,19 +34,15 @@ namespace ChenChen_MapGenerator
         {
             get
             {
+                if (_currentMapName == null)
+                {
+                    return StaticDef.Map_Default_Name;
+                }
                 return _currentMapName;
             }
             private set
             {
                 _currentMapName = value;
-            }
-        }
-
-        public Tilemap CurMapMainTilemap
-        {
-            get
-            {
-                return SceneMapDatasDict[_currentMapName].mainTilemap;
             }
         }
 
@@ -58,37 +53,34 @@ namespace ChenChen_MapGenerator
         protected override void Awake()
         {
             base.Awake();
-            Init();
-            ItemCreator = new ItemCreator();
-        }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        private void Init()
-        {
-            // 初始化组件
             MapCreator = GetComponent<MapCreator>();
-            SceneMapDatasDict = new Dictionary<string, SceneMapData>();
+            ItemCreator = new ItemCreator();
+            MapDatasDict = new Dictionary<string, MapData>();
         }
 
         /// <summary>
-        /// 生成并添加一份地图数据到SceneMapDatasDict。
+        /// 生成一份地图数据。数据会把保存进字典
         /// </summary>
-        /// <param name="mapName"></param>
-        /// <param name="mapSeed">是否使用随机种子，默认为随机</param>
-        private void MapDataDictAdd(Data_MapSave mapSave)
+        /// <param name="mapSave"> 生成地图用的数据 </param>
+        /// <param name="mapObjectActive"> 生成的地图是否立即作为当前场景 </param>
+        private void GenerateMap(Data_MapSave mapSave, bool mapObjectActive)
         {      
-            Init();
-            if (!SceneMapDatasDict.ContainsKey(mapSave.mapName))
+            if (!MapDatasDict.ContainsKey(mapSave.mapName))
             {
-                SceneMapData mapData = new(mapSave);
-                mapData = MapCreator.GenerateMap(mapData);               
+                MapData mapData = new(mapSave);
+                mapData = MapCreator.GenerateMap(mapData);
+                if (mapObjectActive)
+                {
+                    _currentMapName = mapData.mapName;
+                    mapData.mapObject.SetActive(true);
+                }
+                else
+                {
+                    mapData.mapObject.SetActive(false);
+                }
                 // 添加进字典
-                SceneMapDatasDict.Add(mapSave.mapName, mapData);
+                MapDatasDict.Add(mapSave.mapName, mapData);
                 Debug.Log("已经生成地图" + mapSave.mapName);
-                // 保存
-                PlayManager.Instance.SaveData.SaveMap = mapSave;
             }
             else
             {
@@ -99,7 +91,7 @@ namespace ChenChen_MapGenerator
         #region Public
 
         /// <summary>
-        /// 加载场景地图，若没有则会创建一个
+        /// 加载现有的场景地图，若没有则会创建一个
         /// </summary>
         /// <param name="mapName"></param>
         public void LoadOrGenerateSceneMap(string mapName, int seed = -1)
@@ -111,7 +103,7 @@ namespace ChenChen_MapGenerator
             }
 
             // 如果已经存在场景，则直接启用
-            if (SceneMapDatasDict.ContainsKey(mapName))
+            if (MapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(true);
                 Debug.Log($"场景已经存在{mapName},直接启用");
@@ -122,16 +114,18 @@ namespace ChenChen_MapGenerator
                                         MapWidthOfGenerate,
                                         MapHeightOfGenerate,
                                         seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
-                MapDataDictAdd(mapSave);
+                GenerateMap(mapSave, true);
+                // 生成环境
                 for (int i = 0; i < 100; i++)
                 {
                     Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
-                    if (SceneMapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
+                    if (MapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
                         ItemCreator.GenerateItem("常青树", pos, mapName);
                 }
+                // 保存
+                PlayManager.Instance.SaveData.SaveMap = mapSave;
             }
             AstarPath.active.Scan();
-            _currentMapName = mapName;
         }
 
         /// <summary>
@@ -141,9 +135,8 @@ namespace ChenChen_MapGenerator
         public void LoadSceneMapFromSave(Data_GameSave gameSave)
         {
             Data_MapSave mapSave = gameSave.SaveMap;
-            MapDataDictAdd(mapSave);
-            _currentMapName = mapSave.mapName;
-            SceneMapDatasDict[_currentMapName].mapObject.SetActive(false);
+            GenerateMap(mapSave, false);
+            CurrentMapName = gameSave.SaveMap.mapName;
             foreach(var thingSave in gameSave.SaveThings)
             {
                 ItemCreator.GenerateItem(thingSave);                   
@@ -156,7 +149,7 @@ namespace ChenChen_MapGenerator
         /// <param name="mapName"></param>
         public void CloseSceneMap(string mapName)
         {
-            if (SceneMapDatasDict.ContainsKey(mapName))
+            if (MapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(false);
             }
@@ -175,9 +168,9 @@ namespace ChenChen_MapGenerator
         {
 #if UNITY_EDITOR
             DestroyImmediate(transform.Find(mapName).gameObject);
-            if (SceneMapDatasDict.ContainsKey(mapName))
+            if (MapDatasDict.ContainsKey(mapName))
             {
-                SceneMapDatasDict.Remove(mapName);
+                MapDatasDict.Remove(mapName);
             }
 #else
             Destroy(transform.Find(mapName).gameObject);
@@ -190,17 +183,7 @@ namespace ChenChen_MapGenerator
 
         public bool TryGetTilemap(string name,out Tilemap result)
         {
-            result = MapCreator.GetTileamp(name, SceneMapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject);
-            return result != null;
-        }
-
-        public bool TryGetMapMain(string mapName, out Tilemap result)
-        {
-            result = null;
-            if (SceneMapDatasDict.ContainsKey(mapName))
-            {
-                result = SceneMapDatasDict[mapName].mainTilemap;
-            }
+            result = MapCreator.GetTileamp(name, MapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject);
             return result != null;
         }
 

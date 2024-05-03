@@ -8,13 +8,13 @@ namespace ChenChen_MapGenerator
     /// 场景地图数据
     /// </summary>
     [System.Serializable]
-    public class SceneMapData
+    public class MapData
     {
-        public SceneMapData()
+        public MapData()
         {
         }
 
-        public SceneMapData(Data_MapSave save)
+        public MapData(Data_MapSave save)
         {
             this.mapName = save.mapName;
             this.width = save.width;
@@ -26,6 +26,5 @@ namespace ChenChen_MapGenerator
         public int seed;
         public MapNode[,] mapNodes;
         public GameObject mapObject;
-        public Tilemap mainTilemap;
     }
 }

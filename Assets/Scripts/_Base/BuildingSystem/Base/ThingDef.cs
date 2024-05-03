@@ -33,7 +33,7 @@ namespace ChenChen_BuildingSystem
         public int Durability;
 
         [Header("ÆäËûÊôĞÔ")]
-        public Vector2 offset;
+        public Vector2 Offset;
         public bool CanRotation;
 
     }

@@ -16,6 +16,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
     private Sprite ThingPreviewSprite;
     private bool ThingIsObstacle;
     private TileBase ThingTileBase;
+    private bool CreateIndividualScript;
 
     [MenuItem("Window/Blueprint Generator")]
     public static void ShowWindow()
@@ -40,6 +41,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
         ThingPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", ThingPreviewSprite, typeof(Sprite), false);
         ThingIsObstacle = EditorGUILayout.Toggle("是否是障碍物", ThingIsObstacle);
         ThingTileBase = (TileBase)EditorGUILayout.ObjectField("瓦片", ThingTileBase, typeof(TileBase), false);
+        CreateIndividualScript = EditorGUILayout.Toggle("是否生成独立脚本", CreateIndividualScript);
 
         // 生成按钮
         if (GUILayout.Button("Generate Blueprint"))
@@ -54,6 +56,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
                 ThingGenerator.ThingPreviewSprite = ThingPreviewSprite;
                 ThingGenerator.ThingIsObstacle = ThingIsObstacle;
                 ThingGenerator.ThingTileBase = ThingTileBase;
+                ThingGenerator.CreateIndividualScript = CreateIndividualScript;
 
                 // 调用生成蓝图的方法
                 ThingGenerator.GenerateBlueprint();

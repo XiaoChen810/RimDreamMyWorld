@@ -45,9 +45,6 @@ namespace ChenChen_BuildingSystem
             CurBuildingDef = def;
             CurBuildingName = def.DefName;
 
-            // 获取当前地图的TileMap
-            Tilemap main = MapManager.Instance.CurMapMainTilemap;
-
             // 配置鼠标指示器信息
             OnBuildMode = true;
             MouseIndicator = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab);
@@ -68,15 +65,13 @@ namespace ChenChen_BuildingSystem
         {
             if (OnBuildMode && MouseIndicator != null)
             {
-                // 监听鼠标位置信息转换成世界坐标
+                // 监听鼠标位置信息转换成世界坐标, 并且取整为网格坐标
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Tilemap curTilemap = MapManager.Instance.CurMapMainTilemap;
-                Vector3Int cellPosition = curTilemap.WorldToCell(mousePosition);
-                Vector3 placePosition = curTilemap.CellToWorld(cellPosition);
-                MouseIndicator.transform.position = placePosition + new Vector3(CurBuildingDef.offset.x, CurBuildingDef.offset.y);
+                Vector3Int placePosition = StaticFuction.VectorTransToInt(mousePosition);
+                MouseIndicator.transform.position = placePosition + new Vector3(CurBuildingDef.Offset.x, CurBuildingDef.Offset.y);
 
-                SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
                 // 如果能建造则设置主体为绿色，否则为红色
+                SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();               
                 if (CanBuildHere(MouseIndicator))
                 {
                     sr.color = Color.green;
@@ -141,9 +136,10 @@ namespace ChenChen_BuildingSystem
 
             // 获取待放置对象 Collider2D 的边界框信息
             Bounds bounds = collider.bounds;
-
+            // 计算碰撞体在世界空间中的中心位置
+            Vector2 center = bounds.center;
             // 执行碰撞检测，只检测指定图层的碰撞器
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(objectToBuild.transform.position, bounds.size, 0f);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
 
             // 遍历检测到的碰撞器，如果有任何一个碰撞器存在，则返回 false，表示无法放置游戏对象
             foreach (Collider2D otherCollider in colliders)

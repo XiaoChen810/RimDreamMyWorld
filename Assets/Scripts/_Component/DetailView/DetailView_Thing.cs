@@ -3,13 +3,13 @@ using ChenChen_UISystem;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetailView_Building : DetailView
+public class DetailView_Thing : DetailView
 {
-    protected Thing_Building building;
+    protected ThingBase thing;
 
     private void OnEnable()
     {
-        building = GetComponent<Thing_Building>();
+        thing = GetComponent<ThingBase>();
     }
 
     protected override void OnMouseDown()
@@ -21,20 +21,20 @@ public class DetailView_Building : DetailView
     protected override void UpdateShow(DetailViewPanel panel)
     {
         if (panel == null) return;
-        if (building == null) return;
+        if (thing == null) return;
 
         panel.SetView(
-            building.Def.DefName,
-            building.MaxDurability,
-            building.CurDurability,
-            building.Workload,
-            userName: (building.TheUsingPawn != null) ? building.TheUsingPawn.name : null
+            thing.Def.DefName,
+            thing.MaxDurability,
+            thing.CurDurability,
+            thing.Workload,
+            userName: (thing.TheUsingPawn != null) ? thing.TheUsingPawn.name : null
             );
     }
 
     protected override void AddPanel()
     {
         PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
-        PanelManager.Instance.AddPanel(new DetailViewPanel(building, StartShow, EndShow));
+        PanelManager.Instance.AddPanel(new DetailViewPanel(thing, StartShow, EndShow));
     }
 }

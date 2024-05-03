@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using ChenChen_MapGenerator;
+using ChenChen_AI;
 
 namespace ChenChen_BuildingSystem
 {
     [System.Serializable]
-    public abstract class ThingBase : MonoBehaviour, IBlueprint, IDismantlable
+    public abstract class ThingBase : MonoBehaviour, IBlueprint, IDismantlable, IDetailView
     {
         /// <summary>
         /// 物品自身的定义
@@ -14,12 +15,20 @@ namespace ChenChen_BuildingSystem
         /// <summary>
         /// 物品所在的地图名
         /// </summary>
-        public string MapName;
+        public string MapName { get; protected set; }
 
         /// <summary>
         /// 物品是可以拆除的
         /// </summary>
-        public bool IsDismantlable;
+        public bool IsDismantlable { get; protected set; }
+
+        /// <summary>
+        /// 物品自身碰撞体
+        /// </summary>
+        public BoxCollider2D ColliderSelf { get; protected set; }
+
+        // 物品当前耐久度
+        public int CurDurability { get; protected set; }
 
         // 物品建造所需工作量
         public int WorkloadBuilt
@@ -39,11 +48,9 @@ namespace ChenChen_BuildingSystem
             get { return Def.Durability; }
         }
 
-        // 物品当前耐久度
-        public int CurDurability;
 
         // 物品工作量
-        [SerializeField] protected int _workload;
+        protected int _workload;
         public int Workload
         {
             get
@@ -56,8 +63,8 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        [SerializeField] private BuildingLifeStateType _lifeState = 0;
-
+        // 生命周期
+        private BuildingLifeStateType _lifeState = 0;
         public BuildingLifeStateType LifeState
         {
             get
@@ -93,17 +100,57 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        // 物品碰撞体
-        public BoxCollider2D ColliderSelf { get; protected set; }
+        // 使用的棋子
+        protected Pawn _theUsingPawn;
+        public Pawn TheUsingPawn
+        {
+            get
+            {
+                return _theUsingPawn;
+            }
+            protected set
+            {
+                _theUsingPawn = value;
+            }
+        }
 
+        // 是否被使用
+        protected bool _isUsed;
+        public bool IsUsed
+        {
+            get
+            {
+                return _isUsed;
+            }
+            protected set
+            {
+                _isUsed = value;
+            }
+        }
 
+        // 细节视图
+        protected DetailView _detailView;
+        public DetailView DetailView
+        {
+            get
+            {
+                if (_detailView == null)
+                {
+                    if (!TryGetComponent<DetailView>(out _detailView))
+                    {
+                        _detailView = gameObject.AddComponent<DetailView_Thing>();
+                    }
+                }
+                return _detailView;
+            }
+        }
         protected virtual void OnEnable()
         {
             gameObject.name = gameObject.name.Replace("(Clone)", "");
             CurDurability = MaxDurability;
             ColliderSelf = GetComponent<BoxCollider2D>();
+            _detailView = gameObject.AddComponent<DetailView_Thing>();
         }
-
         // 实现接口中定义的属性和方法
         public abstract void OnPlaced(BuildingLifeStateType initial_State, string mapName);
         public abstract void OnMarkBuild();

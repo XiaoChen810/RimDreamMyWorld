@@ -49,6 +49,7 @@ public class PlayManager : SingletonMono<PlayManager>
             SaveData.SaveThings.Add(newThingSave);
             Debug.Log($"Save a thing: {thingDef.DefName}");
         }
+
         ES3.Save(root_save_name, SaveData);
         Debug.Log($"成功保存存档{root_save_name}资源");
     }

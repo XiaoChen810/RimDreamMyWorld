@@ -23,7 +23,6 @@ namespace ChenChen_Scene
                 panelManager = new PanelManager();
                 panelManager.AddPanel(new SelectionWindowPanel());
             }
-
         }
 
         public override void OnExit()

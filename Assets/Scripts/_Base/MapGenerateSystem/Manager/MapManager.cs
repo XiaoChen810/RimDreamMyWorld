@@ -28,7 +28,7 @@ namespace ChenChen_MapGenerator
 
         private string _currentMapName;
         /// <summary>
-        ///  当前场景的地图名字
+        /// 当前场景的地图名字
         /// </summary>
         public string CurrentMapName
         {
@@ -45,6 +45,11 @@ namespace ChenChen_MapGenerator
                 _currentMapName = value;
             }
         }
+
+        /// <summary>
+        /// 当前生成地图的参数
+        /// </summary>
+        public Data_MapSave CurMapSave { get; private set; }
 
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
@@ -123,9 +128,8 @@ namespace ChenChen_MapGenerator
                         ItemCreator.GenerateItem("常青树", pos, mapName);
                 }
                 // 保存
-                PlayManager.Instance.MapSaveThisPlay = mapSave;
+                CurMapSave = mapSave;
             }
-            AstarPath.active.Scan();
         }
 
         /// <summary>

@@ -16,12 +16,12 @@ namespace ChenChen_UISystem
         {
             UITool.TryGetChildComponentByName<Button>("SaveBtn").onClick.AddListener(() =>
             {
-                PlayManager.Instance.Save();
+                PlayManager.Instance.Save(data_MapSave: MapManager.Instance.CurMapSave);
             });
-            UITool.TryGetChildComponentByName<Button>("LoadBtn").onClick.AddListener(() =>
-            {
-                PanelManager.Instance.AddPanel(new SavesPanel());
-            });
+            //UITool.TryGetChildComponentByName<Button>("LoadBtn").onClick.AddListener(() =>
+            //{
+            //    PanelManager.Instance.AddPanel(new SavesPanel());
+            //});
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {
                 PanelManager.RemovePanel(this);

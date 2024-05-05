@@ -1,3 +1,5 @@
+using ChenChen_MapGenerator;
+using ChenChen_Scene;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,18 +18,33 @@ namespace ChenChen_UISystem
 
         public override void OnEnter()
         {
+            LoadAllSave();
             UITool.TryGetChildComponentByName<Button>("BtnNew").onClick.AddListener(() =>
             {
-
+                SceneSystem.Instance.SetScene(new InitScene());
+            });
+            UITool.TryGetChildComponentByName<Button>("BtnDelete").onClick.AddListener(() =>
+            {
+                PlayManager.Instance.Delete(selectedGameSave);
+                selectedGameSave = null;
+                LoadAllSave();
             });
             UITool.TryGetChildComponentByName<Button>("BtnContinue").onClick.AddListener(() =>
             {
-                if(selectedGameSave != null)
+                if (selectedGameSave != null)
                 {
-                    PanelManager.Instance.RemovePanel(this);
+                    PanelManager.RemovePanel(this);
                     PlayManager.Instance.Load(selectedGameSave);
+                    SceneSystem.Instance.SetScene(new MainScene(() =>
+                    {
+                        MapManager.Instance.LoadOrGenerateSceneMap(selectedGameSave.SaveMap.mapName);
+                    }));
                 }
-            });
+            });         
+        }
+
+        private void LoadAllSave()
+        {
             // 获取装内容的子物体
             GameObject content = UITool.GetChildByName("Content");
             // 检查是否有GridLayoutGroup组件
@@ -41,17 +58,22 @@ namespace ChenChen_UISystem
                 PanelManager.RemovePanel(this);
                 return;
             }
+            // 先清空内容
+            for (int i = 0; i < content.transform.childCount; i++)
+            {
+                GameObject.Destroy(content.transform.GetChild(i).gameObject);
+            }
             // 加载所有存档
             foreach (var save in PlayManager.Instance.SaveList)
             {
                 GameObject saveInstance = Object.Instantiate(savePrefab);
                 saveInstance.transform.Find("TextName").GetComponent<Text>().text = $"Name: {save.SaveName}";
-                saveInstance.transform.Find("TextDate").GetComponent<Text>().text = $"Name: {save.SaveDate}";
-                saveInstance.transform.Find("TextSeed").GetComponent<Text>().text = $"Name: {save.SaveMap.seed}";
-                saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save; 
+                saveInstance.transform.Find("TextDate").GetComponent<Text>().text = $"Date: {save.SaveDate}";
+                saveInstance.transform.Find("TextSeed").GetComponent<Text>().text = $"Seed: {save.SaveMap.seed}";
+                saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save;
                 saveInstance.transform.SetParent(content.transform, false);
             }
-            // 获取内容中的全部子物体
+            // 获取内容中的全部按钮添加功能
             Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);
             foreach (var btn in btnContents)
             {

@@ -15,6 +15,9 @@ namespace ChenChen_UISystem
 
         public UITool UITool { get; private set; }
 
+        /// <summary>
+        /// 自己所在的PanelManager
+        /// </summary>
         public PanelManager PanelManager { get; private set; }
 
         public UIManager UIManager { get; private set; }

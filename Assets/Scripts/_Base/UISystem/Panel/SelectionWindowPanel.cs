@@ -1,4 +1,5 @@
 using ChenChen_AI;
+using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,9 +29,11 @@ namespace ChenChen_UISystem
         {
             UITool.TryGetChildComponentByName<Button>("EnterGame").onClick.AddListener(() =>
             {
-
                 SceneSystem.Instance.SetScene(new MainScene(() =>
                 {
+                    // 生成一个新场景
+                    MapManager.Instance.LoadOrGenerateSceneMap(StaticDef.Map_Default_Name);
+                    // 生成选择的棋子
                     GameManager.Instance.GeneratePawn(new PawnKindDef(p0.PawnName, "殖民地", "", null),
                         new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
                         p0.Attribute);

@@ -95,7 +95,7 @@ namespace ChenChen_BuildingSystem
                 }
                 else
                 {
-                    Debug.LogWarning($"The building life state has been {value}");
+                    Debug.Log($"物品的生命周期已经处于 {value}，无需切换");
                 }
             }
         }

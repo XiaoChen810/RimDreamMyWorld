@@ -70,7 +70,6 @@ namespace ChenChen_BuildingSystem
                 {
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
                     sr.color = new Color(1, 1, 1, 0f);
-                    Debug.Log("Compele");
                 }
                 else
                 {

@@ -7,6 +7,13 @@ namespace ChenChen_Scene
     public class SceneSystem : Singleton<SceneSystem>
     {
         SceneBase currentScene;
+        public SceneBase CurScene
+        {
+            get
+            {
+                return currentScene;
+            }
+        }
 
         /// <summary>
         /// 设置新场景，退出旧场景

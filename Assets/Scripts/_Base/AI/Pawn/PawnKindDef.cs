@@ -35,5 +35,17 @@ namespace ChenChen_AI
             CanBattle = canBattle;
             CanDrafted = canDrafted;
         }
+
+        public PawnKindDef(Pawn pawn)
+        {
+            PawnName = pawn.PawnName;
+            PawnFaction = pawn.FactionName;
+            PawnDescription = pawn.Description;
+            PrefabPath = pawn.PrefabPath;
+            CanSelect = pawn.CanSelect;
+            CanGetJob = pawn.CanGetJob;
+            CanBattle = pawn.CanBattle;
+            CanDrafted = pawn.CanDrafted;
+        }
     }
 }

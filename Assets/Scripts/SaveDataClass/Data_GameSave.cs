@@ -9,6 +9,7 @@ public class Data_GameSave
         SaveName = saveName;
         SaveDate = saveDate;
         SaveThings = new List<Data_ThingSave>();
+        SavePawns = new List<Data_PawnSave>();
     }
 
     // ´æµµÃû×Ö
@@ -19,4 +20,6 @@ public class Data_GameSave
     public Data_MapSave SaveMap;
 
     public List<Data_ThingSave> SaveThings;
+
+    public List<Data_PawnSave> SavePawns;
 }

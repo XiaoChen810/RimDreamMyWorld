@@ -2,18 +2,24 @@ using ChenChen_BuildingSystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using ChenChen_UISystem;
+using ChenChen_AI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 游戏流程的管理，保存进度，加载进度等
+/// </summary>
 public class PlayManager : SingletonMono<PlayManager>
 {
     private static readonly string root_save_name = "GameSave";
 
     public List<Data_GameSave> SaveList = new List<Data_GameSave>();
+    public PanelManager PanelManager { get; private set; }
 
     private void Start()
     {
+        PanelManager = new PanelManager();
         //加载开始场景
         SceneSystem.Instance.SetScene(new StartScene());
 
@@ -32,18 +38,7 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         if(Input.GetKeyUp(KeyCode.Escape))
         {
-            PanelManager.Instance.GetTopPanel(out PanelBase panel);
-            if (panel == null || panel.GetType() != typeof(SettingPanel))
-            {
-                if(SceneSystem.Instance.CurScene.GetType() == typeof(MainScene))
-                {
-                    PanelManager.Instance.AddPanel(new SettingPanel());
-                }                  
-            }
-            else
-            {
-                PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
-            }
+            PanelManager.TogglePanel(new SettingPanel());
         }
     }
 
@@ -53,13 +48,21 @@ public class PlayManager : SingletonMono<PlayManager>
     /// <param name="saveName"></param>
     public Data_GameSave Save(string saveName = "unnamed", Data_MapSave data_MapSave = null)
     {
+        if (SceneSystem.Instance.CurSceneType != SceneType.Main)
+        {
+            Debug.LogWarning("未进入游戏，无法保存");
+            return null;
+        }
+        // 新建存档
         string saveDate = DateTime.Now.ToString();
         Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
+        // 保存地图生成参数
         if (data_MapSave == null)
         {
             data_MapSave = new Data_MapSave();
         }
         saveData.SaveMap = data_MapSave;
+        // 保存地图上所有的物品
         foreach (var thing in BuildingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
         {
             // 保存
@@ -74,6 +77,20 @@ public class PlayManager : SingletonMono<PlayManager>
             Debug.Log($"Save a thing: {thingDef.DefName}");
         }
         SaveList.Add(saveData);
+        // 保存全部棋子
+        foreach (var pawnObj in GameManager.Instance.PawnsList)
+        {
+            Pawn pawn = pawnObj.GetComponent<Pawn>();
+            PawnKindDef pawnKindDef = new PawnKindDef(pawn);
+            Data_PawnSave newPawnSave = new Data_PawnSave(
+                pawnObj.transform.position,
+                pawnKindDef,
+                pawn.Attribute,
+                pawn.PawnInfo
+                );
+            saveData.SavePawns.Add(newPawnSave);
+        }
+        // 最后，保存存档
         ES3.Save(root_save_name, SaveList);
         Debug.Log($"成功保存存档{saveName}资源, 日期{saveDate}");
         return saveData;
@@ -86,6 +103,7 @@ public class PlayManager : SingletonMono<PlayManager>
     public void Load(Data_GameSave gameSave)
     {
         MapManager.Instance.LoadSceneMapFromSave(gameSave);
+        GameManager.Instance.LoadScenePawnFromSave(gameSave);
     }
 
     /// <summary>

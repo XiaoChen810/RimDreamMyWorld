@@ -221,7 +221,7 @@ namespace ChenChen_MapGenerator
         /// <param name="name"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public Tilemap GetTileamp(string name, GameObject parent = null)
+        public Tilemap GetTileamp(string name, GameObject parent = null, bool isObstacle = true)
         {
             if(LayerDict.ContainsKey(name))
             {
@@ -233,6 +233,13 @@ namespace ChenChen_MapGenerator
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Above";
+                if (isObstacle)
+                {
+                    newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                    newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                    newObj.layer = 8; //Obstacle Layer
+                }
                 newObj.transform.parent = parent.transform;
                 LayerDict.Add(name, tilemap);
                 return tilemap;

@@ -9,7 +9,11 @@ namespace ChenChen_Scene
     public class StartScene : SceneBase
     {
         readonly string sceneName = "Start";
+        private static readonly SceneType sceneType = SceneType.Start;
         private PanelManager panelManager;
+
+        public StartScene() : base(sceneType) { }
+
         public override void OnEnter()
         {
             // º”‘ÿ≥°æ∞

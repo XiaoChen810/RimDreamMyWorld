@@ -27,7 +27,6 @@ public class GameManager : SingletonMono<GameManager>
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
 
-    public bool isOnTestMode;
 
     protected override void Awake()
     {
@@ -44,57 +43,60 @@ public class GameManager : SingletonMono<GameManager>
     private void Update()
     {
         OpenBuildingMenuPanel();
-        if (isOnSelectPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
-        {
-            isOnSelectPawnCreatePos_WhenTest = false;
-            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            createPos.z = 0;
-            GeneratePawn(createPos, CharacterTest, "小光头" + nameIndex++, "殖民地");
-        }
-        if(isOnSelectEnenyPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
-        {
-            isOnSelectEnenyPawnCreatePos_WhenTest= false;
-            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
-            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            createPos.z = 0;
-            GeneratePawn(createPos, GoblinPrefab, "哥布林", "哥布林", canGetJob: false, canSelect: false);
-        }
+        测试();
     }
 
     #region Pwan
 
-    public void GeneratePawn(PawnKindDef kindDef, Vector3 position, PawnAttribute attribute, GameObject prefab = null)
+    /// <summary>
+    /// 生成Pawn
+    /// </summary>
+    /// <param name="kindDef"></param>
+    /// <param name="position"></param>
+    /// <param name="attribute"></param>
+    /// <param name="prefab"></param>
+    public Pawn GeneratePawn(PawnKindDef kindDef, Vector3 position, PawnAttribute attribute = null, GameObject prefab = null)
     {
         if (prefab == null)
         {
-            if(kindDef.PrefabPath == null)
-            {
-                prefab = CharacterTest;
-            }
-            else
-            {
-                prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
-            }
+            prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
+        }
+        if (prefab == null)
+        {
+            prefab = CharacterTest;
         }
         if (prefab == null)
         {
             Debug.LogWarning("Prefab is null");
+            return null;
         }
         GameObject newPawn = Instantiate(prefab, position, Quaternion.identity);
+        newPawn.transform.SetParent(transform, false);
         if (newPawn.TryGetComponent<Pawn>(out Pawn pawn))
         {
             newPawn.name = kindDef.PawnName;
             InitPawn(pawn, kindDef, attribute);
             _pawnsList.Add(newPawn);
+            return pawn;
         }
         else
         {
             Debug.LogError("Pawn prefab lost or don't have component in need ");
+            return null;
         }
     }
 
-    public static void InitPawn(Pawn pawn, PawnKindDef def, PawnAttribute attribute)
+    public void LoadScenePawnFromSave(Data_GameSave data_GameSave)
+    {
+        foreach(var pawnSave in data_GameSave.SavePawns)
+        {
+            Pawn newPawn = GeneratePawn(pawnSave.PawnKindDef, pawnSave.Position, pawnSave.PawnAttribute);
+            newPawn.PawnInfo = pawnSave.PawnInfo;
+        }
+    }
+
+
+    private static void InitPawn(Pawn pawn, PawnKindDef def, PawnAttribute attribute)
     {
         pawn.PawnName = def.PawnName;
         pawn.FactionName = def.PawnFaction;
@@ -102,17 +104,10 @@ public class GameManager : SingletonMono<GameManager>
         pawn.CanGetJob = def.CanGetJob;
         pawn.CanBattle = def.CanBattle;
         pawn.CanDrafted = def.CanDrafted;
-        if (attribute == null)
-        {
-            pawn.Attribute.InitPawnAttribute();
-        }
-        else
-        {
-            pawn.Attribute = attribute;
-        }
+        pawn.Attribute = (attribute == null) ? pawn.Attribute.InitPawnAttribute() : attribute;
     }
 
-    public void GeneratePawn(Vector3 position, GameObject prefab, string pawnName, string factionName,
+    private void GeneratePawn(Vector3 position, GameObject prefab, string pawnName, string factionName,
         bool canSelect = true, bool canGetJob = true, bool canBattle = true, bool canDrafted = true)
     {
 
@@ -152,15 +147,17 @@ public class GameManager : SingletonMono<GameManager>
                 isMenuPanelCreated = false;
             };
 
-            PanelManager.AddPanel(new BuildingMenuPanel(onEnterCallback, onExitCallback));
+            PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
         }
     }
+
+
+
+#if UNITY_EDITOR
 
     private static int nameIndex = 0;
     private bool isOnSelectPawnCreatePos_WhenTest;
     private bool isOnSelectEnenyPawnCreatePos_WhenTest;
-
-#if UNITY_EDITOR
 
     public void 生成一个基础小人()
     {
@@ -184,11 +181,24 @@ public class GameManager : SingletonMono<GameManager>
         SceneSystem.Instance.SetScene(new StartScene());
     }
 
-    public void 生成测试棋子()
+    public void 测试()
     {
-        if (!isOnTestMode) return;
-        GeneratePawn(new Vector3(30, 30), CharacterTest, "小光头" + nameIndex++, "殖民地");
-        GeneratePawn(new Vector3(45, 30), GoblinPrefab, "哥布林", "哥布林");
+        if (isOnSelectPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
+        {
+            isOnSelectPawnCreatePos_WhenTest = false;
+            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            createPos.z = 0;
+            GeneratePawn(createPos, CharacterTest, "小光头" + nameIndex++, "殖民地");
+        }
+        if (isOnSelectEnenyPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
+        {
+            isOnSelectEnenyPawnCreatePos_WhenTest = false;
+            // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+            Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            createPos.z = 0;
+            GeneratePawn(createPos, GoblinPrefab, "哥布林", "哥布林", canGetJob: false, canSelect: false);
+        }
     }
 
 #endif

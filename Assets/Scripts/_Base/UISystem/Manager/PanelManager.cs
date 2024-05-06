@@ -1,3 +1,4 @@
+using ChenChen_Scene;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,6 +70,27 @@ namespace ChenChen_UISystem
             if(_panelsStack.Count > 0)
             {
                 _panelsStack.Peek().OnResume();
+            }
+        }
+
+        /// <summary>
+        /// 切换面板，如果当前已经是这个面板，则关闭，如果不是则新建当前面板
+        /// </summary>
+        /// <param name="nextPanel"></param>
+        /// <param name="sceneType"> 限定在哪种场景里可以切换，如果不填则全部都可以 </param>
+        public void TogglePanel(PanelBase nextPanel, SceneType sceneType = SceneType.None)
+        {
+            GetTopPanel(out PanelBase panel);
+            if (panel == null || panel.GetType() != nextPanel.GetType())
+            {
+                if (sceneType == SceneType.None || SceneSystem.Instance.CurSceneType == sceneType)
+                {
+                    AddPanel(nextPanel);
+                }
+            }
+            else
+            {
+                RemovePanel(GetTopPanel());
             }
         }
 

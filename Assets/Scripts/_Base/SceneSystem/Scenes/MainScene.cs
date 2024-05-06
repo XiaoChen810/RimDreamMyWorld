@@ -11,8 +11,10 @@ namespace ChenChen_Scene
     public class MainScene : SceneBase
     {
         readonly string sceneName = "Main";
-        public Action OnCompleteAction;
-        public MainScene(Action action = null)
+        private static readonly SceneType sceneType = SceneType.Main;
+        private Action OnCompleteAction;
+
+        public MainScene(Action action = null) : base(sceneType)
         {
             this.OnCompleteAction = action;
         }

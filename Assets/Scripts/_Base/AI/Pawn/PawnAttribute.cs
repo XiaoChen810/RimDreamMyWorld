@@ -45,7 +45,7 @@ namespace ChenChen_AI
         /// <summary>
         /// 初始化人物能力，随机分配
         /// </summary>
-        public void InitPawnAttribute()
+        public PawnAttribute InitPawnAttribute()
         {
             A_Combat = new PawnAbility(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
             A_Culinary = new PawnAbility(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
@@ -55,6 +55,7 @@ namespace ChenChen_AI
             A_Medical = new PawnAbility(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
             A_Carrying = new PawnAbility(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
             A_Research = new PawnAbility(Random.Range(0, 3), Random.Range(0, 20), Random.Range(5, 10));
+            return this;
         }
 
         /// <summary>

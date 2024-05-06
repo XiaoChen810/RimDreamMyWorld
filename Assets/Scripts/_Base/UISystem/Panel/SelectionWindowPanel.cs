@@ -34,15 +34,17 @@ namespace ChenChen_UISystem
                     // 生成一个新场景
                     MapManager.Instance.LoadOrGenerateSceneMap(StaticDef.Map_Default_Name);
                     // 生成选择的棋子
-                    GameManager.Instance.GeneratePawn(new PawnKindDef(p0.PawnName, "殖民地", "", null),
-                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
-                        p0.Attribute);
-                    GameManager.Instance.GeneratePawn(new PawnKindDef(p1.PawnName, "殖民地", "", null),
-                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
-                        p1.Attribute);
-                    GameManager.Instance.GeneratePawn(new PawnKindDef(p2.PawnName, "殖民地", "", null),
-                        new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
-                        p2.Attribute);
+                    GenerateSelectedPawn(p0);
+                    GenerateSelectedPawn(p1);
+                    GenerateSelectedPawn(p2);
+
+                    void GenerateSelectedPawn(Pawn select)
+                    {
+                        GameManager.Instance.GeneratePawn(
+                            new PawnKindDef(select.PawnName, "殖民地", "", null),
+                            new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
+                            select.Attribute);
+                    }
                 }));
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox0/Refresh").onClick.AddListener(() =>

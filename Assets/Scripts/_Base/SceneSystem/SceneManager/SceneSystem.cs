@@ -15,6 +15,14 @@ namespace ChenChen_Scene
             }
         }
 
+        SceneType currentType;
+        public SceneType CurSceneType
+        {
+            get
+            {
+                return currentType;
+            }
+        }
         /// <summary>
         /// 设置新场景，退出旧场景
         /// </summary>
@@ -23,6 +31,7 @@ namespace ChenChen_Scene
         {
             currentScene?.OnExit();
             currentScene = scene;
+            currentType = scene.Type;
             currentScene?.OnEnter();           
         }
     }

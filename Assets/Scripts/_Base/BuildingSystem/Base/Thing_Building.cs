@@ -66,7 +66,7 @@ namespace ChenChen_BuildingSystem
             // ‘⁄Õﬂ∆¨µÿÕº…Ë÷√Õﬂ∆¨
             if (Def.TileBase != null)
             {
-                if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
+                if (MapManager.Instance.TryGetTilemap("Building", true, out Tilemap buildingTilemap))
                 {
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
                     sr.color = new Color(1, 1, 1, 0f);
@@ -75,7 +75,6 @@ namespace ChenChen_BuildingSystem
                 {
                     Debug.LogError("Error in set tile");
                 }
-
             }
             else
             {
@@ -126,7 +125,7 @@ namespace ChenChen_BuildingSystem
         {
             if (Def.TileBase != null)
             {
-                if (MapManager.Instance.TryGetTilemap("Building", out Tilemap buildingTilemap))
+                if (MapManager.Instance.TryGetTilemap("Building", true, out Tilemap buildingTilemap))
                 {
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }

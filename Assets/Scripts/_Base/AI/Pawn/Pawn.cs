@@ -41,6 +41,8 @@ namespace ChenChen_AI
         [Header("人物信息")]
         public string PawnName;
         public string FactionName;
+        public string Description;
+        public string PrefabPath;
 
         [Header("人物状态 Can")]
         public bool CanSelect = true;
@@ -48,32 +50,39 @@ namespace ChenChen_AI
         public bool CanBattle = true;
         public bool CanDrafted = true;
 
-        [Header("人物状态 Is")]
-        [SerializeField] protected bool _isDead;
-        [SerializeField] protected bool _isSelect;
-        [SerializeField] protected bool _isOnWork;
-        [SerializeField] protected bool _isOnBattle;
-        [SerializeField] protected bool _isDrafted;
+        [Header("人物状态信息")]
+        [SerializeField] private PawnInfo _pawnInfo = new();
+        public PawnInfo PawnInfo
+        {
+            get
+            {
+                return _pawnInfo;
+            }
+            set
+            {
+                _pawnInfo = value;
+            }
+        }
         public bool IsDead
         {
             get
             {
-                return _isDead;
+                return _pawnInfo.IsDead;
             }
             set
             {
-                _isDead = value;
+                _pawnInfo.IsDead = value;
             }
         }
         public bool IsSelect
         {
             get
             {
-                return _isSelect;
+                return _pawnInfo.IsSelect;
             }
             set
             {
-                if (_isSelect == value) return;
+                if (_pawnInfo.IsSelect == value) return;
                 if (!CanSelect) return;
                 if (value)
                 {
@@ -85,42 +94,42 @@ namespace ChenChen_AI
                     // 选择框隐藏, 并解除征兆
                     Indicator_DOColorWhite();
                     Indicator_DOFadeZero();
-                    _isDrafted = false;
+                    _pawnInfo.IsDrafted = false;
                 }
-                _isSelect = value;
+                _pawnInfo.IsSelect = value;
             }
         }
         public bool IsOnWork
         {
             get
             {
-                return _isOnWork;
+                return _pawnInfo.IsOnWork;
             }
             set
             {
-                _isOnWork = value;
+                _pawnInfo.IsOnWork = value;
             }
         }
         public bool IsOnBattle
         {
             get
             {
-                return _isOnBattle;
+                return _pawnInfo.IsOnBattle;
             }
             set
             {
-                _isOnBattle = value;
+                _pawnInfo.IsOnBattle = value;
             }
         }
         public bool IsDrafted
         {
             get
             {
-                return _isDrafted;
+                return _pawnInfo.IsDrafted;
             }
             set
             {
-                if (_isDrafted == value) return;
+                if (_pawnInfo.IsDrafted == value) return;
                 if (!CanDrafted) return;
 
                 if (value)
@@ -133,9 +142,9 @@ namespace ChenChen_AI
                     // 选择框复原，并取消选择
                     Indicator_DOColorWhite();
                     Indicator_DOFadeZero();
-                    _isSelect = false;
+                    _pawnInfo.IsSelect = false;
                 }
-                _isDrafted = value;
+                _pawnInfo.IsDrafted = value;
             }
         }
 

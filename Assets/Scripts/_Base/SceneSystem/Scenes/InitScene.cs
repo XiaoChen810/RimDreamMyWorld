@@ -1,5 +1,4 @@
-﻿using ChenChen_MapGenerator;
-using ChenChen_UISystem;
+﻿using ChenChen_UISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,9 +6,12 @@ namespace ChenChen_Scene
 {
     public class InitScene : SceneBase
     {
-        readonly string sceneName = "Init";
-
+        private static readonly string sceneName = "Init";
+        private static readonly SceneType sceneType = SceneType.Init;
         private PanelManager panelManager;
+
+        public InitScene() : base(sceneType) { }
+
         public override void OnEnter()
         {
             // 加载场景

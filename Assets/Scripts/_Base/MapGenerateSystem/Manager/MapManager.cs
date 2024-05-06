@@ -130,6 +130,7 @@ namespace ChenChen_MapGenerator
                 // 保存
                 CurMapSave = mapSave;
             }
+            AstarPath.active.Scan();
         }
 
         /// <summary>
@@ -185,9 +186,9 @@ namespace ChenChen_MapGenerator
 #endif
         }
 
-        public bool TryGetTilemap(string name,out Tilemap result)
+        public bool TryGetTilemap(string name, bool isObstacle,out Tilemap result)
         {
-            result = MapCreator.GetTileamp(name, MapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject);
+            result = MapCreator.GetTileamp(name, MapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject, true);
             return result != null;
         }
 

@@ -10,9 +10,9 @@ public abstract class DetailView : MonoBehaviour
 {
     public bool onShow = false;
 
-    protected virtual void OnMouseDown()
+    public virtual void Selected()
     {
-        Debug.Log($"{gameObject.name} is clicked");
+        Debug.Log($"{gameObject.name} is selected");
         AddPanel();
     }
 
@@ -32,12 +32,12 @@ public abstract class DetailView : MonoBehaviour
         }
     }
 
-    public void StartShow()
+    public virtual void StartShow()
     {
         onShow = true;
     }
 
-    public void EndShow()
+    public virtual void EndShow()
     {
         onShow = false;
     }

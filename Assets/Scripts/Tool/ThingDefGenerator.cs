@@ -79,6 +79,14 @@ public class ThingDefGenerator
                 CreateThingPrefab<Thing_Trees>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Trees");
                 break;
+            case ThingType.Wall:
+                CreateThingPrefab<Thing_Wall>(ThingName, thingDef);
+                CreateScript(folderPath, "Thing_Wall");
+                break;
+            case ThingType.Floor:
+                CreateThingPrefab<Thing_Floor>(ThingName, thingDef);
+                CreateScript(folderPath, "Thing_Floor");
+                break;
             default:
                 CreateThingPrefab<Thing_Building>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Building");

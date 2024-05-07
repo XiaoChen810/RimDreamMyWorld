@@ -29,6 +29,8 @@ namespace ChenChen_UISystem
         private Callback onEnterCallback;
         private Callback onExitCallback;
 
+        public bool IsStopping { get; private set; }
+
         /// <summary>
         ///  带回调函数的构造函数
         /// </summary>
@@ -96,6 +98,7 @@ namespace ChenChen_UISystem
         public virtual void OnPause()
         {
             UITool.GetOrAddComponent<Transform>().gameObject.SetActive(false);
+            IsStopping = true;
         }
 
         /// <summary>
@@ -104,6 +107,7 @@ namespace ChenChen_UISystem
         public virtual void OnResume()
         {
             UITool.GetOrAddComponent<Transform>().gameObject.SetActive(true);
+            IsStopping = false;
         }
 
         /// <summary>

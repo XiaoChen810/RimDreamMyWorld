@@ -37,45 +37,5 @@ namespace ChenChen_BuildingSystem
             LifeState = initial_State;
             MapName = mapName;
         }
-
-        public override void OnMarkBuild()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnBuild(int thisWorkload)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnComplete()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnCancel()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnInterpret()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnMarkDemolish()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnDemolish(int value)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnDemolished()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

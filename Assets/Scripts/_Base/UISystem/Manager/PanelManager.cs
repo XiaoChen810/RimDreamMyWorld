@@ -21,12 +21,13 @@ namespace ChenChen_UISystem
         }
 
         /// <summary>
-        ///  添加新面板，暂停原先顶层的面板，把新面板压入栈
+        /// 添加新面板，默认暂停原先顶层的面板，把新面板压入栈
         /// </summary>
         /// <param name="nextPanel"></param>
-        public void AddPanel(PanelBase nextPanel)
+        /// <param name="stopCurrentPanel"> 是否暂停顶层面板 </param>
+        public void AddPanel(PanelBase nextPanel, bool stopCurrentPanel = true)
         {
-            if(_panelsStack.Count > 0)
+            if(_panelsStack.Count > 0 && stopCurrentPanel)
             {
                 PanelBase currentPanel = _panelsStack.Peek();
                 currentPanel.OnPause();
@@ -69,7 +70,8 @@ namespace ChenChen_UISystem
             // 移除后将下一个面板接触暂停
             if(_panelsStack.Count > 0)
             {
-                _panelsStack.Peek().OnResume();
+                if (_panelsStack.Peek().IsStopping)
+                    _panelsStack.Peek().OnResume();
             }
         }
 
@@ -123,5 +125,13 @@ namespace ChenChen_UISystem
             return null;
         }
 
+        /// <summary>
+        /// 面板数量是否为空
+        /// </summary>
+        /// <returns></returns>
+        public bool PanelSpace()
+        {
+            return _panelsStack.Count == 0;
+        }
     }
 }

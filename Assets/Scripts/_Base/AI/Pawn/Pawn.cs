@@ -45,6 +45,7 @@ namespace ChenChen_AI
         public string PrefabPath;
 
         [Header("ÈËÎï×´Ì¬ Can")]
+        public bool StopUpdate = false;
         public bool CanSelect = true;
         public bool CanGetJob = true;
         public bool CanBattle = true;
@@ -347,6 +348,7 @@ namespace ChenChen_AI
 
         protected virtual void Update()
         {
+            if (StopUpdate) return;
             StateMachine.Update();
             TryToGetJob();
 

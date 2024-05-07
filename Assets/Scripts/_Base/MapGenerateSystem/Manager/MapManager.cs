@@ -91,6 +91,8 @@ namespace ChenChen_MapGenerator
             {
                 Debug.Log("不会重复生成相同名字的地图");
             }
+            CurMapSave = mapSave;
+            CurrentMapName = mapSave.mapName;
         }
 
         #region Public
@@ -127,8 +129,6 @@ namespace ChenChen_MapGenerator
                     if (MapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
                         ItemCreator.GenerateItem("常青树", pos, mapName);
                 }
-                // 保存
-                CurMapSave = mapSave;
             }
             AstarPath.active.Scan();
         }
@@ -141,7 +141,6 @@ namespace ChenChen_MapGenerator
         {
             Data_MapSave mapSave = gameSave.SaveMap;
             GenerateMap(mapSave, false);
-            CurrentMapName = gameSave.SaveMap.mapName;
             foreach(var thingSave in gameSave.SaveThings)
             {
                 ItemCreator.GenerateItem(thingSave);                   

@@ -76,7 +76,6 @@ public class PlayManager : SingletonMono<PlayManager>
             saveData.SaveThings.Add(newThingSave);
             Debug.Log($"Save a thing: {thingDef.DefName}");
         }
-        SaveList.Add(saveData);
         // 保存全部棋子
         foreach (var pawnObj in GameManager.Instance.PawnsList)
         {
@@ -90,6 +89,16 @@ public class PlayManager : SingletonMono<PlayManager>
                 );
             saveData.SavePawns.Add(newPawnSave);
         }
+        // 判断是否有要覆盖的
+        for (int i = 0; i < SaveList.Count; i++)
+        {
+            if (SaveList[i].SaveName == saveData.SaveName)
+            {
+                SaveList[i] = saveData;
+                Debug.Log("覆盖了");
+            }
+        }
+        if(!SaveList.Contains(saveData)) SaveList.Add(saveData);
         // 最后，保存存档
         ES3.Save(root_save_name, SaveList);
         Debug.Log($"成功保存存档{saveName}资源, 日期{saveDate}");

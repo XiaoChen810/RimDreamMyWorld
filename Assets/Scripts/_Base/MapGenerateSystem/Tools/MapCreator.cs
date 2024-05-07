@@ -55,7 +55,7 @@ namespace ChenChen_MapGenerator
                     newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
-                    newObj.layer = 8; //Obstacle Layer
+                    newObj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
                 }
                 if (!LayerDict.ContainsKey(t.tilemapName))
                 {

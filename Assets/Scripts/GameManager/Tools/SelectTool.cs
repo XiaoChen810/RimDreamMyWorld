@@ -18,16 +18,23 @@ public class SelectTool : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // 如果在建造模式中则不检测输入
+        if (ChenChen_BuildingSystem.BuildingSystemManager.Instance.Tool.OnBuildMode) return;
+        InputUpdate();
+    }
+
+    private void InputUpdate()
+    {
+        if (UnityEngine.Input.GetMouseButtonDown(0))
         {
             // 记录滑动开始的位置
-            startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            startPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         }
 
-        if (Input.GetMouseButton(0))
+        if (UnityEngine.Input.GetMouseButton(0))
         {
             // 更新滑动结束的位置
-            endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            endPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
 
             // 如果滑动距离超过一定值就绘制方框
             if (Vector2.Distance(startPos, endPos) > 0.1f)
@@ -36,7 +43,7 @@ public class SelectTool : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (UnityEngine.Input.GetMouseButtonUp(0))
         {
             // 在滑动结束时处理多选
             HandleSelection(startPos, endPos);
@@ -72,21 +79,46 @@ public class SelectTool : MonoBehaviour
         lineRenderer.positionCount = 0;
     }
 
-    private void HandleSelection(Vector2 start, Vector2 end)    
+    private void HandleSelection(Vector2 start, Vector2 end)
     {
         // 在这里处理多选逻辑
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(start, end);
 
+        // 执行选中逻辑, 任何一个逻辑成功，就返回，顺序为优先级
+        // 判断有无选中棋子
+        if (Logic_Pawn(hitColliders)) return;
+        // 判断有无选中物体
+        if (Logic_Thing(hitColliders)) return;
+
+    }
+
+    private bool Logic_Pawn(Collider2D[] hitColliders)
+    {
+        bool flag = false;
         foreach (Collider2D collider in hitColliders)
         {
             if (collider.CompareTag("Pawn"))
             {
-                // 执行选中逻辑
                 Pawn controller = collider.GetComponent<Pawn>();
-
-                controller.IsSelect = !controller.IsSelect;           
+                controller.IsSelect = !controller.IsSelect;
+                flag = true;
             }
         }
+        return flag;
+    }
+    private bool Logic_Thing(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
+        {
+            if (collider.CompareTag("Thing"))
+            {
+                DetailView_Thing detailView = collider.GetComponent<DetailView_Thing>();
+                detailView.Selected();
+                flag = true;
+            }
+        }
+        return flag;
     }
 }
 

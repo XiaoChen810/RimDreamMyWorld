@@ -23,13 +23,17 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         public ThingDef CurBuildingDef;
         /// <summary>
+        /// 当前物体的ThingBase组件
+        /// </summary>
+        public ThingBase CurBuildingBase;
+        /// <summary>
         /// 是否正处于建造模式中
         /// </summary>
-        public bool OnBuildMode;
+        [field: SerializeField] public bool OnBuildMode { get; private set; }
         /// <summary>
         /// 当前鼠标上的预览
         /// </summary>
-        public GameObject MouseIndicator;
+        [field: SerializeField] public GameObject MouseIndicator {  get; private set; }
 
         public BuildingModeTool(BuildingSystemManager buildingSystemManager)
         {
@@ -44,18 +48,10 @@ namespace ChenChen_BuildingSystem
         {
             CurBuildingDef = def;
             CurBuildingName = def.DefName;
-
-            // 配置鼠标指示器信息
-            OnBuildMode = true;
             MouseIndicator = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab);
-            if (!MouseIndicator.GetComponent<Collider2D>())
-            {
-                Debug.LogError("ERROR: MouseIndicator no Collider2D");
-                GameObject.Destroy(MouseIndicator);
-                return;
-            }
             MouseIndicator.SetActive(true);
-
+            CurBuildingBase = MouseIndicator.GetComponent<ThingBase>();
+            OnBuildMode = true;
         }
 
         /// <summary>
@@ -72,7 +68,7 @@ namespace ChenChen_BuildingSystem
 
                 // 如果能建造则设置主体为绿色，否则为红色
                 SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();               
-                if (CanBuildHere(MouseIndicator))
+                if (CurBuildingBase.CanBuildHere())
                 {
                     sr.color = Color.green;
                     // 放置
@@ -119,39 +115,9 @@ namespace ChenChen_BuildingSystem
             OnBuildMode = false;
             MouseIndicator.SetActive(false);
             UnityEngine.Object.Destroy(MouseIndicator);
-        }
-
-        // 检查是否能够在指定位置放置指定的游戏对象
-        public bool CanBuildHere(GameObject objectToBuild)
-        {
-            // 获取待放置对象的 Collider2D 组件
-            Collider2D collider = objectToBuild.GetComponent<Collider2D>();
-
-            // 如果待放置对象没有 Collider2D 组件，则返回 false
-            if (collider == null)
-            {
-                Debug.LogWarning("Object to build does not have a Collider2D component.");
-                return false;
-            }
-
-            // 获取待放置对象 Collider2D 的边界框信息
-            Bounds bounds = collider.bounds;
-            // 计算碰撞体在世界空间中的中心位置
-            Vector2 center = bounds.center;
-            // 执行碰撞检测，只检测指定图层的碰撞器
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
-
-            // 遍历检测到的碰撞器，如果有任何一个碰撞器存在，则返回 false，表示无法放置游戏对象
-            foreach (Collider2D otherCollider in colliders)
-            {
-                if (otherCollider.gameObject != objectToBuild) // 忽略待放置游戏对象的碰撞
-                {
-                    return false;
-                }
-            }
-
-            // 如果没有任何碰撞器存在，则表示可以放置游戏对象
-            return true;
+            CurBuildingBase = null;
+            CurBuildingDef = null;
+            CurBuildingName = null;
         }
     }
 }

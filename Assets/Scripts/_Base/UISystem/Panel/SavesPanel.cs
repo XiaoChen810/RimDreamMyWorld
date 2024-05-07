@@ -67,11 +67,10 @@ namespace ChenChen_UISystem
             foreach (var save in PlayManager.Instance.SaveList)
             {
                 GameObject saveInstance = Object.Instantiate(savePrefab);
-                saveInstance.transform.Find("TextName").GetComponent<Text>().text = $"Name: {save.SaveName}";
-                saveInstance.transform.Find("TextDate").GetComponent<Text>().text = $"Date: {save.SaveDate}";
-                saveInstance.transform.Find("TextSeed").GetComponent<Text>().text = $"Seed: {save.SaveMap.seed}";
-                saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save;
                 saveInstance.transform.SetParent(content.transform, false);
+                saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save;
+                UITool.GetChildByName("TextName").GetComponent<Text>().text = $"Name: {save.SaveName}";
+                UITool.GetChildByName("TextDate").GetComponent<Text>().text = $"Date: {save.SaveDate}";
             }
             // 获取内容中的全部按钮添加功能
             Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);

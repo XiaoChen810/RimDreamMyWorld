@@ -13,9 +13,8 @@ public class GameManager : SingletonMono<GameManager>
 
     private bool isMenuPanelCreated;
 
-    [SerializeField]
-    private List<GameObject> _pawnsList = new List<GameObject>();
 
+    [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
     /// <summary>
     /// 游戏内全部的Pawn的GameObject列表
     /// </summary>
@@ -24,9 +23,26 @@ public class GameManager : SingletonMono<GameManager>
         get { return _pawnsList.AsReadOnly(); }
     }
 
+    [SerializeField] private List<PawnKindDef> _totalPawnDefList = new List<PawnKindDef>();
+    /// <summary>
+    /// 全部Pawn定义的列表，游戏开始时加载
+    /// </summary>
+    public IReadOnlyList<PawnKindDef> TotalPawnDefList
+    {
+        get { return _totalPawnDefList.AsReadOnly(); }
+    }
+
+    [SerializeField] private List<Pawn> _pawnWhenStartList = new List<Pawn>();
+    /// <summary>
+    /// 仅当进行人物选择时使用的角色列表
+    /// </summary>
+    public IReadOnlyList<Pawn> PawnWhenStartList
+    {
+        get { return _pawnWhenStartList.AsReadOnly(); }
+    }
+
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
-
 
     protected override void Awake()
     {
@@ -37,7 +53,12 @@ public class GameManager : SingletonMono<GameManager>
     private void Init()
     {
         PanelManager = new PanelManager();
-        DontDestroyOnLoad(this.gameObject);
+        _totalPawnDefList.Add(StaticPawnDef.s_Bald);
+        _totalPawnDefList.Add(StaticPawnDef.s_SinglePonytail);
+        _totalPawnDefList.Add(StaticPawnDef.s_RedHair);
+        _totalPawnDefList.Add(StaticPawnDef.s_YellowHair);
+        _totalPawnDefList.Add(StaticPawnDef.s_CrewCut);
+        _totalPawnDefList.Add(StaticPawnDef.s_Boy);
     }
 
     private void Update()
@@ -55,28 +76,33 @@ public class GameManager : SingletonMono<GameManager>
     /// <param name="position"></param>
     /// <param name="attribute"></param>
     /// <param name="prefab"></param>
-    public Pawn GeneratePawn(PawnKindDef kindDef, Vector3 position, PawnAttribute attribute = null, GameObject prefab = null)
+    public Pawn GeneratePawn(PawnKindDef kindDef, Vector3 position, PawnAttribute attribute = null)
     {
+        GameObject prefab = null;
         if (prefab == null)
         {
             prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
         }
         if (prefab == null)
         {
-            prefab = CharacterTest;
+            PawnKindDef ramdomPawnKindDef = TotalPawnDefList[UnityEngine.Random.Range(0, TotalPawnDefList.Count)];
+            kindDef.PrefabPath = ramdomPawnKindDef.PrefabPath;
+            kindDef.PawnDescription = ramdomPawnKindDef.PawnDescription;
+            prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
+            Debug.Log("从现有Prefab中随机挑选了一个");
         }
         if (prefab == null)
         {
             Debug.LogWarning("Prefab is null");
             return null;
         }
-        GameObject newPawn = Instantiate(prefab, position, Quaternion.identity);
-        newPawn.transform.SetParent(transform, false);
-        if (newPawn.TryGetComponent<Pawn>(out Pawn pawn))
+        GameObject newPawnObject = Instantiate(prefab, position, Quaternion.identity);
+        newPawnObject.transform.SetParent(transform, false);
+        if (newPawnObject.TryGetComponent<Pawn>(out Pawn pawn))
         {
-            newPawn.name = kindDef.PawnName;
+            newPawnObject.name = kindDef.PawnName;
             InitPawn(pawn, kindDef, attribute);
-            _pawnsList.Add(newPawn);
+            _pawnsList.Add(newPawnObject);
             return pawn;
         }
         else
@@ -84,6 +110,24 @@ public class GameManager : SingletonMono<GameManager>
             Debug.LogError("Pawn prefab lost or don't have component in need ");
             return null;
         }
+
+        void InitPawn(Pawn pawn, PawnKindDef def, PawnAttribute attribute)
+        {
+            pawn.PawnName = def.PawnName;
+            pawn.FactionName = def.PawnFaction;
+            pawn.Description = def.PawnDescription;
+            pawn.PrefabPath = def.PrefabPath;
+            pawn.CanSelect = def.CanSelect;
+            pawn.CanGetJob = def.CanGetJob;
+            pawn.CanBattle = def.CanBattle;
+            pawn.CanDrafted = def.CanDrafted;
+            pawn.Attribute = (attribute == null) ? pawn.Attribute.InitPawnAttribute() : attribute;
+        }
+    }
+
+    public PawnKindDef GetRandomPawnKindDef()
+    {
+        return TotalPawnDefList[UnityEngine.Random.Range(0, TotalPawnDefList.Count)];
     }
 
     public void LoadScenePawnFromSave(Data_GameSave data_GameSave)
@@ -95,16 +139,18 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
-
-    private static void InitPawn(Pawn pawn, PawnKindDef def, PawnAttribute attribute)
+    public bool RemovePawn(Pawn pawn)
     {
-        pawn.PawnName = def.PawnName;
-        pawn.FactionName = def.PawnFaction;
-        pawn.CanSelect = def.CanSelect;
-        pawn.CanGetJob = def.CanGetJob;
-        pawn.CanBattle = def.CanBattle;
-        pawn.CanDrafted = def.CanDrafted;
-        pawn.Attribute = (attribute == null) ? pawn.Attribute.InitPawnAttribute() : attribute;
+        for(int i = 0; i < _pawnsList.Count; i++)
+        {
+            if (_pawnsList[i] == pawn.gameObject)
+            {
+                Destroy(_pawnsList[i].gameObject);
+                _pawnsList.RemoveAt(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void GeneratePawn(Vector3 position, GameObject prefab, string pawnName, string factionName,
@@ -127,6 +173,30 @@ public class GameManager : SingletonMono<GameManager>
         {
             Debug.LogError("Pawn prefab lost or don't have component in need ");
         }
+    }
+
+    #endregion
+
+    #region 人物选择界面
+
+    public void StartSelect()
+    {
+        _pawnWhenStartList.Add(GeneratePawn(GetRandomPawnKindDef(), new Vector3(-5, 1.3f, 0)));
+        _pawnWhenStartList.Add(GeneratePawn(GetRandomPawnKindDef(), new Vector3(0, 1.3f, 0)));
+        _pawnWhenStartList.Add(GeneratePawn(GetRandomPawnKindDef(), new Vector3(5, 1.3f, 0)));
+        foreach(var pawn in _pawnWhenStartList)
+        {
+            pawn.StopUpdate = true;
+        }
+    }
+
+    public void EndSelect()
+    {
+        for (int i = 0; i < _pawnWhenStartList.Count; i++)
+        {
+            RemovePawn(_pawnWhenStartList[i]);
+        }
+        _pawnWhenStartList.Clear();
     }
 
     #endregion
@@ -189,7 +259,7 @@ public class GameManager : SingletonMono<GameManager>
             // new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
             Vector3 createPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             createPos.z = 0;
-            GeneratePawn(createPos, CharacterTest, "小光头" + nameIndex++, "殖民地");
+            GeneratePawn(createPos, Resources.Load<GameObject>(TotalPawnDefList[UnityEngine.Random.Range(0, TotalPawnDefList.Count)].PrefabPath), "小光头" + nameIndex++, "殖民地");
         }
         if (isOnSelectEnenyPawnCreatePos_WhenTest && Input.GetMouseButtonDown(0))
         {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 859504598948546268}
   - component: {fileID: 7206891981325085675}
   - component: {fileID: 2766296172974488512}
-  - component: {fileID: 4132640834712195906}
+  - component: {fileID: 8746764096803354194}
   m_Layer: 0
   m_Name: "\u6728\u5899_Prefab"
   m_TagString: Untagged
@@ -122,7 +122,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.00013166666, y: -0.000649333}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,9 +132,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.8781251, y: 0.87349975}
+  m_Size: {x: 0.95, y: 0.95}
   m_EdgeRadius: 0
---- !u!114 &4132640834712195906
+--- !u!114 &8746764096803354194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7322805227020604951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7687f36835d69bc408bc9cf1d7e4c81e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a3923fec3677f34084070019ef0ef08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Def: {fileID: 11400000, guid: d4ee0207e91f5b146827a24c31a78dfa, type: 2}
+  DrawOutline_Sprite: 0
+  DrawOutline_Collider: 0

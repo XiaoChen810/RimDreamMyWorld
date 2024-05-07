@@ -11,19 +11,21 @@ namespace ChenChen_UISystem
     public class SelectionWindowPanel : PanelBase
     {
         static readonly string path = "UI/Panel/Scene/SelectionWindowPanel";
-        public SelectionWindowPanel() : base(new UIType(path))
-        {
-            p0 = GameObject.Find("SelectionPawn0").GetComponent<Pawn>();
-            p1 = GameObject.Find("SelectionPawn1").GetComponent<Pawn>();
-            p2 = GameObject.Find("SelectionPawn2").GetComponent<Pawn>();
-            p0.Attribute.InitPawnAttribute();
-            p1.Attribute.InitPawnAttribute();
-            p2.Attribute.InitPawnAttribute();
-        }
-
+        private GameManager gameManager;
         private Pawn p0;
         private Pawn p1;
         private Pawn p2;
+        //private Vector3 vp1 = new Vector3(-5, 1.3f, 0);
+        //private Vector3 vp2 = new Vector3(0, 1.3f, 0);
+        //private Vector3 vp3 = new Vector3(5, 1.3f, 0);
+        public SelectionWindowPanel() : base(new UIType(path))
+        {
+            gameManager = GameManager.Instance;
+            gameManager.StartSelect();
+            p0 = gameManager.PawnWhenStartList[0];
+            p1 = gameManager.PawnWhenStartList[1];
+            p2 = gameManager.PawnWhenStartList[2];
+        }
 
         public override void OnEnter()
         {
@@ -41,10 +43,12 @@ namespace ChenChen_UISystem
                     void GenerateSelectedPawn(Pawn select)
                     {
                         GameManager.Instance.GeneratePawn(
-                            new PawnKindDef(select.PawnName, "Ö³ÃñµØ", "", null),
+                            new PawnKindDef(select.PawnName, select.FactionName, select.Description, select.PrefabPath),
                             new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
                             select.Attribute);
                     }
+
+                    gameManager.EndSelect();
                 }));
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox0/Refresh").onClick.AddListener(() =>

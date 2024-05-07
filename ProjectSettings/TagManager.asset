@@ -8,6 +8,7 @@ TagManager:
   - Pawn
   - Obstacle
   - Water
+  - Thing
   layers:
   - Default
   - TransparentFX

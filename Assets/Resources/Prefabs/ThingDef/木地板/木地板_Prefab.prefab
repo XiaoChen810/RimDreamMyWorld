@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2531488232518932828}
   - component: {fileID: 3044151602965324488}
   - component: {fileID: 3970361194059048062}
-  - component: {fileID: 324145323857855313}
+  - component: {fileID: -7631358094498307229}
   m_Layer: 0
   m_Name: "\u6728\u5730\u677F_Prefab"
   m_TagString: Untagged
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_Sprite: {fileID: 471750548, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -132,9 +132,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.95, y: 0.95}
   m_EdgeRadius: 0
---- !u!114 &324145323857855313
+--- !u!114 &-7631358094498307229
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4485589614726433316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7687f36835d69bc408bc9cf1d7e4c81e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b703d3d48493504a8037b174fccfe01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Def: {fileID: 11400000, guid: e6dd22737e4785c45a92d5a12d28334c, type: 2}

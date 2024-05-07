@@ -23,7 +23,8 @@ namespace ChenChen_AI
         /// </summary>
         public Animator Animator { get; protected set; }
 
-        [Header("当前状态")]
+        [Header("当前任务")]
+        public GameObject CurJobTarget;
         public List<string> CurrentStateList = new List<string>();
 
         [Header("人物逻辑属性")]
@@ -31,29 +32,36 @@ namespace ChenChen_AI
         public float AttackRange = 1;
         public float AttackSpeed = 0.76f;
         public float AttackSpeedWait = 0.5f;
-
-        [Header("人物状态属性")]
-        public int Hp = 100;
+        [Header("人物定义")]
+        [SerializeField] private PawnKindDef _pawnKindDef = new();
+        public PawnKindDef Def
+        {
+            get 
+            { 
+                return _pawnKindDef; 
+            }
+            set 
+            { 
+                _pawnKindDef = value;
+            }
+        }
 
         [Header("人物能力属性")]
-        public PawnAttribute Attribute;
-
-        [Header("人物信息")]
-        public string PawnName;
-        public string FactionName;
-        public string Description;
-        public string PrefabPath;
-
-        [Header("人物状态 Can")]
-        public bool StopUpdate = false;
-        public bool CanSelect = true;
-        public bool CanGetJob = true;
-        public bool CanBattle = true;
-        public bool CanDrafted = true;
-
+        [SerializeField] private PawnAttribute _pawnAttribute = new();
+        public PawnAttribute Attribute
+        {
+            get
+            {
+                return _pawnAttribute;
+            }
+            set
+            {
+                _pawnAttribute = value;
+            }
+        }
         [Header("人物状态信息")]
         [SerializeField] private PawnInfo _pawnInfo = new();
-        public PawnInfo PawnInfo
+        public PawnInfo Info
         {
             get
             {
@@ -64,93 +72,6 @@ namespace ChenChen_AI
                 _pawnInfo = value;
             }
         }
-        public bool IsDead
-        {
-            get
-            {
-                return _pawnInfo.IsDead;
-            }
-            set
-            {
-                _pawnInfo.IsDead = value;
-            }
-        }
-        public bool IsSelect
-        {
-            get
-            {
-                return _pawnInfo.IsSelect;
-            }
-            set
-            {
-                if (_pawnInfo.IsSelect == value) return;
-                if (!CanSelect) return;
-                if (value)
-                {
-                    // 选择框显现
-                    Indicator_DOFadeOne();
-                }
-                else
-                {
-                    // 选择框隐藏, 并解除征兆
-                    Indicator_DOColorWhite();
-                    Indicator_DOFadeZero();
-                    _pawnInfo.IsDrafted = false;
-                }
-                _pawnInfo.IsSelect = value;
-            }
-        }
-        public bool IsOnWork
-        {
-            get
-            {
-                return _pawnInfo.IsOnWork;
-            }
-            set
-            {
-                _pawnInfo.IsOnWork = value;
-            }
-        }
-        public bool IsOnBattle
-        {
-            get
-            {
-                return _pawnInfo.IsOnBattle;
-            }
-            set
-            {
-                _pawnInfo.IsOnBattle = value;
-            }
-        }
-        public bool IsDrafted
-        {
-            get
-            {
-                return _pawnInfo.IsDrafted;
-            }
-            set
-            {
-                if (_pawnInfo.IsDrafted == value) return;
-                if (!CanDrafted) return;
-
-                if (value)
-                {
-                    // 选择框变红
-                    Indicator_DOColorRed();
-                }
-                else
-                {
-                    // 选择框复原，并取消选择
-                    Indicator_DOColorWhite();
-                    Indicator_DOFadeZero();
-                    _pawnInfo.IsSelect = false;
-                }
-                _pawnInfo.IsDrafted = value;
-            }
-        }
-
-        [Header("人物指向")]
-        public GameObject CurJobTarget;
 
         #region Job
 
@@ -162,8 +83,8 @@ namespace ChenChen_AI
         /// <param name="job"></param>
         public void JobToDo(GameObject job)
         {
-            CanGetJob = false;
-            IsOnWork = false;
+            _pawnKindDef.CanGetJob = false;
+            _pawnInfo.IsOnWork = false;
             CurJobTarget = job;
         }
 
@@ -172,7 +93,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobDoing()
         {
-            IsOnWork = true;
+            _pawnInfo.IsOnWork = true;
         }
 
         /// <summary>
@@ -180,8 +101,8 @@ namespace ChenChen_AI
         /// </summary>
         public void JobDone()
         {
-            CanGetJob = true;
-            IsOnWork = false;
+            _pawnKindDef.CanGetJob = true;
+            _pawnInfo.IsOnWork = false;
             CurJobTarget = null;
         }
 
@@ -190,7 +111,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobCanGet()
         {
-            CanGetJob = true;
+            _pawnKindDef.CanGetJob = true;
         }
 
         /// <summary>
@@ -198,7 +119,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobCannotGet()
         {
-            CanGetJob = false;
+            _pawnKindDef.CanGetJob = false;
         }
 
         #endregion
@@ -211,7 +132,7 @@ namespace ChenChen_AI
         public bool TryToEnterBattle(Pawn battleTarget)
         {
             if (isTriggerAttack) return false;
-            IsOnBattle = true;
+            _pawnInfo.IsOnBattle = true;
             CurJobTarget = battleTarget.gameObject;
 
             // 设置位置
@@ -233,7 +154,7 @@ namespace ChenChen_AI
 
         public bool TryToEndBattle()
         {
-            IsOnBattle = false;
+            _pawnInfo.IsOnBattle = false;
             CurJobTarget = null;
             return true;
         }
@@ -241,7 +162,7 @@ namespace ChenChen_AI
         IEnumerator AttackAnimCo()
         {
             Debug.Log("Enter");
-            while (IsOnBattle)
+            while (_pawnInfo.IsOnBattle)
             {
                 yield return null;
                 if (!isTriggerAttack)
@@ -256,11 +177,11 @@ namespace ChenChen_AI
 
         public void GetDamage(float damage)
         {
-            Hp -= (int)damage;
-            Hp = Hp <= 0 ? 0 : Hp;
-            if (Hp <= 0)
+            _pawnInfo.HP -= (int)damage;
+            _pawnInfo.HP = _pawnInfo.HP <= 0 ? 0 : _pawnInfo.HP;
+            if (_pawnInfo.HP <= 0)
             {
-                IsDead = true;
+                Info.IsDead = true;
                 gameObject.SetActive(false);
                 return;
             }
@@ -270,28 +191,18 @@ namespace ChenChen_AI
         #endregion
 
         #region Indicator
-
-        // 获取人物的指示器，如果不存在则创建
-        private bool TryGetIndicator(out GameObject indicator)
+        
+        public void OnPawnClick()
         {
-            indicator = null;
-            if (transform.Find("SelectionBox"))
+            Info.IsSelect = !Info.IsSelect;
+            if(Info.IsSelect)
             {
-                indicator = transform.Find("SelectionBox").gameObject;
-                indicator.SetActive(true);
+                Indicator_DOFadeOne();
             }
-            if (indicator == null)
+            else
             {
-                indicator = Instantiate(Resources.Load<GameObject>("Views/SelectionBox"), gameObject.transform);
-                indicator.name = "SelectionBox";
-                indicator.SetActive(true);
+                Indicator_DOFadeZero();
             }
-            if (indicator == null)
-            {
-                Debug.LogError("Failed to find or create the SelectionBox GameObject.");
-                return false;
-            }
-            return true;
         }
 
         // Animation
@@ -328,6 +239,28 @@ namespace ChenChen_AI
             }
         }
 
+        // 获取人物的指示器，如果不存在则创建
+        private bool TryGetIndicator(out GameObject indicator)
+        {
+            indicator = null;
+            if (transform.Find("SelectionBox"))
+            {
+                indicator = transform.Find("SelectionBox").gameObject;
+                indicator.SetActive(true);
+            }
+            if (indicator == null)
+            {
+                indicator = Instantiate(Resources.Load<GameObject>("Views/SelectionBox"), gameObject.transform);
+                indicator.name = "SelectionBox";
+                indicator.SetActive(true);
+            }
+            if (indicator == null)
+            {
+                Debug.LogError("Failed to find or create the SelectionBox GameObject.");
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         protected virtual void Start()
@@ -348,7 +281,7 @@ namespace ChenChen_AI
 
         protected virtual void Update()
         {
-            if (StopUpdate) return;
+            if (Def.StopUpdate) return;
             StateMachine.Update();
             TryToGetJob();
 

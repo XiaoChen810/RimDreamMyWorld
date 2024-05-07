@@ -27,7 +27,7 @@ namespace ChenChen_AI
             
             //返回成功
             //目标被杀死
-            if (targetPawnComponent.IsDead)
+            if (targetPawnComponent.Info.IsDead)
             {
                 return StateType.Success;
             }

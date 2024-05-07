@@ -13,7 +13,7 @@ namespace ChenChen_AI
         protected override void TryToGetJob()
         {
             GameObject job = null;
-            if (!IsOnWork && CanGetJob)
+            if (!Info.IsOnWork && Def.CanGetJob)
             {
                 job = new JobGiver_Building().TryIssueJobPackage(this);
                 if (job != null)

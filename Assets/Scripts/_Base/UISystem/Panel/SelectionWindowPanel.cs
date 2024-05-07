@@ -21,7 +21,7 @@ namespace ChenChen_UISystem
         public SelectionWindowPanel() : base(new UIType(path))
         {
             gameManager = GameManager.Instance;
-            gameManager.StartSelect();
+            gameManager.PawnGeneratorTool.StartSelect();
             p0 = gameManager.PawnWhenStartList[0];
             p1 = gameManager.PawnWhenStartList[1];
             p2 = gameManager.PawnWhenStartList[2];
@@ -42,13 +42,13 @@ namespace ChenChen_UISystem
 
                     void GenerateSelectedPawn(Pawn select)
                     {
-                        GameManager.Instance.GeneratePawn(
-                            new PawnKindDef(select.PawnName, select.FactionName, select.Description, select.PrefabPath),
-                            new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
-                            select.Attribute);
+                        _ = GameManager.Instance.PawnGeneratorTool.GeneratePawn(new Vector3(Random.Range(45, 55), Random.Range(45, 55), 0),
+                                                          select.Def,
+                                                          select.Info,
+                                                          select.Attribute);
                     }
 
-                    gameManager.EndSelect();
+                    gameManager.PawnGeneratorTool.EndSelect();
                 }));
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox0/Refresh").onClick.AddListener(() =>
@@ -71,15 +71,15 @@ namespace ChenChen_UISystem
             UpdateAttributeValue(2, p2);
             UITool.TryGetChildComponentByPath<InputField>("PawnBox0/Name").onValueChanged.AddListener((string content) =>
             {
-                p0.PawnName = content;
+                p0.Def.PawnName = content;
             });
             UITool.TryGetChildComponentByPath<InputField>("PawnBox1/Name").onValueChanged.AddListener((string content) =>
             {
-                p1.PawnName = content;
+                p1.Def.PawnName = content;
             });
             UITool.TryGetChildComponentByPath<InputField>("PawnBox2/Name").onValueChanged.AddListener((string content) =>
             {
-                p2.PawnName = content;
+                p2.Def.PawnName = content;
             });
         }
 

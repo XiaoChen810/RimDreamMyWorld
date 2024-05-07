@@ -7,10 +7,10 @@ namespace ChenChen_AI
         protected override void TryToGetJob()
         {
             GameObject job = null;
-            if (!IsOnWork && CanGetJob)
+            if (!Info.IsOnWork && Def.CanGetJob)
             {
                 job = new JobGiver_FindEnemy().TryIssueJobPackage(this);
-                if (job != null && !IsOnBattle)
+                if (job != null && !Info.IsOnBattle)
                 {
                     StateMachine.NextState = new PawnJob_Chase(this, job);
                     return;

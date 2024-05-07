@@ -30,12 +30,12 @@ namespace ChenChen_AI
         {
             base.Update();
             // 选中情况下，按下R征兆
-            if (_pawn.IsSelect && Input.GetKeyDown(KeyCode.R))
+            if (_pawn.Info.IsSelect && Input.GetKeyDown(KeyCode.R))
             {
-                _pawn.StateMachine.TryChangeState(new PawnJob_Draft(_pawn, !_pawn.IsDrafted));
+                _pawn.StateMachine.TryChangeState(new PawnJob_Draft(_pawn, !_pawn.Info.IsDrafted));
             }
             // 征兆情况下, 鼠标右击，移动到鼠标点
-            if (_pawn.IsSelect && _pawn.IsDrafted && Input.GetMouseButtonDown(1))
+            if (_pawn.Info.IsSelect && _pawn.Info.IsDrafted && Input.GetMouseButtonDown(1))
             {
                 _pawn.StateMachine.TryChangeState(
                     new PawnJob_Move(_pawn, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
@@ -160,7 +160,7 @@ namespace ChenChen_AI
         protected void DrawPathUpdate()
         {
             List<Vector3> pathDraw = new List<Vector3>();
-            if (path != null && _pawn.IsSelect)
+            if (path != null && _pawn.Info.IsSelect)
             {
                 for (int i = currentWaypoint; i < path.vectorPath.Count; i++)
                 {

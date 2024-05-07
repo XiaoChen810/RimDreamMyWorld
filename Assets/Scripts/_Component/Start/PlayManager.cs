@@ -85,7 +85,7 @@ public class PlayManager : SingletonMono<PlayManager>
                 pawnObj.transform.position,
                 pawnKindDef,
                 pawn.Attribute,
-                pawn.PawnInfo
+                pawn.Info
                 );
             saveData.SavePawns.Add(newPawnSave);
         }
@@ -112,7 +112,7 @@ public class PlayManager : SingletonMono<PlayManager>
     public void Load(Data_GameSave gameSave)
     {
         MapManager.Instance.LoadSceneMapFromSave(gameSave);
-        GameManager.Instance.LoadScenePawnFromSave(gameSave);
+        GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(gameSave);
     }
 
     /// <summary>
@@ -129,7 +129,6 @@ public class PlayManager : SingletonMono<PlayManager>
 
     private void OnApplicationQuit()
     {
-        ES3.Save(root_save_name, SaveList);
-        Debug.Log("游戏退出，自动保存");
+        //Debug.Log("游戏退出，自动保存");
     }
 }

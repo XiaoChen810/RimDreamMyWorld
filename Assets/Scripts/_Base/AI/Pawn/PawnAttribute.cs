@@ -9,6 +9,11 @@ namespace ChenChen_AI
     [System.Serializable]
     public class PawnAttribute
     {
+        public PawnAttribute()
+        {
+
+        }
+
         /// <summary>
         /// Õ½¶·ÄÜÁ¦
         /// </summary>

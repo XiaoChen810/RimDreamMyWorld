@@ -36,7 +36,7 @@ namespace ChenChen_AI
                 pawn.JobDoing();               
 
                 // 进入下一个状态
-                if (!targetPawnComponent.IsDead)
+                if (!targetPawnComponent.Info.IsDead)
                 {
                     IsSuccess = true;
                     pawn.StateMachine.NextState = new PawnJob_Battle(pawn, target);

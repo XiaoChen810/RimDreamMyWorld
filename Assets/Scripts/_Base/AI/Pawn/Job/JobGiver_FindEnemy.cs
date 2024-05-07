@@ -13,7 +13,7 @@ namespace ChenChen_AI
             foreach (var pawnObj in GameManager.Instance.PawnsList)
             {
                 //寻找与自己阵营不同的
-                if (pawnObj.GetComponent<Pawn>().FactionName != pawn.FactionName)
+                if (pawnObj.GetComponent<Pawn>().Def.PawnFaction != pawn.Def.PawnFaction)
                 {
                     //找离自己最近的
                     float thisDistance = Vector2.Distance(pawnObj.transform.position, pawn.transform.position);

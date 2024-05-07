@@ -11,9 +11,9 @@ public class Data_PawnSave
 
     public PawnKindDef PawnKindDef;
 
-    public PawnAttribute PawnAttribute;
-
     public PawnInfo PawnInfo;
+
+    public PawnAttribute PawnAttribute;
 
     public Data_PawnSave(Vector3 position, PawnKindDef pawnKindDef, PawnAttribute pawnAttribute, PawnInfo pawnInfo)
     {

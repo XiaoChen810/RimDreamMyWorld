@@ -6,10 +6,17 @@ namespace ChenChen_AI
     [System.Serializable]
     public class PawnInfo
     {
+        public PawnInfo()
+        {
+
+        }
+        
         public bool IsDead;
         public bool IsSelect;
         public bool IsOnWork;
         public bool IsOnBattle;
         public bool IsDrafted;
+
+        public int HP;
     }
 }

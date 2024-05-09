@@ -12,6 +12,7 @@ public class GameManager : SingletonMono<GameManager>
     public PanelManager PanelManager { get; private set; }
     public SelectTool SelectTool { get; private set; }
     public PawnGeneratorTool PawnGeneratorTool { get; private set; }
+    public AnimatorTool AnimatorTool { get; private set; }
 
     private bool isMenuPanelCreated;
 
@@ -57,6 +58,7 @@ public class GameManager : SingletonMono<GameManager>
         PanelManager = new PanelManager();
         SelectTool = GetComponent<SelectTool>();
         PawnGeneratorTool = new PawnGeneratorTool(this);
+        AnimatorTool = GetComponent<AnimatorTool>();
         _totalPawnDefList.Add(StaticPawnDef.s_Bald);
         _totalPawnDefList.Add(StaticPawnDef.s_SinglePonytail);
         _totalPawnDefList.Add(StaticPawnDef.s_RedHair);

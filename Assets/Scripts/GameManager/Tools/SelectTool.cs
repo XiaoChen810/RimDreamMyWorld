@@ -100,7 +100,7 @@ public class SelectTool : MonoBehaviour
             if (collider.CompareTag("Pawn"))
             {
                 Pawn pawn = collider.GetComponent<Pawn>();
-                pawn.OnPawnClick();
+                pawn.OnPawnSelected();
                 flag = true;
             }
         }

@@ -22,11 +22,16 @@ namespace ChenChen_UISystem
         /// </summary>
         /// <typeparam name="T">组件类型，例如Button</typeparam>
         /// <returns></returns>
-        public T GetOrAddComponent<T>() where T : Component
+        public bool TryGetOrAddComponent<T>(out T component) where T : Component
         {
-            if (currentPanel.GetComponent<T>() == null) currentPanel.AddComponent<T>();
-
-            return currentPanel.GetComponent<T>();
+            component = null;
+            if (currentPanel == null) return false;
+            if (currentPanel.GetComponent<T>() == null)
+            {
+                currentPanel.AddComponent<T>();
+            }
+            component = currentPanel.GetComponent<T>();
+            return component != null;
         }
 
         /// <summary>

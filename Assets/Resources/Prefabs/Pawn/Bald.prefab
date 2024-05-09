@@ -307,13 +307,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurJobTarget: {fileID: 0}
   CurrentStateList: []
   WorkRange: 1.35
   AttackRange: 1.5
   AttackSpeed: 0.76
   AttackSpeedWait: 0.5
-  Hp: 100
-  Attribute:
+  _pawnKindDef:
+    PawnName: 
+    PawnFaction: 
+    PawnDescription: 
+    PrefabPath: 
+    StopUpdate: 0
+    CanSelect: 0
+    CanGetJob: 0
+    CanBattle: 0
+    CanDrafted: 0
+  _pawnAttribute:
     A_Combat:
       _value: 0
       _interest: 0
@@ -346,21 +356,13 @@ MonoBehaviour:
       _value: 0
       _interest: 0
       _exp: 0
-  PawnName: 
-  FactionName: 
-  Description: 
-  PrefabPath: 
-  CanSelect: 1
-  CanGetJob: 1
-  CanBattle: 0
-  CanDrafted: 1
   _pawnInfo:
     IsDead: 0
     IsSelect: 0
     IsOnWork: 0
     IsOnBattle: 0
     IsDrafted: 0
-  CurJobTarget: {fileID: 0}
+    HP: 0
 --- !u!114 &960917627947803231
 MonoBehaviour:
   m_ObjectHideFlags: 0

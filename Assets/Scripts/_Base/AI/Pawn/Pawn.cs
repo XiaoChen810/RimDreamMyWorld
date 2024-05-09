@@ -33,11 +33,15 @@ namespace ChenChen_AI
         public float AttackSpeed = 0.76f;
         public float AttackSpeedWait = 0.5f;
         [Header("人物定义")]
-        [SerializeField] private PawnKindDef _pawnKindDef = new();
+        [SerializeField] private PawnKindDef _pawnKindDef;
         public PawnKindDef Def
         {
             get 
             { 
+                if(_pawnKindDef == null)
+                {
+                    _pawnKindDef = new PawnKindDef();
+                }
                 return _pawnKindDef; 
             }
             set 
@@ -47,11 +51,16 @@ namespace ChenChen_AI
         }
 
         [Header("人物能力属性")]
-        [SerializeField] private PawnAttribute _pawnAttribute = new();
+        [SerializeField] private PawnAttribute _pawnAttribute;
         public PawnAttribute Attribute
         {
             get
             {
+                if (_pawnAttribute == null)
+                {
+                    _pawnAttribute = new PawnAttribute();
+                    _pawnAttribute.InitPawnAttribute();
+                }
                 return _pawnAttribute;
             }
             set
@@ -60,11 +69,15 @@ namespace ChenChen_AI
             }
         }
         [Header("人物状态信息")]
-        [SerializeField] private PawnInfo _pawnInfo = new();
+        [SerializeField] private PawnInfo _pawnInfo;
         public PawnInfo Info
         {
             get
             {
+                if (_pawnInfo == null)
+                {
+                    _pawnInfo = new PawnInfo();
+                }
                 return _pawnInfo;
             }
             set
@@ -192,7 +205,7 @@ namespace ChenChen_AI
 
         #region Indicator
         
-        public void OnPawnClick()
+        public void OnPawnSelected()
         {
             Info.IsSelect = !Info.IsSelect;
             if(Info.IsSelect)
@@ -210,7 +223,7 @@ namespace ChenChen_AI
         {
             if (TryGetIndicator(out GameObject indicator))
             {
-                SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
                 sr.DOFade(1, 1);
             }
         }
@@ -218,24 +231,8 @@ namespace ChenChen_AI
         {
             if (TryGetIndicator(out GameObject indicator))
             {
-                SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
+                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
                 sr.DOFade(0, 1);
-            }
-        }
-        protected void Indicator_DOColorRed()
-        {
-            if (TryGetIndicator(out GameObject indicator))
-            {
-                SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
-                sr.DOColor(Color.red, 1);
-            }
-        }
-        protected void Indicator_DOColorWhite()
-        {
-            if (TryGetIndicator(out GameObject indicator))
-            {
-                SpriteRenderer sr = indicator.GetComponent<SpriteRenderer>();
-                sr.DOColor(Color.white, 1);
             }
         }
 
@@ -253,6 +250,8 @@ namespace ChenChen_AI
                 indicator = Instantiate(Resources.Load<GameObject>("Views/SelectionBox"), gameObject.transform);
                 indicator.name = "SelectionBox";
                 indicator.SetActive(true);
+                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
+                sr.sortingLayerName = "Above";
             }
             if (indicator == null)
             {

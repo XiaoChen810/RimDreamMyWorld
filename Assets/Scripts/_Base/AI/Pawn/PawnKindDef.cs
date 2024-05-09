@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace ChenChen_AI
 {
     [System.Serializable]
-    public class PawnKindDef
+    public class PawnKindDef : ICloneable
     {
         public string PawnName;
 
@@ -54,17 +55,10 @@ namespace ChenChen_AI
             CanDrafted = pawn.Def.CanDrafted;
         }
 
-        public PawnKindDef(PawnKindDef copyDef)
+        public object Clone()
         {
-            PawnName = copyDef.PawnName;
-            PawnFaction = copyDef.PawnFaction;
-            PawnDescription = copyDef.PawnDescription;
-            PrefabPath = copyDef.PrefabPath;
-            StopUpdate = copyDef.StopUpdate;
-            CanSelect = copyDef.CanSelect;
-            CanGetJob = copyDef.CanGetJob;
-            CanBattle = copyDef.CanBattle;
-            CanDrafted = copyDef.CanDrafted;
+            PawnKindDef clone = (PawnKindDef)MemberwiseClone();
+            return clone;
         }
     }
 }

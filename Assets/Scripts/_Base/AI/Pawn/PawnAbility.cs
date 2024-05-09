@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ChenChen_AI
 {
@@ -7,7 +8,7 @@ namespace ChenChen_AI
     /// 人物的某种能力
     /// </summary>
     [System.Serializable]
-    public class PawnAbility
+    public class PawnAbility : ICloneable
     {
         /// <summary>
         /// 能力具体数值
@@ -53,6 +54,15 @@ namespace ChenChen_AI
             _interest = interest;
             _exp = exp;
             _value = value;
+        }
+
+        public object Clone()
+        {
+            PawnAbility clone = (PawnAbility)MemberwiseClone();
+            clone.Value = _value;
+            clone.Interest = _interest;
+            clone.EXP = _exp;
+            return clone;
         }
     }
 }

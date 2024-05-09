@@ -97,7 +97,10 @@ namespace ChenChen_UISystem
         /// </summary>
         public virtual void OnPause()
         {
-            UITool.GetOrAddComponent<Transform>().gameObject.SetActive(false);
+            if (UITool.TryGetOrAddComponent<Transform>(out Transform trans))
+            {
+                trans.gameObject.SetActive(false);
+            }
             IsStopping = true;
         }
 
@@ -106,7 +109,10 @@ namespace ChenChen_UISystem
         /// </summary>
         public virtual void OnResume()
         {
-            UITool.GetOrAddComponent<Transform>().gameObject.SetActive(true);
+            if (UITool.TryGetOrAddComponent<Transform>(out Transform trans))
+            {
+                trans.gameObject.SetActive(true);
+            }
             IsStopping = false;
         }
 
@@ -116,7 +122,10 @@ namespace ChenChen_UISystem
         public virtual void OnExit()
         {
             onExitCallback?.Invoke();
-            GameObject.Destroy(UITool.GetOrAddComponent<Transform>().gameObject);
+            if (UITool.TryGetOrAddComponent<Transform>(out Transform trans))
+            {
+                GameObject.Destroy(trans.gameObject);
+            }
         }
 
         /// <summary>

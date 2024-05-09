@@ -77,7 +77,8 @@ public class PawnGeneratorTool
     {
         foreach (var pawnSave in data_GameSave.SavePawns)
         {
-            Pawn newPawn = GeneratePawn(pawnSave.Position, pawnSave.PawnKindDef, pawnSave.PawnInfo, pawnSave.PawnAttribute);
+            Data_PawnSave newPawnSave = (Data_PawnSave) pawnSave.Clone();
+            Pawn newPawn = GeneratePawn(newPawnSave.Position, newPawnSave.PawnKindDef, newPawnSave.PawnInfo, newPawnSave.PawnAttribute);
         }
     }
 

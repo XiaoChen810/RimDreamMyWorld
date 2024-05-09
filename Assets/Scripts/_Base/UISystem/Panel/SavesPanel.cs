@@ -1,5 +1,6 @@
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,11 +35,18 @@ namespace ChenChen_UISystem
                 if (selectedGameSave != null)
                 {
                     PanelManager.RemovePanel(this);
-                    PlayManager.Instance.Load(selectedGameSave);
-                    SceneSystem.Instance.SetScene(new MainScene(() =>
+                    Action onPreloadAnimation = () =>
                     {
+                        Debug.Log("Continue Game");
+                    }; 
+                    Action onPostLoadScene= () =>
+                    {
+                        // 加载游戏存档
+                        PlayManager.Instance.Load(selectedGameSave);
+                        // 打开刚刚加载的存档的地图
                         MapManager.Instance.LoadOrGenerateSceneMap(selectedGameSave.SaveMap.mapName);
-                    }));
+                    };
+                    SceneSystem.Instance.SetScene(new MainScene(onPreloadAnimation, onPostLoadScene, 1f));
                 }
             });         
         }
@@ -66,7 +74,7 @@ namespace ChenChen_UISystem
             // 加载所有存档
             foreach (var save in PlayManager.Instance.SaveList)
             {
-                GameObject saveInstance = Object.Instantiate(savePrefab);
+                GameObject saveInstance = UnityEngine.Object.Instantiate(savePrefab);
                 saveInstance.transform.SetParent(content.transform, false);
                 saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save;
                 UITool.GetChildByName("TextName").GetComponent<Text>().text = $"Name: {save.SaveName}";

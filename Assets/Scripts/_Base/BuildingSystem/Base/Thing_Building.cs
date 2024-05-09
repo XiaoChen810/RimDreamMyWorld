@@ -37,6 +37,7 @@ namespace ChenChen_BuildingSystem
             // 设置完一切后
             BuildingSystemManager.Instance.AddThingToList(this.gameObject);
         }
+
         public override void OnMarkBuild()
         {
             // 变成半透明，表示还未完成
@@ -82,6 +83,8 @@ namespace ChenChen_BuildingSystem
             {
                 GetComponent<Collider2D>().isTrigger = false;
                 gameObject.layer = 8; //"Obstacle"
+                Bounds bounds = ColliderSelf.bounds;
+                AstarPath.active.UpdateGraphs(bounds);
             }
             IsDismantlable = true;
             DrawOutline_Collider = false;

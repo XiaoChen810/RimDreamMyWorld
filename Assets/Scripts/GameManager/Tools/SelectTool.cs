@@ -1,4 +1,5 @@
 using ChenChen_AI;
+using ChenChen_BuildingSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,10 @@ using UnityEngine;
 
 public class SelectTool : MonoBehaviour
 {
+    private LineRenderer lineRenderer;
     private Vector2 startPos;
     private Vector2 endPos;
-    private LineRenderer lineRenderer;
+    private bool open = false;
 
     private void Start()
     {
@@ -20,6 +22,7 @@ public class SelectTool : MonoBehaviour
     {
         // 如果在建造模式中则不检测输入
         if (ChenChen_BuildingSystem.BuildingSystemManager.Instance.Tool.OnBuildMode) return;
+        if (GameManager.Instance.WorkSpaceTool.IsDoingWorkSpace) return;
         InputUpdate();
     }
 
@@ -29,10 +32,13 @@ public class SelectTool : MonoBehaviour
         {
             // 记录滑动开始的位置
             startPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+            open = true;
         }
 
         if (UnityEngine.Input.GetMouseButton(0))
         {
+            if (!open) return;
+
             // 更新滑动结束的位置
             endPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
 
@@ -48,6 +54,7 @@ public class SelectTool : MonoBehaviour
             // 在滑动结束时处理多选
             HandleSelection(startPos, endPos);
             ResetLineRenderer();
+            open = false;
         }
     }
 
@@ -89,7 +96,8 @@ public class SelectTool : MonoBehaviour
         if (Logic_Pawn(hitColliders)) return;
         // 判断有无选中物体
         if (Logic_Thing(hitColliders)) return;
-
+        // 判断有无工作区
+        if (Logic_WorkSpace(hitColliders)) return;
     }
 
     private bool Logic_Pawn(Collider2D[] hitColliders)
@@ -113,8 +121,24 @@ public class SelectTool : MonoBehaviour
         {
             if (collider.CompareTag("Thing"))
             {
-                DetailView_Thing detailView = collider.GetComponent<DetailView_Thing>();
-                detailView.Selected();
+                ThingBase thing = collider.GetComponent<ThingBase>();
+                DetailView dv = thing.DetailView;
+                dv.Selected();
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    private bool Logic_WorkSpace(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
+        {
+            if (collider.CompareTag("WorkSpace"))
+            {
+                WorkSpace workSpace = collider.GetComponent<WorkSpace>();
+                DetailView dv = workSpace.DetailView;
+                dv.Selected();
                 flag = true;
             }
         }

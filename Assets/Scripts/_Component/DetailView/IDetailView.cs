@@ -2,7 +2,7 @@ using ChenChen_BuildingSystem;
 using UnityEngine;
 
 
-public interface IDetailView 
+public interface IDetailView
 {
     DetailView DetailView { get;}
 }

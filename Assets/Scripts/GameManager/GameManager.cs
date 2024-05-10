@@ -13,9 +13,9 @@ public class GameManager : SingletonMono<GameManager>
     public SelectTool SelectTool { get; private set; }
     public PawnGeneratorTool PawnGeneratorTool { get; private set; }
     public AnimatorTool AnimatorTool { get; private set; }
+    public WorkSpaceTool WorkSpaceTool { get; private set; }
 
     private bool isMenuPanelCreated;
-
 
     [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
     /// <summary>
@@ -59,6 +59,7 @@ public class GameManager : SingletonMono<GameManager>
         SelectTool = GetComponent<SelectTool>();
         PawnGeneratorTool = new PawnGeneratorTool(this);
         AnimatorTool = GetComponent<AnimatorTool>();
+        WorkSpaceTool = GetComponent<WorkSpaceTool>();
         _totalPawnDefList.Add(StaticPawnDef.s_Bald);
         _totalPawnDefList.Add(StaticPawnDef.s_SinglePonytail);
         _totalPawnDefList.Add(StaticPawnDef.s_RedHair);
@@ -75,21 +76,32 @@ public class GameManager : SingletonMono<GameManager>
 
     private void OpenBuildingMenuPanel()
     {
-        if (Input.GetKeyDown(KeyCode.U) && !isMenuPanelCreated)
+        // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
+        PanelBase.Callback onEnterCallback = () =>
         {
-            // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
-            PanelBase.Callback onEnterCallback = () =>
-            {
-                isMenuPanelCreated = true;
-            };
+            isMenuPanelCreated = true;
+        };
 
-            // 定义面板OnExit时的回调函数，重置isPanelCreated为false
-            PanelBase.Callback onExitCallback = () =>
+        // 定义面板OnExit时的回调函数，重置isPanelCreated为false
+        PanelBase.Callback onExitCallback = () =>
+        {
+            isMenuPanelCreated = false;
+        };
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            if (!isMenuPanelCreated)
             {
-                isMenuPanelCreated = false;
-            };
-
-            PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
+                PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
+                return;
+            }
+            if (isMenuPanelCreated)
+            {
+                if (PanelManager.GetTopPanel().GetType() == typeof(BuildingMenuPanel))
+                {
+                    PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
+                    return;
+                }
+            }
         }
     }
 

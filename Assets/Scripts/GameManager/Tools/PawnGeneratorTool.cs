@@ -98,9 +98,9 @@ public class PawnGeneratorTool
 
     public void StartSelect()
     {
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), new PawnAttribute()));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), new PawnAttribute()));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), new PawnAttribute()));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
         foreach (var pawn in GameManager.PawnWhenStartList)
         {
             pawn.Def.StopUpdate = true;

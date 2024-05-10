@@ -11,6 +11,11 @@ public class DetailView_Thing : DetailView
     {
         thing = GetComponent<ThingBase>();
     }
+    protected override void AddPanel()
+    {
+        PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
+        PanelManager.Instance.AddPanel(new DetailViewPanel_Thing(thing, StartShow, EndShow));
+    }
 
     protected override void UpdateShow(DetailViewPanel panel)
     {
@@ -24,12 +29,6 @@ public class DetailView_Thing : DetailView
             thing.Workload,
             userName: (thing.TheUsingPawn != null) ? thing.TheUsingPawn.name : null
             );
-    }
-
-    protected override void AddPanel()
-    {
-        PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
-        PanelManager.Instance.AddPanel(new DetailViewPanel(thing, StartShow, EndShow));
     }
 
     public override void StartShow()

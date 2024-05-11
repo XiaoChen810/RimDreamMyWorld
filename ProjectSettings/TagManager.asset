@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Water
   - Thing
+  - WorkSpace
   layers:
   - Default
   - TransparentFX

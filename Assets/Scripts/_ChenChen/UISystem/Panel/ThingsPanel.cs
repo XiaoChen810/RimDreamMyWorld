@@ -21,7 +21,7 @@ namespace ChenChen_UISystem
             InitContent(ThingType);
             UITool.TryGetChildComponentByName<Button>("Btn¹Ø±Õ").onClick.AddListener(() =>
             {
-                PanelManager.RemovePanel(this);
+                PanelManager.RemoveTopPanel(this);
             });
         }
     }

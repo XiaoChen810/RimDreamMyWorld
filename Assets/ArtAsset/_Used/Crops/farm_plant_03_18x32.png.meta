@@ -1,0 +1,439 @@
+fileFormatVersion: 2
+guid: 74e8c15b74039014fb3fa3f8a446fef2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6604877154473199830
+    second: farm_plant_03_18x32_0
+  - first:
+      213: 2852603052843129458
+    second: farm_plant_03_18x32_1
+  - first:
+      213: -8648476597317759110
+    second: farm_plant_03_18x32_2
+  - first:
+      213: -5716844561521066629
+    second: farm_plant_03_18x32_3
+  - first:
+      213: 6110887127728583069
+    second: farm_plant_03_18x32_4
+  - first:
+      213: -7242629084239750380
+    second: farm_plant_03_18x32_5
+  - first:
+      213: 7976274192594901017
+    second: farm_plant_03_18x32_6
+  - first:
+      213: -1327672101367625508
+    second: farm_plant_03_18x32_7
+  - first:
+      213: 3036514310601795583
+    second: farm_plant_03_18x32_8
+  - first:
+      213: -3425730316924252530
+    second: farm_plant_03_18x32_9
+  - first:
+      213: -8051148980409265494
+    second: farm_plant_03_18x32_10
+  - first:
+      213: 3618763715465428059
+    second: farm_plant_03_18x32_11
+  - first:
+      213: 995936555372715599
+    second: farm_plant_03_18x32_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 8
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d8c77127cc39ab50800000000000000
+      internalID: 6604877154473199830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_1
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 3
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27ad8e1ec5b769720800000000000000
+      internalID: 2852603052843129458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_2
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 3
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7f88983b507af780800000000000000
+      internalID: -8648476597317759110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_3
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 5
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7db9621920b9a0b0800000000000000
+      internalID: -5716844561521066629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_4
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d91f4ce377b3ec450800000000000000
+      internalID: 6110887127728583069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_5
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b1af198330d7b90800000000000000
+      internalID: -7242629084239750380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_6
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9181cb83e1b61be60800000000000000
+      internalID: 7976274192594901017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_7
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd849c31249239de0800000000000000
+      internalID: -1327672101367625508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_8
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff76fc66dadd32a20800000000000000
+      internalID: 3036514310601795583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_9
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 5
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8e81735d6c5570d0800000000000000
+      internalID: -3425730316924252530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_10
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 5
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa215fcb8a2944090800000000000000
+      internalID: -8051148980409265494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_11
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 5
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5cb36a1d6e683230800000000000000
+      internalID: 3618763715465428059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: farm_plant_03_18x32_12
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 5
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4e11d9350742dd00800000000000000
+      internalID: 995936555372715599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      farm_plant_03_18x32_0: 6604877154473199830
+      farm_plant_03_18x32_1: 2852603052843129458
+      farm_plant_03_18x32_10: -8051148980409265494
+      farm_plant_03_18x32_11: 3618763715465428059
+      farm_plant_03_18x32_12: 995936555372715599
+      farm_plant_03_18x32_2: -8648476597317759110
+      farm_plant_03_18x32_3: -5716844561521066629
+      farm_plant_03_18x32_4: 6110887127728583069
+      farm_plant_03_18x32_5: -7242629084239750380
+      farm_plant_03_18x32_6: 7976274192594901017
+      farm_plant_03_18x32_7: -1327672101367625508
+      farm_plant_03_18x32_8: 3036514310601795583
+      farm_plant_03_18x32_9: -3425730316924252530
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

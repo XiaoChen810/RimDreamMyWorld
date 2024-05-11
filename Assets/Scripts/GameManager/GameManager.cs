@@ -26,15 +26,6 @@ public class GameManager : SingletonMono<GameManager>
         get { return _pawnsList; }
     }
 
-    [SerializeField] private List<PawnKindDef> _totalPawnDefList = new List<PawnKindDef>();
-    /// <summary>
-    /// 全部Pawn定义的列表，游戏开始时加载
-    /// </summary>
-    public List<PawnKindDef> TotalPawnDefList
-    {
-        get { return _totalPawnDefList; }
-    }
-
     [SerializeField] private List<Pawn> _pawnWhenStartList = new List<Pawn>();
     /// <summary>
     /// 仅当进行人物选择时使用的角色列表
@@ -60,12 +51,6 @@ public class GameManager : SingletonMono<GameManager>
         PawnGeneratorTool = new PawnGeneratorTool(this);
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
-        _totalPawnDefList.Add(StaticPawnDef.s_Bald);
-        _totalPawnDefList.Add(StaticPawnDef.s_SinglePonytail);
-        _totalPawnDefList.Add(StaticPawnDef.s_RedHair);
-        _totalPawnDefList.Add(StaticPawnDef.s_YellowHair);
-        _totalPawnDefList.Add(StaticPawnDef.s_CrewCut);
-        _totalPawnDefList.Add(StaticPawnDef.s_Boy);
     }
 
     private void Update()

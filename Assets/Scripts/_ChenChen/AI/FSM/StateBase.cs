@@ -16,6 +16,11 @@ namespace ChenChen_AI
         /// </summary>
         public bool IsSuccess;
 
+        /// <summary>
+        /// ¥ÌŒÛ»’÷æ
+        /// </summary>
+        public string DebugLogDescription;
+
         public StateBase(StateMachine machine, StateBase next = null)
         {
             _stateMachine = machine;

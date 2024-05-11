@@ -24,7 +24,7 @@ namespace ChenChen_UISystem
             //});
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {
-                PanelManager.RemovePanel(this);
+                PanelManager.RemoveTopPanel(this);
             });
         }
     }

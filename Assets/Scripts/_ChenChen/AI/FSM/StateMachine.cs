@@ -175,7 +175,9 @@ namespace ChenChen_AI
                     return;
                 }
                 // 未成功进入
-                Debug.Log($"{Owner.name}进入状态 {_currentState} 失败，当前状态自动切换为空：");
+                string log = _currentState.DebugLogDescription == null ? "无错误日志" : _currentState.DebugLogDescription;
+                Debug.Log($"{Owner.name}进入状态 {_currentState} 失败，当前状态自动切换为空：\n" +
+                    $"失败原因: {log}");
                 _currentState = null;
             }
         }

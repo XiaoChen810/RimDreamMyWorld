@@ -26,21 +26,21 @@ public class ThingDefGenerator
 
     private readonly string saveRootPath = "Assets/Resources/Prefabs/ThingDef";
 
-    public void GenerateBlueprint()
+    public void GenerateThingDef()
     {
         if (string.IsNullOrEmpty(ThingName))
         {
-            Debug.LogError("Blueprint name cannot be empty!");
+            Debug.LogError("Thing name cannot be empty!");
             return;
         }
 
         if (ThingPreviewSprite == null)
         {
-            Debug.LogError("Blueprint preview sprite cannot be null!");
+            Debug.LogError("Thing preview sprite cannot be null!");
             return;
         }
 
-        // 检查是否已存在同名的蓝图数据文件
+        // 检查是否已存在同名的数据文件
         string existingFolderPath = $"{saveRootPath}/{ThingName}";
         if (System.IO.Directory.Exists(existingFolderPath))
         {

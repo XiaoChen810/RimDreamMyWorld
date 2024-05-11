@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using ChenChen_BuildingSystem;
 
-public class BlueprintGeneratorEditorWindow : EditorWindow
+public class ThingDefGeneratorEditorWindow : EditorWindow
 {
     private ThingDefGenerator ThingGenerator;
 
@@ -18,10 +18,10 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
     private TileBase ThingTileBase;
     private bool CreateIndividualScript;
 
-    [MenuItem("Window/Blueprint Generator")]
+    [MenuItem("Window/ThingDef Generator")]
     public static void ShowWindow()
     {
-        GetWindow(typeof(BlueprintGeneratorEditorWindow), false, "Blueprint Generator");
+        GetWindow(typeof(ThingDefGeneratorEditorWindow), false, "ThingDef Generator");
     }
 
     private void OnEnable()
@@ -31,7 +31,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Blueprint Generator", EditorStyles.boldLabel);
+        GUILayout.Label("ThingDef Generator", EditorStyles.boldLabel);
 
         // 属性设置
         ThingName = EditorGUILayout.TextField("名字", ThingName);
@@ -44,7 +44,7 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
         CreateIndividualScript = EditorGUILayout.Toggle("是否生成独立脚本", CreateIndividualScript);
 
         // 生成按钮
-        if (GUILayout.Button("Generate Blueprint"))
+        if (GUILayout.Button("Generate ThingDef"))
         {
             if (ThingGenerator != null)
             {
@@ -59,14 +59,16 @@ public class BlueprintGeneratorEditorWindow : EditorWindow
                 ThingGenerator.CreateIndividualScript = CreateIndividualScript;
 
                 // 调用生成蓝图的方法
-                ThingGenerator.GenerateBlueprint();
+                ThingGenerator.GenerateThingDef();
             }
             else
             {
-                Debug.LogError("Could not find Blueprint Generator component in the scene.");
+                Debug.LogError("Could not find ThingDef Generator component in the scene.");
             }
         }
     }
 }
+
+
 
 

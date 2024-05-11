@@ -25,7 +25,7 @@ namespace ChenChen_BuildingSystem
         protected override void Awake()
         {
             base.Awake();
-            LoadBlueprintData();
+            LoadAllThingDefData();
             ThingGeneratedList = new List<GameObject>();
             Tool = new BuildingModeTool(this);
         }
@@ -35,7 +35,7 @@ namespace ChenChen_BuildingSystem
             Tool.BuildUpdate();
         }
 
-        private void LoadBlueprintData()
+        private void LoadAllThingDefData()
         {
             ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
 
@@ -56,7 +56,7 @@ namespace ChenChen_BuildingSystem
                     }
                     else
                     {
-                        Debug.LogWarning($"BlueprintData with name '{ThingData.DefName}' already exists. Skipping.");
+                        Debug.LogWarning($"ThingDef with name '{ThingData.DefName}' already exists. Skipping.");
                     }
                 }
             }

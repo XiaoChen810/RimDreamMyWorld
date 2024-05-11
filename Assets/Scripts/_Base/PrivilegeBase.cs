@@ -1,6 +1,10 @@
 ﻿using ChenChen_AI;
 using UnityEngine;
 
+/// <summary>
+/// 权限基类，用于绑定是否被使用，谁在使用。
+/// 继承于MonoBehaviour
+/// </summary>
 public abstract class PrivilegeBase : MonoBehaviour
 {
     // 使用的棋子

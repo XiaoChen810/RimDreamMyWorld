@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DetailView_Thing : DetailView
 {
-    protected ThingBase thing;
+    [SerializeField] protected ThingBase thing;
 
     private void OnEnable()
     {
@@ -13,7 +13,7 @@ public class DetailView_Thing : DetailView
     }
     protected override void AddPanel()
     {
-        PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
+        PanelManager.Instance.RemoveTopPanel(PanelManager.Instance.GetTopPanel());
         PanelManager.Instance.AddPanel(new DetailViewPanel_Thing(thing, StartShow, EndShow));
     }
 

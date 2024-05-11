@@ -45,6 +45,7 @@ namespace ChenChen_UISystem
 
                     void GenerateSelectedPawn(Pawn select)
                     {
+                        select.Def.StopUpdate = false;
                         _ = GameManager.Instance.PawnGeneratorTool.GeneratePawn(new Vector3(UnityEngine.Random.Range(45, 55), UnityEngine.Random.Range(45, 55), 0),
                                                           select.Def,
                                                           select.Info,
@@ -57,17 +58,17 @@ namespace ChenChen_UISystem
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox0/Refresh").onClick.AddListener(() =>
             {
-                p0.Attribute.InitPawnAttribute();
+                p0.Attribute = new PawnAttribute();
                 UpdateAttributeValue(0, p0);
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox1/Refresh").onClick.AddListener(() =>
             {
-                p1.Attribute.InitPawnAttribute();
+                p1.Attribute = new PawnAttribute();
                 UpdateAttributeValue(1, p1);
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox2/Refresh").onClick.AddListener(() =>
             {
-                p2.Attribute.InitPawnAttribute();
+                p2.Attribute = new PawnAttribute();
                 UpdateAttributeValue(2, p2);
             });
             UpdateAttributeValue(0, p0);

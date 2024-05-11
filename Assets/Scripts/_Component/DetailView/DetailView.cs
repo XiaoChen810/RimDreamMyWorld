@@ -8,7 +8,8 @@ using UnityEngine;
 /// </summary>
 public abstract class DetailView : MonoBehaviour
 {
-    public bool onShow = false;
+    public bool OnShow = false;
+    //public DetailViewPanel Panel { get; protected set; }
 
     public virtual void Selected()
     {
@@ -22,7 +23,7 @@ public abstract class DetailView : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(onShow)
+        if(OnShow)
         {
             DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
             if(detail != null)
@@ -34,11 +35,11 @@ public abstract class DetailView : MonoBehaviour
 
     public virtual void StartShow()
     {
-        onShow = true;
+        OnShow = true;
     }
 
     public virtual void EndShow()
     {
-        onShow = false;
+        OnShow = false;
     }
 }

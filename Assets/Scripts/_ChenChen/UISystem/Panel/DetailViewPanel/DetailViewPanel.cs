@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UISystem
 {
-    public class DetailViewPanel : PanelBase
+    public abstract class DetailViewPanel : PanelBase
     {
         static readonly string path = "UI/Panel/Menus/DetailViewPanel";
 
@@ -25,7 +25,7 @@ namespace ChenChen_UISystem
             // 关闭菜单的按钮
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
-                PanelManager.RemovePanel(this);
+                PanelManager.RemoveTopPanel(this);
             });
             DemolishBtn = UITool.TryGetChildComponentByName<Button>("Btn拆除");
             DemolishBtn.gameObject.SetActive(false);

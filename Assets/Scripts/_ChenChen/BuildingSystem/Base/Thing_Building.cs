@@ -129,10 +129,9 @@ namespace ChenChen_BuildingSystem
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
             }
-            if (_detailView.onShow)
+            if (_detailView.OnShow)
             {
-                DetailViewPanel_Thing detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel_Thing;
-                PanelManager.Instance.RemovePanel(detail);
+                PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
             }
             BuildingSystemManager.Instance.RemoveThingToList(this.gameObject);
             FindAnyObjectByType<AstarPath>().Scan();

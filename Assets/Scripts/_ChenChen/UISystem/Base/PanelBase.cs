@@ -136,7 +136,7 @@ namespace ChenChen_UISystem
         protected void UseBlueprintByName(string name)
         {
             BuildingSystemManager.Instance.OpenBuildingMode(name);
-            PanelManager.RemovePanel(this);
+            PanelManager.RemoveTopPanel(this);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ChenChen_UISystem
             if (btnPrefab == null)
             {
                 Debug.LogError("按钮的预制件为空, 检查位置: UI/Component/BtnBlueprintDefault");
-                PanelManager.RemovePanel(this);
+                PanelManager.RemoveTopPanel(this);
                 return;
             }
             // 根据蓝图字典,设置成对应的按钮添加到内容中

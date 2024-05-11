@@ -80,10 +80,9 @@ public class PlayManager : SingletonMono<PlayManager>
         foreach (var pawnObj in GameManager.Instance.PawnsList)
         {
             Pawn pawn = pawnObj.GetComponent<Pawn>();
-            PawnKindDef pawnKindDef = new PawnKindDef(pawn);
             Data_PawnSave newPawnSave = new Data_PawnSave(
                 pawnObj.transform.position,
-                pawnKindDef,
+                pawn.Def,
                 pawn.Attribute,
                 pawn.Info
                 );

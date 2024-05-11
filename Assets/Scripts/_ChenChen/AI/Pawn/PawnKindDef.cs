@@ -42,19 +42,6 @@ namespace ChenChen_AI
             CanDrafted = canDrafted;
         }
 
-        public PawnKindDef(Pawn pawn)
-        {
-            PawnName = pawn.Def.PawnName;
-            PawnFaction = pawn.Def.PawnFaction;
-            PawnDescription = pawn.Def.PawnDescription;
-            PrefabPath = pawn.Def.PrefabPath;
-            StopUpdate = false;
-            CanSelect = pawn.Def.CanSelect;
-            CanGetJob = pawn.Def.CanGetJob;
-            CanBattle = pawn.Def.CanBattle;
-            CanDrafted = pawn.Def.CanDrafted;
-        }
-
         public object Clone()
         {
             PawnKindDef clone = (PawnKindDef)MemberwiseClone();

@@ -59,7 +59,6 @@ namespace ChenChen_AI
                 if (_pawnAttribute == null)
                 {
                     _pawnAttribute = new PawnAttribute();
-                    _pawnAttribute.InitPawnAttribute();
                 }
                 return _pawnAttribute;
             }
@@ -280,18 +279,22 @@ namespace ChenChen_AI
 
         protected virtual void Update()
         {
-            if (Def.StopUpdate) return;
-            StateMachine.Update();
-            if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
-
 #if UNITY_EDITOR
             任务列表Debug();
 #endif
+            if (Def.StopUpdate) return;
+            StateMachine.Update();
+            if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
         }
 
         protected void 任务列表Debug()
         {
             CurrentStateList.Clear();
+            if (Def.StopUpdate)
+            {
+                CurrentStateList.Add("StopUpdate");
+                return;
+            }
             CurrentStateList.Add("正在：" + StateMachine.CurState?.ToString());
             CurrentStateList.Add("下一个：" + StateMachine.NextState?.ToString());
             foreach (var task in StateMachine.StateQueue)

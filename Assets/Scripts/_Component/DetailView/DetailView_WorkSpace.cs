@@ -1,10 +1,11 @@
 ﻿using ChenChen_UISystem;
+using UnityEngine;
 using System;
 
 
 public class DetailView_WorkSpace : DetailView
 {
-    protected WorkSpace workSpace;
+    [SerializeField] protected WorkSpace workSpace;
 
     private void OnEnable()
     {
@@ -13,7 +14,7 @@ public class DetailView_WorkSpace : DetailView
 
     protected override void AddPanel()
     {
-        PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
+        PanelManager.Instance.RemoveTopPanel(PanelManager.Instance.GetTopPanel());
         PanelManager.Instance.AddPanel(new DetailViewPanel_WorkSpace(workSpace, StartShow, EndShow));
     }
 

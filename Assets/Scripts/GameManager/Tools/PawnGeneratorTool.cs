@@ -49,7 +49,7 @@ public class PawnGeneratorTool
             }
             if (prefab == null)
             {
-                PawnKindDef ramdomPawnKindDef = GameManager.TotalPawnDefList[UnityEngine.Random.Range(0, GameManager.TotalPawnDefList.Count)];
+                PawnKindDef ramdomPawnKindDef = StaticPawnDef.GetRandomPawn();
                 kindDef.PrefabPath = ramdomPawnKindDef.PrefabPath;
                 kindDef.PawnDescription = ramdomPawnKindDef.PawnDescription;
                 prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
@@ -66,11 +66,6 @@ public class PawnGeneratorTool
             result.transform.SetParent(GameManager.transform, false);
             return true;
         }
-    }
-
-    public PawnKindDef GetRandomPawnKindDef()
-    {
-        return GameManager.TotalPawnDefList[UnityEngine.Random.Range(0, GameManager.TotalPawnDefList.Count)];
     }
 
     public void LoadScenePawnFromSave(Data_GameSave data_GameSave)
@@ -98,9 +93,9 @@ public class PawnGeneratorTool
 
     public void StartSelect()
     {
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), GetRandomPawnKindDef(), new PawnInfo(), null));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
         foreach (var pawn in GameManager.PawnWhenStartList)
         {
             pawn.Def.StopUpdate = true;

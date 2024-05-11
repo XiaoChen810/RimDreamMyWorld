@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using ChenChen_CropSystem;
 
 
 public class WorkSpace_Farm : WorkSpace
@@ -16,20 +17,28 @@ public class WorkSpace_Farm : WorkSpace
     /// </summary>
     [SerializeField] protected List<Cell> _cells = new();
 
+    [SerializeField] protected CropDef _whatCrop;
+
     protected override void AfterSizeChange()
     {
         _cells.Clear();
         Bounds bounds = SR.bounds;
-        Debug.Log($"bounds min is {bounds.min},bounds max is {bounds.max}");
+
         // 遍历所有整数点，创建并添加到_cells列表中
         for (float x = Mathf.Floor(bounds.min.x); x < Mathf.Ceil(bounds.max.x); x++)
         {
             for (float y = Mathf.Floor(bounds.min.y); y < Mathf.Ceil(bounds.max.y); y++)
             {
                 Vector2Int cellPosition = new Vector2Int((int)x, (int)y);
-                _cells.Add(new Cell { pos = cellPosition, isUse = false , isFarm = false});
+                _cells.Add(new Cell { pos = cellPosition + new Vector2(0.5f, 0.5f), isUse = false, isFarm = false });
             }
         }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        _whatCrop = CropManager.Instance.GetCropDef("小麦");
     }
 
     /// <summary>
@@ -54,12 +63,23 @@ public class WorkSpace_Farm : WorkSpace
         return false;
     }
 
+    /// <summary>
+    /// 尝试在这个位置种植
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public bool TrySetAPositionHadFarmed(Vector2 position)
     {
         foreach(Cell cell in _cells)
         {
             if(cell.pos == position && cell.isUse && !cell.isFarm)
             {
+                GameObject cropObj = new GameObject(_whatCrop.CropName);
+                cropObj.transform.position = position;
+                cropObj.transform.SetParent(transform, true);
+                Crop crop = cropObj.AddComponent<Crop>();
+                crop.Init(_whatCrop, this);
+
                 cell.isFarm = true;
                 cell.isUse = false;
                 Debug.Log($"{position} is Farm");

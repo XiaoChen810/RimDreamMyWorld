@@ -109,7 +109,7 @@ namespace ChenChen_BuildingSystem
                 {
                     if (!TryGetComponent<DetailView>(out _detailView))
                     {
-                        _detailView = gameObject.AddComponent<DetailView_WorkSpace>();
+                        _detailView = gameObject.AddComponent<DetailView_Thing>();
                     }
                 }
                 return _detailView;

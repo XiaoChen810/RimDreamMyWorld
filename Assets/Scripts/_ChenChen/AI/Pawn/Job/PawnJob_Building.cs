@@ -32,7 +32,7 @@ namespace ChenChen_AI
             curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
-                Debug.LogWarning("The Building Don't Have Building Component");
+                DebugLogDescription = ("The Building Don't Have Building Component");
                 return false;
             }
 
@@ -45,7 +45,7 @@ namespace ChenChen_AI
             // 设置人物目标点，前往目标，跑过去
             if (!_pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, _pawn.WorkRange))
             {
-                Debug.LogWarning("The building can't arrive");
+                DebugLogDescription = ("The building can't arrive");
                 return false;
             }
 

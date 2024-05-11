@@ -51,7 +51,7 @@ namespace ChenChen_UISystem
         /// 移除面板( 仅限顶层面板 )，然后恢复下一个面板
         /// </summary>
         /// <param name="removedPanel"></param>
-        public void RemovePanel(PanelBase removedPanel)
+        public void RemoveTopPanel(PanelBase removedPanel)
         {
             if (removedPanel == null) return;
 
@@ -67,8 +67,40 @@ namespace ChenChen_UISystem
                     Debug.Log($"当前顶层UI不是{removedPanel.UIType.Name}");
                 }
             }
-            // 移除后将下一个面板接触暂停
+            // 移除后将下一个面板解除暂停
             if(_panelsStack.Count > 0)
+            {
+                if (_panelsStack.Peek().IsStopping)
+                    _panelsStack.Peek().OnResume();
+            }
+        }
+
+        public void RemovePanel(PanelBase removedPanel)
+        {
+            if (removedPanel == null) return;
+
+            Stack<PanelBase> temp = new();
+            // 移除选择的面板
+            while (_panelsStack.Count > 0)
+            {
+                if (_panelsStack.Peek() == removedPanel)
+                {
+                    _panelsStack.Pop().OnExit();
+                    break;
+                }
+                else
+                {
+                    temp.Push(_panelsStack.Pop());
+                    Debug.Log($"当前顶层UI不是{removedPanel.UIType.Name}");
+                }
+            }
+            // 将剩下的面板放回
+            while (temp.Count > 0)
+            {
+                _panelsStack.Push(temp.Pop());
+            }
+            // 最后后将最上层面板解除暂停
+            if (_panelsStack.Count > 0)
             {
                 if (_panelsStack.Peek().IsStopping)
                     _panelsStack.Peek().OnResume();
@@ -82,8 +114,7 @@ namespace ChenChen_UISystem
         /// <param name="sceneType"> 限定在哪种场景里可以切换，如果不填则全部都可以 </param>
         public void TogglePanel(PanelBase nextPanel, SceneType sceneType = SceneType.None)
         {
-            GetTopPanel(out PanelBase panel);
-            if (panel == null || panel.GetType() != nextPanel.GetType())
+            if (!TryGetTopPanel(out PanelBase top) || top.GetType() != nextPanel.GetType())
             {
                 if (sceneType == SceneType.None || SceneSystem.Instance.CurSceneType == sceneType)
                 {
@@ -92,7 +123,7 @@ namespace ChenChen_UISystem
             }
             else
             {
-                RemovePanel(GetTopPanel());
+                RemoveTopPanel(GetTopPanel());
             }
         }
 
@@ -113,16 +144,16 @@ namespace ChenChen_UISystem
         /// <summary>
         /// 获取顶层面板
         /// </summary>
-        public PanelBase GetTopPanel(out PanelBase top)
+        public bool TryGetTopPanel(out PanelBase top)
         {
             _panelsStack.TryPeek(out var panel);
             if (panel != null)
             {
                 top = panel;
-                return panel;
+                return true;
             }
             top = null;
-            return null;
+            return false;
         }
 
         /// <summary>

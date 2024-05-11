@@ -6,13 +6,13 @@ using UnityEngine;
 
 public class WorkSpaceTool : MonoBehaviour
 {
-    public GameManager GameManager;
-    public GameObject WorkSpacePrefab;
+    private GameManager GameManager;
     private LineRenderer lineRenderer;
 
     [SerializedDictionary("SpaceName", "WorkSpace")]
-    public SerializedDictionary<string, WorkSpace> TotalWorkSpaceDictionary;
+    [SerializeField] private SerializedDictionary<string, WorkSpace> TotalWorkSpaceDictionary;
 
+    public GameObject WorkSpacePrefab;
     public bool IsDoingWorkSpace = false;
 
     private void Start()
@@ -92,22 +92,26 @@ public class WorkSpaceTool : MonoBehaviour
             // 当鼠标松开时，确认放置
             if (Input.GetMouseButtonUp(0))
             {
-                // 设置sr的大小为方框大小
                 mousePosition.x = Mathf.Floor(mousePosition.x);
                 mousePosition.y = Mathf.Floor(mousePosition.y);
-                workSpace.SetSize(mouseDownPosition, mousePosition);
-                workSpace.gameObject.SetActive(true);
-                // 重置LineRenderer
-                ResetLineRenderer();
-                IsDoingWorkSpace = false;
+                if (IsOk(mouseDownPosition, mousePosition))
+                {
+                    // 设置sr的大小为方框大小
+                    workSpace.SetSize(mouseDownPosition, mousePosition);
+                    workSpace.gameObject.SetActive(true);
+                    // 重置LineRenderer
+                    ResetLineRenderer();
+                    IsDoingWorkSpace = false;
+                }
+                else
+                {
+                    Cancel(workSpaceName, workSpace);
+                }
             }
             // 当鼠标右键按下，取消本次工作区设置
             if (Input.GetMouseButtonDown(1))
             {
-                ResetLineRenderer();
-                Destroy(workSpace.gameObject);
-                TotalWorkSpaceDictionary.Remove(workSpaceName);
-                IsDoingWorkSpace = false;
+                Cancel(workSpaceName, workSpace);
                 break;
             }
             yield return null;
@@ -167,6 +171,15 @@ public class WorkSpaceTool : MonoBehaviour
         {
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
+        }
+
+        void Cancel(string workSpaceName, WorkSpace workSpace)
+        {
+            ResetLineRenderer();
+            Destroy(workSpace.gameObject);
+            TotalWorkSpaceDictionary.Remove(workSpaceName);
+            index--;
+            IsDoingWorkSpace = false;
         }
     }
 

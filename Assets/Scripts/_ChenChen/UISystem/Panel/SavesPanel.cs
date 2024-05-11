@@ -34,7 +34,7 @@ namespace ChenChen_UISystem
             {
                 if (selectedGameSave != null)
                 {
-                    PanelManager.RemovePanel(this);
+                    PanelManager.RemoveTopPanel(this);
                     Action onPreloadAnimation = () =>
                     {
                         Debug.Log("Continue Game");
@@ -63,7 +63,7 @@ namespace ChenChen_UISystem
             if (savePrefab == null)
             {
                 Debug.LogError("存档的预制件为空, 检查位置: " + saveDefaultPath);
-                PanelManager.RemovePanel(this);
+                PanelManager.RemoveTopPanel(this);
                 return;
             }
             // 先清空内容

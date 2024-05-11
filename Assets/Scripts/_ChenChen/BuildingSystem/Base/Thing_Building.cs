@@ -35,7 +35,7 @@ namespace ChenChen_BuildingSystem
                 LifeState = Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding;
             }      
             // 设置完一切后
-            BuildingSystemManager.Instance.AddThingToList(this.gameObject);
+            ThingSystemManager.Instance.AddThingToList(this.gameObject);
         }
 
         public override void OnMarkBuild()
@@ -92,7 +92,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnCancel()
         {
-            BuildingSystemManager.Instance.RemoveThingToList(this.gameObject);
+            ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
             Destroy(gameObject);
         }
 
@@ -131,10 +131,15 @@ namespace ChenChen_BuildingSystem
             }
             if (_detailView.OnShow)
             {
-                PanelManager.Instance.RemovePanel(PanelManager.Instance.GetTopPanel());
+                PanelManager panel = DetailViewManager.Instance.PanelManager;
+                panel.RemoveTopPanel(panel.GetTopPanel());
             }
-            BuildingSystemManager.Instance.RemoveThingToList(this.gameObject);
-            FindAnyObjectByType<AstarPath>().Scan();
+            if (Def.IsObstacle)
+            {
+                Bounds bounds = ColliderSelf.bounds;
+                AstarPath.active.UpdateGraphs(bounds);
+            }
+            ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
             Debug.Log($"移除建筑：" + gameObject.name);
             Destroy(gameObject);
         }

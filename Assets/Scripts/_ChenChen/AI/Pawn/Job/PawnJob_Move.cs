@@ -20,11 +20,16 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
+            // 设置目标点
+            if (!_pawn.MoveControl.GoToHere(targetPos))
+            {
+                DebugLogDescription = ("无法移动到目标点");
+                return false;
+            }
             // 设置人物状态 
             _pawn.JobToDo(null);
             _pawn.JobCanGet();
-            // 设置目标点
-            return _pawn.MoveControl.GoToHere(targetPos);
+            return true;
         }
 
         public override StateType OnUpdate()

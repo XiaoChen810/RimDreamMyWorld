@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CropName: "\u5C0F\u9EA6"
   CropDescription: "\u5C0F\u9EA6\uFF0C\u53EF\u4EE5\u78E8\u6210\u5927\u7C73"
-  CropIcon: {fileID: 0}
+  CropIcon: {fileID: 28910670122852590, guid: 2082565e6a1309c48b390c068ac44a8c, type: 3}
   GroupNutrientRequiries: 100
   GroupSpeed: 25
   CropsSprites:

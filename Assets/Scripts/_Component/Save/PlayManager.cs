@@ -63,7 +63,7 @@ public class PlayManager : SingletonMono<PlayManager>
         }
         saveData.SaveMap = data_MapSave;
         // 保存地图上所有的物品
-        foreach (var thing in BuildingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
+        foreach (var thing in ThingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
         {
             // 保存
             ThingDef thingDef = thing.Def;

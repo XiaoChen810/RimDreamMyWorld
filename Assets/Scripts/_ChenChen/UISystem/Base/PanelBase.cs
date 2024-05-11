@@ -135,7 +135,7 @@ namespace ChenChen_UISystem
         /// <param name="name"></param>
         protected void UseBlueprintByName(string name)
         {
-            BuildingSystemManager.Instance.OpenBuildingMode(name);
+            ThingSystemManager.Instance.OpenBuildingMode(name);
             PanelManager.RemoveTopPanel(this);
         }
 
@@ -144,7 +144,7 @@ namespace ChenChen_UISystem
         /// </summary>
         protected void InitContent(ThingType type) 
         {
-            Dictionary<string, ThingDef> dict = BuildingSystemManager.Instance.ThingDefDictionary;
+            Dictionary<string, ThingDef> dict = ThingSystemManager.Instance.ThingDefDictionary;
             // 获取装内容的子物体
             GameObject content = UITool.GetChildByName("Content");
             // 检查是否有GridLayoutGroup组件

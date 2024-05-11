@@ -5,10 +5,17 @@ using UnityEngine;
 /// 权限基类，用于绑定是否被使用，谁在使用。
 /// 继承于MonoBehaviour
 /// </summary>
-public abstract class PrivilegeBase : MonoBehaviour
+public abstract class PermissionBase : MonoBehaviour
 {
+    public enum PermissionType 
+    {
+        IsFree = 0,
+        IsBooking = 1,
+        IsUsed = 2,
+    }
+
     // 使用的棋子
-    protected Pawn _theUsingPawn;
+    [SerializeField] protected Pawn _theUsingPawn;
     public Pawn TheUsingPawn
     {
         get
@@ -22,27 +29,37 @@ public abstract class PrivilegeBase : MonoBehaviour
     }
 
     // 是否被使用
-    protected bool _isUsed;
-    public bool IsUsed
+    [SerializeField] protected PermissionType _permission;
+    public PermissionType Permission
     {
         get
         {
-            return _isUsed;
+            return _permission;
         }
         protected set
         {
-            _isUsed = value;
+            _permission = value;
         }
+    }
+
+    /// <summary>
+    /// 预定
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool BookingMe()
+    {
+        Permission = PermissionType.IsBooking;
+        return true;
     }
 
     /// <summary>
     /// 获取使用权限
     /// </summary>
-    public virtual bool GetPrivilege(Pawn pawn)
+    public virtual bool GetPermission(Pawn pawn)
     {
-        if (_isUsed) return false;
+        if (_permission == PermissionType.IsUsed) return false;
 
-        _isUsed = true;
+        _permission = PermissionType.IsUsed;
         _theUsingPawn = pawn;
         return true;
     }
@@ -52,11 +69,11 @@ public abstract class PrivilegeBase : MonoBehaviour
     /// </summary>
     /// <param name="pawn"></param>
     /// <returns></returns>
-    public virtual bool RevokePrivilege(Pawn pawn)
+    public virtual bool RevokePermission(Pawn pawn)
     {
         if (_theUsingPawn != pawn) return false;
 
-        _isUsed = false;
+        _permission = PermissionType.IsFree;
         _theUsingPawn = null;
         return true;
     }

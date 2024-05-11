@@ -4,7 +4,7 @@ using ChenChen_AI;
 
 namespace ChenChen_BuildingSystem
 {
-    public abstract class ThingBase : PrivilegeBase, IBlueprint, IDemolish, IDetailView 
+    public abstract class ThingBase : PermissionBase, IBlueprint, IDemolish, IDetailView 
     {
         /// <summary>
         /// 物品自身的定义
@@ -94,7 +94,8 @@ namespace ChenChen_BuildingSystem
                 }
                 else
                 {
-                    Debug.Log($"物品的生命周期已经处于 {value}，无需切换");
+                    if (value != BuildingLifeStateType.None)
+                        Debug.LogWarning($"物品{this.name}(position: {this.transform.position})的生命周期已经处于 {value}，无需切换");
                 }
             }
         }

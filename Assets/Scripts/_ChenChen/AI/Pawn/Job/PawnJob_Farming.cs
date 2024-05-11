@@ -27,28 +27,24 @@ namespace ChenChen_AI
                 DebugLogDescription = ($"{_pawn.name} No WorkSpace_Farm");
                 return false;
             }
-
-            // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!_workSpace_Farm.GetPrivilege(_pawn))
-            {
-                DebugLogDescription = ($"{_pawn.name} No privilege");
-                return false;
-            }
-
             // 尝试获取工作位置            
             if (!_workSpace_Farm.TryGetAFarmingPosition(out _farmingPosition))
             {
                 DebugLogDescription = ($"{_pawn.name} 无法从 {_workSpace_Farm.name} 中获取工作位置");
                 return false;
             }
-
+            // 最后尝试取得权限，预定当前工作，标记目标被使用
+            if (!_workSpace_Farm.GetPermission(_pawn))
+            {
+                DebugLogDescription = ($"{_pawn.name} No privilege");
+                return false;
+            }
             // 设置人物目标点，前往目标，跑过去
             if (!_pawn.MoveControl.GoToHere(_farmingPosition, Urgency.Urge))
             {
                 DebugLogDescription = ($"{_pawn.name} The position can't arrive");
                 return false;
             }
-
             // 设置人物无法接取工作
             _pawn.JobToDo(_workSpace_Farm.gameObject);
 
@@ -91,11 +87,12 @@ namespace ChenChen_AI
             _pawn.Animator.SetBool("IsDoing", false);
 
             // 归还目标使用权限
-            _workSpace_Farm.RevokePrivilege(_pawn);
+            _workSpace_Farm.RevokePermission(_pawn);
         }
 
         public override void OnInterrupt()
         {
+            _workSpace_Farm.ReturnAPosition(_farmingPosition);
             OnExit();
         }
     }

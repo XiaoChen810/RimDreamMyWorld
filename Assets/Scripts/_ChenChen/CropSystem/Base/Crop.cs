@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChenChen_CropSystem
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class Crop : PrivilegeBase
+    public class Crop : PermissionBase
     {
         [SerializeField] public CropDef Def { get; private set; }
         [SerializeField] public WorkSpace_Farm WorkSpace { get; private set; }

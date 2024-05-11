@@ -37,8 +37,10 @@ public class WorkSpaceTool : MonoBehaviour
         GameObject result = null;
         foreach(var space in TotalWorkSpaceDictionary)
         {
-            if(space.Value.Type == workSpaceType && !space.Value.IsUsed)
+            if(space.Value.WorkSpaceType == workSpaceType 
+                && space.Value.Permission == PermissionBase.PermissionType.IsFree)
             {
+                space.Value.BookingMe();
                 result = space.Value.gameObject;
                 break;
             }
@@ -46,20 +48,11 @@ public class WorkSpaceTool : MonoBehaviour
         return result;
     }
 
-    private IEnumerator WorkSpaceSettingCo(string workSpaceName)
+    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, WorkSpaceType workSpaceType)
     {
-        WorkSpace workSpace;
-        if (!TotalWorkSpaceDictionary.TryGetValue(workSpaceName, out workSpace))
-        {
-            IsDoingWorkSpace = false;
-            yield break;
-        }
-
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mouseDownPosition = mousePosition;
-        workSpace.transform.position = mouseDownPosition;
-        workSpace.gameObject.SetActive(false);
 
         while (IsDoingWorkSpace)
         {
@@ -96,22 +89,31 @@ public class WorkSpaceTool : MonoBehaviour
                 mousePosition.y = Mathf.Floor(mousePosition.y);
                 if (IsOk(mouseDownPosition, mousePosition))
                 {
+                    // 生成实例
+                    GameObject obj = Instantiate(WorkSpacePrefab, transform);
+                    obj.name = newWorkSpaceName;
+                    obj.tag = "WorkSpace";
+                    WorkSpace workSpace = obj.GetComponent<WorkSpace>();
+                    workSpace.Init(workSpaceType);
+
                     // 设置sr的大小为方框大小
                     workSpace.SetSize(mouseDownPosition, mousePosition);
                     workSpace.gameObject.SetActive(true);
+
                     // 重置LineRenderer
                     ResetLineRenderer();
                     IsDoingWorkSpace = false;
+                    TotalWorkSpaceDictionary.Add(newWorkSpaceName, workSpace);
                 }
                 else
                 {
-                    Cancel(workSpaceName, workSpace);
+                    Cancel();
                 }
             }
             // 当鼠标右键按下，取消本次工作区设置
             if (Input.GetMouseButtonDown(1))
             {
-                Cancel(workSpaceName, workSpace);
+                Cancel();
                 break;
             }
             yield return null;
@@ -124,8 +126,8 @@ public class WorkSpaceTool : MonoBehaviour
             Collider2D[] hitColliders = Physics2D.OverlapAreaAll(start, end);
             foreach (Collider2D collider in hitColliders)
             {
-                // 有任何一个不是自己的碰撞体就返回
-                if (collider != workSpace.Coll) return false;
+                // 有任何一个碰撞体就返回
+                return false;
             }
             var nodes = MapManager.Instance.MapDatasDict[MapManager.Instance.CurrentMapName].mapNodes;
             int minx = start.x < end.x ? (int)start.x : (int)end.x;
@@ -173,11 +175,9 @@ public class WorkSpaceTool : MonoBehaviour
             lineRenderer.endColor = color;
         }
 
-        void Cancel(string workSpaceName, WorkSpace workSpace)
+        void Cancel()
         {
             ResetLineRenderer();
-            Destroy(workSpace.gameObject);
-            TotalWorkSpaceDictionary.Remove(workSpaceName);
             index--;
             IsDoingWorkSpace = false;
         }
@@ -193,15 +193,8 @@ public class WorkSpaceTool : MonoBehaviour
             Debug.LogWarning("不会生成相同名字的工作区");
             return;
         }
-        // 生成实例
-        GameObject obj = Instantiate(WorkSpacePrefab, transform);
-        obj.name = newWorkSpaceName;
-        obj.tag = "WorkSpace";
-        WorkSpace workSpace = obj.GetComponent<WorkSpace>();
-        workSpace.Init(workSpaceType);
-        TotalWorkSpaceDictionary.Add(newWorkSpaceName, workSpace);
         // 初始设置
-        StartCoroutine(WorkSpaceSettingCo(newWorkSpaceName));
+        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, workSpaceType));
     }
 
     /// <summary>

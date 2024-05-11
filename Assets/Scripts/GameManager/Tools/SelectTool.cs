@@ -21,7 +21,7 @@ public class SelectTool : MonoBehaviour
     private void Update()
     {
         // 如果在建造模式中则不检测输入
-        if (ChenChen_BuildingSystem.BuildingSystemManager.Instance.Tool.OnBuildMode) return;
+        if (ChenChen_BuildingSystem.ThingSystemManager.Instance.Tool.OnBuildMode) return;
         if (GameManager.Instance.WorkSpaceTool.IsDoingWorkSpace) return;
         InputUpdate();
     }

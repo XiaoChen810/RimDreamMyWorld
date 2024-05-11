@@ -1,6 +1,7 @@
 ﻿using ChenChen_UISystem;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 
 public class DetailView_WorkSpace : DetailView
@@ -14,21 +15,24 @@ public class DetailView_WorkSpace : DetailView
 
     protected override void AddPanel()
     {
-        PanelManager.Instance.RemoveTopPanel(PanelManager.Instance.GetTopPanel());
-        PanelManager.Instance.AddPanel(new DetailViewPanel_WorkSpace(workSpace, StartShow, EndShow));
+        PanelManager panel = DetailViewManager.Instance.PanelManager;
+        panel.RemoveTopPanel(panel.GetTopPanel());
+        panel.AddPanel(new DetailViewPanel_WorkSpace(workSpace, StartShow, EndShow));
     }
 
     protected override void UpdateShow(DetailViewPanel panel)
     {
         if (panel == null) return;
         if (workSpace == null) return;
-
+        Content.Clear();
+        if(TryGetComponent<WorkSpace_Farm>(out WorkSpace_Farm workSpace_Farm))
+        {
+            Content.Add($"当前种植作物: {workSpace_Farm.CurCrop.CropName}");
+        }
+        Content.Add($"使用者: {(workSpace.TheUsingPawn != null ? workSpace.TheUsingPawn.name : null)}");
         panel.SetView(
             workSpace.name,
-            0,
-            0,
-            0,
-            userName: (workSpace.TheUsingPawn != null) ? workSpace.TheUsingPawn.name : null
+            Content
             );
     }
 }

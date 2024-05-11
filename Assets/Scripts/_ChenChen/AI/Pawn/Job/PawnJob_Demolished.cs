@@ -23,13 +23,14 @@ namespace ChenChen_AI
             currentWorkObject = building.GetComponent<Thing_Building>();
             if (currentWorkObject == null)
             {
-                Debug.LogWarning("The Building Don't Have Building Component");
+                DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!currentWorkObject.GetPrivilege(_pawn))
+            if (!currentWorkObject.GetPermission(_pawn))
             {
+                DebugLogDescription = ("目标已经其他人被使用");
                 return false;
             }
 
@@ -37,7 +38,7 @@ namespace ChenChen_AI
             bool flag = _pawn.MoveControl.GoToHere(building.transform.position, Urgency.Urge, _pawn.WorkRange);
             if (!flag)
             {
-                Debug.LogWarning("The building can't arrive");
+                DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
@@ -93,7 +94,7 @@ namespace ChenChen_AI
         public override void OnInterrupt()
         {
             // 归还目标使用权限
-            currentWorkObject.RevokePrivilege(_pawn);
+            currentWorkObject.RevokePermission(_pawn);
 
             OnExit();
         }

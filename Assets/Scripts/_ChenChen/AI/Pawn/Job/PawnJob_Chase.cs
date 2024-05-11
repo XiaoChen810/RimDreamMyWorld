@@ -16,10 +16,17 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            if (target == null) return false;
+            if (target == null)
+            {
+                DebugLogDescription = ("目标为空");
+                return false;
+            }
             targetPawnComponent = target.GetComponent<Pawn>();
-            if (targetPawnComponent == null) return false;
-
+            if (targetPawnComponent == null)
+            {
+                DebugLogDescription = ("目标无Pawn组件");
+                return false;
+            }
             // 设置人物无法接取工作
             _pawn.JobToDo(target);
             // 设置人物目标点，前往目标，走过去

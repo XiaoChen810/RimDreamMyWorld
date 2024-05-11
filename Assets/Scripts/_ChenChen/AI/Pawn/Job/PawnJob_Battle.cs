@@ -17,7 +17,12 @@ namespace ChenChen_AI
         public override bool OnEnter()
         {
             targetPawnComponent = target.GetComponent<Pawn>();
-            if (targetPawnComponent == null) return false;
+            if (targetPawnComponent == null)
+            {
+                DebugLogDescription = ("尝试获取Pawn组件失败");
+                return false;
+            }
+
             return _pawn.TryToEnterBattle(targetPawnComponent);
         }
 

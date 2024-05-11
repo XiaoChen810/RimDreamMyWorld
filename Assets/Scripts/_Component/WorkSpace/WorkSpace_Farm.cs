@@ -11,13 +11,19 @@ public class WorkSpace_Farm : WorkSpace
         public Vector2 pos;
         public bool isUse;
         public bool isFarm;
+        public Crop Crop;
     }
     /// <summary>
     /// 包含的所有网格
     /// </summary>
-    [SerializeField] protected List<Cell> _cells = new();
+    //protected List<Cell> _cells = new();
+    protected Dictionary<Vector2,Cell> _cells = new Dictionary<Vector2,Cell>();
 
     [SerializeField] protected CropDef _whatCrop;
+    public CropDef CurCrop
+    {
+        get { return _whatCrop; }
+    }
 
     protected override void AfterSizeChange()
     {
@@ -29,8 +35,8 @@ public class WorkSpace_Farm : WorkSpace
         {
             for (float y = Mathf.Floor(bounds.min.y); y < Mathf.Ceil(bounds.max.y); y++)
             {
-                Vector2Int cellPosition = new Vector2Int((int)x, (int)y);
-                _cells.Add(new Cell { pos = cellPosition + new Vector2(0.5f, 0.5f), isUse = false, isFarm = false });
+                Vector2 cellPosition = new Vector2Int((int)x, (int)y) + new Vector2(0.5f, 0.5f);
+                _cells.Add(cellPosition, new Cell { pos = cellPosition, isUse = false, isFarm = false });
             }
         }
     }
@@ -42,23 +48,21 @@ public class WorkSpace_Farm : WorkSpace
     }
 
     /// <summary>
-    /// 尝试获取一个种植的位置，随机的
+    /// 尝试获取一个种植的位置
     /// </summary>
     /// <returns></returns>
     public bool TryGetAFarmingPosition(out Vector2 farmingPositon)
     {
-        List<Cell> cellsNoUse = new();
-        foreach(Cell cell in _cells)
+        foreach(var cell in _cells)
         {
-            if (!cell.isUse && !cell.isFarm) cellsNoUse.Add(cell);
+            if(!cell.Value.isUse && !cell.Value.isFarm)
+            {
+                farmingPositon = cell.Key;
+                cell.Value.isUse = true;
+                return true;
+            }
         }
-        if (cellsNoUse.Count > 0)
-        {
-            int index = Random.Range(0, cellsNoUse.Count);
-            farmingPositon = cellsNoUse[index].pos;
-            cellsNoUse[index].isUse = true;
-            return true;
-        }
+        Debug.LogWarning("No Position Can Farm");
         farmingPositon = Vector2.zero;
         return false;
     }
@@ -70,9 +74,10 @@ public class WorkSpace_Farm : WorkSpace
     /// <returns></returns>
     public bool TrySetAPositionHadFarmed(Vector2 position)
     {
-        foreach(Cell cell in _cells)
+        if (_cells.ContainsKey(position))
         {
-            if(cell.pos == position && cell.isUse && !cell.isFarm)
+            Cell cell = _cells[position];
+            if (cell.pos == position && cell.isUse && !cell.isFarm)
             {
                 GameObject cropObj = new GameObject(_whatCrop.CropName);
                 cropObj.transform.position = position;
@@ -82,7 +87,7 @@ public class WorkSpace_Farm : WorkSpace
 
                 cell.isFarm = true;
                 cell.isUse = false;
-                Debug.Log($"{position} is Farm");
+                cell.Crop = crop;
                 return true;
             }
         }
@@ -90,5 +95,16 @@ public class WorkSpace_Farm : WorkSpace
         return false;
     }
 
+    public void ReturnAPosition(Vector2 position)
+    {
+        if (_cells.ContainsKey(position))
+        {
+            Cell cell = _cells[position];
+            if (cell.pos == position && cell.isUse && !cell.isFarm)
+            {
+                cell.isUse = false;
+            }
+        }
+    }
 }
 

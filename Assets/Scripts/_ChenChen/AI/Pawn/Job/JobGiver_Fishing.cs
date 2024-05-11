@@ -7,7 +7,7 @@ namespace ChenChen_AI
     {
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            return BuildingSystemManager.Instance.GetThingGenerated("钓鱼点", needFree: true);
+            return ThingSystemManager.Instance.GetThingGenerated("钓鱼点", needFree: true);
         }
     }
 }

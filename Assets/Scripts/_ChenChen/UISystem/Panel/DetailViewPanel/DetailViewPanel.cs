@@ -1,4 +1,6 @@
 ﻿using ChenChen_BuildingSystem;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +11,7 @@ namespace ChenChen_UISystem
         static readonly string path = "UI/Panel/Menus/DetailViewPanel";
 
         public Text ItemName { get; private set; }
-        public Text Durability { get; private set; }
-        public Text Workload { get; private set; }
-        public Text UserName { get; private set; }
+        public List<Text> Texts { get; private set; }
         public Button DemolishBtn { get; private set; }
 
 
@@ -31,18 +31,27 @@ namespace ChenChen_UISystem
             DemolishBtn.gameObject.SetActive(false);
 
             ItemName = UITool.TryGetChildComponentByName<Text>("ItemName");
-            Durability = UITool.TryGetChildComponentByName<Text>("Durability");
-            Workload = UITool.TryGetChildComponentByName<Text>("Workload");
-            UserName = UITool.TryGetChildComponentByName<Text>("UserName");
-
+            Texts = UITool.GetChildByName("TextContent").GetComponentsInChildren<Text>().ToList();
         }
 
-        public void SetView(string itemName, int maxDur, int curDur, int workload, string userName = null)
+        public void SetView(string itemName, List<string> content)
         {
             ItemName.text = itemName;
-            Durability.text = $"{maxDur} / {curDur}";
-            Workload.text = workload.ToString();
-            UserName.text = userName;
+            if(content.Count > Texts.Count)
+            {
+                Debug.LogWarning($"最大加载{Texts.Count}行内容");
+            }
+            for (int i = 0; i < Texts.Count; i++)
+            {
+                if(i < content.Count)
+                {
+                    Texts[i].text = content[i];
+                }
+                else
+                {
+                    Texts[i].text = string.Empty;
+                }
+            }
         }
     }
 }

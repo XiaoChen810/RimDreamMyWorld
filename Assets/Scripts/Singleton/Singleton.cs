@@ -13,6 +13,7 @@ public class Singleton<T> where T : new()
             if (instance == null)
             {
                 instance = new T();
+                Debug.Log("Create new instance: " + instance.ToString());
             }
             return instance;
         }

@@ -13,7 +13,7 @@ namespace ChenChen_BuildingSystem
     /// </summary>
     public class BuildingModeTool
     {
-        public BuildingSystemManager BuildingSystemManager;
+        public ThingSystemManager BuildingSystemManager;
         /// <summary>
         /// 当前蓝图的名字
         /// </summary>
@@ -35,7 +35,7 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         [field: SerializeField] public GameObject MouseIndicator {  get; private set; }
 
-        public BuildingModeTool(BuildingSystemManager buildingSystemManager)
+        public BuildingModeTool(ThingSystemManager buildingSystemManager)
         {
             BuildingSystemManager = buildingSystemManager;
         }

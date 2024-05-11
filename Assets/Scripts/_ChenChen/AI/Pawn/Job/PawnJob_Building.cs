@@ -32,20 +32,21 @@ namespace ChenChen_AI
             curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
-                DebugLogDescription = ("The Building Don't Have Building Component");
+                DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!curTargetComponent.GetPrivilege(_pawn))
+            if (!curTargetComponent.GetPermission(_pawn))
             {
+                DebugLogDescription = ("目标已经其他人被使用");
                 return false;
             }
 
             // 设置人物目标点，前往目标，跑过去
             if (!_pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, _pawn.WorkRange))
             {
-                DebugLogDescription = ("The building can't arrive");
+                DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
@@ -87,7 +88,7 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             // 归还目标使用权限
-            curTargetComponent.RevokePrivilege(_pawn);
+            curTargetComponent.RevokePermission(_pawn);
 
             // 设置人物状态
             _pawn.JobDone();

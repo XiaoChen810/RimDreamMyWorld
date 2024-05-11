@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public abstract class WorkSpace : PrivilegeBase, IDetailView
+public abstract class WorkSpace : PermissionBase, IDetailView
 {
     // Component
     public SpriteRenderer SR;
     public BoxCollider2D Coll;
 
     // Type
-    public WorkSpaceType Type;
+    public WorkSpaceType WorkSpaceType;
 
     // œ∏Ω⁄ ”Õº
     protected DetailView _detailView;
@@ -39,7 +39,7 @@ public abstract class WorkSpace : PrivilegeBase, IDetailView
 
     public void Init(WorkSpaceType type)
     {
-        Type = type;
+        WorkSpaceType = type;
     }
 
     public void SetSize(Vector2 oneV, Vector2 twoV)

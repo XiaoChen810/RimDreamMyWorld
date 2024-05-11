@@ -1,5 +1,6 @@
 using ChenChen_BuildingSystem;
 using ChenChen_UISystem;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -9,11 +10,14 @@ using UnityEngine;
 public abstract class DetailView : MonoBehaviour
 {
     public bool OnShow = false;
-    //public DetailViewPanel Panel { get; protected set; }
+
+    /// <summary>
+    /// ÄÚÈÝ
+    /// </summary>
+    public List<string> Content = new List<string>();
 
     public virtual void Selected()
     {
-        Debug.Log($"{gameObject.name} is selected");
         AddPanel();
     }
 
@@ -25,8 +29,7 @@ public abstract class DetailView : MonoBehaviour
     {
         if(OnShow)
         {
-            DetailViewPanel detail = PanelManager.Instance.GetTopPanel() as DetailViewPanel;
-            if(detail != null)
+            if (DetailViewManager.Instance.PanelManager.GetTopPanel() is DetailViewPanel detail)
             {
                 UpdateShow(detail);
             }

@@ -3,36 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using UnityEditor;
-using UnityEditor.Rendering;
-using ChenChen_MapGenerator;
+using ChenChen_UISystem;
+using ChenChen_Scene;
 
 namespace ChenChen_BuildingSystem
 {
     /// <summary>
     /// 记录全部蓝图
     /// </summary>
-    public class BuildingSystemManager : SingletonMono<BuildingSystemManager>
+    public class ThingSystemManager : SingletonMono<ThingSystemManager>
     {
         [Header("包含全部物品定义的字典")]
         [SerializedDictionary("名称", "物品定义")]
         public SerializedDictionary<string, ThingDef> ThingDefDictionary;
 
         [Header("包含全部已经生成的物体列表")]
-        [SerializeField] private List<GameObject> ThingGeneratedList;
+        [SerializeField] private List<Thing_Building> ThingBuildingGeneratedList;
 
         public BuildingModeTool Tool { get; private set; }
+
+        public PanelManager BuildingPanelManager { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             LoadAllThingDefData();
-            ThingGeneratedList = new List<GameObject>();
+            ThingBuildingGeneratedList = new List<Thing_Building>();
             Tool = new BuildingModeTool(this);
+            BuildingPanelManager = new PanelManager();
         }
 
         public void Update()
         {
             Tool.BuildUpdate();
+            OpenBuildingMenuPanel();
+        }
+
+        private void OpenBuildingMenuPanel()
+        {
+            // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
+            PanelBase.Callback onEnterCallback = () =>
+            {
+                
+            };
+
+            // 定义面板OnExit时的回调函数，重置isPanelCreated为false
+            PanelBase.Callback onExitCallback = () =>
+            {
+                
+            };
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
+            }             
         }
 
         private void LoadAllThingDefData()
@@ -72,7 +96,7 @@ namespace ChenChen_BuildingSystem
         {
             if (obj.TryGetComponent<Thing_Building>(out var building))
             {
-                ThingGeneratedList.Add(obj);
+                ThingBuildingGeneratedList.Add(building);
             }
             else
             {
@@ -86,13 +110,13 @@ namespace ChenChen_BuildingSystem
         /// <param name="obj"></param>
         public void RemoveThingToList(GameObject obj)
         {
-            if (obj.TryGetComponent<Thing_Building>(out var building))
+            if (obj.TryGetComponent<Thing_Building>(out var building) && ThingBuildingGeneratedList.Contains(building))
             {
-                ThingGeneratedList.Remove(obj);
+                ThingBuildingGeneratedList.Remove(building);
             }
             else
             {
-                Debug.LogWarning("检测到没有 Building 组件的物体想添加进 _BuildingList ，已返回");
+                Debug.LogWarning("列表里没有这个物体");
                 return;
             }
         }
@@ -100,35 +124,33 @@ namespace ChenChen_BuildingSystem
         /// 获取物体从已生成列表
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="needFree"></param>
+        /// <param name="needFree"> 是否需要一个没有被使用的 </param>
         /// <returns></returns>
         public GameObject GetThingGenerated(string name = null, bool needFree = true)
         {
-            foreach (var item in ThingGeneratedList)
+            foreach (var building in ThingBuildingGeneratedList)
             {
-                Thing_Building building = item.GetComponent<Thing_Building>();
                 if (name != null && building.Def.DefName != name) continue;
-                if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
-                return item;
+                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                return building.gameObject;
             }
             return null;
         }
         /// <summary>
         /// 获取物体从已生成列表
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="lifeState"> 物体处于什么阶段 </param>
         /// <param name="name"></param>
-        /// <param name="needFree"></param>
+        /// <param name="needFree"> 是否需要一个没有被使用的 </param>
         /// <returns></returns>
-        public GameObject GetThingGenerated(BuildingLifeStateType state, string name = null, bool needFree = true)
+        public GameObject GetThingGenerated(BuildingLifeStateType lifeState, string name = null, bool needFree = true)
         {
-            foreach (var item in ThingGeneratedList)
+            foreach (var building in ThingBuildingGeneratedList)
             {
-                Thing_Building building = item.GetComponent<Thing_Building>();
-                if (building.LifeState != state) continue;
+                if (building.LifeState != lifeState) continue;
                 if (name != null && building.Def.DefName != name) continue;
-                if (needFree && (building.TheUsingPawn != null || building.IsUsed)) continue;
-                return item;
+                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                return building.gameObject;
             }
             return null;
         }

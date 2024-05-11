@@ -8,14 +8,11 @@ using System;
 using ChenChen_AI;
 
 public class GameManager : SingletonMono<GameManager>
-{
-    public PanelManager PanelManager { get; private set; }
+{ 
     public SelectTool SelectTool { get; private set; }
     public PawnGeneratorTool PawnGeneratorTool { get; private set; }
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
-
-    private bool isMenuPanelCreated;
 
     [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
     /// <summary>
@@ -46,48 +43,10 @@ public class GameManager : SingletonMono<GameManager>
 
     private void Init()
     {
-        PanelManager = new PanelManager();
         SelectTool = GetComponent<SelectTool>();
         PawnGeneratorTool = new PawnGeneratorTool(this);
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
-    }
-
-    private void Update()
-    {
-        OpenBuildingMenuPanel();
-    }
-
-
-    private void OpenBuildingMenuPanel()
-    {
-        // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
-        PanelBase.Callback onEnterCallback = () =>
-        {
-            isMenuPanelCreated = true;
-        };
-
-        // 定义面板OnExit时的回调函数，重置isPanelCreated为false
-        PanelBase.Callback onExitCallback = () =>
-        {
-            isMenuPanelCreated = false;
-        };
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            if (!isMenuPanelCreated)
-            {
-                PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
-                return;
-            }
-            if (isMenuPanelCreated)
-            {
-                if (PanelManager.GetTopPanel().GetType() == typeof(BuildingMenuPanel))
-                {
-                    PanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
-                    return;
-                }
-            }
-        }
     }
 
 #if UNITY_EDITOR

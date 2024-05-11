@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7970102784693909415}
   - component: {fileID: 6808794504451761701}
   m_Layer: 0
-  m_Name: BuildingSystemManager
+  m_Name: ThingSystemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,5 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThingDefDictionary:
     _serializedList: []
-  ThingGeneratedList: []
-  ThingSaveList: []
+  ThingBuildingGeneratedList: []

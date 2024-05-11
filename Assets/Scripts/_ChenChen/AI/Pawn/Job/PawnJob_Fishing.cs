@@ -33,14 +33,14 @@ namespace ChenChen_AI
             curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
-                Debug.LogWarning("The FishingPoint Don't Have Building Component");
+                DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!curTargetComponent.GetPrivilege(_pawn))
+            if (!curTargetComponent.GetPermission(_pawn))
             {
-                //未取得权限则退出
+                DebugLogDescription = ("目标已经其他人被使用");
                 return false;
             }
 
@@ -48,7 +48,7 @@ namespace ChenChen_AI
             bool flag = _pawn.MoveControl.GoToHere(target.transform.position, Urgency.Normal);
             if (!flag)
             {
-                Debug.LogWarning("The fishing can't arrive");
+                DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
             // 设置人物状态
@@ -93,7 +93,7 @@ namespace ChenChen_AI
         {
             _pawn.JobDone();
 
-            curTargetComponent.RevokePrivilege(_pawn);
+            curTargetComponent.RevokePermission(_pawn);
         }
     }
 }

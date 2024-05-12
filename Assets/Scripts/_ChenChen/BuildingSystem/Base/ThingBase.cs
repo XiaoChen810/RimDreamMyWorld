@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using ChenChen_MapGenerator;
 using ChenChen_AI;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ChenChen_BuildingSystem
 {
@@ -63,40 +64,39 @@ namespace ChenChen_BuildingSystem
         }
 
         // 生命周期
-        private BuildingLifeStateType _lifeState = 0;
+        [SerializeField] protected BuildingLifeStateType _lifeState = 0;
         public BuildingLifeStateType LifeState
         {
             get
             {
                 return _lifeState;
             }
-            set
+        }
+        public void ChangeLifeState(BuildingLifeStateType change)
+        {
+            if (change != _lifeState)
             {
-                if (value != _lifeState)
+                switch (change)
                 {
-                    switch (value)
-                    {
-                        case BuildingLifeStateType.MarkBuilding:
-                            OnMarkBuild();
-                            break;
-                        case BuildingLifeStateType.FinishedBuilding:
-                            OnComplete();
-                            break;
-                        case BuildingLifeStateType.MarkDemolished:
-                            OnMarkDemolish();
-                            break;
-                        case BuildingLifeStateType.FinishedDemolished:
-                            OnDemolished();
-                            break;
-
-                    }
-                    _lifeState = value;
+                    case BuildingLifeStateType.MarkBuilding:
+                        OnMarkBuild();
+                        break;
+                    case BuildingLifeStateType.FinishedBuilding:
+                        OnComplete();
+                        break;
+                    case BuildingLifeStateType.MarkDemolished:
+                        OnMarkDemolish();
+                        break;
+                    case BuildingLifeStateType.FinishedDemolished:
+                        OnDemolished();
+                        break;
                 }
-                else
-                {
-                    if (value != BuildingLifeStateType.None)
-                        Debug.LogWarning($"物品{this.name}(position: {this.transform.position})的生命周期已经处于 {value}，无需切换");
-                }
+                _lifeState = change;
+            }
+            else
+            {
+                if (change != BuildingLifeStateType.None)
+                    Debug.LogWarning($"物品{this.name}(position: {this.transform.position})的生命周期已经处于 {change}，无需切换");
             }
         }
 

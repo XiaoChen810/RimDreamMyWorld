@@ -129,6 +129,20 @@ namespace ChenChen_UISystem
         }
 
         /// <summary>
+        /// 延迟触发退出函数
+        /// </summary>
+        /// <param name="time"></param>
+        public virtual void OnExit(float time)
+        {
+            GameManager.Instance.StartCoroutine(DelayExitCo(time));
+            IEnumerator DelayExitCo(float time)
+            {
+                yield return new WaitForSeconds(time);
+                OnExit();
+            }
+        }
+
+        /// <summary>
         /// 调用BuildingSystemManager，通过 name 选择按钮对应蓝图
         /// 然后关闭面板
         /// </summary>

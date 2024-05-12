@@ -16,11 +16,10 @@ namespace ChenChen_UISystem
         public override void OnEnter()
         {
             base.OnEnter();
-            DemolishBtn.onClick.AddListener(() =>
+            SetButton("²ð³ý", () =>
             {
-                thing.OnMarkDemolish();
+                thing.ChangeLifeState(BuildingLifeStateType.MarkDemolished);
             });
-            DemolishBtn.gameObject.SetActive(thing.CanDemolish);
         }      
     }
 }

@@ -1,4 +1,5 @@
 using ChenChen_BuildingSystem;
+using System;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -9,10 +10,14 @@ namespace ChenChen_AI
         private GameObject building;
         private Thing_Building currentWorkObject;
         private float _time;
+        private float _timeOne;
 
         public PawnJob_Demolished(Pawn pawn, GameObject building = null) : base(pawn, tick)
         {
             this.building = building;
+            float ability = pawn.Attribute.A_Construction.Value;
+            if (ability == 0) _timeOne = 10;
+            _timeOne = 1f / ability;
         }
 
         public override bool OnEnter()
@@ -68,8 +73,9 @@ namespace ChenChen_AI
                 _pawn.JobDoing();
 
                 // 执行工作
+                // 执行工作
                 _time += Time.deltaTime;
-                if (_time > 2)
+                if (_time > _timeOne)
                 {
                     currentWorkObject.OnDemolish(_pawn.Attribute.A_Construction.Value);
                     _time = 0;

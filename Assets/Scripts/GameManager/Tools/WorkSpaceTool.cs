@@ -40,7 +40,7 @@ public class WorkSpaceTool : MonoBehaviour
             if(space.Value.WorkSpaceType == workSpaceType 
                 && space.Value.Permission == PermissionBase.PermissionType.IsFree)
             {
-                space.Value.BookingMe();
+                //space.Value.BookingMe();
                 result = space.Value.gameObject;
                 break;
             }
@@ -53,21 +53,38 @@ public class WorkSpaceTool : MonoBehaviour
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mouseDownPosition = mousePosition;
-
+        bool flag = false;
         while (IsDoingWorkSpace)
         {
             // 监听鼠标位置
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+            if(!flag)
+            {
+                mouseDownPosition = mousePosition;
+                mouseDownPosition.x = Mathf.Ceil(mousePosition.x);
+                mouseDownPosition.y = Mathf.Ceil(mousePosition.y);
+                mousePosition.x = Mathf.Floor(mousePosition.x);
+                mousePosition.y = Mathf.Floor(mousePosition.y);
+                if (IsOk(mouseDownPosition, mousePosition))
+                {
+                    ChangeColor(Color.green);
+                }
+                else
+                {
+                    ChangeColor(Color.red);
+                }
+                DrawLineBox(mouseDownPosition, mousePosition);
+            }
             // 当鼠标按下时，准备放置新工作区块
             if (Input.GetMouseButtonDown(0))
             {
                 mouseDownPosition = mousePosition;
                 mouseDownPosition.x = Mathf.Ceil(mousePosition.x);
                 mouseDownPosition.y = Mathf.Ceil(mousePosition.y);
+                flag = true;
             }
             // 当鼠标持续按下时，检查当前位置是否符合要求，并提示
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && flag)
             {
                 mousePosition.x = Mathf.Floor(mousePosition.x);
                 mousePosition.y = Mathf.Floor(mousePosition.y);
@@ -83,7 +100,7 @@ public class WorkSpaceTool : MonoBehaviour
                 DrawLineBox(mouseDownPosition, mousePosition);
             }
             // 当鼠标松开时，确认放置
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && flag)
             {
                 mousePosition.x = Mathf.Floor(mousePosition.x);
                 mousePosition.y = Mathf.Floor(mousePosition.y);

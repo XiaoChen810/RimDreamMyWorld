@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ChenChen_UISystem
@@ -12,8 +13,7 @@ namespace ChenChen_UISystem
 
         public Text ItemName { get; private set; }
         public List<Text> Texts { get; private set; }
-        public Button DemolishBtn { get; private set; }
-
+        public List<Button> Buttons { get; private set; }
 
         public DetailViewPanel(Callback onEnter, Callback onExit) : base(new UIType(path), onEnter, onExit)
         {
@@ -27,11 +27,13 @@ namespace ChenChen_UISystem
             {
                 PanelManager.RemoveTopPanel(this);
             });
-            DemolishBtn = UITool.TryGetChildComponentByName<Button>("Btn拆除");
-            DemolishBtn.gameObject.SetActive(false);
-
             ItemName = UITool.TryGetChildComponentByName<Text>("ItemName");
             Texts = UITool.GetChildByName("TextContent").GetComponentsInChildren<Text>().ToList();
+            Buttons = UITool.GetChildByName("BtnContent").GetComponentsInChildren<Button>().ToList();
+            foreach (var btn in  Buttons)
+            {
+                btn.gameObject.SetActive(false);
+            }
         }
 
         public void SetView(string itemName, List<string> content)
@@ -52,6 +54,22 @@ namespace ChenChen_UISystem
                     Texts[i].text = string.Empty;
                 }
             }
+        }
+
+        public void SetButton(string btnText, UnityAction onClick)
+        {
+            foreach(var btn in Buttons)
+            {
+                if (!btn.gameObject.activeSelf)
+                {
+                    btn.gameObject.SetActive(true);
+                    btn.GetComponentInChildren<Text>().text = btnText;
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(onClick);
+                    return;
+                }
+            }
+            Debug.LogWarning("使用的Button已达最大限度");
         }
     }
 }

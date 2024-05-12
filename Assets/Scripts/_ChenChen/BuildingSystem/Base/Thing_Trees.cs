@@ -34,7 +34,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
         {
-            LifeState = initial_State;
+            ChangeLifeState(initial_State);
             MapName = mapName;
         }
     }

@@ -29,7 +29,7 @@ public class DetailView_WorkSpace : DetailView
         {
             Content.Add($"当前种植作物: {workSpace_Farm.CurCrop.CropName}");
         }
-        Content.Add($"使用者: {(workSpace.TheUsingPawn != null ? workSpace.TheUsingPawn.name : null)}");
+        //Content.Add($"使用者: {(workSpace.TheUsingPawn != null ? workSpace.TheUsingPawn.name : null)}");
         panel.SetView(
             workSpace.name,
             Content

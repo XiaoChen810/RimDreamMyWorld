@@ -29,10 +29,10 @@ namespace ChenChen_BuildingSystem
                 }
             }
             // 判断初始状态，需不需要标志建造
-            LifeState = initial_State;
-            if(LifeState == BuildingLifeStateType.None)
+            ChangeLifeState(initial_State);
+            if(_lifeState == BuildingLifeStateType.None)
             {
-                LifeState = Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding;
+                ChangeLifeState(Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding);
             }      
             // 设置完一切后
             ThingSystemManager.Instance.AddThingToList(this.gameObject);
@@ -52,7 +52,7 @@ namespace ChenChen_BuildingSystem
             if(Workload <= 0)
             {
                 Workload = 0;
-                LifeState = BuildingLifeStateType.FinishedBuilding;
+                ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
             }
         }
 
@@ -98,7 +98,7 @@ namespace ChenChen_BuildingSystem
 
         public override void OnInterpret()
         {
-            LifeState = BuildingLifeStateType.MarkBuilding;
+            ChangeLifeState(BuildingLifeStateType.MarkBuilding);
         }
 
         #endregion
@@ -116,7 +116,7 @@ namespace ChenChen_BuildingSystem
             if(_workload <= 0)
             {
                 _workload = 0;
-                LifeState = BuildingLifeStateType.FinishedDemolished;
+                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
             }
         }
 

@@ -64,6 +64,7 @@ public class WorkSpace_Farm : WorkSpace
         }
         Debug.LogWarning("No Position Can Farm");
         farmingPositon = Vector2.zero;
+        _permission = PermissionType.IsBooking;                                
         return false;
     }
 
@@ -103,6 +104,7 @@ public class WorkSpace_Farm : WorkSpace
             if (cell.pos == position && cell.isUse && !cell.isFarm)
             {
                 cell.isUse = false;
+                _permission = PermissionType.IsFree;
             }
         }
     }

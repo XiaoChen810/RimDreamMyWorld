@@ -28,6 +28,7 @@ namespace ChenChen_UISystem
                 background.color = new Color(0, 0, 0, 1);
                 background.DOFade(0, 2);
             }
+            OnExit(3);
         }
     }
 }

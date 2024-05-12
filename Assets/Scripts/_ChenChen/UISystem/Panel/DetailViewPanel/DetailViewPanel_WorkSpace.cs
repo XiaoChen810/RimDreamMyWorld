@@ -16,7 +16,10 @@ namespace ChenChen_UISystem
         public override void OnEnter()
         {
             base.OnEnter();
-
+            SetButton("删除", () =>
+            {
+                Debug.Log($"删除工作区: {workSpace.name}");
+            });
 
         }
     }

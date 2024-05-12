@@ -56,16 +56,17 @@ namespace ChenChen_Scene
             // 过场动画
             GameManager.Instance.AnimatorTool.Animation_LoadingScene();
             bool animationPlayed = false;
-
+            float timeAnimation = 0;
             // 等待异步加载操作完成
             while (!asyncLoad.isDone)
             {
-                // 打印加载进度值
-                Debug.Log("Loading progress: " + asyncLoad.progress);
                 if (asyncLoad.progress >= 0.1f && !animationPlayed)
                 {
-                    yield return new WaitForSeconds(_transitionDelay);
-                    animationPlayed = true;
+                    timeAnimation += Time.deltaTime;
+                    if(timeAnimation > 1)
+                    {
+                        animationPlayed = true;
+                    }
                 }
 
                 if (animationPlayed)

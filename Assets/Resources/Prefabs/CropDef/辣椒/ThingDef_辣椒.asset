@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b70940d2d976240a701a9d9d2d2f0a, type: 3}
+  m_Name: "ThingDef_\u8FA3\u6912"
+  m_EditorClassIdentifier: 
+  CropName: "\u8FA3\u6912"
+  CropDescription: "\u5F88\u8FA3\u7684\u8FA3\u6912"
+  CropIcon: {fileID: -148318777588730066, guid: 2082565e6a1309c48b390c068ac44a8c, type: 3}
+  GroupNutrientRequiries: 100
+  GroupSpeed: 12.5
+  CropsSprites:
+  - {fileID: -1778619116597907426, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: 5172823131061618564, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: -446021142624003255, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: -1251196453477826343, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: 8940519799356751205, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: 2461803731744983694, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: 7523323102845335286, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}
+  - {fileID: 4722000174796866426, guid: 9b3c2cae8eeb2194aaa799fe0883905f, type: 3}

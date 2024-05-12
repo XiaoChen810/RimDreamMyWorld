@@ -8,8 +8,10 @@ public class CameraController : MonoBehaviour
 {
     private PixelPerfectCamera PixelPerfectCamera;
     public float Speed;
-    public float zoomSpeed = 5f; // ���������ٶ�
 
+    public float zoomMin = 48;
+    public float zoomMax = 192;
+    [Range(10, 50)] public int zoomSpeed = 5;
 
     private void Start()
     {
@@ -26,26 +28,20 @@ public class CameraController : MonoBehaviour
             transform.position += new Vector3(horizontal, vertical, 0) * Speed * Time.deltaTime;
         }
 
-        // ��ȡ����������
         float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
 
-        // ������ͷԶ��
         ZoomCamera(scrollWheelInput);
     }
 
     void ZoomCamera(float scrollInput)
     {
-        // ��ȡ��ǰ��ͷ��orthographicSize
         float currentSize = PixelPerfectCamera.assetsPPU;
 
-        // ���ݹ������������ͷԶ��
-        currentSize -= scrollInput * zoomSpeed * Time.deltaTime;
+        currentSize -= scrollInput * zoomSpeed;
 
-        // �����µ�PixelPerfectCamera��assetsPPU��ȷ����С��ĳ����Сֵ
-        currentSize = Mathf.Max(currentSize, 1f);
+        currentSize = Mathf.Max(currentSize, zoomMin);
+        currentSize = Mathf.Min(currentSize, zoomMax);
 
-        // �����µ�PixelPerfectCamera��assetsPPU
         PixelPerfectCamera.assetsPPU = Mathf.RoundToInt(currentSize);
-
     }
 }

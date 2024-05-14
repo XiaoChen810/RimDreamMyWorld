@@ -74,10 +74,16 @@ namespace ChenChen_AI
             }
         }
 
-        public Pawn Owner;
+        public GameObject Owner;
         private float _tickTime;
 
-        public StateMachine(StateBase defaultState, Pawn owner)
+        public StateMachine(GameObject owner)
+        {
+            _StateQueue = new Queue<StateBase>();
+            Owner = owner;
+        }
+
+        public StateMachine(StateBase defaultState, GameObject owner)
         {
             _StateQueue = new Queue<StateBase>();
             _defaultState = defaultState;

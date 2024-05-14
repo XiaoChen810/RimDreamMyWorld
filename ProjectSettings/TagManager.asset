@@ -10,6 +10,7 @@ TagManager:
   - Water
   - Thing
   - WorkSpace
+  - Animal
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Character
   - Pawn
   - Obstacle
-  - 
+  - Animal
   - 
   - 
   - 

@@ -6,6 +6,7 @@ using UnityEngine;
 namespace ChenChen_AI
 {
     [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(PawnMoveController))]
     public abstract class Pawn : MonoBehaviour
     {
         /// <summary>
@@ -270,7 +271,7 @@ namespace ChenChen_AI
             Animator = GetComponent<Animator>();
 
             /* ≈‰÷√◊¥Ã¨ª˙ */
-            StateMachine = new StateMachine(new PawnJob_Idle(this), this);
+            StateMachine = new StateMachine(new PawnJob_Idle(this), this.gameObject);
 
             /* …Ë÷√Õº≤„Pawn∫Õ±Í«© */
             gameObject.layer = 7;

@@ -3,7 +3,7 @@ using ChenChen_BuildingSystem;
 
 namespace ChenChen_AI
 {
-    public class CharacterMain : Pawn
+    public class HumanMain : Pawn
     {
         protected override void Start()
         {

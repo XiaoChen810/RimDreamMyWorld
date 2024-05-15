@@ -18,5 +18,9 @@ public class GameManagerEditor : Editor
         {
             GameManager.Instance.生成一个敌人();
         }
+        if (GUILayout.Button("测试按钮"))
+        {
+            GameManager.Instance.测试按钮();
+        }      
     }
 }

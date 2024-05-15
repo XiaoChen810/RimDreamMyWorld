@@ -45,7 +45,7 @@ namespace ChenChen_AI
             }
 
             // 设置目标点
-            bool flag = _pawn.MoveControl.GoToHere(target.transform.position, Urgency.Normal);
+            bool flag = _pawn.MoveController.GoToHere(target.transform.position, Urgency.Normal);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
@@ -60,11 +60,11 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 到达后
-            if (_pawn.MoveControl.ReachDestination)
+            if (_pawn.MoveController.ReachDestination)
             {
                 _pawn.JobDoing();
                 _time += Time.deltaTime;
-                _pawn.MoveControl.FilpRight();
+                _pawn.MoveController.FilpRight();
             }
 
             if (_time > 0 && _time <= animTime1) _pawn.Animator.SetInteger("IsFishing", 1);

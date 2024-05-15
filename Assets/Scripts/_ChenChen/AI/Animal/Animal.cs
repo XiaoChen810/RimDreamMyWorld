@@ -23,6 +23,12 @@ namespace ChenChen_AI
         /// </summary>
         public Animator Animator { get; protected set; }
 
+        public AnimalDef Def;
+        public AnimalInfo Info;
+
+        [Header("当前状态")]
+        public List<string> CurrentStateList = new List<string>();
+
         protected virtual void Start()
         {
             /* 添加这个人物的移动组件 */
@@ -32,11 +38,36 @@ namespace ChenChen_AI
             Animator = GetComponent<Animator>();
 
             /* 配置状态机 */
-            StateMachine = new StateMachine(this.gameObject);
+            StateMachine = new StateMachine(this.gameObject, new AnimalState_Idle(this));
 
             /* 设置图层Pawn和标签 */
             gameObject.layer = 9;
             gameObject.tag = "Animal";
+        }
+
+        public void Init(AnimalDef def,AnimalInfo info)
+        {
+            Def = def;
+            Info = info;
+        }
+
+        protected virtual void Update()
+        {
+#if UNITY_EDITOR
+            任务列表Debug();
+#endif
+            StateMachine.Update();
+        }
+
+        protected void 任务列表Debug()
+        {
+            CurrentStateList.Clear();
+            CurrentStateList.Add("正在：" + StateMachine.CurState?.ToString());
+            CurrentStateList.Add("下一个：" + StateMachine.NextState?.ToString());
+            foreach (var task in StateMachine.StateQueue)
+            {
+                CurrentStateList.Add("准备" + task.ToString());
+            }
         }
     }
 }

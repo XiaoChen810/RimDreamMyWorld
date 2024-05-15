@@ -40,7 +40,7 @@ namespace ChenChen_AI
             }
 
             // 设置人物目标点，前往目标，跑过去
-            bool flag = _pawn.MoveControl.GoToHere(building.transform.position, Urgency.Urge, _pawn.WorkRange);
+            bool flag = _pawn.MoveController.GoToHere(building.transform.position, Urgency.Urge, _pawn.WorkRange);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
@@ -67,7 +67,7 @@ namespace ChenChen_AI
             }
 
             // 判断是否到达目标点附近
-            if (_pawn.MoveControl.ReachDestination)
+            if (_pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
                 _pawn.JobDoing();

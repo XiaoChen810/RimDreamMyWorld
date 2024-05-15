@@ -386,6 +386,7 @@ MonoBehaviour:
   reachedEndOfPath: 0
   reachDestination: 0
   currentWaypoint: 0
+  IsFaceRight: 1
   curUrgency: 1
 --- !u!114 &3998445696871861264
 MonoBehaviour:

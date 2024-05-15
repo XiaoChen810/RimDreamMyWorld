@@ -21,7 +21,7 @@ namespace ChenChen_AI
         public override bool OnEnter()
         {
             // 设置目标点
-            if (!_pawn.MoveControl.GoToHere(targetPos))
+            if (!_pawn.MoveController.GoToHere(targetPos))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
@@ -35,7 +35,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点
-            if (_pawn.MoveControl.ReachDestination)
+            if (_pawn.MoveController.ReachDestination)
             {
                 return StateType.Success;
             }

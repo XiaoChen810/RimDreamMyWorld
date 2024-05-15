@@ -8,12 +8,12 @@ using System;
 using ChenChen_AI;
 
 public class GameManager : SingletonMono<GameManager>
-{ 
-    public SelectTool SelectTool { get; private set; }
+{
     public PawnGeneratorTool PawnGeneratorTool { get; private set; }
+    public SelectTool SelectTool { get; private set; }
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
-
+    public AnimalGenerateTool AnimalGenerateTool { get; private set; }
     [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
     /// <summary>
     /// 游戏内全部的Pawn的GameObject列表
@@ -31,7 +31,6 @@ public class GameManager : SingletonMono<GameManager>
     {
         get { return _pawnWhenStartList; }
     }
-
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
 
@@ -43,10 +42,21 @@ public class GameManager : SingletonMono<GameManager>
 
     private void Init()
     {
-        SelectTool = GetComponent<SelectTool>();
         PawnGeneratorTool = new PawnGeneratorTool(this);
+        SelectTool = GetComponent<SelectTool>();
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
+        AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void RecoverGame()
+    {
+        Time.timeScale = 1;
     }
 
 #if UNITY_EDITOR
@@ -60,6 +70,12 @@ public class GameManager : SingletonMono<GameManager>
     {
         MapManager.Instance.CloseSceneMap(MapManager.Instance.CurrentMapName);
         SceneSystem.Instance.SetScene(new StartScene());
+    }
+
+    public void 测试按钮()
+    {
+        Vector2 random = new Vector2(UnityEngine.Random.Range(0, 50), UnityEngine.Random.Range(0, 50));
+        AnimalGenerateTool.GenerateAnimal("绵羊", random);
     }
 
 #endif

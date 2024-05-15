@@ -26,6 +26,13 @@ namespace ChenChen_UISystem
             {
                 PanelManager.RemoveTopPanel(this);
             });
+            GameManager.Instance.PauseGame();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            GameManager.Instance.RecoverGame();
         }
     }
 }

@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 3972681017625064464}
   - component: {fileID: 469817324645448464}
   - component: {fileID: 2425970292396928305}
+  - component: {fileID: -4085446627842269338}
+  - component: {fileID: -6610101603538707827}
   m_Layer: 0
   m_Name: Brid
   m_TagString: Untagged
@@ -77,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1226369987
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -848361052, guid: a7aa1afff7d929640981a9639af27068, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -143,7 +145,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -185,7 +187,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &469817324645448464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +211,7 @@ MonoBehaviour:
   reachedEndOfPath: 1
   reachDestination: 1
   currentWaypoint: 0
+  IsFaceRight: 0
 --- !u!114 &2425970292396928305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,3 +224,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7213fb6c813d0ea49b41317678a773db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Def: {fileID: 11400000, guid: 540c97d040bf4c5448eae4f921a02bd4, type: 2}
+  Info:
+    Health: 0
+  CurrentStateList: []
+--- !u!114 &-4085446627842269338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2586637671572776123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &-6610101603538707827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2586637671572776123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: 0.05
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.3
+  offset: 0.2
+  factor: 0.1

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 7220269546119906233}
   - component: {fileID: 3153273640110790588}
   - component: {fileID: 2264959377735515721}
-  - component: {fileID: 2320182449586295257}
-  - component: {fileID: 4381420206814342994}
+  - component: {fileID: -5097333732888630307}
+  - component: {fileID: -8733278393466760539}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -296,48 +296,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e62db0b82f4a8f4d90c416199cf747f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 1073741824
-  radius: 0.3
-  height: 2
+  isStart: 0
   canMove: 1
-  maxSpeed: 100
-  gravity: {x: NaN, y: NaN, z: NaN}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
+  speed: 2
   endReachedDistance: 0.2
-  whenCloseToDestination: 0
-  rvoDensityBehavior:
-    enabled: 0
-    densityThreshold: 0.5
-    returnAfterBeingPushedAway: 0
-    progressAverage: 0
-    lastJobDensityResult: 0
-  centerOffsetCompatibility: NaN
-  repathRateCompatibility: NaN
-  canSearchCompability: 0
-  orientation: 1
-  enableRotation: 0
-  autoRepath:
-    mode: 2
-    period: NaN
-    sensitivity: 10
-    maximumPeriod: 2
-    visualizeSensitivity: 0
-  targetCompatibility: {fileID: 0}
-  maxAcceleration: 500
-  rotationSpeed: 32400
-  slowdownDistance: 0.6
-  pickNextWaypointDist: 2
-  alwaysDrawGizmos: 0
-  slowWhenNotFacingTarget: 1
-  preventMovingBackwards: 0
-  constrainInsideGraph: 0
-  MoveSpeed: 100
-  PathUpdateIntervalTime: 1
-  CanMove: 0
-  IsRun: 0
---- !u!114 &2320182449586295257
+  repathRate: 0.5
+  destination: {x: 0, y: 0, z: 0}
+  targetDestination: {fileID: 0}
+  targetIsAObject: 0
+  reachedEndOfPath: 1
+  reachDestination: 1
+  currentWaypoint: 0
+  curUrgency: 1
+--- !u!114 &-5097333732888630307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -349,58 +320,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a05a55a9444644ab084da7e32e2e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurJobTarget: {fileID: 0}
   CurrentStateList: []
   WorkRange: 1
   AttackRange: 1
   AttackSpeed: 0.76
-  AttackSpeedWait: 1
-  Hp: 100
-  Attribute:
+  AttackSpeedWait: 0.5
+  _pawnKindDef:
+    PawnName: 
+    PawnFaction: 
+    PawnDescription: 
+    PrefabPath: 
+    StopUpdate: 0
+    CanSelect: 0
+    CanGetJob: 0
+    CanBattle: 0
+    CanDrafted: 0
+  _pawnAttribute:
     A_Combat:
-      _value: 0
+      _value: 7
       _interest: 0
-      _exp: 0
+      _exp: 15
     A_Culinary:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 5
+      _interest: 2
+      _exp: 10
     A_Construction:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 1
+      _exp: 8
     A_Survival:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 5
+      _interest: 1
+      _exp: 6
     A_Craftsmanship:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 7
+      _interest: 2
+      _exp: 12
     A_Medical:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 2
+      _exp: 18
     A_Carrying:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 1
+      _exp: 2
     A_Research:
-      _value: 0
-      _interest: 0
-      _exp: 0
-  PawnName: 
-  FactionName: 
-  CanSelect: 1
-  CanGetJob: 0
-  CanBattle: 1
-  CanDrafted: 0
-  IsDead: 0
-  IsSelect: 0
-  IsOnWork: 0
-  IsOnBattle: 0
-  IsDrafted: 0
-  CurJobTarget: {fileID: 0}
---- !u!114 &4381420206814342994
+      _value: 7
+      _interest: 1
+      _exp: 4
+  _pawnInfo:
+    IsDead: 0
+    IsSelect: 0
+    IsOnWork: 0
+    IsOnBattle: 0
+    IsDrafted: 0
+    HP: 0
+--- !u!114 &-8733278393466760539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

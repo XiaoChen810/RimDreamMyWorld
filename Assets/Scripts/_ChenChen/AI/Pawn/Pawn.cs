@@ -17,7 +17,7 @@ namespace ChenChen_AI
         /// <summary>
         /// 人物移动的控制
         /// </summary>
-        public PawnMoveController MoveControl { get; protected set; }
+        public PawnMoveController MoveController { get; protected set; }
 
         /// <summary>
         /// 人物动画状态控制
@@ -153,11 +153,11 @@ namespace ChenChen_AI
             Vector3 him = battleTarget.gameObject.transform.position;
             if (me.x < him.x)
             {
-                MoveControl.FilpRight();
+                MoveController.FilpRight();
             }
             else
             {
-                MoveControl.FilpLeft();
+                MoveController.FilpLeft();
             }
 
             if (AttackCoroutine != null) StopCoroutine(AttackAnimCo());
@@ -265,13 +265,13 @@ namespace ChenChen_AI
         protected virtual void Start()
         {
             /* 添加这个人物的移动组件 */
-            MoveControl = GetComponent<PawnMoveController>();
+            MoveController = GetComponent<PawnMoveController>();
 
             /* 添加这个人物的动画组件 */
             Animator = GetComponent<Animator>();
 
             /* 配置状态机 */
-            StateMachine = new StateMachine(new PawnJob_Idle(this), this.gameObject);
+            StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
             /* 设置图层Pawn和标签 */
             gameObject.layer = 7;

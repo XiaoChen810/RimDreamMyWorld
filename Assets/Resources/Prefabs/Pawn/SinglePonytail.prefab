@@ -180,7 +180,7 @@ BoxCollider2D:
   m_Offset: {x: -0.00758674, y: 0.14125647}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5924999, y: 0.19333331}
+    pivot: {x: 0.5924999, y: 0.03333346}
     oldSize: {x: 1, y: 1.125}
     newSize: {x: 0.12, y: 0.15}
     adaptiveTilingThreshold: 0.5
@@ -307,60 +307,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurJobTarget: {fileID: 0}
   CurrentStateList: []
   WorkRange: 1.35
   AttackRange: 1.5
   AttackSpeed: 0.76
   AttackSpeedWait: 0.5
-  Hp: 100
-  Attribute:
+  _pawnKindDef:
+    PawnName: 
+    PawnFaction: 
+    PawnDescription: 
+    PrefabPath: 
+    StopUpdate: 0
+    CanSelect: 0
+    CanGetJob: 0
+    CanBattle: 0
+    CanDrafted: 0
+  _pawnAttribute:
     A_Combat:
-      _value: 0
+      _value: 5
       _interest: 0
-      _exp: 0
+      _exp: 10
     A_Culinary:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 9
+      _interest: 2
+      _exp: 9
     A_Construction:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 2
+      _exp: 7
     A_Survival:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 5
+      _interest: 2
+      _exp: 8
     A_Craftsmanship:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 7
+      _interest: 1
+      _exp: 7
     A_Medical:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 2
+      _exp: 15
     A_Carrying:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 9
+      _interest: 2
+      _exp: 3
     A_Research:
-      _value: 0
+      _value: 6
       _interest: 0
-      _exp: 0
-  PawnName: 
-  FactionName: 
-  Description: 
-  PrefabPath: 
-  CanSelect: 1
-  CanGetJob: 1
-  CanBattle: 0
-  CanDrafted: 1
+      _exp: 2
   _pawnInfo:
     IsDead: 0
     IsSelect: 0
     IsOnWork: 0
     IsOnBattle: 0
     IsDrafted: 0
-  CurJobTarget: {fileID: 0}
+    HP: 0
 --- !u!114 &712924167695433583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +386,7 @@ MonoBehaviour:
   reachedEndOfPath: 0
   reachDestination: 0
   currentWaypoint: 0
+  IsFaceRight: 1
   curUrgency: 1
 --- !u!114 &3989307997037373988
 MonoBehaviour:

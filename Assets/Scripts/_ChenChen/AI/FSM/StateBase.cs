@@ -7,6 +7,11 @@ namespace ChenChen_AI
         protected StateMachine _stateMachine { get; private set; }
 
         /// <summary>
+        /// 这个状态默认的下一个状态
+        /// </summary>
+        public StateBase NextState;
+
+        /// <summary>
         /// 这个状态的最大存在时间
         /// </summary>
         public float MaxTick;
@@ -24,6 +29,7 @@ namespace ChenChen_AI
         public StateBase(StateMachine machine, StateBase next = null)
         {
             _stateMachine = machine;
+            NextState = next;
         }
 
         public virtual bool OnEnter()

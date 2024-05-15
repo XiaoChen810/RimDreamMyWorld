@@ -30,14 +30,14 @@ namespace ChenChen_AI
             // 设置人物无法接取工作
             _pawn.JobToDo(target);
             // 设置人物目标点，前往目标，走过去
-            _pawn.MoveControl.GoToHere(target, Urgency.Normal, _pawn.AttackRange);
+            _pawn.MoveController.GoToHere(target, Urgency.Normal, _pawn.AttackRange);
             return true;
         }
 
         public override StateType OnUpdate()
         {
             // 判断目标是否到达攻击距离
-            if (_pawn.MoveControl.ReachDestination)
+            if (_pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
                 _pawn.JobDoing();               

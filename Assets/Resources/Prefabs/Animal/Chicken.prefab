@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 2126463457394118144}
   - component: {fileID: 9143144880544197605}
   - component: {fileID: 466067920342164429}
+  - component: {fileID: -2811212752151154289}
+  - component: {fileID: 733322515469885521}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -77,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1226369987
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1987918767, guid: 2683943c60fa9e34f90adec3df9d2224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -143,7 +145,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -185,7 +187,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &9143144880544197605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +211,7 @@ MonoBehaviour:
   reachedEndOfPath: 1
   reachDestination: 1
   currentWaypoint: 0
+  IsFaceRight: 0
 --- !u!114 &466067920342164429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,3 +224,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7213fb6c813d0ea49b41317678a773db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Def: {fileID: 11400000, guid: dfcc212ae6b7c824fafab4e9c0088567, type: 2}
+  Info:
+    Health: 0
+  CurrentStateList: []
+--- !u!114 &-2811212752151154289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7936288114951742126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &733322515469885521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7936288114951742126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: 0.05
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.3
+  offset: 0.2
+  factor: 0.1

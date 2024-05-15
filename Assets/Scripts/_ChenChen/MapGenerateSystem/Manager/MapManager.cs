@@ -191,6 +191,13 @@ namespace ChenChen_MapGenerator
             return result != null;
         }
 
+        public MapNode GetMapNodeHere(Vector2 position)
+        {
+            int x = (int)position.x;
+            int y = (int)position.y;
+            return MapDatasDict[_currentMapName].mapNodes[x, y];
+        }
+
         #endregion
     }
 }

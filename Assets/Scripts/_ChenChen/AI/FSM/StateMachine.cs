@@ -83,7 +83,7 @@ namespace ChenChen_AI
             Owner = owner;
         }
 
-        public StateMachine(StateBase defaultState, GameObject owner)
+        public StateMachine(GameObject owner, StateBase defaultState)
         {
             _StateQueue = new Queue<StateBase>();
             _defaultState = defaultState;
@@ -100,7 +100,7 @@ namespace ChenChen_AI
                     //状态完成
                     case StateType.Success:
                         _currentState.IsSuccess = true;
-                        TryChangeState();
+                        TryChangeState(_currentState.NextState);
                         break;
                     //状态失败把当前状态设为空
                     case StateType.Failed:

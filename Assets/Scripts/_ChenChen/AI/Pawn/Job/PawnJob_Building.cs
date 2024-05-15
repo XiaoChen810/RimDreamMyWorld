@@ -44,7 +44,7 @@ namespace ChenChen_AI
             }
 
             // 设置人物目标点，前往目标，跑过去
-            if (!_pawn.MoveControl.GoToHere(target.transform.position, Urgency.Urge, _pawn.WorkRange))
+            if (!_pawn.MoveController.GoToHere(target.transform.position, Urgency.Urge, _pawn.WorkRange))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
@@ -59,7 +59,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             // 判断是否到达目标点附近
-            if (_pawn.MoveControl.ReachDestination)
+            if (_pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
                 _pawn.JobDoing();

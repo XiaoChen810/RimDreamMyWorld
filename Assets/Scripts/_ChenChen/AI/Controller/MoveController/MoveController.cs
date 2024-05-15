@@ -6,6 +6,7 @@ using Pathfinding;
 namespace ChenChen_AI
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Seeker))]
     public abstract class MoveController : MonoBehaviour
     {
         protected Rigidbody2D _rb;
@@ -37,6 +38,8 @@ namespace ChenChen_AI
         // 当前在路径的哪个点
         [SerializeField] protected int currentWaypoint = 0;
 
+        [Header("面向右边")]
+        public bool IsFaceRight;
 
         /// <summary>
         /// Current path;
@@ -205,17 +208,34 @@ namespace ChenChen_AI
         {
             if (lastTransPositon != transform.position)
             {
-                // 向右边走，正面
-                if (lastTransPositon.x < transform.position.x)
+                if (IsFaceRight)
                 {
-                    transform.localScale = Vector3.one;
-                }
-                // 向左边走，反面
-                if (lastTransPositon.x > transform.position.x)
+                    // 向右边走，正面
+                    if (lastTransPositon.x < transform.position.x)
+                    {
+                        transform.localScale = Vector3.one;
+                    }
+                    // 向左边走，反面
+                    if (lastTransPositon.x > transform.position.x)
+                    {
+                        transform.localScale = new Vector3(-1, 1, 1);
+                    }
+                    lastTransPositon = transform.position;
+                }   
+                if (!IsFaceRight)
                 {
-                    transform.localScale = new Vector3(-1, 1, 1);
+                    // 向左边走，正面
+                    if (lastTransPositon.x < transform.position.x)
+                    {
+                        transform.localScale = new Vector3(-1, 1, 1);
+                    }
+                    // 向右边走，反面
+                    if (lastTransPositon.x > transform.position.x)
+                    {
+                        transform.localScale = Vector3.one;
+                    }
+                    lastTransPositon = transform.position;
                 }
-                lastTransPositon = transform.position;
             }
         }
 

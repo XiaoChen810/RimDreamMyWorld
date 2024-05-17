@@ -325,36 +325,36 @@ MonoBehaviour:
     CanDrafted: 0
   _pawnAttribute:
     A_Combat:
-      _value: 0
+      _value: 9
       _interest: 0
-      _exp: 0
+      _exp: 1
     A_Culinary:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 8
+      _interest: 1
+      _exp: 10
     A_Construction:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 9
+      _interest: 2
+      _exp: 19
     A_Survival:
-      _value: 0
+      _value: 9
       _interest: 0
-      _exp: 0
+      _exp: 15
     A_Craftsmanship:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 6
+      _interest: 1
+      _exp: 16
     A_Medical:
-      _value: 0
+      _value: 8
       _interest: 0
-      _exp: 0
+      _exp: 2
     A_Carrying:
-      _value: 0
-      _interest: 0
-      _exp: 0
+      _value: 5
+      _interest: 1
+      _exp: 10
     A_Research:
-      _value: 0
-      _interest: 0
+      _value: 5
+      _interest: 1
       _exp: 0
   _pawnInfo:
     IsDead: 0

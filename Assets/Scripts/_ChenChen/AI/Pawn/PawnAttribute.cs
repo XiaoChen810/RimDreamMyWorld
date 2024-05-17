@@ -13,14 +13,14 @@ namespace ChenChen_AI
         public PawnAttribute()
         {
             System.Random random = new System.Random();
-            A_Combat = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Culinary = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Construction = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Survival = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Craftsmanship = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Medical = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Carrying = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
-            A_Research = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(5, 10));
+            A_Combat = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Culinary = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Construction = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Survival = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Craftsmanship = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Medical = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Carrying = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
+            A_Research = new PawnAbility(random.Next(0, 3), random.Next(0, 20), random.Next(0, 20));
         }
 
         /// <summary>

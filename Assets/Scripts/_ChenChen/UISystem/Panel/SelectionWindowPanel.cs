@@ -32,6 +32,10 @@ namespace ChenChen_UISystem
             {
                 Action onPreloadAnimation = () =>
                 {
+                    p0.gameObject.SetActive(false);
+                    p1.gameObject.SetActive(false);
+                    p2.gameObject.SetActive(false);
+
                     Debug.Log("EnterGame");
                 };
                 Action onPostLoadScene = () =>

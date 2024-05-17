@@ -4,6 +4,7 @@ using ChenChen_UISystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UI;
 
 namespace ChenChen_Scene
 {
@@ -24,8 +25,6 @@ namespace ChenChen_Scene
 
         public override void OnEnter()
         {
-            // 执行加载前动作
-            OnPreLoad?.Invoke();
             // 异步加载场景
             GameManager.Instance.StartCoroutine(LoadSceneCo());
         }
@@ -40,7 +39,7 @@ namespace ChenChen_Scene
             // 确保场景加载完成并且回调函数不为 null
             if (asyncOperation.isDone && OnPostLoad != null)
             {
-                // 执行回调函数
+                // 执行加载后动作
                 OnPostLoad?.Invoke();
                 GameManager.Instance.AnimatorTool.Animation_EndLoadingScene();
                 Debug.Log($"{sceneName}场景加载完毕");
@@ -49,21 +48,28 @@ namespace ChenChen_Scene
 
         private IEnumerator LoadSceneCo()
         {
+            // 执行加载前动作
+            OnPreLoad?.Invoke();
+
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             asyncLoad.completed += OnSceneLoaded;
             asyncLoad.allowSceneActivation = false;
 
             // 过场动画
             GameManager.Instance.AnimatorTool.Animation_LoadingScene();
+            Slider progressSilder = GameManager.Instance.AnimatorTool.ProgressSilder;
             bool animationPlayed = false;
             float timeAnimation = 0;
             // 等待异步加载操作完成
             while (!asyncLoad.isDone)
             {
+                yield return null;
+
                 if (asyncLoad.progress >= 0.1f && !animationPlayed)
                 {
+                    progressSilder.value = Mathf.Clamp((timeAnimation / 1f), 0, 0.9f);
                     timeAnimation += Time.deltaTime;
-                    if(timeAnimation > 1)
+                    if (timeAnimation > 1f)
                     {
                         animationPlayed = true;
                     }
@@ -73,8 +79,6 @@ namespace ChenChen_Scene
                 {
                     asyncLoad.allowSceneActivation = true;
                 }
-
-                yield return null;
             }
         }
     }

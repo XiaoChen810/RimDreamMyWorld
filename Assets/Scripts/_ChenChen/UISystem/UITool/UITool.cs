@@ -11,6 +11,14 @@ namespace ChenChen_UISystem
     {
         // 当前的面板
         GameObject currentPanel;
+        
+        /// <summary>
+        /// 面板自己对应的GameObject
+        /// </summary>
+        public GameObject MyGameObject
+        {
+            get { return currentPanel; }
+        }
 
         public UITool(GameObject currentPanel)
         {

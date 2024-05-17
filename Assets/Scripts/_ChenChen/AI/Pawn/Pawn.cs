@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -33,6 +34,7 @@ namespace ChenChen_AI
         public float AttackRange = 1;
         public float AttackSpeed = 0.76f;
         public float AttackSpeedWait = 0.5f;
+
         [Header("人物定义")]
         [SerializeField] private PawnKindDef _pawnKindDef;
         public PawnKindDef Def
@@ -262,6 +264,24 @@ namespace ChenChen_AI
         }
         #endregion
 
+        #region Need
+
+        protected List<PawnNeed> _needsList;
+
+        protected float _needProbabilityRange;
+
+        protected virtual List<PawnNeed> InitNeedsList()
+        {
+            return new List<PawnNeed>();
+        }
+
+        protected virtual void TryToGetNeed()
+        {
+            
+        }
+
+        #endregion
+
         protected virtual void Start()
         {
             /* 添加这个人物的移动组件 */
@@ -276,6 +296,8 @@ namespace ChenChen_AI
             /* 设置图层Pawn和标签 */
             gameObject.layer = 7;
             gameObject.tag = "Pawn";
+
+            _needsList = InitNeedsList();
         }
 
         protected virtual void Update()
@@ -286,6 +308,7 @@ namespace ChenChen_AI
             if (Def.StopUpdate) return;
             StateMachine.Update();
             if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
+            if (Info.Need == null || Info.Need.IsCompelte) TryToGetNeed();
         }
 
         protected void 任务列表Debug()

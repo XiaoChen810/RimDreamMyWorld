@@ -27,30 +27,40 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         public BoxCollider2D ColliderSelf { get; protected set; }
 
-        // 物品当前耐久度
+        /// <summary>
+        /// 物品当前耐久度
+        /// </summary>
         public int CurDurability { get; protected set; }
 
-        // 物品建造所需工作量
+        /// <summary>
+        /// 物品建造所需工作量
+        /// </summary>
         public int WorkloadBuilt
         {
             get { return Def.Workload; }
         }
 
-        // 物品拆除所需工作量
+        /// <summary>
+        /// 物品拆除所需工作量
+        /// </summary>
         public int WorkloadDemolished
         {
             get { return Mathf.CeilToInt(Def.Workload * 0.5f); }
         }
 
-        // 物品最大耐久度
+        /// <summary>
+        /// 物品最大耐久度
+        /// </summary>
         public int MaxDurability
         {
             get { return Def.Durability; }
         }
 
 
-        // 物品工作量
         protected int _workload;
+        /// <summary>
+        /// 物品剩余工作量
+        /// </summary>
         public int Workload
         {
             get
@@ -63,8 +73,10 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        // 生命周期
         [SerializeField] protected BuildingLifeStateType _lifeState = 0;
+        /// <summary>
+        /// 生命周期
+        /// </summary>
         public BuildingLifeStateType LifeState
         {
             get
@@ -72,6 +84,11 @@ namespace ChenChen_BuildingSystem
                 return _lifeState;
             }
         }
+
+        /// <summary>
+        /// 切换生命周期
+        /// </summary>
+        /// <param name="change"></param>
         public void ChangeLifeState(BuildingLifeStateType change)
         {
             if (change != _lifeState)

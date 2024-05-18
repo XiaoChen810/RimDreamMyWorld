@@ -192,9 +192,8 @@ namespace ChenChen_AI
 
         public void GetDamage(float damage)
         {
-            _pawnInfo.HP -= (int)damage;
-            _pawnInfo.HP = _pawnInfo.HP <= 0 ? 0 : _pawnInfo.HP;
-            if (_pawnInfo.HP <= 0)
+            _pawnInfo.HP.CurValue -= (int)damage;
+            if (_pawnInfo.HP.IsSpace)
             {
                 Info.IsDead = true;
                 gameObject.SetActive(false);
@@ -266,18 +265,40 @@ namespace ChenChen_AI
 
         #region Need
 
-        protected List<PawnNeed> _needsList;
+        //需求列表
+        [SerializeField] protected List<PawnNeed> _needsList;
 
-        protected float _needProbabilityRange;
-
+        //初始化需求列表
         protected virtual List<PawnNeed> InitNeedsList()
         {
             return new List<PawnNeed>();
         }
 
+        //尝试获取需求
         protected virtual void TryToGetNeed()
         {
             
+        }
+
+        //间歇性获取需求
+        protected virtual IEnumerator GetIntermittentNeed()
+        {
+            while (true)
+            {
+                // 根据需求概率动态调整间隔时间
+                float averageProbability = CalculateAverageProbability();
+                float interval = Mathf.Lerp(30f, 60f, averageProbability); 
+
+                yield return new WaitForSeconds(interval);
+
+                TryToGetNeed(); // 尝试获取需求
+            }
+        }
+
+        // 计算平均需求概率
+        protected float CalculateAverageProbability()
+        {
+            return Random.value;
         }
 
         #endregion
@@ -298,6 +319,7 @@ namespace ChenChen_AI
             gameObject.tag = "Pawn";
 
             _needsList = InitNeedsList();
+            StartCoroutine(GetIntermittentNeed());
         }
 
         protected virtual void Update()
@@ -308,7 +330,6 @@ namespace ChenChen_AI
             if (Def.StopUpdate) return;
             StateMachine.Update();
             if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
-            if (Info.Need == null || Info.Need.IsCompelte) TryToGetNeed();
         }
 
         protected void 任务列表Debug()

@@ -37,7 +37,8 @@ namespace ChenChen_UISystem
         /// <param name="target"> 指向目标 </param>
         public void Narrative(string content, GameObject target)
         {
-            _narrativePanel.AddOneNarrativeLog(content, target);          
+            string text = DateTime.Now.ToString() + content;
+            _narrativePanel.AddOneNarrativeLog(text, target);          
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using ChenChen_BuildingSystem;
 using UnityEngine.Tilemaps;
 using static UnityEditor.PlayerSettings;
+using UnityEditor.U2D.Aseprite;
 
 namespace ChenChen_MapGenerator
 {
@@ -69,7 +70,7 @@ namespace ChenChen_MapGenerator
         /// <param name="mapSave"> 生成地图用的数据 </param>
         /// <param name="mapObjectActive"> 生成的地图是否立即作为当前场景 </param>
         private void GenerateMap(Data_MapSave mapSave, bool mapObjectActive)
-        {      
+        {    
             if (!MapDatasDict.ContainsKey(mapSave.mapName))
             {
                 MapData mapData = new(mapSave);

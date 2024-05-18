@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3134209659952464225}
   - component: {fileID: 6474088649562216642}
   - component: {fileID: 410362703854920938}
-  - component: {fileID: 7329631203696708995}
+  - component: {fileID: 4787586644356219846}
   m_Layer: 0
   m_Name: "\u6728\u5E8A_Prefab"
   m_TagString: Untagged
@@ -134,7 +134,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.1337337, y: 1.6773477}
   m_EdgeRadius: 0
---- !u!114 &7329631203696708995
+--- !u!114 &4787586644356219846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2285554699647741247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7687f36835d69bc408bc9cf1d7e4c81e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ac98f574e25769438d2b60a54bddebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _theUsingPawn: {fileID: 0}
+  _permission: 0
   Def: {fileID: 11400000, guid: d9e2d625f3ebfcd449e5f15a9b2cfb62, type: 2}
+  _lifeState: 0
+  DrawOutline_Sprite: 0
+  DrawOutline_Collider: 0

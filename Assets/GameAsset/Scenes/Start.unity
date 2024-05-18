@@ -571,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d3a7fabbfcc7f42b8cb8794a4fee7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ProgressSilder: {fileID: 0}
 --- !u!114 &1154968102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,9 +785,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SaveList: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!1001 &2126960140
 PrefabInstance:
   m_ObjectHideFlags: 0

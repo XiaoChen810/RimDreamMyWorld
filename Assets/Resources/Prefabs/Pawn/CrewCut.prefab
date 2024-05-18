@@ -309,6 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurJobTarget: {fileID: 0}
   CurrentStateList: []
+  SleepSprite: {fileID: 4989447751906580430, guid: d33169013e9a7cc4591dcf5f4d5594c7, type: 3}
   WorkRange: 1.35
   AttackRange: 1.5
   AttackSpeed: 0.76
@@ -357,12 +358,20 @@ MonoBehaviour:
       _interest: 2
       _exp: 8
   _pawnInfo:
-    IsDead: 0
-    IsSelect: 0
-    IsOnWork: 0
-    IsOnBattle: 0
-    IsDrafted: 0
-    HP: 0
+    isDead: 0
+    isSelect: 0
+    isOnWork: 0
+    isOnBattle: 0
+    isDrafted: 0
+    hp:
+      name: "\u5065\u5EB7\u503C"
+      curValue: 100
+      maxValue: 100
+    sleepiness:
+      name: "\u7761\u7720"
+      curValue: 100
+      maxValue: 100
+  _needsList: []
 --- !u!114 &3643529270731135940
 MonoBehaviour:
   m_ObjectHideFlags: 0

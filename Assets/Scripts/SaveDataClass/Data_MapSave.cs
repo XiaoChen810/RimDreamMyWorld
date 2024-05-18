@@ -21,5 +21,4 @@ public class Data_MapSave
     public string mapName;
     public int width, height;
     public int seed;
-
 }

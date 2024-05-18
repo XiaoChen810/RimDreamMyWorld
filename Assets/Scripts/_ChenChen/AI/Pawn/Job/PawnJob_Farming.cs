@@ -33,13 +33,6 @@ namespace ChenChen_AI
                 DebugLogDescription = ($"{_pawn.name} 无法从 {_workSpace_Farm.name} 中获取工作位置");
                 return false;
             }
-            //// 最后尝试取得权限，预定当前工作，标记目标被使用
-            //if (!_workSpace_Farm.GetPermission(_pawn))
-            //{
-            //    DebugLogDescription = ($"{_pawn.name} No privilege");
-            //    return false;
-            //}
-            // 设置人物目标点，前往目标，跑过去
             if (!_pawn.MoveController.GoToHere(_farmingPosition, Urgency.Urge))
             {
                 DebugLogDescription = ($"{_pawn.name} The position can't arrive");
@@ -86,8 +79,6 @@ namespace ChenChen_AI
             // 结束动画
             _pawn.Animator.SetBool("IsDoing", false);
 
-            // 归还目标使用权限
-            _workSpace_Farm.RevokePermission(_pawn);
         }
 
         public override void OnInterrupt()

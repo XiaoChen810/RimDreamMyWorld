@@ -28,7 +28,7 @@ namespace ChenChen_AI
         {
             if (target == null) return false;
 
-            // 尝试获取蓝图
+            // 尝试获取组件
             curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
@@ -50,7 +50,7 @@ namespace ChenChen_AI
                 return false;
             }
 
-            // 设置人物无法接取工作
+            // 设置人物接取工作
             _pawn.JobToDo(target);
 
             return true;

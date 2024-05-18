@@ -155,6 +155,25 @@ namespace ChenChen_BuildingSystem
             return null;
         }
         /// <summary>
+        /// 获取全部物体从已生成列表
+        /// </summary>
+        /// <typeparam name="T">物体类型</typeparam>
+        /// <param name="name">指定的名字（可选）</param>
+        /// <param name="needFree">是否需要一个没有被使用的物体（默认值为 true）</param>
+        /// <returns>符合条件的物体列表</returns>
+        public List<T> GetThingsGenerated<T>(string name = null, bool needFree = true) where T : ThingBase
+        {
+            List<T> list = new List<T>();
+            foreach (var building in ThingBuildingGeneratedList)
+            {
+                if (!building.TryGetComponent<T>(out T component)) continue;
+                if (name != null && building.Def.DefName != name) continue;
+                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                list.Add(component);
+            }
+            return list;
+        }
+        /// <summary>
         /// 访问字典，找到存在的物品定义并返回
         /// </summary>
         /// <param name="name"></param>
@@ -206,6 +225,7 @@ namespace ChenChen_BuildingSystem
                 return false;
             }
             GameObject thingObj = Instantiate(prefab, thingSave.ThingPos, thingSave.ThingRot, transform);
+            thingObj.name = thingSave.DefName;
             thingObj.GetComponent<ThingBase>().OnPlaced(thingSave.LifeState, thingSave.MapName);
             return true;
         }

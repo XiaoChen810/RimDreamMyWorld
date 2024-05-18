@@ -22,8 +22,9 @@ public abstract class PermissionBase : MonoBehaviour
         {
             return _theUsingPawn;
         }
-        protected set
+        set
         {
+            Debug.Log($"{this.name}设定了持有者{value.Def.PawnName}");
             _theUsingPawn = value;
         }
     }

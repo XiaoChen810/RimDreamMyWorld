@@ -40,7 +40,7 @@ namespace ChenChen_AI
             // 尝试取得权限，预定当前工作，标记目标被使用
             if (!curTargetComponent.GetPermission(_pawn))
             {
-                DebugLogDescription = ("目标已经其他人被使用");
+                DebugLogDescription = ("目标已经有其他人被使用");
                 return false;
             }
 

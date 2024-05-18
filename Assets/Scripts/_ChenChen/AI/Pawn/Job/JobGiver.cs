@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,12 @@ namespace ChenChen_AI
 {
     public abstract class JobGiver
     {
-        public JobGiver() { }
+        protected Action<GameObject> onGetJobSuccessly;
+
+        public JobGiver(Action<GameObject> onGetJobSuccessly)
+        {
+            this.onGetJobSuccessly = onGetJobSuccessly;
+        }
 
         // 尝试获取任务
         protected abstract GameObject TryGiveJob(Pawn pawn);
@@ -19,6 +25,7 @@ namespace ChenChen_AI
             {
                 return null;
             }
+            onGetJobSuccessly?.Invoke(job);
             return job;
         }
     }

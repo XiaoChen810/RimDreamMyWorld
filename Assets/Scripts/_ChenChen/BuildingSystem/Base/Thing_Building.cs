@@ -13,7 +13,7 @@ namespace ChenChen_BuildingSystem
         public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
         {
             // 设置初始值
-            _workload = WorkloadBuilt;
+            Workload = WorkloadBuilt;
             MapName = mapName;
             // 设置碰撞体
             if (TryGetComponent<Collider2D>(out Collider2D coll))
@@ -44,6 +44,7 @@ namespace ChenChen_BuildingSystem
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             sr.color = new Color(1, 1, 1, 0f);
             DrawOutline_Collider = true;
+            Workload = Workload > 0 ? Workload :WorkloadBuilt;
         }
 
         public override void OnBuild(int value)
@@ -88,6 +89,7 @@ namespace ChenChen_BuildingSystem
             }
             CanDemolish = true;
             DrawOutline_Collider = false;
+            Workload = 0;
         }
 
         public override void OnCancel()

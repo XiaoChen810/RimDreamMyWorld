@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.IO;
+using UnityEditor.U2D.Aseprite;
 
 
 namespace ChenChen_MapGenerator
@@ -17,12 +20,12 @@ namespace ChenChen_MapGenerator
         private int _height;
         private MapNode[,] _nodes;
         private GameObject _mapObj;
-        private Dictionary<string, Tilemap> LayerDict; 
+        private Dictionary<string, Tilemap> _layerDict; 
 
         [Header("地形数据")]
         [SerializeField] private List<TerrainData> _terrainList;
         [Header("花草数据")]
-        [SerializeField] private List<FlowerData> _flowersList;     
+        [SerializeField] private List<FlowerData> _flowersList;
 
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
@@ -35,7 +38,18 @@ namespace ChenChen_MapGenerator
             _height = mapData.height;
             _nodes = new MapNode[_width, _height];
             Random.InitState(mapData.seed);
-            LayerDict = new Dictionary<string, Tilemap>();
+
+            if (LoadMapPrefab(mapData, out GameObject mapObj))
+            {
+                InitNodeNoiseValue();
+                InitNodeType();
+                CheckNode();
+                result.mapNodes = _nodes;
+                result.mapObject = mapObj;
+                return result;
+            }
+
+            Debug.Log("第一次生成地图" + mapData.mapName);
             // 地图的Object
             _mapObj = new GameObject(mapData.mapName);
             _mapObj.transform.parent = transform;
@@ -44,7 +58,8 @@ namespace ChenChen_MapGenerator
             grid.AddComponent<Grid>();
             grid.transform.parent = _mapObj.transform;
             // 添加Terrain相关的Tilemap
-            foreach(var t in _terrainList)
+            _layerDict = new Dictionary<string, Tilemap>();
+            foreach (var t in _terrainList)
             {
                 GameObject newObj = new GameObject(t.tilemapName);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
@@ -57,9 +72,9 @@ namespace ChenChen_MapGenerator
                     newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
                     newObj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
                 }
-                if (!LayerDict.ContainsKey(t.tilemapName))
+                if (!_layerDict.ContainsKey(t.tilemapName))
                 {
-                    LayerDict.Add(t.tilemapName, tilemap);
+                    _layerDict.Add(t.tilemapName, tilemap);
                 }
                 if (t.type == NodeType.water)
                 {
@@ -73,7 +88,7 @@ namespace ChenChen_MapGenerator
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 newObj.AddComponent<TilemapRenderer>().sortingOrder = f.layerSort;
                 newObj.transform.parent = grid.transform;
-                if (!LayerDict.ContainsKey(f.tilemapName)) LayerDict.Add(f.tilemapName, tilemap);
+                if (!_layerDict.ContainsKey(f.tilemapName)) _layerDict.Add(f.tilemapName, tilemap);
             }
 
             InitNodeNoiseValue();
@@ -84,7 +99,54 @@ namespace ChenChen_MapGenerator
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
+
+            SaveMapPrefab(mapData);
             return result;
+        }
+
+        private void SaveMapPrefab(MapData mapData)
+        {
+            string saveDirectory = "Assets/SavedGameObjects/";
+            string path = "Assets/SavedGameObjects/" + mapData.mapName + mapData.seed + ".prefab";
+            if (!string.IsNullOrEmpty(path))
+            {
+                //创建目录如果它不存在
+                AssetDatabase.Refresh();
+                if (!Directory.Exists(saveDirectory))
+                {
+                    Directory.CreateDirectory(saveDirectory);
+                }
+                PrefabUtility.SaveAsPrefabAsset(_mapObj, path);
+                // 刷新资产数据库
+                AssetDatabase.Refresh();
+
+                Debug.Log("GameObject saved as Prefab: " + path);
+            }
+        }
+
+        public bool LoadMapPrefab(MapData mapData, out GameObject map)
+        {
+            map = null;
+            string prefabPath = "Assets/SavedGameObjects/" + mapData.mapName + mapData.seed + ".prefab";
+            if (string.IsNullOrEmpty(prefabPath))
+                return false;
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            if (prefab != null)
+            {
+                map = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+                map.name = mapData.mapName;
+                map.transform.parent = transform;
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.Log("GameObject Prefab loaded: " + prefabPath);
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("Prefab not found at path: " + prefabPath);
+                return false;
+            }
         }
 
         #region 地图生成
@@ -208,7 +270,7 @@ namespace ChenChen_MapGenerator
                 if (t.type == node.type)
                 {
                     //return _mapObj.transform.Find(t.tilemapName).GetComponent<Tilemap>();
-                    return LayerDict[t.tilemapName];
+                    return _layerDict[t.tilemapName];
                 }
             }
             Debug.Log($"未能找到对应的Tilemap : {node.postion.x}, {node.postion.y}");
@@ -223,9 +285,9 @@ namespace ChenChen_MapGenerator
         /// <returns></returns>
         public Tilemap GetTileamp(string name, GameObject parent = null, bool isObstacle = true)
         {
-            if(LayerDict.ContainsKey(name))
+            if(_layerDict.ContainsKey(name))
             {
-                return LayerDict[name];
+                return _layerDict[name];
             }
             else
             {
@@ -241,7 +303,7 @@ namespace ChenChen_MapGenerator
                     newObj.layer = 8; //Obstacle Layer
                 }
                 newObj.transform.parent = parent.transform;
-                LayerDict.Add(name, tilemap);
+                _layerDict.Add(name, tilemap);
                 return tilemap;
             }
         }

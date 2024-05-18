@@ -6,46 +6,51 @@ namespace ChenChen_AI
 {
     public class HumanMain : Pawn
     {
+        protected List<JobGiver> jobGivers;
 
         protected override void Start()
         {
             base.Start();
+            jobGivers = new List<JobGiver>();
+            // 睡觉
+            jobGivers.Add(new JobGiver_Sleep((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Sleep(this, job);
+            }));
+            // 建造
+            jobGivers.Add(new JobGiver_Building((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Building(this, job);
+            }));
+            // 拆除
+            jobGivers.Add(new JobGiver_Demolish((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Demolished(this, job);
+            }));
+            // 种植
+            jobGivers.Add(new JobGiver_Farming((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Farming(this, job);
+            }));
+            // 钓鱼
+            jobGivers.Add(new JobGiver_Fishing((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Fishing(this, job);
+            }));
         }
-        public string CurNeed => Info.Need.Description;
-        public bool CurNeedIsComplete => Info.Need.IsCompelte;
 
         protected override void TryToGetJob()
         {
             GameObject job = null;
-            // 建造
-            job = new JobGiver_Building().TryIssueJobPackage(this);
-            if (job != null)
+            foreach (JobGiver jobGiver in jobGivers)
             {
-                StateMachine.NextState = new PawnJob_Building(this, job);
-                return;
+                job = jobGiver.TryIssueJobPackage(this);
+                if (job != null)
+                {
+                    CurJobTarget = job;
+                    return;
+                }
             }
-            // 拆除
-            job = new JobGiver_Demolish().TryIssueJobPackage(this);
-            if (job != null)
-            {
-                StateMachine.NextState = new PawnJob_Demolished(this, job);
-                return;
-            }
-            // 种植
-            job = new JobGiver_Farming().TryIssueJobPackage(this);
-            if (job != null)
-            {
-                StateMachine.NextState = new PawnJob_Farming(this, job);
-                return;
-            }
-            // 钓鱼
-            job = new JobGiver_Fishing().TryIssueJobPackage(this);
-            if (job != null)
-            {
-                StateMachine.NextState = new PawnJob_Fishing(this, job);
-                return;
-            }
-
             return;
         }
 
@@ -53,30 +58,33 @@ namespace ChenChen_AI
         {
             List<PawnNeed> needs = new List<PawnNeed>();
             needs.Add(new PawnNeed_HavePet());
-
-            _needProbabilityRange = 0;
-            foreach (PawnNeed need in needs)
-            {
-                _needProbabilityRange += need.Probability;
-            }
+            needs.Add(new PawnNeed_Misc("想要吃饭"));
+            needs.Add(new PawnNeed_Misc("想要睡觉"));
+            needs.Add(new PawnNeed_Misc("想要玩永杰无间"));
+            needs.Add(new PawnNeed_Misc("想要玩英雄联盟"));
             return needs;
         }
 
 
         protected override void TryToGetNeed()
         {
-            float randomProbability = Random.Range(0, _needProbabilityRange);
+            float needProbabilityRange = 0;
+            foreach (PawnNeed need in _needsList)
+            {
+                needProbabilityRange += need.Probability;
+            }
+            float randomProbability = Random.Range(0f, needProbabilityRange); 
             for (int i = 0; i < _needsList.Count; i++)
             {
                 randomProbability -= _needsList[i].Probability;
-                if(randomProbability < 0)
+                if (randomProbability <= 0) 
                 {
                     string content = $"{Def.PawnName}{_needsList[i].Description}";
                     ScenarioManager.Instance.Narrative(content, this.gameObject);
-                    Info.Need = (PawnNeed)_needsList[i].Clone();
                     return;
                 }
             }
         }
+
     }
 }

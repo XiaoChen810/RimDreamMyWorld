@@ -7,15 +7,20 @@ namespace ChenChen_AI
     {
         //持续最大时间
         private readonly static float tick = 500;
+        private GameObject target;
         private Thing_Bed bed;
         public PawnJob_Sleep(Pawn pawn, GameObject bed) : base(pawn, tick, null)
         {
-            this.bed = bed.GetComponent<Thing_Bed>();
+            target = bed;
         }
 
         public override bool OnEnter()
         {
-            if(bed == null) return false;
+            if(!target.TryGetComponent<Thing_Bed>(out bed)) 
+            {
+                DebugLogDescription = ("没有Thing_Bed组件");
+                return false;
+            }
 
             // 尝试取得权限，预定当前工作，标记目标被使用
             if (!bed.GetPermission(_pawn))
@@ -39,6 +44,7 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
+            if (target == null) return StateType.Failed;
             // 判断是否到达目标点附近
             if (_pawn.MoveController.ReachDestination)
             {

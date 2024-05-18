@@ -11,6 +11,7 @@ namespace ChenChen_AI
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
+            if(!pawn.Def.CanPlant) return null;
             return GameManager.Instance.WorkSpaceTool.GetAWorkSpace(WorkSpaceType.Farm);
         }
     }

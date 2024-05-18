@@ -28,8 +28,13 @@ public class WorkSpaceTool : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.T))
         {
-            AddNewWorkSpace($"工作区{index++}", WorkSpaceType.Farm);
+            AddOneFarmWorkSpace();
         }
+    }
+
+    public void AddOneFarmWorkSpace()
+    {
+        AddNewWorkSpace($"工作区{index++}", WorkSpaceType.Farm);
     }
 
     public GameObject GetAWorkSpace(WorkSpaceType workSpaceType)
@@ -146,7 +151,7 @@ public class WorkSpaceTool : MonoBehaviour
                 // 有任何一个碰撞体就返回
                 return false;
             }
-            var nodes = MapManager.Instance.MapDatasDict[MapManager.Instance.CurrentMapName].mapNodes;
+            var nodes = MapManager.Instance.CurMapNodes;
             int minx = start.x < end.x ? (int)start.x : (int)end.x;
             int maxx = start.x > end.x ? (int)start.x : (int)end.x;
             int miny = start.y < end.y ? (int)start.y : (int)end.y;

@@ -6,6 +6,7 @@ using ChenChen_BuildingSystem;
 using UnityEngine.Tilemaps;
 using static UnityEditor.PlayerSettings;
 using UnityEditor.U2D.Aseprite;
+using Pathfinding.RVO;
 
 namespace ChenChen_MapGenerator
 {
@@ -25,7 +26,7 @@ namespace ChenChen_MapGenerator
         /// <summary>
         /// 不同场景的地图数据
         /// </summary>
-        public Dictionary<string, MapData> MapDatasDict = new Dictionary<string, MapData>();
+        private Dictionary<string, MapData> _mapDatasDict = new Dictionary<string, MapData>();
 
         private string _currentMapName;
         /// <summary>
@@ -56,12 +57,16 @@ namespace ChenChen_MapGenerator
         public int MapWidthOfGenerate = 100;
         public int MapHeightOfGenerate = 100;
 
+        public int CurMapWidth => _mapDatasDict[CurrentMapName].width;
+        public int CurMapHeight => _mapDatasDict[CurrentMapName].height;
+        public MapNode[,] CurMapNodes => _mapDatasDict[CurrentMapName].mapNodes;
+
         protected override void Awake()
         {
             base.Awake();
             MapCreator = GetComponent<MapCreator>();
             ItemCreator = new ItemCreator();
-            MapDatasDict = new Dictionary<string, MapData>();
+            _mapDatasDict = new Dictionary<string, MapData>();
         }
 
         /// <summary>
@@ -71,13 +76,13 @@ namespace ChenChen_MapGenerator
         /// <param name="mapObjectActive"> 生成的地图是否立即作为当前场景 </param>
         private void GenerateMap(Data_MapSave mapSave, bool mapObjectActive)
         {    
-            if (!MapDatasDict.ContainsKey(mapSave.mapName))
+            if (!_mapDatasDict.ContainsKey(mapSave.mapName))
             {
                 MapData mapData = new(mapSave);
                 mapData = MapCreator.GenerateMap(mapData);
                 if (mapObjectActive)
                 {
-                    _currentMapName = mapData.mapName;
+                    CurrentMapName = mapData.mapName;
                     mapData.mapObject.SetActive(true);
                 }
                 else
@@ -85,7 +90,7 @@ namespace ChenChen_MapGenerator
                     mapData.mapObject.SetActive(false);
                 }
                 // 添加进字典
-                MapDatasDict.Add(mapSave.mapName, mapData);
+                _mapDatasDict.Add(mapSave.mapName, mapData);
                 Debug.Log("已经生成地图" + mapSave.mapName);
             }
             else
@@ -105,13 +110,13 @@ namespace ChenChen_MapGenerator
         public void LoadOrGenerateSceneMap(string mapName, int seed = -1)
         {
             // 如果加载的是新场景要先把旧场景关了
-            if (_currentMapName != mapName && _currentMapName != null)
+            if (CurrentMapName != mapName && CurrentMapName != null)
             {
-                CloseSceneMap(_currentMapName);
+                CloseSceneMap(CurrentMapName);
             }
 
             // 如果已经存在场景，则直接启用
-            if (MapDatasDict.ContainsKey(mapName))
+            if (_mapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(true);
                 Debug.Log($"场景已经存在{mapName},直接启用");
@@ -127,7 +132,7 @@ namespace ChenChen_MapGenerator
                 for (int i = 0; i < 100; i++)
                 {
                     Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
-                    if (MapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
+                    if (_mapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
                         ItemCreator.GenerateItem("常青树", pos, mapName);
                 }
             }
@@ -154,7 +159,7 @@ namespace ChenChen_MapGenerator
         /// <param name="mapName"></param>
         public void CloseSceneMap(string mapName)
         {
-            if (MapDatasDict.ContainsKey(mapName))
+            if (_mapDatasDict.ContainsKey(mapName))
             {
                 transform.Find(mapName).gameObject.SetActive(false);
             }
@@ -173,9 +178,9 @@ namespace ChenChen_MapGenerator
         {
 #if UNITY_EDITOR
             DestroyImmediate(transform.Find(mapName).gameObject);
-            if (MapDatasDict.ContainsKey(mapName))
+            if (_mapDatasDict.ContainsKey(mapName))
             {
-                MapDatasDict.Remove(mapName);
+                _mapDatasDict.Remove(mapName);
             }
 #else
             Destroy(transform.Find(mapName).gameObject);
@@ -188,7 +193,31 @@ namespace ChenChen_MapGenerator
 
         public bool TryGetTilemap(string name, bool isObstacle,out Tilemap result)
         {
-            result = MapCreator.GetTileamp(name, MapDatasDict[CurrentMapName].mapObject.transform.Find("Grid").gameObject, true);
+            Transform grid = _mapDatasDict[CurrentMapName].mapObject.transform.Find("Grid");
+            Transform tilemapTransform = grid.Find(name);
+            if(tilemapTransform != null)
+            {
+                if(!tilemapTransform.TryGetComponent<Tilemap>(out result))
+                {
+                    Debug.LogError($"缺失Tilemap组件");
+                }
+            }
+            else
+            {
+                Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
+                GameObject newObj = new GameObject(name);
+                Tilemap tilemap = newObj.AddComponent<Tilemap>();
+                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Above";
+                if (isObstacle)
+                {
+                    newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                    newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                    newObj.layer = 8; //Obstacle Layer
+                }
+                newObj.transform.parent = grid.transform;
+                result = tilemap;
+            }
             return result != null;
         }
 
@@ -196,7 +225,11 @@ namespace ChenChen_MapGenerator
         {
             int x = (int)position.x;
             int y = (int)position.y;
-            return MapDatasDict[_currentMapName].mapNodes[x, y];
+            x = x < 0 ? 0 : x;
+            x = x > MapWidthOfGenerate ? MapWidthOfGenerate : x;
+            y = y < 0 ? 0 : y;
+            y = y > MapHeightOfGenerate ? MapHeightOfGenerate : y;
+            return _mapDatasDict[CurrentMapName].mapNodes[x, y];
         }
 
         #endregion

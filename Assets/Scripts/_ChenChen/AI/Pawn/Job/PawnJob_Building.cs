@@ -58,6 +58,8 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
+            if (target == null) return StateType.Failed;
+
             // 判断是否到达目标点附近
             if (_pawn.MoveController.ReachDestination)
             {

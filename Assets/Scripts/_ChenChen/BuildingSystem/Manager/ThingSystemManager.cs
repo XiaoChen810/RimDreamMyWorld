@@ -36,10 +36,13 @@ namespace ChenChen_BuildingSystem
         public void Update()
         {
             Tool.BuildUpdate();
-            OpenBuildingMenuPanel();
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                OpenBuildingMenuPanel();
+            }
         }
 
-        private void OpenBuildingMenuPanel()
+        public void OpenBuildingMenuPanel()
         {
             // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
             PanelBase.Callback onEnterCallback = () =>
@@ -53,10 +56,7 @@ namespace ChenChen_BuildingSystem
                 
             };
 
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
-            }             
+            BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);          
         }
 
         private void LoadAllThingDefData()

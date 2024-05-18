@@ -55,6 +55,8 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
+            if (building == null) return StateType.Failed;
+
             // 如果完成了拆除，状态机结束暂停，可以进入下一个状态
             if (currentWorkObject == null)
             {

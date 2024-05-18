@@ -3,6 +3,7 @@ using ChenChen_BuildingSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class SelectTool : MonoBehaviour
@@ -10,7 +11,7 @@ public class SelectTool : MonoBehaviour
     private LineRenderer lineRenderer;
     private Vector2 startPos;
     private Vector2 endPos;
-    private bool open = false;
+    private bool isDragging = false;
 
     private void Start()
     {
@@ -21,23 +22,27 @@ public class SelectTool : MonoBehaviour
     private void Update()
     {
         // 如果在建造模式中则不检测输入
-        if (ChenChen_BuildingSystem.ThingSystemManager.Instance.Tool.OnBuildMode) return;
+        if (ThingSystemManager.Instance.Tool.OnBuildMode) return;
+        // 如果正在放置工作区则不检测输入
         if (GameManager.Instance.WorkSpaceTool.IsDoingWorkSpace) return;
         InputUpdate();
     }
 
     private void InputUpdate()
     {
+        // 检查鼠标是否在UI上
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (UnityEngine.Input.GetMouseButtonDown(0))
         {
             // 记录滑动开始的位置
             startPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
-            open = true;
+            isDragging = true;
         }
 
         if (UnityEngine.Input.GetMouseButton(0))
         {
-            if (!open) return;
+            if (!isDragging) return;
 
             // 更新滑动结束的位置
             endPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
@@ -54,7 +59,7 @@ public class SelectTool : MonoBehaviour
             // 在滑动结束时处理多选
             HandleSelection(startPos, endPos);
             ResetLineRenderer();
-            open = false;
+            isDragging = false;
         }
     }
 

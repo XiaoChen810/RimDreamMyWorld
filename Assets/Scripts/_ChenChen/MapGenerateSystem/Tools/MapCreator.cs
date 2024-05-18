@@ -285,7 +285,7 @@ namespace ChenChen_MapGenerator
         /// <returns></returns>
         public Tilemap GetTileamp(string name, GameObject parent = null, bool isObstacle = true)
         {
-            if(_layerDict.ContainsKey(name))
+            if(_layerDict != null && _layerDict.ContainsKey(name))
             {
                 return _layerDict[name];
             }

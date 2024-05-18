@@ -1,3 +1,4 @@
+using ChenChen_MapGenerator;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -112,6 +113,9 @@ namespace ChenChen_AI
         /// <returns></returns>
         public bool GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
         {
+            if (target.x <= 0 || target.x >= MapManager.Instance.CurMapWidth) return false;
+            if (target.y <= 0 || target.y >= MapManager.Instance.CurMapHeight) return false;
+
             switch (urgency)
             {
                 case Urgency.Wander:

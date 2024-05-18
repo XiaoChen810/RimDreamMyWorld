@@ -2,6 +2,7 @@
 using ChenChen_MapGenerator;
 using ChenChen_AI;
 using static UnityEngine.Rendering.DebugUI;
+using System.Linq;
 
 namespace ChenChen_BuildingSystem
 {
@@ -215,12 +216,9 @@ namespace ChenChen_BuildingSystem
             Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
 
             // 遍历检测到的碰撞器，如果有任何一个碰撞器存在，则返回 false，表示无法放置游戏对象
-            foreach (Collider2D otherCollider in colliders)
+            if(colliders.Any(otherCollider => otherCollider.gameObject != this.gameObject))
             {
-                if (otherCollider.gameObject != this.gameObject) // 忽略自己游戏对象的碰撞
-                {
-                    return false;
-                }
+                return false;
             }
 
             // 如果没有任何碰撞器存在，则表示可以放置游戏对象

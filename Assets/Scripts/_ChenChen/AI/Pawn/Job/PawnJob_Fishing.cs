@@ -28,8 +28,6 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            if (target == null) return false;
-
             curTargetComponent = target.GetComponent<Thing_Building>();
             if (curTargetComponent == null)
             {
@@ -40,7 +38,7 @@ namespace ChenChen_AI
             // 尝试取得权限，预定当前工作，标记目标被使用
             if (!curTargetComponent.GetPermission(_pawn))
             {
-                DebugLogDescription = ("目标已经有其他人被使用");
+                DebugLogDescription = ("目标已经有其他人使用");
                 return false;
             }
 
@@ -59,6 +57,8 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
+            if (target == null) return StateType.Failed;
+
             // 到达后
             if (_pawn.MoveController.ReachDestination)
             {
@@ -94,6 +94,8 @@ namespace ChenChen_AI
             _pawn.JobDone();
 
             curTargetComponent.RevokePermission(_pawn);
+
+            _pawn.Animator.SetInteger("IsFishing", 0);
         }
     }
 }

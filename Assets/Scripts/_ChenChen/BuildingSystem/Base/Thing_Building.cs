@@ -110,6 +110,10 @@ namespace ChenChen_BuildingSystem
         public override void OnMarkDemolish()
         {
             _workload = Mathf.CeilToInt(Def.Workload * 0.5f);
+            if(Workload == 0)
+            {
+                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
+            }
         }
 
         public override void OnDemolish(int value)

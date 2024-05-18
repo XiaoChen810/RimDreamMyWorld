@@ -9,20 +9,21 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 50;
 
+        private GameObject target;
         private WorkSpace_Farm _workSpace_Farm;
         private Vector2 _farmingPosition;
         private float _farmingTime;
 
         public PawnJob_Farming(Pawn pawn, GameObject workSpace = null) : base(pawn, tick)
         {
-            _workSpace_Farm = workSpace.GetComponent<WorkSpace_Farm>();
+            target = workSpace;
             _farmingTime = 15 - _pawn.Attribute.A_Survival.Value;
             _farmingTime = _farmingTime > 1 ? _farmingTime : 1;
         }
 
         public override bool OnEnter()
         {
-            if (_workSpace_Farm == null)
+            if (!target.TryGetComponent<WorkSpace_Farm>(out _workSpace_Farm))
             {
                 DebugLogDescription = ($"{_pawn.name} No WorkSpace_Farm");
                 return false;
@@ -46,6 +47,7 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
+            if (target == null) return StateType.Failed;
             // 判断是否到达目标点附近
             if (_pawn.MoveController.ReachDestination)
             {

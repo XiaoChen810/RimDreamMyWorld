@@ -12,6 +12,7 @@ namespace ChenChen_AI
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
+            if(!pawn.Def.CanForaging) return null;
             return ThingSystemManager.Instance.GetThingGenerated("钓鱼点", needFree: true);
         }
     }

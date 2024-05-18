@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
     {
         float currentSize = PixelPerfectCamera.assetsPPU;
 
-        currentSize -= scrollInput * zoomSpeed;
+        currentSize += scrollInput * zoomSpeed;
 
         currentSize = Mathf.Max(currentSize, zoomMin);
         currentSize = Mathf.Min(currentSize, zoomMax);

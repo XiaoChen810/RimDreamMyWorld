@@ -18,7 +18,7 @@ namespace ChenChen_UISystem
         private Button _openBtn;
         private Button _closeBtn;
         private float moveSpeed = 1;
-        private float moveDistance = 450;
+        private float moveDistance = 445;
         private GameObject _content; 
         private NarrativePool _pool;
 

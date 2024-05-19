@@ -17,6 +17,9 @@ public class PlayManager : SingletonMono<PlayManager>
     public List<Data_GameSave> SaveList = new List<Data_GameSave>();
     public PanelManager PanelManager { get; private set; }
 
+    [Header("本次游戏加载的存档")]
+    public Data_GameSave CurSave;
+
     private void Start()
     {
         PanelManager = new PanelManager();
@@ -46,7 +49,7 @@ public class PlayManager : SingletonMono<PlayManager>
     /// 新建一个游戏存档并保存到列表，返回本次新建的存档
     /// </summary>
     /// <param name="saveName"></param>
-    public Data_GameSave Save(string saveName = "unnamed", Data_MapSave data_MapSave = null)
+    public Data_GameSave Save(string saveName = null, Data_MapSave data_MapSave = null)
     {
         if (SceneSystem.Instance.CurSceneType != SceneType.Main)
         {
@@ -55,6 +58,7 @@ public class PlayManager : SingletonMono<PlayManager>
         }
         // 新建存档
         string saveDate = DateTime.Now.ToString();
+        saveName = CurSave.SaveName == null ? "unnamed" : CurSave.SaveName;
         Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
         // 保存地图生成参数
         if (data_MapSave == null)
@@ -112,6 +116,7 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         MapManager.Instance.LoadSceneMapFromSave(gameSave);
         GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(gameSave);
+        CurSave = gameSave;
     }
 
     /// <summary>

@@ -215,10 +215,12 @@ namespace ChenChen_BuildingSystem
             // 执行碰撞检测，只检测指定图层的碰撞器
             Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
 
-            // 遍历检测到的碰撞器，如果有任何一个碰撞器存在，则返回 false，表示无法放置游戏对象
-            if(colliders.Any(otherCollider => otherCollider.gameObject != this.gameObject))
+            // 遍历检测到的碰撞器，如果有任何一个碰撞器存在,除了地板，则返回 false，表示无法放置游戏对象
+            foreach(var coll in colliders)
             {
-                return false;
+                if (coll.gameObject == this.gameObject) continue;
+                if (coll.CompareTag("Floor")) continue;
+                return false;              
             }
 
             // 如果没有任何碰撞器存在，则表示可以放置游戏对象

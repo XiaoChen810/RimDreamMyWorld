@@ -9,50 +9,51 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 50;
 
-        private GameObject target;
         private WorkSpace_Farm _workSpace_Farm;
         private Vector2 _farmingPosition;
         private float _farmingTime;
 
-        public PawnJob_Farming(Pawn pawn, GameObject workSpace = null) : base(pawn, tick)
+        public PawnJob_Farming(Pawn pawn, GameObject workSpace) : base(pawn, tick, new TargetPtr(workSpace))
         {
-            target = workSpace;
-            _farmingTime = 15 - _pawn.Attribute.A_Survival.Value;
+            _farmingTime = 15 - base.pawn.Attribute.A_Survival.Value;
             _farmingTime = _farmingTime > 1 ? _farmingTime : 1;
         }
 
         public override bool OnEnter()
         {
-            if (!target.TryGetComponent<WorkSpace_Farm>(out _workSpace_Farm))
+            if (!target.GameObject.TryGetComponent<WorkSpace_Farm>(out _workSpace_Farm))
             {
-                DebugLogDescription = ($"{_pawn.name} No WorkSpace_Farm");
+                DebugLogDescription = ($"{pawn.name} No WorkSpace_Farm");
                 return false;
             }
             // 尝试获取工作位置            
             if (!_workSpace_Farm.TryGetAFarmingPosition(out _farmingPosition))
             {
-                DebugLogDescription = ($"{_pawn.name} 无法从 {_workSpace_Farm.name} 中获取工作位置");
+                DebugLogDescription = ($"{pawn.name} 无法从 {_workSpace_Farm.name} 中获取工作位置");
                 return false;
             }
-            if (!_pawn.MoveController.GoToHere(_farmingPosition, Urgency.Urge))
+            // 尝试前往工作位置
+            if (!pawn.MoveController.GoToHere(_farmingPosition, Urgency.Urge))
             {
-                DebugLogDescription = ($"{_pawn.name} The position can't arrive");
+                DebugLogDescription = ($"{pawn.name} The position can't arrive");
                 return false;
             }
             // 设置人物无法接取工作
-            _pawn.JobToDo(_workSpace_Farm.gameObject);
+            pawn.JobToDo(_workSpace_Farm.gameObject);
 
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (target == null) return StateType.Failed;
+            var baseResult = base.OnUpdate();
+            if (baseResult != StateType.Doing) return baseResult;
+
             // 判断是否到达目标点附近
-            if (_pawn.MoveController.ReachDestination)
+            if (pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
-                _pawn.JobDoing();
+                pawn.JobDoing();
 
                 // 执行工作
                 _farmingTime -= Time.deltaTime;
@@ -68,19 +69,17 @@ namespace ChenChen_AI
                 }
 
                 // 播放动画
-                _pawn.Animator.SetBool("IsDoing", true);
+                pawn.Animator.SetBool("IsDoing", true);
             }
             return StateType.Doing;
         }
 
         public override void OnExit()
         {
-            // 设置人物状态
-            _pawn.JobDone();
+            base.OnExit();
 
             // 结束动画
-            _pawn.Animator.SetBool("IsDoing", false);
-
+            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()

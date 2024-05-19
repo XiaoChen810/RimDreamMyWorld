@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e26f88b41b3c3409fec8a9b2881016, type: 3}
+  m_Name: "ThingDef_\u7802\u8F6E\u673A"
+  m_EditorClassIdentifier: 
+  DefName: "\u7802\u8F6E\u673A"
+  Type: 6
+  Workload: 50
+  PreviewSprite: {fileID: 531245116, guid: db3c02e49ec46d14fb4aa90c97bd395f, type: 3}
+  IsObstacle: 0
+  Prefab: {fileID: 2580116973637445865, guid: 821b718c718da134da80b695cf61b309, type: 3}
+  TileBase: {fileID: 0}
+  Durability: 75
+  Offset: {x: 0.5, y: 0.6}
+  CanRotation: 0

@@ -5,6 +5,12 @@ namespace ChenChen_BuildingSystem
 {
     public class Thing_Floor : Thing_Building
     {
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            tag = "Floor";
+        }
+
         public override bool CanBuildHere()
         {
             // 获取待放置对象的 Collider2D 组件

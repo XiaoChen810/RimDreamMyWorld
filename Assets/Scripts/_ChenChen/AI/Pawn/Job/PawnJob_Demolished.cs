@@ -7,40 +7,32 @@ namespace ChenChen_AI
     public class PawnJob_Demolished : PawnJob
     {
         private readonly static float tick = 50;
-        private GameObject building;
-        private Thing_Building currentWorkObject;
+        private Thing_Building targetComponent;
         private float _time;
         private float _timeOne;
 
-        public PawnJob_Demolished(Pawn pawn, GameObject building = null) : base(pawn, tick)
+        public PawnJob_Demolished(Pawn pawn, GameObject building) : base(pawn, tick,new TargetPtr(building))
         {
-            this.building = building;
             float ability = pawn.Attribute.A_Construction.Value;
-            if (ability == 0) _timeOne = 10;
-            _timeOne = 1f / ability;
+            float a = 1 - (ability / 20);
+            _timeOne = Mathf.Lerp(1f, 10, a) / 2;
         }
 
         public override bool OnEnter()
         {
-            if (building == null) return false;
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
 
             // 尝试获取蓝图
-            currentWorkObject = building.GetComponent<Thing_Building>();
-            if (currentWorkObject == null)
+            targetComponent = target.GetComponent<Thing_Building>();
+            if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
-            // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!currentWorkObject.GetPermission(_pawn))
-            {
-                DebugLogDescription = ("目标已经其他人被使用");
-                return false;
-            }
-
             // 设置人物目标点，前往目标，跑过去
-            bool flag = _pawn.MoveController.GoToHere(building.transform.position, Urgency.Urge, _pawn.WorkRange);
+            bool flag = pawn.MoveController.GoToHere(target.Positon, Urgency.Urge, pawn.WorkRange);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
@@ -48,43 +40,44 @@ namespace ChenChen_AI
             }
 
             // 设置人物无法接取工作
-            _pawn.JobToDo(building);
+            pawn.JobToDo(target.GameObject);
 
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (building == null) return StateType.Failed;
+            var baseResult = base.OnUpdate();
+            if (baseResult != StateType.Doing) return baseResult;
 
             // 如果完成了拆除，状态机结束暂停，可以进入下一个状态
-            if (currentWorkObject == null)
+            if (targetComponent == null)
             {
                 return StateType.Success;
             }
 
-            if (currentWorkObject.MaxDurability <= 0)
+            if (targetComponent.MaxDurability <= 0)
             {
                 return StateType.Success;
             }
 
             // 判断是否到达目标点附近
-            if (_pawn.MoveController.ReachDestination)
+            if (pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
-                _pawn.JobDoing();
+                pawn.JobDoing();
 
                 // 执行工作
                 // 执行工作
                 _time += Time.deltaTime;
                 if (_time > _timeOne)
                 {
-                    currentWorkObject.OnDemolish(_pawn.Attribute.A_Construction.Value);
+                    targetComponent.OnDemolish(pawn.Attribute.A_Construction.Value);
                     _time = 0;
                 }
 
                 // 播放动画
-                _pawn.Animator.SetBool("IsDoing", true);
+                pawn.Animator.SetBool("IsDoing", true);
             }
 
             return StateType.Doing;
@@ -92,17 +85,16 @@ namespace ChenChen_AI
 
         public override void OnExit()
         {
-            // 设置人物状态
-            _pawn.JobDone();
+            base.OnExit();
 
             // 结束动画
-            _pawn.Animator.SetBool("IsDoing", false);
+            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()
         {
             // 归还目标使用权限
-            currentWorkObject.RevokePermission(_pawn);
+            targetComponent.RevokePermission(pawn);
 
             OnExit();
         }

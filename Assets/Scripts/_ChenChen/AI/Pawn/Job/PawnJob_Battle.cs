@@ -6,42 +6,41 @@ namespace ChenChen_AI
     public class PawnJob_Battle : PawnJob
     {
         private readonly static float tick = 500;
-        private GameObject target;
-        private Pawn targetPawnComponent;
+        private Pawn targetComponent;
 
-        public PawnJob_Battle(Pawn pawn, GameObject target) : base(pawn, tick)
+        public PawnJob_Battle(Pawn pawn, GameObject target) : base(pawn, tick,new TargetPtr(target))
         {
-            this.target = target;
         }
 
         public override bool OnEnter()
         {
-            targetPawnComponent = target.GetComponent<Pawn>();
-            if (targetPawnComponent == null)
+            targetComponent = target.GetComponent<Pawn>();
+            if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取Pawn组件失败");
                 return false;
             }
 
-            return _pawn.TryToEnterBattle(targetPawnComponent);
+            return pawn.TryToEnterBattle(targetComponent);
         }
 
         public override StateType OnUpdate()
         {
-            _pawn.JobDoing();
-            
-            if (target == null) return StateType.Failed;
+            var baseResult = base.OnUpdate();
+            if (baseResult != StateType.Doing) return baseResult;
 
+            pawn.JobDoing();
+            
             //返回成功
             //目标被杀死
-            if (targetPawnComponent.Info.IsDead)
+            if (targetComponent.Info.IsDead)
             {
                 return StateType.Success;
             }
 
             //返回失败
             //超出攻击距离
-            if (Vector2.Distance(target.transform.position, _pawn.transform.position) > _pawn.AttackRange)
+            if (Vector2.Distance(target.Positon, pawn.transform.position) > pawn.AttackRange)
             {
                 return StateType.Failed;
             }
@@ -51,8 +50,9 @@ namespace ChenChen_AI
 
         public override void OnExit()
         {
-            _pawn.TryToEndBattle();
-            _pawn.JobDone();
+            base.OnExit();
+
+            pawn.TryToEndBattle();
         }
 
         public override void OnInterrupt()

@@ -76,9 +76,10 @@ namespace ChenChen_UISystem
             {
                 GameObject saveInstance = UnityEngine.Object.Instantiate(savePrefab);
                 saveInstance.transform.SetParent(content.transform, false);
-                saveInstance.GetComponent<SaveDefaultPanel>().Data_GameSave = save;
-                UITool.GetChildByName("TextName").GetComponent<Text>().text = $"Name: {save.SaveName}";
-                UITool.GetChildByName("TextDate").GetComponent<Text>().text = $"Date: {save.SaveDate}";
+                SaveDefaultPanel saveDefaultPanel = saveInstance.GetComponent<SaveDefaultPanel>();
+                saveDefaultPanel.Data_GameSave = save;
+                saveDefaultPanel.TextName.text = $"Name: {save.SaveName}";
+                saveDefaultPanel.TextDate.text = $"Date: {save.SaveDate}";
             }
             // 获取内容中的全部按钮添加功能
             Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);

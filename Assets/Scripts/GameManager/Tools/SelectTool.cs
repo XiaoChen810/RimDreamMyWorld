@@ -124,7 +124,7 @@ public class SelectTool : MonoBehaviour
         bool flag = false;
         foreach (Collider2D collider in hitColliders)
         {
-            if (collider.CompareTag("Thing"))
+            if (collider.CompareTag("Thing") || collider.CompareTag("Floor"))
             {
                 ThingBase thing = collider.GetComponent<ThingBase>();
                 DetailView dv = thing.DetailView;

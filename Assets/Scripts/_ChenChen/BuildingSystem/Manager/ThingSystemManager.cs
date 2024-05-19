@@ -5,6 +5,7 @@ using AYellowpaper.SerializedCollections;
 using UnityEditor;
 using ChenChen_UISystem;
 using ChenChen_Scene;
+using System.IO;
 
 namespace ChenChen_BuildingSystem
 {
@@ -47,16 +48,16 @@ namespace ChenChen_BuildingSystem
             // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
             PanelBase.Callback onEnterCallback = () =>
             {
-                
+
             };
 
             // 定义面板OnExit时的回调函数，重置isPanelCreated为false
             PanelBase.Callback onExitCallback = () =>
             {
-                
+
             };
 
-            BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);          
+            BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
         }
 
         private void LoadAllThingDefData()
@@ -188,10 +189,48 @@ namespace ChenChen_BuildingSystem
                 }
                 if (def.Prefab == null)
                 {
+                    string folderPath = "Assets/Resources/Prefabs/ThingDef"; // 大体文件夹路径
+                    string fileName = $"{def.DefName}_Prefab.prefab"; // 文件名
+
+                    string filePath = FindFileInFolder(folderPath, fileName);
+
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        // 从文件路径中提取相对路径以便于 Resources.Load
+                        string resourcePath = filePath.Substring(filePath.IndexOf("Resources/") + 10); // 去掉 "Resources/" 和扩展名 ".prefab"
+                        resourcePath = resourcePath.Replace(".prefab", "");
+
+                        def.Prefab = Resources.Load<GameObject>(resourcePath);
+
+                        if (def.Prefab == null)
+                        {
+                            Debug.LogError($"Prefab not found at: {resourcePath}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"Prefab file not found in folder: {folderPath}");
+                    }
+                }
+                if (def.Prefab == null)
+                {
                     Debug.LogError($"返回了一个定义 {name}，但其的预制件为空");
                     return ThingDefDictionary[name];
                 }
                 return ThingDefDictionary[name];
+
+                string FindFileInFolder(string folderPath, string fileName)
+                {
+                    // 递归搜索文件夹
+                    foreach (string file in Directory.GetFiles(folderPath, "*.prefab", SearchOption.AllDirectories))
+                    {
+                        if (Path.GetFileName(file) == fileName)
+                        {
+                            return file;
+                        }
+                    }
+                    return null; // 未找到文件，返回null
+                }
             }
 
             Debug.LogWarning($"未能找到{name}的定义");

@@ -7,20 +7,13 @@ namespace ChenChen_AI
     public class PawnJob_Chase : PawnJob
     {
         private readonly static float tick = 500;
-        private GameObject target;
         private Pawn targetPawnComponent;
-        public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn, tick)
+        public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
-            this.target = target;
         }
 
         public override bool OnEnter()
         {
-            if (target == null)
-            {
-                DebugLogDescription = ("目标为空");
-                return false;
-            }
             targetPawnComponent = target.GetComponent<Pawn>();
             if (targetPawnComponent == null)
             {
@@ -28,38 +21,33 @@ namespace ChenChen_AI
                 return false;
             }
             // 设置人物无法接取工作
-            _pawn.JobToDo(target);
+            pawn.JobToDo(target.GameObject);
             // 设置人物目标点，前往目标，走过去
-            _pawn.MoveController.GoToHere(target, Urgency.Normal, _pawn.AttackRange);
+            pawn.MoveController.GoToHere(target.Positon, Urgency.Normal, pawn.AttackRange);
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (target == null) return StateType.Failed;
+            var baseResult = base.OnUpdate();
+            if (baseResult != StateType.Doing) return baseResult;
 
             // 判断目标是否到达攻击距离
-            if (_pawn.MoveController.ReachDestination)
+            if (pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
-                _pawn.JobDoing();               
+                pawn.JobDoing();               
 
                 // 进入下一个状态
                 if (!targetPawnComponent.Info.IsDead)
                 {
                     IsSuccess = true;
-                    _pawn.StateMachine.NextState = new PawnJob_Battle(_pawn, target);
+                    pawn.StateMachine.NextState = new PawnJob_Battle(pawn, target.GameObject);
                     return StateType.Success;
                 }
             }
 
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            // 设置人物状态
-            _pawn.JobDone();
         }
 
         public override void OnInterrupt()

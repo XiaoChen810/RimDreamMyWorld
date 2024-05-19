@@ -6,8 +6,7 @@ namespace ChenChen_AI
     public class PawnJob_Building : PawnJob
     {
         private readonly static float tick = 50;
-        private GameObject target;
-        private Thing_Building curTargetComponent;
+        private Thing_Building targetComponent;
         private float _time;
         private float _timeOne;
 
@@ -16,70 +15,64 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="buildPos"></param>
-        public PawnJob_Building(Pawn pawn, GameObject target = null) : base(pawn, tick)
+        public PawnJob_Building(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
-            this.target = target;
             float ability = pawn.Attribute.A_Construction.Value;
-            if (ability == 0) _timeOne = 10;
-            _timeOne = 1f / ability;
+            float a = 1 - (ability / 20);
+            _timeOne = Mathf.Lerp(1f, 10, a);
         }
 
         public override bool OnEnter()
         {
-            if (target == null) return false;
+            var baseResult = base.OnEnter();
+            if(baseResult != true) return baseResult;
 
             // 尝试获取组件
-            curTargetComponent = target.GetComponent<Thing_Building>();
-            if (curTargetComponent == null)
+            targetComponent = target.GetComponent<Thing_Building>();
+            if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
-            // 尝试取得权限，预定当前工作，标记目标被使用
-            if (!curTargetComponent.GetPermission(_pawn))
-            {
-                DebugLogDescription = ("目标已经其他人被使用");
-                return false;
-            }
-
             // 设置人物目标点，前往目标，跑过去
-            if (!_pawn.MoveController.GoToHere(target.transform.position, Urgency.Urge, _pawn.WorkRange))
+            if (!pawn.MoveController.GoToHere(target.Positon, Urgency.Urge, pawn.WorkRange))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
             // 设置人物接取工作
-            _pawn.JobToDo(target);
+            pawn.JobToDo(target.GameObject);
 
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (target == null) return StateType.Failed;
+            var baseResult = base.OnUpdate();
+            if (baseResult != StateType.Doing) return baseResult;
 
             // 判断是否到达目标点附近
-            if (_pawn.MoveController.ReachDestination)
+            if (pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
-                _pawn.JobDoing();
+                pawn.JobDoing();
 
                 // 执行工作
                 _time += Time.deltaTime;
                 if(_time > _timeOne)
                 {
-                    curTargetComponent.OnBuild(1);
+                    targetComponent.OnBuild(1);
                     _time = 0;
                 }
 
                 // 播放动画
-                _pawn.Animator.SetBool("IsDoing", true);
+                pawn.Animator.SetBool("IsDoing", true);
             }
 
             // 如果完成了建造，状态机结束暂停，可以进入下一个状态
-            if (curTargetComponent.Workload <= 0)
+            if (targetComponent.Workload <= 0)
             {
                 return StateType.Success;
             }
@@ -89,19 +82,15 @@ namespace ChenChen_AI
 
         public override void OnExit()
         {
-            // 归还目标使用权限
-            curTargetComponent.RevokePermission(_pawn);
-
-            // 设置人物状态
-            _pawn.JobDone();
+            base.OnExit();
 
             // 结束动画
-            _pawn.Animator.SetBool("IsDoing", false);
+            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()
         {
-            curTargetComponent.OnInterpret();
+            targetComponent.OnInterpret();
             OnExit();
         }
     }

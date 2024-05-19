@@ -10,9 +10,9 @@ namespace ChenChen_AI
         /// <summary>
         /// 闲置
         /// </summary>
-        public PawnJob_Idle(Pawn pawn) : base(pawn, tick)
+        public PawnJob_Idle(Pawn pawn) : base(pawn, tick, null)
         {
-            this._pawn = pawn;
+            this.pawn = pawn;
         }
 
         public override bool OnEnter()
@@ -23,7 +23,7 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            if (_pawn.StateMachine.NextState != null || !(_pawn.StateMachine.StateQueue.Count == 0))
+            if (pawn.StateMachine.NextState != null || !(pawn.StateMachine.StateQueue.Count == 0))
             {
                 return StateType.Success;
             }
@@ -31,17 +31,12 @@ namespace ChenChen_AI
             _time += Time.deltaTime;
             if (_time > _waitTime)
             {
-                Vector2 p = _pawn.transform.position;
+                Vector2 p = pawn.transform.position;
                 p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
-                _pawn.StateMachine.NextState = new PawnJob_Move(_pawn, p);
+                pawn.StateMachine.NextState = new PawnJob_Move(pawn, p);
                 return StateType.Success;
             }
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            //pawn.JobCanGet();
         }
     }
 }

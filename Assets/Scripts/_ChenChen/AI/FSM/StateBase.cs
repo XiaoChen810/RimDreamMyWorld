@@ -9,27 +9,34 @@ namespace ChenChen_AI
         /// <summary>
         /// 这个状态默认的下一个状态
         /// </summary>
-        public StateBase NextState;
+        public StateBase NextStateDefault { get; private set; }
 
         /// <summary>
         /// 这个状态的最大存在时间
         /// </summary>
-        public float MaxTick;
+        public float MaxTick { get; private set; }
 
         /// <summary>
         /// 这个状态是否是成功结束的
         /// </summary>
-        public bool IsSuccess;
+        public bool IsSuccess { get; set; }
 
         /// <summary>
         /// 错误日志
         /// </summary>
-        public string DebugLogDescription;
+        public string DebugLogDescription { get; set; }
 
         public StateBase(StateMachine machine, StateBase next = null)
         {
             _stateMachine = machine;
-            NextState = next;
+            NextStateDefault = next;
+        }
+
+        public StateBase(StateMachine machine,float maxTick, StateBase next = null)
+        {
+            _stateMachine = machine;
+            MaxTick = maxTick;
+            NextStateDefault = next;
         }
 
         public virtual bool OnEnter()
@@ -64,7 +71,7 @@ namespace ChenChen_AI
 
         public virtual void OnInterrupt()
         {
-            Debug.Log("Interrupt" + ToString());
+            Debug.Log("Interrupt" + this.ToString());
         }
     }
 }

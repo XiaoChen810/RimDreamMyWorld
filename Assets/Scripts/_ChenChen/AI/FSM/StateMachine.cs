@@ -100,7 +100,7 @@ namespace ChenChen_AI
                     //状态完成
                     case StateType.Success:
                         _currentState.IsSuccess = true;
-                        TryChangeState(_currentState.NextState);
+                        TryChangeState(_currentState.NextStateDefault);
                         break;
                     //状态失败把当前状态设为空
                     case StateType.Failed:
@@ -128,13 +128,14 @@ namespace ChenChen_AI
 
         public void TryChangeState(StateBase newState = null)
         {
+            // 当前状态的默认
             if (newState != null)
             {
                 ChangeState(newState);
                 return;
             }
 
-            //如果下一个目标状态不为空，则切换成下一个状态
+            // 状态机下一个目标状态
             if (_nextState != null)
             {
                 ChangeState(_nextState);
@@ -142,14 +143,14 @@ namespace ChenChen_AI
                 return;
             }
 
-            //如果当前队列不为空，则从队列中抽一个状态出来
+            // 如果当前队列不为空，则从队列中抽一个状态出来
             if (_StateQueue.Count > 0)
             {
                 ChangeState(_StateQueue.Dequeue());
                 return;
             }
 
-            //都为空则设置为默认
+            // 都为空则设置为默认
             ChangeState(_defaultState);
         }
 
@@ -177,7 +178,7 @@ namespace ChenChen_AI
                 if (_currentState.OnEnter())
                 {
                     //Debug.Log($"{Owner.name}切换成状态: " + _currentState);
-                    _maxTick = newState.MaxTick;
+                    MaxTick = newState.MaxTick;
                     return;
                 }
                 // 未成功进入

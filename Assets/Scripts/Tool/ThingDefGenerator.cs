@@ -87,6 +87,10 @@ public class ThingDefGenerator
                 CreateThingPrefab<Thing_Floor>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Floor");
                 break;
+            case ThingType.ToolTable:
+                CreateThingPrefab<Thing_ToolTable>(ThingName, thingDef);
+                CreateScript(folderPath, "Thing_ToolTable");
+                break;
             default:
                 CreateThingPrefab<Thing_Building>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Building");

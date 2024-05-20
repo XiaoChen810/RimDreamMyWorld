@@ -28,7 +28,9 @@ namespace ChenChen_MapGenerator
         [Header("花草数据")]
         [SerializeField] private List<FlowerData> _flowersList;
         [Header("预生成物体数据")]
-        [SerializeField] private List<PrefabData> _prefabsList;
+        [SerializeField] private List<ThingData> _prefabsList;
+        [Header("特效生成数据")]
+        [SerializeField] private List<EffectData> _effectsList;
 
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
@@ -99,7 +101,8 @@ namespace ChenChen_MapGenerator
             CheckNode();
             GenerateTileMap();
             GenerateFlowers();
-            GeneratePrefabs(mapData);
+            GenerateThings(mapData);
+            GenerateEffects();
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
@@ -255,10 +258,10 @@ namespace ChenChen_MapGenerator
                 List<MapNode> theGrassTile = new List<MapNode>();
                 foreach (var node in _nodes)
                 {
-                    if (node.type == NodeType.grass)
+                    if (node.type == flower.type)
                     {
                         // 上下左右没有其他类型的瓦片
-                        if (flower.farFormOtherTile && Has(node.postion.x, node.postion.y, NodeType.grass))
+                        if (flower.farFormOtherTile && Has(node.postion.x, node.postion.y, flower.type))
                         {
                             continue;
                         }
@@ -307,24 +310,58 @@ namespace ChenChen_MapGenerator
         /// <summary>
         /// 生成预制件
         /// </summary>
-        private void GeneratePrefabs(MapData mapData)
+        private void GenerateThings(MapData mapData)
         {
             List<Vector2Int> vector2Ints = new(); 
             ItemCreator itemCreator = new ItemCreator();
-            foreach (var prefab in _prefabsList)
+            foreach (var thing in _prefabsList)
             {
                 int generatedCount = 0;
-                while (generatedCount < prefab.num)
+                int flag = 0;   // 防止无限循环
+                while (generatedCount < thing.num || flag > 1000)
                 {
                     // 随机生成一个位置
                     Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, _width), UnityEngine.Random.Range(0, _height));
 
                     // 检查节点类型是否匹配
-                    if (!vector2Ints.Contains(pos) && _nodes[pos.x, pos.y].type == prefab.type)
+                    if (!vector2Ints.Contains(pos) && _nodes[pos.x, pos.y].type == thing.type)
                     {
-                        itemCreator.GenerateItem(prefab.name, pos, mapData.mapName);
+                        itemCreator.GenerateItem(thing.name, pos, mapData.mapName);
                         generatedCount++;
                         vector2Ints.Add(pos);
+                    }
+                    else
+                    {
+                        flag++;
+                    }
+                }
+            }
+        }
+
+        private void GenerateEffects()
+        {
+            List<Vector2> vector2s = new();
+            GameObject effecParent = new GameObject("Effect");
+            effecParent.transform.parent = this.transform;
+            foreach (var effect in _effectsList)
+            {
+                int generatedCount = 0;
+                int flag = 0;   // 防止无限循环
+                while (generatedCount < effect.num || flag > 1000)
+                {
+                    // 随机生成一个位置
+                    Vector2 pos = new Vector2(UnityEngine.Random.Range(0, _width), UnityEngine.Random.Range(0, _height));
+
+                    // 检查节点类型是否匹配
+                    if (!vector2s.Contains(pos))
+                    {
+                        Instantiate(effect.prefab, pos, Quaternion.identity, effecParent.transform);
+                        generatedCount++;
+                        vector2s.Add(pos);
+                    }
+                    else
+                    {
+                        flag++;
                     }
                 }
             }

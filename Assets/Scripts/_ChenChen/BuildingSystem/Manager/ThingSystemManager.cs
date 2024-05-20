@@ -76,13 +76,6 @@ namespace ChenChen_BuildingSystem
             {
                 OpenBuildingMenuPanel();
             }
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                foreach(var go in ThingBuildingGeneratedList)
-                {
-                    go.gameObject.SetActive(true);
-                }
-            }
         }
 
         public void OpenBuildingMenuPanel()

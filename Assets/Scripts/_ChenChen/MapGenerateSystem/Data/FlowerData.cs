@@ -21,5 +21,7 @@ namespace ChenChen_MapGenerator
         public List<TileBase> tile;
 
         public bool farFormOtherTile;
+
+        public NodeType type;
     }
 }

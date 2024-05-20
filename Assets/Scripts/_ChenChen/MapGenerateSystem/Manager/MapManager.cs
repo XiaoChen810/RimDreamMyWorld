@@ -146,14 +146,6 @@ namespace ChenChen_MapGenerator
                                         MapHeightOfGenerate,
                                         seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
                 GenerateMap(mapSave, true);
-                //if(ItemCreator == null) ItemCreator = new ItemCreator();
-                //// 生成树
-                //for (int i = 0; i < TreeNum; i++)
-                //{
-                //    Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
-                //    if (_mapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
-                //        ItemCreator.GenerateItem("常青树", pos, mapName);
-                //}
             }
             AstarPath.active.Scan();
         }

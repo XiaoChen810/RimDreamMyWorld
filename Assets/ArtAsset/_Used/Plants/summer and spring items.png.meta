@@ -1,0 +1,759 @@
+fileFormatVersion: 2
+guid: 802795dff0ff517469d6db1f50df8914
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4733715229258874546
+    second: summer and spring items_0
+  - first:
+      213: 6693456667809540489
+    second: summer and spring items_1
+  - first:
+      213: -8375596684571345965
+    second: summer and spring items_2
+  - first:
+      213: -4664690515371588952
+    second: summer and spring items_3
+  - first:
+      213: -7940072066423926139
+    second: summer and spring items_4
+  - first:
+      213: -3316685018015193825
+    second: summer and spring items_5
+  - first:
+      213: -6723508022124322937
+    second: summer and spring items_6
+  - first:
+      213: -1632925778851196757
+    second: summer and spring items_7
+  - first:
+      213: 4028045271074708300
+    second: summer and spring items_8
+  - first:
+      213: 1690985286657278250
+    second: summer and spring items_9
+  - first:
+      213: -7675999343021996628
+    second: summer and spring items_10
+  - first:
+      213: 4544456574698825470
+    second: summer and spring items_11
+  - first:
+      213: 2697333713083925250
+    second: summer and spring items_12
+  - first:
+      213: -3658355166181013082
+    second: summer and spring items_13
+  - first:
+      213: 1694659614755893889
+    second: summer and spring items_14
+  - first:
+      213: -6743211547049771028
+    second: summer and spring items_15
+  - first:
+      213: 2983946102035231196
+    second: summer and spring items_16
+  - first:
+      213: -114555880900303816
+    second: summer and spring items_17
+  - first:
+      213: -5727509260977768512
+    second: summer and spring items_18
+  - first:
+      213: -1756352249504556141
+    second: summer and spring items_19
+  - first:
+      213: -543474097774256480
+    second: summer and spring items_20
+  - first:
+      213: 6771233541102765696
+    second: summer and spring items_21
+  - first:
+      213: -1722049788796867446
+    second: summer and spring items_22
+  - first:
+      213: -6397239055494811736
+    second: summer and spring items_23
+  - first:
+      213: 3740401984499768943
+    second: summer and spring items_24
+  - first:
+      213: -3398761070620443558
+    second: summer and spring items_25
+  - first:
+      213: 77189056168719149
+    second: summer and spring items_26
+  - first:
+      213: -2476179924918498030
+    second: summer and spring items_27
+  - first:
+      213: 1978810757689791255
+    second: summer and spring items_28
+  - first:
+      213: -565636597896790580
+    second: summer and spring items_29
+  - first:
+      213: 6331855371058401647
+    second: summer and spring items_30
+  - first:
+      213: -2653950106313186347
+    second: summer and spring items_31
+  - first:
+      213: -4951771737523759117
+    second: summer and spring items_32
+  - first:
+      213: 2200385745765230094
+    second: summer and spring items_33
+  - first:
+      213: 2844844227474532138
+    second: summer and spring items_34
+  - first:
+      213: 279094690559571333
+    second: summer and spring items_35
+  - first:
+      213: 6338392415200484340
+    second: summer and spring items_36
+  - first:
+      213: -7068777481471013584
+    second: summer and spring items_37
+  - first:
+      213: 3290915962861752344
+    second: summer and spring items_38
+  - first:
+      213: -1331630381906255370
+    second: summer and spring items_39
+  - first:
+      213: -6060767269607206465
+    second: summer and spring items_40
+  - first:
+      213: 5764296719728372503
+    second: summer and spring items_41
+  - first:
+      213: -4576567050072581752
+    second: summer and spring items_42
+  - first:
+      213: 4064144205915463597
+    second: summer and spring items_43
+  - first:
+      213: -1758632120805124708
+    second: summer and spring items_44
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: summer and spring items_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 180
+        width: 76
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bef4d3bbe881b140800000000000000
+      internalID: 4733715229258874546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_1
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 243
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 989e14c306fe3ec50800000000000000
+      internalID: 6693456667809540489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_2
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 212
+        width: 18
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3db7f22f037e3cb80800000000000000
+      internalID: -8375596684571345965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_3
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 192
+        width: 30
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2842cd0b0b34fb0800000000000000
+      internalID: -4664690515371588952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_9
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 161
+        width: 11
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a218e93b826977710800000000000000
+      internalID: 1690985286657278250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_10
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 161
+        width: 11
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca5ca07444f597590800000000000000
+      internalID: -7675999343021996628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39b92d34fee20a7e0800000000000000
+      internalID: -1756352249504556141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_20
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 134
+        width: 32
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ae1a8100313578f0800000000000000
+      internalID: -543474097774256480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u6625\u6811"
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 64
+        width: 36
+        height: 48
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08604a4b70148fd50800000000000000
+      internalID: 6771233541102765696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u6A31\u82B1\u6811"
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 64
+        width: 36
+        height: 48
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8ce93547dc0a18e0800000000000000
+      internalID: -1722049788796867446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_23
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 113
+        width: 31
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8afe9f919f07837a0800000000000000
+      internalID: -6397239055494811736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: summer and spring items_26
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 81
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d23fb71a90b321100800000000000000
+      internalID: 77189056168719149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u6885\u6811"
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 64
+        width: 36
+        height: 48
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21d87474a77d2add0800000000000000
+      internalID: -2476179924918498030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u82B10"
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 32
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03dc3a42558a6ed90800000000000000
+      internalID: -7068777481471013584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u82B11"
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 32
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8109908d1aeabad20800000000000000
+      internalID: 3290915962861752344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u82B12"
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 17
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f12c521939158de0800000000000000
+      internalID: -1331630381906255370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u82B13"
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 17
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb19fb49744d3eba0800000000000000
+      internalID: -6060767269607206465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u82B14"
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 17
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71beb577355eeff40800000000000000
+      internalID: 5764296719728372503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u8611\u83C72"
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 33
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 869b1f873cf38144bbc3803108aef1b8
+      internalID: -2118501852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u8611\u83C71"
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 34
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfae1a40aa1b31d46944e103e1670923
+      internalID: 413560275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u6811\u4E1B"
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 42
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abec78a6d15620e409af892c4916eecf
+      internalID: 1229249283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u679C\u4E1B"
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 10
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e32a521084cec748bad4a0e476b57e3
+      internalID: -1775446174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: ba6210a187f3398409b6bde46bd5cdd7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      summer and spring items_0: 4733715229258874546
+      summer and spring items_1: 6693456667809540489
+      summer and spring items_10: -7675999343021996628
+      summer and spring items_11: 4544456574698825470
+      summer and spring items_12: 2697333713083925250
+      summer and spring items_13: -3658355166181013082
+      summer and spring items_14: 1694659614755893889
+      summer and spring items_15: -6743211547049771028
+      summer and spring items_16: 2983946102035231196
+      summer and spring items_17: -114555880900303816
+      summer and spring items_18: -5727509260977768512
+      summer and spring items_19: -1756352249504556141
+      summer and spring items_2: -8375596684571345965
+      summer and spring items_20: -543474097774256480
+      summer and spring items_23: -6397239055494811736
+      summer and spring items_24: 3740401984499768943
+      summer and spring items_25: -3398761070620443558
+      summer and spring items_26: 77189056168719149
+      summer and spring items_28: 1978810757689791255
+      summer and spring items_29: -565636597896790580
+      summer and spring items_3: -4664690515371588952
+      summer and spring items_30: 6331855371058401647
+      summer and spring items_31: -2653950106313186347
+      summer and spring items_32: -4951771737523759117
+      summer and spring items_33: 2200385745765230094
+      summer and spring items_34: 2844844227474532138
+      summer and spring items_35: 279094690559571333
+      summer and spring items_36: 6338392415200484340
+      summer and spring items_42: -4576567050072581752
+      summer and spring items_43: 4064144205915463597
+      summer and spring items_44: -1758632120805124708
+      summer and spring items_5: -3316685018015193825
+      summer and spring items_6: -6723508022124322937
+      summer and spring items_7: -1632925778851196757
+      summer and spring items_8: 4028045271074708300
+      summer and spring items_9: 1690985286657278250
+      "\u6625\u6811": 6771233541102765696
+      "\u679C\u4E1B": -1775446174
+      "\u6811\u4E1B": 1229249283
+      "\u6885\u6811": -2476179924918498030
+      "\u6A31\u82B1\u6811": -1722049788796867446
+      "\u82B10": -7068777481471013584
+      "\u82B11": 3290915962861752344
+      "\u82B12": -1331630381906255370
+      "\u82B13": -6060767269607206465
+      "\u82B14": 5764296719728372503
+      "\u8611\u83C71": 413560275
+      "\u8611\u83C72": -7940072066423926139
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -150,6 +150,8 @@ namespace ChenChen_BuildingSystem
             CurDurability = MaxDurability;
             ColliderSelf = GetComponent<BoxCollider2D>();
             tag = "Thing";
+            GetComponent<SpriteRenderer>().sortingLayerName = "Middle";
+            GetComponent<SpriteRenderer>().sortingOrder = -(int)transform.position.y;
 
             // 创建中心透明蓝色纹理
             centerTexture = new Texture2D(1, 1);

@@ -99,24 +99,40 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 778315bae6cee7a4b8168f13b53dd4e8, type: 2}
     - {fileID: 11400000, guid: da6c9ccd5a271dd47a81cc3ad4019735, type: 2}
     farFormOtherTile: 1
-  - probability: 0.2
+    type: 1
+  - probability: 0.08
     tilemapName: "\u82B1\u6735"
     layerSort: 4
     tile:
-    - {fileID: 11400000, guid: afbbaaa563187df448323789edc52544, type: 2}
-    - {fileID: 11400000, guid: e0b70a29ad5c07444872988d8e909f3d, type: 2}
-    - {fileID: 11400000, guid: 5920c0be1594eb74fb608d6de2342843, type: 2}
-    - {fileID: 11400000, guid: 4b737a7a136e9a54e81692a7a2a6a423, type: 2}
-    - {fileID: 11400000, guid: 5b8bba9e67fa39741bf86b6c65628be7, type: 2}
-    - {fileID: 11400000, guid: 73af3c3deb10c6a4bb3b07cfef8083b2, type: 2}
-    - {fileID: 11400000, guid: 16960ec35b54cf74290e628d1638d0bb, type: 2}
-    - {fileID: 11400000, guid: 9019669e339eed6498ad296bdd932413, type: 2}
-    - {fileID: 11400000, guid: 0bdf8eabc47c19a459bff8af91a394e2, type: 2}
+    - {fileID: 11400000, guid: 0bf5dc79edd470345995409a43b00763, type: 2}
+    - {fileID: 11400000, guid: 6fe63dcf0ccb7f842b88463f98e9f2b3, type: 2}
+    - {fileID: 11400000, guid: 95981c4a318e16642a1c7929ec23dfc8, type: 2}
+    - {fileID: 11400000, guid: 287811a53b11ae04fa0a4184e19fa9c9, type: 2}
+    - {fileID: 11400000, guid: 07209aa63a07dc24aaac8c252486c29a, type: 2}
     farFormOtherTile: 0
+    type: 1
+  - probability: 0.03
+    tilemapName: "\u6C34\u4E2D"
+    layerSort: 5
+    tile:
+    - {fileID: 11400000, guid: 4f01ec944e45ef84aabc02d5dd378366, type: 2}
+    - {fileID: 11400000, guid: 0b97ad1217c97f144a341a27f224a1ec, type: 2}
+    - {fileID: 11400000, guid: 6f23861b940e2ea42901c63d4131e4db, type: 2}
+    - {fileID: 11400000, guid: d190273dbba69664bb38cfbc5c3ab0d3, type: 2}
+    - {fileID: 11400000, guid: 74c4372bd7210264ea7fe997e41d639f, type: 2}
+    - {fileID: 11400000, guid: d8908bab5c1c39546a42b2429d5d0904, type: 2}
+    farFormOtherTile: 1
+    type: 2
   _prefabsList:
-  - name: "\u5E38\u9752\u6811"
+  - name: "\u6625\u6811"
     type: 1
     num: 500
-  - name: "\u56ED\u6811"
+  - name: "\u6885\u6811"
     type: 1
     num: 500
+  - name: "\u6A31\u82B1\u6811"
+    type: 1
+    num: 500
+  _effectsList:
+  - prefab: {fileID: 8171373853705526921, guid: 31c8c27dfb42da54e9548d06b9d705f3, type: 3}
+    num: 100

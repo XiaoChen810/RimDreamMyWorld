@@ -56,8 +56,11 @@ namespace ChenChen_UISystem
             }
         }
 
+        private Dictionary<string, Button> _btnDict = new Dictionary<string, Button>();
         public void SetButton(string btnText, UnityAction onClick)
         {
+            if (_btnDict.ContainsKey(btnText)) return;
+
             foreach(var btn in Buttons)
             {
                 if (!btn.gameObject.activeSelf)
@@ -66,10 +69,29 @@ namespace ChenChen_UISystem
                     btn.GetComponentInChildren<Text>().text = btnText;
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(onClick);
+                    _btnDict.Add(btnText, btn);
                     return;
                 }
             }
             Debug.LogWarning("使用的Button已达最大限度");
+        }
+
+        public void RemoveButton(string btnText)
+        {
+            if (_btnDict.ContainsKey(btnText))
+            {
+                _btnDict[btnText].gameObject.SetActive(false);
+                _btnDict.Remove(btnText);
+            }
+        }
+
+        public void RemoveAllButton()
+        {
+            foreach(var btn in _btnDict)
+            {
+                btn.Value.gameObject.SetActive(false);
+            }
+            _btnDict.Clear();
         }
     }
 }

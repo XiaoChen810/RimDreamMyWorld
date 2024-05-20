@@ -19,5 +19,7 @@ namespace ChenChen_MapGenerator
         public int layerSort;
 
         public List<TileBase> tile;
+
+        public bool farFormOtherTile;
     }
 }

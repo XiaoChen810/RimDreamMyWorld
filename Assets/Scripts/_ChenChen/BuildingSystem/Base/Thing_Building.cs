@@ -34,8 +34,6 @@ namespace ChenChen_BuildingSystem
             {
                 ChangeLifeState(Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding);
             }      
-            // 设置完一切后
-            ThingSystemManager.Instance.AddThingToList(this.gameObject);
         }
 
         public override void OnMarkBuild()
@@ -57,7 +55,7 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        public override void OnComplete()
+        public override void OnCompleteBuild()
         {
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
@@ -92,13 +90,12 @@ namespace ChenChen_BuildingSystem
             Workload = 0;
         }
 
-        public override void OnCancel()
+        public override void OnCancelBuild()
         {
-            ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
             Destroy(gameObject);
         }
 
-        public override void OnInterpret()
+        public override void OnInterpretBuild()
         {
             ChangeLifeState(BuildingLifeStateType.MarkBuilding);
         }
@@ -128,6 +125,25 @@ namespace ChenChen_BuildingSystem
 
         public override void OnDemolished()
         {
+            Debug.Log($"移除建筑：" + gameObject.name);
+            Destroy(gameObject);
+        }
+
+        public override void OnCanclDemolish()
+        {
+            ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
+        }
+
+        #endregion
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+        }
+
+        private void OnDestroy()
+        {
+            if (!Application.isPlaying) return;
             if (Def.TileBase != null)
             {
                 if (MapManager.Instance.TryGetTilemap("Building", true, out Tilemap buildingTilemap))
@@ -135,7 +151,7 @@ namespace ChenChen_BuildingSystem
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
             }
-            if (_detailView.OnShow)
+            if (_detailView != null && _detailView.OnShow)
             {
                 PanelManager panel = DetailViewManager.Instance.PanelManager;
                 panel.RemoveTopPanel(panel.GetTopPanel());
@@ -146,15 +162,6 @@ namespace ChenChen_BuildingSystem
                 AstarPath.active.UpdateGraphs(bounds);
             }
             ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
-            Debug.Log($"移除建筑：" + gameObject.name);
-            Destroy(gameObject);
-        }
-
-        #endregion
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
         }
     }
 }

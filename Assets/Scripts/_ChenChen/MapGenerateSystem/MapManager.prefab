@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5b4e72992a6404db67d1535c441111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapWidthOfGenerate: 100
-  MapHeightOfGenerate: 100
+  MapWidthOfGenerate: 250
+  MapHeightOfGenerate: 250
+  TreeNum: 0
 --- !u!114 &3981268902768134650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,10 +62,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMapDefaultTileBase: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
   lacunarrty: 0.08
+  needSaveForPrefab: 0
   _terrainList:
   - probability: 0.2
     tilemapName: River
-    layerSort: 100
+    layerSort: 2
     isObstacle: 1
     tile: {fileID: 11400000, guid: 713de5a758900fe4aadb3f2d9f797f5b, type: 2}
     type: 2
@@ -74,9 +76,9 @@ MonoBehaviour:
     isObstacle: 0
     tile: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
     type: 1
-  - probability: 0.65
+  - probability: 0.52
     tilemapName: Ground
-    layerSort: 10
+    layerSort: 1
     isObstacle: 0
     tile: {fileID: 11400000, guid: 7daa9c2b7aebb064b9c5084d6bcb51cb, type: 2}
     type: 3
@@ -87,12 +89,34 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
     type: 1
   _flowersList:
-  - probability: 0.05
-    tilemapName: Leaves
-    layerSort: 10
+  - probability: 0.5
+    tilemapName: "\u8349\u576A"
+    layerSort: 3
     tile:
-    - {fileID: 11400000, guid: d72fc1061a1c28445b8a1efca9f942f3, type: 2}
-    - {fileID: 11400000, guid: fcadf1f42b13ce04094a6ffe4c475a6d, type: 2}
-    - {fileID: 11400000, guid: 1100b3d8a0d60c34795fc9f5f6be3ce0, type: 2}
-    - {fileID: 11400000, guid: f06e0c3f7b402f64c80b8877c13f92ea, type: 2}
-    - {fileID: 11400000, guid: bce3722151e3612418e9b1ba656e7541, type: 2}
+    - {fileID: 11400000, guid: 46957dc2bd9c1ab42b18d2e20306d19f, type: 2}
+    - {fileID: 11400000, guid: 86364b14d7b225a4b9b73907cf53f370, type: 2}
+    - {fileID: 11400000, guid: fe453226b21feec458696cdcc66551e3, type: 2}
+    - {fileID: 11400000, guid: 778315bae6cee7a4b8168f13b53dd4e8, type: 2}
+    - {fileID: 11400000, guid: da6c9ccd5a271dd47a81cc3ad4019735, type: 2}
+    farFormOtherTile: 1
+  - probability: 0.2
+    tilemapName: "\u82B1\u6735"
+    layerSort: 4
+    tile:
+    - {fileID: 11400000, guid: afbbaaa563187df448323789edc52544, type: 2}
+    - {fileID: 11400000, guid: e0b70a29ad5c07444872988d8e909f3d, type: 2}
+    - {fileID: 11400000, guid: 5920c0be1594eb74fb608d6de2342843, type: 2}
+    - {fileID: 11400000, guid: 4b737a7a136e9a54e81692a7a2a6a423, type: 2}
+    - {fileID: 11400000, guid: 5b8bba9e67fa39741bf86b6c65628be7, type: 2}
+    - {fileID: 11400000, guid: 73af3c3deb10c6a4bb3b07cfef8083b2, type: 2}
+    - {fileID: 11400000, guid: 16960ec35b54cf74290e628d1638d0bb, type: 2}
+    - {fileID: 11400000, guid: 9019669e339eed6498ad296bdd932413, type: 2}
+    - {fileID: 11400000, guid: 0bdf8eabc47c19a459bff8af91a394e2, type: 2}
+    farFormOtherTile: 0
+  _prefabsList:
+  - name: "\u5E38\u9752\u6811"
+    type: 1
+    num: 500
+  - name: "\u56ED\u6811"
+    type: 1
+    num: 500

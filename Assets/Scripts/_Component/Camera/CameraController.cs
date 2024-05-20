@@ -1,22 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-
 
 public class CameraController : MonoBehaviour
 {
-    private PixelPerfectCamera PixelPerfectCamera;
     public float Speed;
 
     public float zoomMin = 48;
     public float zoomMax = 192;
-    [Range(10, 50)] public int zoomSpeed = 5;
-
-    private void Start()
-    {
-        PixelPerfectCamera = GetComponent<PixelPerfectCamera>();
-    }
+    [Range(1, 50)] public int zoomSpeed = 5;
 
     private void Update()
     {
@@ -35,13 +25,19 @@ public class CameraController : MonoBehaviour
 
     void ZoomCamera(float scrollInput)
     {
-        float currentSize = PixelPerfectCamera.assetsPPU;
+        // 获取摄像机的当前缩放值
+        float currentZoom = Camera.main.orthographicSize;
 
-        currentSize += scrollInput * zoomSpeed;
+        // 计算缩放增量
+        float zoomDelta = -scrollInput * zoomSpeed;
 
-        currentSize = Mathf.Max(currentSize, zoomMin);
-        currentSize = Mathf.Min(currentSize, zoomMax);
+        // 根据增量调整缩放值
+        float newZoom = currentZoom + zoomDelta;
 
-        PixelPerfectCamera.assetsPPU = Mathf.RoundToInt(currentSize);
+        // 限制缩放值在预定义的范围内
+        newZoom = Mathf.Clamp(newZoom, zoomMin, zoomMax);
+
+        // 将调整后的缩放值应用到摄像机的视野中
+        Camera.main.orthographicSize = newZoom;
     }
 }

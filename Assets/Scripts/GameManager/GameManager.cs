@@ -33,7 +33,7 @@ public class GameManager : SingletonMono<GameManager>
     }
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
-
+    public bool GameIsStart = false;
     protected override void Awake()
     {
         base.Awake();

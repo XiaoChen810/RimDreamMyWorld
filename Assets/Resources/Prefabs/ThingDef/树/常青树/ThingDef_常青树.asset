@@ -20,5 +20,5 @@ MonoBehaviour:
   Prefab: {fileID: 3552662489425600228, guid: 74eb6070f67600349bc4e5cf7337faee, type: 3}
   TileBase: {fileID: 0}
   Durability: 100
-  offset: {x: 0, y: 0}
+  Offset: {x: 0, y: 0}
   CanRotation: 0

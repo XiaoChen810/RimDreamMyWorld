@@ -1,0 +1,379 @@
+fileFormatVersion: 2
+guid: 5e99239d120a1a5419d0342cfc433fa2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7612640668222069322
+    second: spring tilemap_0
+  - first:
+      213: 9210172966656183056
+    second: spring tilemap_1
+  - first:
+      213: 5660342796524229486
+    second: spring tilemap_2
+  - first:
+      213: 7191881934129167488
+    second: spring tilemap_3
+  - first:
+      213: -390155800997155422
+    second: spring tilemap_4
+  - first:
+      213: 4400558716022089402
+    second: spring tilemap_5
+  - first:
+      213: 2894847865871560296
+    second: spring tilemap_6
+  - first:
+      213: -7457664777743109772
+    second: spring tilemap_7
+  - first:
+      213: 6733970812718230393
+    second: spring tilemap_8
+  - first:
+      213: -129386795406977891
+    second: spring tilemap_9
+  - first:
+      213: -9173764329863169122
+    second: spring tilemap_10
+  - first:
+      213: 6843522065908636049
+    second: spring tilemap_11
+  - first:
+      213: -3808249891470293176
+    second: spring tilemap_12
+  - first:
+      213: 2518913783544980433
+    second: spring tilemap_13
+  - first:
+      213: -1319065902825786639
+    second: spring tilemap_14
+  - first:
+      213: -3068854687581468907
+    second: spring tilemap_15
+  - first:
+      213: -294689037979134207
+    second: spring tilemap_16
+  - first:
+      213: 2920325487044453076
+    second: spring tilemap_17
+  - first:
+      213: -9222908986810862692
+    second: spring tilemap_18
+  - first:
+      213: 3946024663558668164
+    second: spring tilemap_19
+  - first:
+      213: -3176852450397387664
+    second: spring tilemap_20
+  - first:
+      213: -6116649514196029273
+    second: spring tilemap_21
+  - first:
+      213: 589632574530820604
+    second: spring tilemap_22
+  - first:
+      213: 6763643176896971618
+    second: spring tilemap_23
+  - first:
+      213: -4807842436779952684
+    second: spring tilemap_24
+  - first:
+      213: 2014269295932107978
+    second: spring tilemap_25
+  - first:
+      213: 4575962595380797140
+    second: spring tilemap_26
+  - first:
+      213: 3861586919986522071
+    second: spring tilemap_27
+  - first:
+      213: 9146006939084886103
+    second: spring tilemap_28
+  - first:
+      213: 1311463404234222856
+    second: spring tilemap_29
+  - first:
+      213: -8459591179594139123
+    second: spring tilemap_30
+  - first:
+      213: 4014675846791118353
+    second: spring tilemap_31
+  - first:
+      213: 7119865508614956986
+    second: spring tilemap_32
+  - first:
+      213: -291344338682700225
+    second: spring tilemap_33
+  - first:
+      213: 8233691100033513402
+    second: spring tilemap_34
+  - first:
+      213: 4608878074835118993
+    second: spring tilemap_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: map_0
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 197
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c25c30771aad0648840472256edfa76
+      internalID: 114295863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: map_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 177
+        width: 64
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7792e989fde1ef242aafffeaecf27f00
+      internalID: -756358048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: map_2
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 162
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf031c95e958d724a8d2dd1071abbedc
+      internalID: -1630040777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: map_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 129
+        width: 54
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21051d5d7672e53438d07d8d89f139c5
+      internalID: -1560862790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: map_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 129
+        width: 32
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bc2cef07f245844da55dc21fd626a54
+      internalID: 452729001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: map_4
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 145
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95349fb1a95464148a5d6b022feec9d3
+      internalID: 360984717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 006564d3d44480f42a78978db280e4e9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      map_0: 114295863
+      map_1: -756358048
+      map_10: -1748992058
+      map_11: 1551860174
+      map_12: -633590920
+      map_13: -135178969
+      map_14: 588143065
+      map_15: -851601596
+      map_16: -285085486
+      map_17: 116071745
+      map_2: -1630040777
+      map_20: -1030702426
+      map_23: 416284132
+      map_24: -1820197314
+      map_25: -156597227
+      map_26: 1492096163
+      map_27: 266982656
+      map_28: -562116948
+      map_29: -2024344595
+      map_3: 452729001
+      map_30: 171819693
+      map_31: -204120570
+      map_32: -1963779143
+      map_33: -582176899
+      map_34: 261209748
+      map_35: 1201646320
+      map_4: 360984717
+      map_5: -1560862790
+      map_6: 2007465111
+      map_7: 1068556687
+      map_9: 41719987
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

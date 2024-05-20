@@ -14,6 +14,7 @@ namespace ChenChen_MapGenerator
         [Header("生成器基本信息")]
         public TileBase mainMapDefaultTileBase;
         public float lacunarrty;
+        public bool needSaveForPrefab;
 
         // 生成地图时用到的全局数据
         private int _width;
@@ -26,6 +27,8 @@ namespace ChenChen_MapGenerator
         [SerializeField] private List<TerrainData> _terrainList;
         [Header("花草数据")]
         [SerializeField] private List<FlowerData> _flowersList;
+        [Header("预生成物体数据")]
+        [SerializeField] private List<PrefabData> _prefabsList;
 
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
@@ -96,16 +99,32 @@ namespace ChenChen_MapGenerator
             CheckNode();
             GenerateTileMap();
             GenerateFlowers();
+            GeneratePrefabs(mapData);
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
-
-            SaveMapPrefab(mapData);
+            SetStaticRecursively(result.mapObject, StaticEditorFlags.BatchingStatic);
+            if(needSaveForPrefab) SaveMapPrefab(mapData);
             return result;
+
+            static void SetStaticRecursively(GameObject obj, StaticEditorFlags flags)
+            {
+                // 设置当前对象的静态属性
+                if (obj.TryGetComponent<Tilemap>(out _))
+                {
+                    GameObjectUtility.SetStaticEditorFlags(obj, flags);
+                }
+                // 递归设置所有子对象的静态属性
+                foreach (Transform child in obj.transform)
+                {
+                    SetStaticRecursively(child.gameObject, flags);
+                }
+            }
         }
 
         private void SaveMapPrefab(MapData mapData)
         {
+            if (mapData.mapName == "临时地图") return;
             string saveDirectory = "Assets/SavedGameObjects/";
             string path = "Assets/SavedGameObjects/" + mapData.mapName + mapData.seed + ".prefab";
             if (!string.IsNullOrEmpty(path))
@@ -229,27 +248,84 @@ namespace ChenChen_MapGenerator
         /// </summary>
         private void GenerateFlowers()
         {
-            // 统计有多少块草地
-            int count = 0;
-            List<MapNode> theGrassTile = new List<MapNode>();
-            foreach (var md in _nodes)
+            foreach (var flower in _flowersList)
             {
-                if (md.type == NodeType.grass)
+                // 统计剩下多少块草地
+                int count = 0;
+                List<MapNode> theGrassTile = new List<MapNode>();
+                foreach (var node in _nodes)
                 {
-                    theGrassTile.Add(md);
-                    count++;
+                    if (node.type == NodeType.grass)
+                    {
+                        // 上下左右没有其他类型的瓦片
+                        if (flower.farFormOtherTile && Has(node.postion.x, node.postion.y, NodeType.grass))
+                        {
+                            continue;
+                        }
+                        theGrassTile.Add(node);
+                        count++;
+                    }
                 }
-            }
 
-            foreach(var flower in _flowersList)
-            {
-                for(int i = 0;i<count * flower.probability; i++)
+                for (int i = 0; i < count * flower.probability; i++)
                 {
                     if (theGrassTile.Count == 0) return;
                     int randomIndex = Random.Range(0, theGrassTile.Count);
                     Vector3Int pos = new Vector3Int(theGrassTile[randomIndex].postion.x, theGrassTile[randomIndex].postion.y);
                     TileBase tile = flower.tile[Random.Range(0, flower.tile.Count)];
                     GetTileamp(flower.tilemapName).SetTile(pos, tile);
+                }
+            }
+
+            // 周围有其他类型
+            bool Has(int x, int y, NodeType me)
+            {
+                bool flag = false;
+
+                // 检查八个方向
+                if (IsOtherType(x - 1, y, me)) flag = true; // 左
+                if (IsOtherType(x + 1, y, me)) flag = true; // 右
+                if (IsOtherType(x, y - 1, me)) flag = true; // 上
+                if (IsOtherType(x, y + 1, me)) flag = true; // 下
+                if (IsOtherType(x - 1, y - 1, me)) flag = true; // 左上
+                if (IsOtherType(x + 1, y - 1, me)) flag = true; // 右上
+                if (IsOtherType(x - 1, y + 1, me)) flag = true; // 左下
+                if (IsOtherType(x + 1, y + 1, me)) flag = true; // 右下
+
+                return flag;
+            }
+
+            // 是不同的类型
+            bool IsOtherType(int x, int y, NodeType me)
+            {
+                if (y + 1 > _height || y - 1 < 0) return true;
+                if (x + 1 > _width || x - 1 < 0) return true;
+                return _nodes[x, y].type != me;
+            }
+        }
+
+        /// <summary>
+        /// 生成预制件
+        /// </summary>
+        private void GeneratePrefabs(MapData mapData)
+        {
+            List<Vector2Int> vector2Ints = new(); 
+            ItemCreator itemCreator = new ItemCreator();
+            foreach (var prefab in _prefabsList)
+            {
+                int generatedCount = 0;
+                while (generatedCount < prefab.num)
+                {
+                    // 随机生成一个位置
+                    Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, _width), UnityEngine.Random.Range(0, _height));
+
+                    // 检查节点类型是否匹配
+                    if (!vector2Ints.Contains(pos) && _nodes[pos.x, pos.y].type == prefab.type)
+                    {
+                        itemCreator.GenerateItem(prefab.name, pos, mapData.mapName);
+                        generatedCount++;
+                        vector2Ints.Add(pos);
+                    }
                 }
             }
         }

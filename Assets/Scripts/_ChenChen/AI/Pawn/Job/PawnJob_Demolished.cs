@@ -50,15 +50,20 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
-            // 如果完成了拆除，状态机结束暂停，可以进入下一个状态
+            // 目标为空，完成了拆除
             if (targetComponent == null)
             {
                 return StateType.Success;
             }
-
-            if (targetComponent.MaxDurability <= 0)
+            // 目标耐久度为0，完成了拆除
+            if (targetComponent.CurDurability <= 0)
             {
                 return StateType.Success;
+            }
+            // 目标解除标记拆除状态，中断
+            if (targetComponent.LifeState != BuildingLifeStateType.MarkDemolished)
+            {
+                return StateType.Interrupt;
             }
 
             // 判断是否到达目标点附近

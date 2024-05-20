@@ -11,5 +11,6 @@ namespace ChenChen_BuildingSystem
         void OnMarkDemolish();
         void OnDemolish(int value);
         void OnDemolished();
+        void OnCanclDemolish();
     }
 }

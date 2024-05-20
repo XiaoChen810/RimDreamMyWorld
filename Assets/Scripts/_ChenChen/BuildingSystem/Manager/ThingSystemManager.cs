@@ -6,6 +6,7 @@ using UnityEditor;
 using ChenChen_UISystem;
 using ChenChen_Scene;
 using System.IO;
+using ChenChen_MapGenerator;
 
 namespace ChenChen_BuildingSystem
 {
@@ -16,22 +17,56 @@ namespace ChenChen_BuildingSystem
     {
         [Header("包含全部物品定义的字典")]
         [SerializedDictionary("名称", "物品定义")]
-        public SerializedDictionary<string, ThingDef> ThingDefDictionary;
+        public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
 
         [Header("包含全部已经生成的物体列表")]
-        [SerializeField] private List<Thing_Building> ThingBuildingGeneratedList;
+        //public List<Thing_Building> ThingBuildingGeneratedList;
+        public List<ThingBase> ThingBuildingGeneratedList = new List<ThingBase>();
 
-        public BuildingModeTool Tool { get; private set; }
+        private BuildingModeTool tool;
+        public BuildingModeTool Tool // 处理物品的建造
+        {
+            get 
+            { 
+                if (tool == null)
+                {
+                    tool = new BuildingModeTool(this);
+                }
+                return tool;
+            }
+        }
 
-        public PanelManager BuildingPanelManager { get; private set; }
+        private PanelManager buildingPanelManager;
+        public PanelManager BuildingPanelManager    // 单独分配一个PanelManager，确保不会和其他面板冲突
+        {
+            get
+            {
+                if(buildingPanelManager == null)
+                {
+                    buildingPanelManager = new PanelManager();
+                }
+                return buildingPanelManager;
+            }
+        }
+
+        private Quadtree quadtree;   // 存放物体的四叉树
+        public Quadtree Quadtree
+        {
+            get
+            {
+                if (quadtree == null)
+                {
+                    Rect worldBounds = new Rect(0, 0, MapManager.Instance.CurMapWidth, MapManager.Instance.CurMapHeight);
+                    quadtree = new Quadtree(0, worldBounds, this.gameObject, "root");
+                }
+                return quadtree;
+            }
+        }
 
         protected override void Awake()
         {
             base.Awake();
             LoadAllThingDefData();
-            ThingBuildingGeneratedList = new List<Thing_Building>();
-            Tool = new BuildingModeTool(this);
-            BuildingPanelManager = new PanelManager();
         }
 
         public void Update()
@@ -40,6 +75,13 @@ namespace ChenChen_BuildingSystem
             if (Input.GetKeyDown(KeyCode.U))
             {
                 OpenBuildingMenuPanel();
+            }
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                foreach(var go in ThingBuildingGeneratedList)
+                {
+                    go.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -95,13 +137,14 @@ namespace ChenChen_BuildingSystem
         /// <param name="obj"></param>
         public void AddThingToList(GameObject obj)
         {
-            if (obj.TryGetComponent<Thing_Building>(out var building))
+            if (obj.TryGetComponent<ThingBase>(out var thing))
             {
-                ThingBuildingGeneratedList.Add(building);
+                ThingBuildingGeneratedList.Add(thing);
+                Quadtree.Insert(obj);
             }
             else
             {
-                Debug.LogWarning("检测到没有 Building 组件的物体想添加进 _BuildingList ，已返回");
+                Debug.LogWarning("检测到没有 ThingBase 组件的物体想添加进 _BuildingList ，已返回");
                 return;
             }
         }
@@ -117,7 +160,7 @@ namespace ChenChen_BuildingSystem
             }
             else
             {
-                Debug.LogWarning("列表里没有这个物体");
+                Debug.Log("列表里没有这个物体");
                 return;
             }
         }
@@ -263,28 +306,30 @@ namespace ChenChen_BuildingSystem
                 Debug.LogError($"定义 {thingDef.DefName}定义的预制件为空");
                 return false;
             }
-            GameObject thingObj = Instantiate(prefab, thingSave.ThingPos, thingSave.ThingRot, transform);
-            thingObj.name = thingSave.DefName;
-            thingObj.GetComponent<ThingBase>().OnPlaced(thingSave.LifeState, thingSave.MapName);
+            Generate(thingDef, thingSave.ThingPos, thingSave.ThingRot, thingSave.LifeState, thingSave.MapName);
             return true;
         }
+        // 直接使用定义
         public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
-            Generate(thingDef, position, routation, initLifdState, mapName);
+            Generate(thingDef, position + thingDef.Offset, routation, initLifdState, mapName);
             return true;
         }
+        // 直接使用名字
         public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
             ThingDef thingDef = GetThingDef(thingName);
-            Generate(thingDef, position, routation, initLifdState, mapName);
+            Generate(thingDef, position + thingDef.Offset, routation, initLifdState, mapName);
             return true;
         }
+        // 生成
         private void Generate(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
-            // 生成
-            GameObject thingObj = Instantiate(thingDef.Prefab, position + thingDef.Offset, routation, transform);
+            GameObject thingObj = Instantiate(thingDef.Prefab, position , routation, transform);
+            thingObj.name = thingDef.DefName;
             ThingBase thing = thingObj.GetComponent<ThingBase>();
             thing.OnPlaced(initLifdState, mapName);
+            AddThingToList(thingObj);
         }
 
         #endregion

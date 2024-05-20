@@ -10,10 +10,10 @@ namespace ChenChen_BuildingSystem
         // 执行建造时的方法
         void OnBuild(int value);
         // 完成建造时调用的方法
-        void OnComplete();
+        void OnCompleteBuild();
         // 取消建造时调用的方法
-        void OnCancel();
+        void OnCancelBuild();
         // 中断建造时调用的方法
-        void OnInterpret();
+        void OnInterpretBuild();
     }
 }

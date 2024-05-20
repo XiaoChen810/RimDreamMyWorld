@@ -31,6 +31,31 @@ public class DetailView_Thing : DetailView
             thing.Def.DefName,
             Content
             );
+
+        if (thing.LifeState == BuildingLifeStateType.MarkBuilding)
+        {
+            panel.RemoveAllButton();
+            panel.SetButton("取消", () =>
+            {
+                thing.OnCancelBuild();
+            });
+        }
+        if (thing.LifeState == BuildingLifeStateType.MarkDemolished)
+        {
+            panel.RemoveAllButton();
+            panel.SetButton("取消", () =>
+            {
+                thing.OnCanclDemolish();
+            });
+        }
+        if (thing.LifeState == BuildingLifeStateType.FinishedBuilding)
+        {
+            panel.RemoveAllButton();
+            panel.SetButton("拆除", () =>
+            {
+                thing.ChangeLifeState(BuildingLifeStateType.MarkDemolished);
+            });
+        }
     }
 
     public override void StartShow()

@@ -37,5 +37,10 @@ namespace ChenChen_BuildingSystem
             ChangeLifeState(initial_State);
             MapName = mapName;
         }
+
+        public override void OnDemolished()
+        {
+            ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
+        }
     }
 }

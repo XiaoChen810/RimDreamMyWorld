@@ -206,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 96151752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 31.75, y: 29.07, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -426,6 +426,7 @@ MonoBehaviour:
   _pawnWhenStartList: []
   CharacterTest: {fileID: 6258274224586722765, guid: a2b56aab754280d408178f81b95b3599, type: 3}
   GoblinPrefab: {fileID: 4211871020731615996, guid: 0a86a649487e85c49b78a8f617578f83, type: 3}
+  GameIsStart: 0
 --- !u!4 &1154968097
 Transform:
   m_ObjectHideFlags: 0
@@ -785,6 +786,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SaveList: []
+  CurSave:
+    SaveName: 
+    SaveDate: 
+    SaveMap:
+      mapName: 
+      width: 0
+      height: 0
+      seed: 0
+    SaveThings: []
+    SavePawns: []
 --- !u!1001 &2126960140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -838,52 +849,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: _flowersList.Array.data[0].tile.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: afbbaaa563187df448323789edc52544, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: e0b70a29ad5c07444872988d8e909f3d, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5920c0be1594eb74fb608d6de2342843, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 4b737a7a136e9a54e81692a7a2a6a423, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[4]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 5b8bba9e67fa39741bf86b6c65628be7, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[5]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 73af3c3deb10c6a4bb3b07cfef8083b2, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[6]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 16960ec35b54cf74290e628d1638d0bb, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[7]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 9019669e339eed6498ad296bdd932413, type: 2}
-    - target: {fileID: 3981268902768134650, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: '_flowersList.Array.data[0].tile.Array.data[8]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 0bdf8eabc47c19a459bff8af91a394e2, type: 2}
-    - target: {fileID: 4367089392959131425, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: MapWidthOfGenerate
-      value: 250
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367089392959131425, guid: 6c86171ce1a999a43952859ab4ad05ce, type: 3}
-      propertyPath: MapHeightOfGenerate
-      value: 250
+      propertyPath: needSaveForPrefab
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

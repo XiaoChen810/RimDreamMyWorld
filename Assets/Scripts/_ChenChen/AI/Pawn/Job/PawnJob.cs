@@ -53,7 +53,7 @@ namespace ChenChen_AI
          */
         public override StateType OnUpdate()
         {
-            if(target.IsGameObject && target.GameObject == null)
+            if(target != null && target.IsGameObject && target.GameObject == null)
             {
                 return StateType.Failed;
             }
@@ -81,10 +81,6 @@ namespace ChenChen_AI
                         Debug.Log($"归还目标使用权限失败：{pawn.name} to {per.name}");
                     }
                 }
-            }
-            else
-            {
-                Debug.Log("目标的 GameObject 已被销毁或为空");
             }
 
             target = null;

@@ -58,7 +58,7 @@ public class PlayManager : SingletonMono<PlayManager>
         }
         // 新建存档
         string saveDate = DateTime.Now.ToString();
-        saveName = CurSave.SaveName == null ? "unnamed" : CurSave.SaveName;
+        saveName = saveName == null ? "unnamed" : CurSave.SaveName;
         Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
         // 保存地图生成参数
         if (data_MapSave == null)
@@ -67,7 +67,7 @@ public class PlayManager : SingletonMono<PlayManager>
         }
         saveData.SaveMap = data_MapSave;
         // 保存地图上所有的物品
-        foreach (var thing in ThingSystemManager.Instance.transform.gameObject.GetComponentsInChildren<ThingBase>())
+        foreach (var thing in ThingSystemManager.Instance.ThingBuildingGeneratedList)
         {
             // 保存
             ThingDef thingDef = thing.Def;

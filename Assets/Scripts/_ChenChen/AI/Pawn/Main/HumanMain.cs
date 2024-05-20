@@ -40,11 +40,10 @@ namespace ChenChen_AI
         }
 
         protected override void TryToGetJob()
-        {
-            GameObject job = null;
+        {    
             foreach (JobGiver jobGiver in jobGivers)
             {
-                job = jobGiver.TryIssueJobPackage(this);
+                GameObject job = jobGiver.TryIssueJobPackage(this);
                 if (job != null)
                 {
                     CurJobTarget = job;

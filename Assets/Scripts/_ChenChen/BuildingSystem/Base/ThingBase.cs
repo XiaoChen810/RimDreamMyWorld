@@ -100,7 +100,7 @@ namespace ChenChen_BuildingSystem
                         OnMarkBuild();
                         break;
                     case BuildingLifeStateType.FinishedBuilding:
-                        OnComplete();
+                        OnCompleteBuild();
                         break;
                     case BuildingLifeStateType.MarkDemolished:
                         OnMarkDemolish();
@@ -232,11 +232,12 @@ namespace ChenChen_BuildingSystem
         public abstract void OnPlaced(BuildingLifeStateType initial_State, string mapName);
         public virtual void OnMarkBuild() { throw new System.NotImplementedException(); }
         public virtual void OnBuild(int value) { throw new System.NotImplementedException(); }
-        public virtual void OnComplete() { throw new System.NotImplementedException(); }
-        public virtual void OnCancel() { throw new System.NotImplementedException(); }
-        public virtual void OnInterpret() { throw new System.NotImplementedException(); }
+        public virtual void OnCompleteBuild() { throw new System.NotImplementedException(); }
+        public virtual void OnCancelBuild() { throw new System.NotImplementedException(); }
+        public virtual void OnInterpretBuild() { throw new System.NotImplementedException(); }
         public virtual void OnMarkDemolish() { throw new System.NotImplementedException(); }
         public virtual void OnDemolish(int value) { throw new System.NotImplementedException(); }
         public virtual void OnDemolished() { throw new System.NotImplementedException(); }
+        public virtual void OnCanclDemolish() { throw new System.NotImplementedException(); }
     }
 }

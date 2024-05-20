@@ -56,9 +56,26 @@ namespace ChenChen_MapGenerator
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
         public int MapHeightOfGenerate = 100;
+        public int TreeNum;
 
-        public int CurMapWidth => _mapDatasDict[CurrentMapName].width;
-        public int CurMapHeight => _mapDatasDict[CurrentMapName].height;
+        public int CurMapWidth
+        {
+            get 
+            {
+                if (_mapDatasDict.ContainsKey(CurrentMapName))
+                   return _mapDatasDict[CurrentMapName].width;
+                return MapWidthOfGenerate;
+            }
+        }
+        public int CurMapHeight
+        {
+            get
+            {
+                if (_mapDatasDict.ContainsKey(CurrentMapName))
+                    return _mapDatasDict[CurrentMapName].height;
+                return MapHeightOfGenerate;
+            }
+        }
         public MapNode[,] CurMapNodes => _mapDatasDict[CurrentMapName].mapNodes;
 
         protected override void Awake()
@@ -79,6 +96,7 @@ namespace ChenChen_MapGenerator
             if (!_mapDatasDict.ContainsKey(mapSave.mapName))
             {
                 MapData mapData = new(mapSave);
+                if (MapCreator == null) MapCreator = GetComponent<MapCreator>();
                 mapData = MapCreator.GenerateMap(mapData);
                 if (mapObjectActive)
                 {
@@ -128,13 +146,14 @@ namespace ChenChen_MapGenerator
                                         MapHeightOfGenerate,
                                         seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
                 GenerateMap(mapSave, true);
-                // 生成环境
-                for (int i = 0; i < 100; i++)
-                {
-                    Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
-                    if (_mapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
-                        ItemCreator.GenerateItem("常青树", pos, mapName);
-                }
+                //if(ItemCreator == null) ItemCreator = new ItemCreator();
+                //// 生成树
+                //for (int i = 0; i < TreeNum; i++)
+                //{
+                //    Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, MapWidthOfGenerate), UnityEngine.Random.Range(0, MapHeightOfGenerate));
+                //    if (_mapDatasDict[mapName].mapNodes[pos.x, pos.y].type == NodeType.grass)
+                //        ItemCreator.GenerateItem("常青树", pos, mapName);
+                //}
             }
             AstarPath.active.Scan();
         }

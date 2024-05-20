@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UISystem
 {
-    public class DetailViewPanel_Thing: DetailViewPanel
+    public class DetailViewPanel_Thing : DetailViewPanel
     {
         private ThingBase thing;
 
@@ -16,10 +16,6 @@ namespace ChenChen_UISystem
         public override void OnEnter()
         {
             base.OnEnter();
-            SetButton("²ð³ý", () =>
-            {
-                thing.ChangeLifeState(BuildingLifeStateType.MarkDemolished);
-            });
         }      
     }
 }

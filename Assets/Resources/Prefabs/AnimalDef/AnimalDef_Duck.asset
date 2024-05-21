@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c43e6c61c7cd24994b68c47b46d41d, type: 3}
   m_Name: AnimalDef_Duck
   m_EditorClassIdentifier: 
-  Name: "\u9E2D"
+  Name: "\u9E2D\u5B50"
   Description: "\u560E\uFF0C\u560E\uFF0C\u560E......"
+  Prefab: {fileID: 2145537941219745911, guid: c8299127c16ed744aabf13cd22e25a48, type: 3}
   Meat: 20
   MaxHealth: 50
+  IsAquaticAnimals: 1

@@ -25,6 +25,7 @@ public class DetailView_WorkSpace : DetailView
         if (panel == null) return;
         if (workSpace == null) return;
         Content.Clear();
+        // 如果工作区是农业类型的特殊情况
         if(TryGetComponent<WorkSpace_Farm>(out WorkSpace_Farm workSpace_Farm))
         {
             Content.Add($"当前种植作物: {workSpace_Farm.CurCrop.CropName}");

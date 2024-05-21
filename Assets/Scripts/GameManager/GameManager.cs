@@ -18,7 +18,7 @@ public class GameManager : SingletonMono<GameManager>
     /// <summary>
     /// 游戏内全部的Pawn的GameObject列表
     /// </summary>
-    public List<GameObject> PawnsList   
+    public List<GameObject> PawnsList
     {
         get { return _pawnsList; }
     }
@@ -33,7 +33,10 @@ public class GameManager : SingletonMono<GameManager>
     }
     public GameObject CharacterTest;
     public GameObject GoblinPrefab;
-    public bool GameIsStart = false;
+
+    private bool _gameIsStart = false;
+    public bool GameIsStart { get { return _gameIsStart; } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,6 +50,16 @@ public class GameManager : SingletonMono<GameManager>
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
+    }
+
+    public void StartGame()
+    {
+        if(GameIsStart)
+        {
+            Debug.LogWarning("游戏只能开始一次");
+        }
+        _gameIsStart = true;
+        AnimalGenerateTool.CreateAllAnimalThree();
     }
 
     public void PauseGame()
@@ -74,7 +87,7 @@ public class GameManager : SingletonMono<GameManager>
 
     public void 测试按钮()
     {
-        Vector2 random = new Vector2(UnityEngine.Random.Range(0, 50), UnityEngine.Random.Range(0, 50));
+        Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
         AnimalGenerateTool.GenerateAnimal("绵羊", random);
     }
 

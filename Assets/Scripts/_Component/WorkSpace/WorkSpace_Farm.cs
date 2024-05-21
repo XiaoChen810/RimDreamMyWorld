@@ -44,7 +44,12 @@ public class WorkSpace_Farm : WorkSpace
     protected override void OnEnable()
     {
         base.OnEnable();
-        _whatCrop = CropManager.Instance.GetCropDef("小麦");
+    }
+
+    public void Init(string cropName)
+    {
+        WorkSpaceType = WorkSpaceType.Farm;
+        _whatCrop = CropManager.Instance.GetCropDef(cropName);
     }
 
     /// <summary>

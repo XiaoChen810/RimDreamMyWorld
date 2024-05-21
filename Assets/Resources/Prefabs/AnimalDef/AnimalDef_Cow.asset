@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "\u5976\u725B"
   Description: "\u80FD\u4EA7\u5976\u7684\u725B"
+  Prefab: {fileID: 2339811349509002577, guid: 3a7b18a6008b54345993635f09a357b3, type: 3}
   Meat: 100
   MaxHealth: 200
+  IsAquaticAnimals: 0

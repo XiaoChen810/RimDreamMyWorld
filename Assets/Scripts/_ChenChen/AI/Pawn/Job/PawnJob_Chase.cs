@@ -23,7 +23,7 @@ namespace ChenChen_AI
             // 设置人物无法接取工作
             pawn.JobToDo(target.GameObject);
             // 设置人物目标点，前往目标，走过去
-            pawn.MoveController.GoToHere(target.Positon, Urgency.Normal, pawn.AttackRange);
+            pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange);
             return true;
         }
 

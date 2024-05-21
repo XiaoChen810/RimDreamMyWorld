@@ -37,11 +37,6 @@ public abstract class WorkSpace : PermissionBase, IDetailView
         Coll = GetComponent<BoxCollider2D>();
     }
 
-    public void Init(WorkSpaceType type)
-    {
-        WorkSpaceType = type;
-    }
-
     public void SetSize(Vector2 oneV, Vector2 twoV)
     {
         float width = Mathf.Abs(oneV.x - twoV.x);

@@ -18,7 +18,7 @@ namespace ChenChen_UISystem
             base.OnEnter();
             SetButton("删除", () =>
             {
-                Debug.Log($"删除工作区: {workSpace.name}");
+                Debug.Log($"删除工作区: {workSpace.name}, 但还没做");
             });
 
         }

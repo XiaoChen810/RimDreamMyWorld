@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapWidthOfGenerate: 250
   MapHeightOfGenerate: 250
-  TreeNum: 0
 --- !u!114 &3981268902768134650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +99,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: da6c9ccd5a271dd47a81cc3ad4019735, type: 2}
     farFormOtherTile: 1
     type: 1
-  - probability: 0.08
+  - probability: 0.02
     tilemapName: "\u82B1\u6735"
     layerSort: 4
     tile:
@@ -110,6 +109,14 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 287811a53b11ae04fa0a4184e19fa9c9, type: 2}
     - {fileID: 11400000, guid: 07209aa63a07dc24aaac8c252486c29a, type: 2}
     farFormOtherTile: 0
+    type: 1
+  - probability: 0.01
+    tilemapName: "\u8349\u4E1B"
+    layerSort: 5
+    tile:
+    - {fileID: 11400000, guid: fcdfaed77fb5b6a41b44e71991891dbc, type: 2}
+    - {fileID: 11400000, guid: 3e88eb4485fd81245b046b6efc922da9, type: 2}
+    farFormOtherTile: 1
     type: 1
   - probability: 0.03
     tilemapName: "\u6C34\u4E2D"
@@ -135,4 +142,8 @@ MonoBehaviour:
     num: 500
   _effectsList:
   - prefab: {fileID: 8171373853705526921, guid: 31c8c27dfb42da54e9548d06b9d705f3, type: 3}
-    num: 100
+    num: 0
+    spacing: 0
+  - prefab: {fileID: 7562996378230635062, guid: 6f2c22407115b0346b458fea01b60764, type: 3}
+    num: 5
+    spacing: 50

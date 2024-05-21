@@ -1,5 +1,7 @@
 using AYellowpaper.SerializedCollections;
 using ChenChen_MapGenerator;
+using ChenChen_UISystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +12,7 @@ public class WorkSpaceTool : MonoBehaviour
     private LineRenderer lineRenderer;
 
     [SerializedDictionary("SpaceName", "WorkSpace")]
-    [SerializeField] private SerializedDictionary<string, WorkSpace> TotalWorkSpaceDictionary;
+    public SerializedDictionary<string, WorkSpace> TotalWorkSpaceDictionary;
 
     public GameObject WorkSpacePrefab;
     public bool IsDoingWorkSpace = false;
@@ -34,9 +36,14 @@ public class WorkSpaceTool : MonoBehaviour
 
     public void AddOneFarmWorkSpace()
     {
-        AddNewWorkSpace($"工作区{index++}", WorkSpaceType.Farm);
+        PanelManager.Instance.TogglePanel(new CropWorkSpacePanel(), ChenChen_Scene.SceneType.Main, true);
     }
-
+    
+    /// <summary>
+    /// 获取一种类型的工作区的GameObject
+    /// </summary>
+    /// <param name="workSpaceType"></param>
+    /// <returns></returns>
     public GameObject GetAWorkSpace(WorkSpaceType workSpaceType)
     {
         GameObject result = null;
@@ -45,7 +52,6 @@ public class WorkSpaceTool : MonoBehaviour
             if(space.Value.WorkSpaceType == workSpaceType 
                 && space.Value.Permission == PermissionBase.PermissionType.IsFree)
             {
-                //space.Value.BookingMe();
                 result = space.Value.gameObject;
                 break;
             }
@@ -53,7 +59,55 @@ public class WorkSpaceTool : MonoBehaviour
         return result;
     }
 
-    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, WorkSpaceType workSpaceType)
+    /// <summary>
+    /// 添加一个新的 种植 工作区
+    /// </summary>
+    public void AddNewWorkSpace(string newWorkSpaceName, string cropName)
+    {
+        newWorkSpaceName = newWorkSpaceName + index++.ToString();
+        if (TotalWorkSpaceDictionary.ContainsKey(newWorkSpaceName))
+        {
+            Debug.LogWarning("不会生成相同名字的工作区");
+            return;
+        }
+
+        Action<GameObject> onPlace = (GameObject obj) =>
+        {
+            if (obj.TryGetComponent<WorkSpace_Farm>(out WorkSpace_Farm workSpace_Farm))
+            {
+                workSpace_Farm.Init(cropName);
+            }
+        };
+
+        // 初始设置
+        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, onPlace));
+    }
+
+    /// <summary>
+    /// 扩张现有工作区
+    /// </summary>
+    private void ExpendWorkSpace()
+    {
+
+    }
+
+    /// <summary>
+    /// 缩小现有工作区
+    /// </summary>
+    private void NarrowWorkSpace()
+    {
+
+    }
+
+    /// <summary>
+    /// 删除现有工作区
+    /// </summary>
+    private void DeleteWorkSpace()
+    {
+
+    }
+
+    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, Action<GameObject> onPlace)
     {
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -63,7 +117,7 @@ public class WorkSpaceTool : MonoBehaviour
         {
             // 监听鼠标位置
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if(!flag)
+            if (!flag)
             {
                 mouseDownPosition = mousePosition;
                 mouseDownPosition.x = Mathf.Ceil(mousePosition.x);
@@ -116,7 +170,6 @@ public class WorkSpaceTool : MonoBehaviour
                     obj.name = newWorkSpaceName;
                     obj.tag = "WorkSpace";
                     WorkSpace workSpace = obj.GetComponent<WorkSpace>();
-                    workSpace.Init(workSpaceType);
 
                     // 设置sr的大小为方框大小
                     workSpace.SetSize(mouseDownPosition, mousePosition);
@@ -126,6 +179,8 @@ public class WorkSpaceTool : MonoBehaviour
                     ResetLineRenderer();
                     IsDoingWorkSpace = false;
                     TotalWorkSpaceDictionary.Add(newWorkSpaceName, workSpace);
+
+                    onPlace?.Invoke(obj);
                 }
                 else
                 {
@@ -203,43 +258,5 @@ public class WorkSpaceTool : MonoBehaviour
             index--;
             IsDoingWorkSpace = false;
         }
-    }
-
-    /// <summary>
-    /// 添加一个新的工作区
-    /// </summary>
-    private void AddNewWorkSpace(string newWorkSpaceName, WorkSpaceType workSpaceType)
-    {
-        if (TotalWorkSpaceDictionary.ContainsKey(newWorkSpaceName))
-        {
-            Debug.LogWarning("不会生成相同名字的工作区");
-            return;
-        }
-        // 初始设置
-        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, workSpaceType));
-    }
-
-    /// <summary>
-    /// 扩张现有工作区
-    /// </summary>
-    private void ExpendWorkSpace()
-    {
-
-    }
-
-    /// <summary>
-    /// 缩小现有工作区
-    /// </summary>
-    private void NarrowWorkSpace()
-    {
-
-    }
-
-    /// <summary>
-    /// 删除现有工作区
-    /// </summary>
-    private void DeleteWorkSpace()
-    {
-
     }
 }

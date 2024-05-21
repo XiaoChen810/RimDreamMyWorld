@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 23359624927296265}
   - component: {fileID: 6639448932715276262}
   m_Layer: 0
-  m_Name: Palette
+  m_Name: _Palette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

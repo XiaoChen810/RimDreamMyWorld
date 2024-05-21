@@ -36,19 +36,6 @@ namespace ChenChen_BuildingSystem
             }
         }
 
-        private PanelManager buildingPanelManager;
-        public PanelManager BuildingPanelManager    // 单独分配一个PanelManager，确保不会和其他面板冲突
-        {
-            get
-            {
-                if(buildingPanelManager == null)
-                {
-                    buildingPanelManager = new PanelManager();
-                }
-                return buildingPanelManager;
-            }
-        }
-
         private Quadtree quadtree;   // 存放物体的四叉树
         public Quadtree Quadtree
         {
@@ -92,7 +79,7 @@ namespace ChenChen_BuildingSystem
 
             };
 
-            BuildingPanelManager.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main);
+            PanelManager.Instance.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main, true);
         }
 
         private void LoadAllThingDefData()

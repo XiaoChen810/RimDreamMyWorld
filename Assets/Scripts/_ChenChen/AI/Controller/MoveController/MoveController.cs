@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using ChenChen_MapGenerator;
 
 namespace ChenChen_AI
 {
@@ -19,8 +20,8 @@ namespace ChenChen_AI
         [SerializeField] protected bool isStart = false;
         // 能否移动，isStart 和 canMove同时为 true 才会动
         [SerializeField] protected bool canMove = true;
-        // 移动速度
-        [SerializeField] protected float speed = 2f;
+        // 速度倍率
+        [SerializeField] protected float speedMagnification = 1f;
         // 移动点更新的距离，也是判断到达目标点的距离
         [SerializeField] protected float endReachedDistance = 0.2f;
         // 开启动态刷新时，每次刷新的间隔时间
@@ -37,6 +38,25 @@ namespace ChenChen_AI
         [SerializeField] protected bool reachDestination = true;
         // 当前在路径的哪个点
         [SerializeField] protected int currentWaypoint = 0;
+
+        [Header("移动速度 ")]
+        [SerializeField] private float _speed = 2f;
+        protected float Speed
+        {
+            get 
+            {
+                float result = _speed * speedMagnification;
+                return result; 
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    Debug.Log("Speed seted 0");
+                }
+                _speed = value;
+            }
+        }
 
         [Header("面向右边")]
         public bool IsFaceRight;
@@ -80,7 +100,7 @@ namespace ChenChen_AI
             if (Time.time > lastRepath + repathRate && _seeker.IsDone())
             {
                 lastRepath = Time.time;
-                ReflashDestination(targetDestination != null ? targetDestination.position : destination, speed, endReachedDistance);
+                ReflashDestination(targetDestination != null ? targetDestination.position : destination, endReachedDistance);
             }
             //Debug.Log($"Time.time  {Time.time} > lastRepath + repathRate {lastRepath + repathRate} _seeker.IsDone() {_seeker.IsDone()}");
 
@@ -116,7 +136,7 @@ namespace ChenChen_AI
             }
 
             // 移动
-            var speedFactor = !reachedEndOfPath ? speed : 0;
+            var speedFactor = !reachedEndOfPath ? Speed : 0;
             speedFactor = !reachDestination ? speedFactor : 0;
             speedFactor = canMove ? speedFactor : 0;
             Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
@@ -139,11 +159,15 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        protected bool StartPath(Vector3 destination, float speed, float endReachedDistance = 0.2f)
+        protected bool StartPath(Vector3 destination, float endReachedDistance = 0.2f)
         {
             targetDestination = null;
             targetIsAObject = false;
-            return ReflashDestination(destination, speed, endReachedDistance);
+            if(!ReflashDestination(destination, endReachedDistance))
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -151,17 +175,29 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        protected bool StartPath(GameObject destination, float speed, float endReachedDistance = 0.2f)
+        protected bool StartPath(GameObject destination, float endReachedDistance = 0.2f)
         {
             // 设置要追踪的目标
             targetDestination = destination.transform;
             targetIsAObject = true;
-            return ReflashDestination(targetDestination.position, speed, endReachedDistance);
+            if (!ReflashDestination(targetDestination.position, endReachedDistance))
+            {
+                targetDestination = null;
+                targetIsAObject = false;
+                return false;
+            }
+            return true;
         }
 
-        private bool ReflashDestination(Vector3 destination, float speed, float endReachedDistance)
+        private bool ReflashDestination(Vector3 destination, float endReachedDistance)
         {
-            //Debug.Log("Reflash Destination");
+            if (destination.x <= 0 || destination.x >= MapManager.Instance.CurMapWidth) return false;
+            if (destination.y <= 0 || destination.y >= MapManager.Instance.CurMapHeight) return false;
+            if (!_seeker.IsDone())
+            {
+                Debug.Log(1);
+                return false;
+            }
             // 新建路径
             ABPath newPath = ABPath.Construct(transform.position, destination);
             // 开始计算路径
@@ -175,7 +211,6 @@ namespace ChenChen_AI
                     if (Vector2.Distance(end, destination) < endReachedDistance)
                     {
                         this.destination = destination;
-                        this.speed = speed;
                         this.endReachedDistance = endReachedDistance;
                         if (path != null) path.Release(this);
                         path = p;

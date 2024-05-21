@@ -25,5 +25,7 @@ namespace ChenChen_MapGenerator
         public GameObject prefab;
 
         public int num;
+
+        public int spacing;
     }
 }

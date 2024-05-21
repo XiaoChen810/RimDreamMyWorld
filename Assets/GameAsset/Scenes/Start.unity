@@ -426,7 +426,6 @@ MonoBehaviour:
   _pawnWhenStartList: []
   CharacterTest: {fileID: 6258274224586722765, guid: a2b56aab754280d408178f81b95b3599, type: 3}
   GoblinPrefab: {fileID: 4211871020731615996, guid: 0a86a649487e85c49b78a8f617578f83, type: 3}
-  GameIsStart: 0
 --- !u!4 &1154968097
 Transform:
   m_ObjectHideFlags: 0
@@ -602,20 +601,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animalsList: []
-  AnimalPrefabs:
+  AnimalDefs:
     _serializedList:
     - Key: "\u4E0D\u98DE\u9E1F"
-      Value: {fileID: 2586637671572776123, guid: f73501fd2b1b77c45a2a5fe7dbe30e60, type: 3}
+      Value: {fileID: 11400000, guid: 540c97d040bf4c5448eae4f921a02bd4, type: 2}
     - Key: "\u9E21"
-      Value: {fileID: 7936288114951742126, guid: 74704eef2dfa3ee43ad2ae0d15f38353, type: 3}
+      Value: {fileID: 11400000, guid: dfcc212ae6b7c824fafab4e9c0088567, type: 2}
     - Key: "\u5976\u725B"
-      Value: {fileID: 2339811349509002577, guid: 3a7b18a6008b54345993635f09a357b3, type: 3}
+      Value: {fileID: 11400000, guid: 93ffbb25b8dbb264a89fd72548d93a3c, type: 2}
     - Key: "\u9E2D\u5B50"
-      Value: {fileID: 2145537941219745911, guid: c8299127c16ed744aabf13cd22e25a48, type: 3}
+      Value: {fileID: 11400000, guid: 845730d2ae8ff024fb707cdc46863fd5, type: 2}
     - Key: "\u732A"
-      Value: {fileID: 866803006032208052, guid: de36c50b5198c584bae92529075beea0, type: 3}
+      Value: {fileID: 11400000, guid: 723b895947e428d4584ff2e87d5730b8, type: 2}
     - Key: "\u7EF5\u7F8A"
-      Value: {fileID: 2016447919060592971, guid: b867c73e423169d47b6d38cafa7f4485, type: 3}
+      Value: {fileID: 11400000, guid: 2ecf5b2871773b14a94e858122fcb8f3, type: 2}
 --- !u!1001 &1405207835
 PrefabInstance:
   m_ObjectHideFlags: 0

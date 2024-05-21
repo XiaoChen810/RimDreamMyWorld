@@ -121,12 +121,12 @@ TextureImporter:
       name: farm_plant_09_18x32_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 4
-        width: 15
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3
+        y: 5
+        width: 13
+        height: 10
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -142,12 +142,12 @@ TextureImporter:
       name: farm_plant_09_18x32_1
       rect:
         serializedVersion: 2
-        x: 20
-        y: 4
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 21
+        y: 5
+        width: 13
+        height: 13
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,12 +163,12 @@ TextureImporter:
       name: farm_plant_09_18x32_2
       rect:
         serializedVersion: 2
-        x: 36
-        y: 4
-        width: 16
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 37
+        y: 5
+        width: 14
+        height: 15
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -184,12 +184,12 @@ TextureImporter:
       name: farm_plant_09_18x32_3
       rect:
         serializedVersion: 2
-        x: 54
-        y: 4
-        width: 18
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 55
+        y: 5
+        width: 16
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,12 +205,12 @@ TextureImporter:
       name: farm_plant_09_18x32_4
       rect:
         serializedVersion: 2
-        x: 71
-        y: 4
-        width: 20
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 72
+        y: 5
+        width: 18
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,12 +226,12 @@ TextureImporter:
       name: farm_plant_09_18x32_5
       rect:
         serializedVersion: 2
-        x: 90
-        y: 4
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 91
+        y: 5
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -247,12 +247,12 @@ TextureImporter:
       name: farm_plant_09_18x32_6
       rect:
         serializedVersion: 2
-        x: 107
-        y: 4
-        width: 19
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 108
+        y: 5
+        width: 18
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,7 +267,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 37592f9c1687e1e4bbfdb520d46e787d
     internalID: 0
     vertices: []
     indices: 

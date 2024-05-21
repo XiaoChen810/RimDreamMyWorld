@@ -78,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -130,12 +130,12 @@ TextureImporter:
       name: farm_plant_01_18x32_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 4
-        width: 6
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 7
+        y: 5
+        width: 4
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -151,12 +151,12 @@ TextureImporter:
       name: farm_plant_01_18x32_1
       rect:
         serializedVersion: 2
-        x: 21
-        y: 3
-        width: 11
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 22
+        y: 4
+        width: 9
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -172,12 +172,12 @@ TextureImporter:
       name: farm_plant_01_18x32_2
       rect:
         serializedVersion: 2
-        x: 38
-        y: 3
-        width: 15
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 39
+        y: 4
+        width: 13
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -193,12 +193,12 @@ TextureImporter:
       name: farm_plant_01_18x32_3
       rect:
         serializedVersion: 2
-        x: 56
-        y: 3
-        width: 15
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 57
+        y: 4
+        width: 13
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: farm_plant_01_18x32_4
       rect:
         serializedVersion: 2
-        x: 74
-        y: 3
-        width: 15
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 75
+        y: 4
+        width: 13
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -235,12 +235,12 @@ TextureImporter:
       name: farm_plant_01_18x32_5
       rect:
         serializedVersion: 2
-        x: 91
-        y: 3
-        width: 16
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 92
+        y: 4
+        width: 14
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -256,12 +256,12 @@ TextureImporter:
       name: farm_plant_01_18x32_6
       rect:
         serializedVersion: 2
-        x: 109
-        y: 3
-        width: 16
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 110
+        y: 4
+        width: 14
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -277,12 +277,12 @@ TextureImporter:
       name: farm_plant_01_18x32_7
       rect:
         serializedVersion: 2
-        x: 127
-        y: 3
-        width: 16
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 4
+        width: 14
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -298,12 +298,12 @@ TextureImporter:
       name: farm_plant_01_18x32_8
       rect:
         serializedVersion: 2
-        x: 145
-        y: 3
-        width: 16
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 146
+        y: 4
+        width: 14
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -319,12 +319,12 @@ TextureImporter:
       name: farm_plant_01_18x32_9
       rect:
         serializedVersion: 2
-        x: 163
-        y: 3
-        width: 16
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 164
+        y: 4
+        width: 14
+        height: 21
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,7 +339,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f0446c0950d9e844f997b3b5fc4fd032
     internalID: 0
     vertices: []
     indices: 

@@ -1,8 +1,4 @@
 using ChenChen_BuildingSystem;
-using ChenChen_Scene;
-using ChenChen_UISystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -111,13 +111,18 @@ namespace ChenChen_UISystem
         /// 切换面板，如果当前已经是这个类型的面板，则关闭，如果不是则新建当前面板
         /// </summary>
         /// <param name="nextPanel"></param>
-        /// <param name="sceneType"> 限定在哪种场景里可以切换，如果不填则全部都可以 </param>
-        public void TogglePanel(PanelBase nextPanel, SceneType sceneType = SceneType.None)
+        /// <param name="sceneType">限定在哪种场景里可以切换，如果不填则全部都可以</param>
+        /// <param name="doTopPanelRemove">打开时，新建当前面板时会关闭顶层面板</param>
+        public void TogglePanel(PanelBase nextPanel, SceneType sceneType = SceneType.None, bool doTopPanelRemove = false)
         {
             if (!TryGetTopPanel(out PanelBase top) || top.GetType() != nextPanel.GetType())
             {
                 if (sceneType == SceneType.None || SceneSystem.Instance.CurSceneType == sceneType)
                 {
+                    if (doTopPanelRemove)
+                    {
+                        RemoveTopPanel(GetTopPanel());
+                    }
                     AddPanel(nextPanel);
                 }
             }

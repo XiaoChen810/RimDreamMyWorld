@@ -56,7 +56,6 @@ namespace ChenChen_MapGenerator
         [Header("生成的主地图的长宽")]
         public int MapWidthOfGenerate = 100;
         public int MapHeightOfGenerate = 100;
-        public int TreeNum;
 
         public int CurMapWidth
         {
@@ -236,12 +235,18 @@ namespace ChenChen_MapGenerator
         {
             int x = (int)position.x;
             int y = (int)position.y;
-            x = x < 0 ? 0 : x;
-            x = x > MapWidthOfGenerate ? MapWidthOfGenerate : x;
-            y = y < 0 ? 0 : y;
-            y = y > MapHeightOfGenerate ? MapHeightOfGenerate : y;
+
+            // 确保 x 在有效范围内
+            if (x < 0) x = 0;
+            if (x >= CurMapWidth) x = CurMapWidth - 1;
+
+            // 确保 y 在有效范围内
+            if (y < 0) y = 0;
+            if (y >= CurMapHeight) y = CurMapHeight - 1;
+
             return _mapDatasDict[CurrentMapName].mapNodes[x, y];
         }
+
 
         #endregion
     }

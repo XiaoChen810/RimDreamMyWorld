@@ -51,18 +51,17 @@ namespace ChenChen_AI
         {
             if (!isStart || !canMove)
             {
-                speed = 0;
                 _pawn.Animator.SetBool("IsWalk", false);
                 _pawn.Animator.SetBool("IsRun", false);
                 return;
             }
             if (!_isSwimming)
             {
-                if (speed > 0 && speed <= 1)
+                if (Speed > 0 && Speed <= 1)
                 {
                     SetAnimation("IsWalk", true);
                 }
-                if (speed > 1)
+                if (Speed > 1)
                 {
                     SetAnimation("IsRun", true);
                 }
@@ -109,54 +108,51 @@ namespace ChenChen_AI
         /// <summary>
         /// 前往到目标点
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="targetPos"></param>
         /// <returns></returns>
-        public bool GoToHere(Vector3 target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+        public bool GoToHere(Vector3 targetPos, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
         {
-            if (target.x <= 0 || target.x >= MapManager.Instance.CurMapWidth) return false;
-            if (target.y <= 0 || target.y >= MapManager.Instance.CurMapHeight) return false;
-
             switch (urgency)
             {
                 case Urgency.Wander:
-                    speed = 1;
+                    Speed = 1;
                     break;
                 case Urgency.Normal:
-                    speed = 2;
+                    Speed = 2;
                     break;
                 case Urgency.Urge:
-                    speed = 3;
+                    Speed = 3;
                     break;
                 default:
-                    speed = 2;
+                    Speed = 2;
                     break;
             }
-            return StartPath(target, speed, endReachedDistance);
+            return StartPath(targetPos, endReachedDistance);
         }
 
         /// <summary>
         /// 跟随目标
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="targetObj"></param>
         /// <returns></returns>
-        public void GoToHere(GameObject target, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+        public void GoToHere(GameObject targetObj, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
         {
             switch (urgency)
             {
                 case Urgency.Wander:
-                    speed = 1;
+                    Speed = 1;
                     break;
                 case Urgency.Normal:
-                    speed = 2;
+                    Speed = 2;
                     break;
                 case Urgency.Urge:
-                    speed = 3;
+                    Speed = 3;
                     break;
                 default:
-                    speed = 2;
+                    Speed = 2;
                     break;
             }
-            StartPath(target, speed, endReachedDistance);
+            StartPath(targetObj, endReachedDistance);
         }
 
         #region DrawPath

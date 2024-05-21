@@ -7,10 +7,10 @@ namespace ChenChen_CropSystem
     [RequireComponent(typeof(SpriteRenderer))]
     public class Crop : PermissionBase
     {
-        [SerializeField] public CropDef Def { get; private set; }
         [SerializeField] public WorkSpace_Farm WorkSpace { get; private set; }
+        public CropDef Def;
 
-        private float _curNutrient = 0;
+        [SerializeField] private float _curNutrient = 0;
         public float CurNutrient    // 当前营养值
         {
             get { return _curNutrient; }
@@ -21,7 +21,7 @@ namespace ChenChen_CropSystem
             }
         }
 
-        private int _curPeriodIndex = 0;
+        [SerializeField] private int _curPeriodIndex = 0;
         public int CurPeriodIndex  // 当前生长阶段
         {
             get { return _curPeriodIndex; }
@@ -46,7 +46,8 @@ namespace ChenChen_CropSystem
 
             _sr = GetComponent<SpriteRenderer>();
             _sr.sprite = Def.CropsSprites[CurPeriodIndex];
-            _sr.sortingLayerName = workSpace.GetComponent<SpriteRenderer>().sortingLayerName;
+            _sr.sortingLayerName = "Above";
+            _sr.sortingOrder = -(int)gameObject.transform.position.y;
 
             CurNutrient = 0;
             CurPeriodIndex = 0;

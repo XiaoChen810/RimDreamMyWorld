@@ -42,7 +42,7 @@ namespace ChenChen_Scene
                 // 执行加载后动作
                 OnPostLoad?.Invoke();
                 GameManager.Instance.AnimatorTool.Animation_EndLoadingScene();
-                GameManager.Instance.GameIsStart = true;
+                GameManager.Instance.StartGame();
             }
         }
 

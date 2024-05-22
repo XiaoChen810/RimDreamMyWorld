@@ -399,6 +399,7 @@ GameObject:
   - component: {fileID: 1154968097}
   - component: {fileID: 1154968099}
   - component: {fileID: 1154968096}
+  - component: {fileID: 1154968104}
   - component: {fileID: 1154968098}
   - component: {fileID: 1154968101}
   - component: {fileID: 1154968102}
@@ -422,10 +423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17f1fc02b984040489a20e21b516facb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pawnsList: []
-  _pawnWhenStartList: []
-  CharacterTest: {fileID: 6258274224586722765, guid: a2b56aab754280d408178f81b95b3599, type: 3}
-  GoblinPrefab: {fileID: 4211871020731615996, guid: 0a86a649487e85c49b78a8f617578f83, type: 3}
 --- !u!4 &1154968097
 Transform:
   m_ObjectHideFlags: 0
@@ -615,6 +612,22 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: 723b895947e428d4584ff2e87d5730b8, type: 2}
     - Key: "\u7EF5\u7F8A"
       Value: {fileID: 11400000, guid: 2ecf5b2871773b14a94e858122fcb8f3, type: 2}
+--- !u!114 &1154968104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154968095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9abb4ed8eb35a1c4da6dcf6dff234236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pawnsList: []
+  _pawnWhenStartList: []
+  CharacterTest: {fileID: 6258274224586722765, guid: a2b56aab754280d408178f81b95b3599, type: 3}
+  GoblinPrefab: {fileID: 4211871020731615996, guid: 0a86a649487e85c49b78a8f617578f83, type: 3}
 --- !u!1001 &1405207835
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ namespace ChenChen_UISystem
     {
         static readonly string path = "UI/Panel/Menus/BuildingMenuPanel";
 
-        public BuildingMenuPanel(Callback onEnter, Callback onExit) : base(new UIType(path), onEnter, onExit) { }
+        public BuildingMenuPanel() : base(new UIType(path)) { }
 
         /// <summary>
         /// 添加各种菜单按钮的监听函数

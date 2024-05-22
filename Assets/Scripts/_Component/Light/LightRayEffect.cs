@@ -20,7 +20,7 @@ public class LightRayEffect : MonoBehaviour
 
     private void Start()
     {
-        // Initialize phase offsets for each light for intensity and scales
+        //给每个光线随机一个偏移值
         phaseOffsetsIntensity = new List<float>();
         phaseOffsetsXScale = new List<float>();
         phaseOffsetsYScale = new List<float>();
@@ -37,21 +37,21 @@ public class LightRayEffect : MonoBehaviour
     {
         for (int i = 0; i < rays.Count; i++)
         {
-            // Calculate intensity
+            // 计算强度
             float sinValueIntensity = Mathf.Sin(Time.time * speedIntensity + phaseOffsetsIntensity[i]);
             sinValueIntensity = sinValueIntensity < 0 ? 0 : sinValueIntensity;
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, sinValueIntensity);
-            rays[i].intensity = intensity;
 
-            // Calculate Y-axis scale
+            // 计算y轴缩放，光线宽度
             float sinValueYScale = Mathf.Sin(Time.time * speedYScale + phaseOffsetsYScale[i]);
             float yScale = Mathf.Lerp(minYScale, maxYScale, Mathf.Abs(sinValueYScale));
 
-            // Calculate X-axis scale
+            // 计算x轴缩放，光线长度
             float sinValueXScale = Mathf.Sin(Time.time * speedXScale + phaseOffsetsXScale[i]);
             float xScale = Mathf.Lerp(minXScale, maxXScale, Mathf.Abs(sinValueXScale));
 
-            // Apply scales
+            // 赋值
+            rays[i].intensity = intensity;
             rays[i].transform.localScale = new Vector3(xScale, yScale, rays[i].transform.localScale.z);
         }
     }

@@ -66,7 +66,7 @@ namespace ChenChen_UISystem
         public void AddOneNarrativeLog(string text, GameObject target)
         {
             NarrativeLog newNarrativeLog = _pool.Get();
-            newNarrativeLog.Init(text, target);
+            newNarrativeLog.Init(text, new TargetPtr(target));
         }
     }
 }

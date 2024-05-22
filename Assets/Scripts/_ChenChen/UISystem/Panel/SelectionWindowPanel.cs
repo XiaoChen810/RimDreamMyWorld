@@ -21,9 +21,9 @@ namespace ChenChen_UISystem
         {
             gameManager = GameManager.Instance;
             gameManager.PawnGeneratorTool.StartSelect();
-            p0 = gameManager.PawnWhenStartList[0];
-            p1 = gameManager.PawnWhenStartList[1];
-            p2 = gameManager.PawnWhenStartList[2];
+            p0 = gameManager.PawnGeneratorTool.PawnWhenStartList[0];
+            p1 = gameManager.PawnGeneratorTool.PawnWhenStartList[1];
+            p2 = gameManager.PawnGeneratorTool.PawnWhenStartList[2];
         }
 
         public override void OnEnter()

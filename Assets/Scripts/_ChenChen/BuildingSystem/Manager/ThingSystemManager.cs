@@ -59,27 +59,6 @@ namespace ChenChen_BuildingSystem
         public void Update()
         {
             Tool.BuildUpdate();
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                OpenBuildingMenuPanel();
-            }
-        }
-
-        public void OpenBuildingMenuPanel()
-        {
-            // 定义面板OnEnter时的回调函数，设置isPanelCreated为true
-            PanelBase.Callback onEnterCallback = () =>
-            {
-
-            };
-
-            // 定义面板OnExit时的回调函数，重置isPanelCreated为false
-            PanelBase.Callback onExitCallback = () =>
-            {
-
-            };
-
-            PanelManager.Instance.TogglePanel(new BuildingMenuPanel(onEnterCallback, onExitCallback), SceneType.Main, true);
         }
 
         private void LoadAllThingDefData()

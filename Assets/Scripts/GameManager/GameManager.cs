@@ -14,38 +14,32 @@ public class GameManager : SingletonMono<GameManager>
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
     public AnimalGenerateTool AnimalGenerateTool { get; private set; }
-    [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
-    /// <summary>
-    /// 游戏内全部的Pawn的GameObject列表
-    /// </summary>
-    public List<GameObject> PawnsList
-    {
-        get { return _pawnsList; }
-    }
-
-    [SerializeField] private List<Pawn> _pawnWhenStartList = new List<Pawn>();
-    /// <summary>
-    /// 仅当进行人物选择时使用的角色列表
-    /// </summary>
-    public List<Pawn> PawnWhenStartList
-    {
-        get { return _pawnWhenStartList; }
-    }
-    public GameObject CharacterTest;
-    public GameObject GoblinPrefab;
 
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
 
+    [Header("Time")]
+    public int currentSeason = 1; // 当前季节，1为春季，2为夏季，3为秋季，4为冬季
+    public int currentDay = 1; // 当前天数，每季度15天
+    public int currentHour = 0; // 当前小时，24小时制
+    public int currentMinute = 0; // 当前分钟
+    public float secondsPerGameMinute = 5f; // 游戏中的每分钟等于现实中的秒数
+
+    private Coroutine timeCoroutine; // 协程引用
+
+    // 当前游戏时间
+    public string CurrentTime
+    {
+        get
+        {
+            return string.Format("Season {0}, Day {1}, {2:00}:{3:00}", currentSeason, currentDay, currentHour, currentMinute);
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
-        Init();
-    }
-
-    private void Init()
-    {
-        PawnGeneratorTool = new PawnGeneratorTool(this);
+        PawnGeneratorTool = GetComponent<PawnGeneratorTool>();
         SelectTool = GetComponent<SelectTool>();
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
@@ -58,7 +52,11 @@ public class GameManager : SingletonMono<GameManager>
         {
             Debug.LogWarning("游戏只能开始一次");
         }
+        //正式开始
         _gameIsStart = true;
+        //时间流逝
+        timeCoroutine = StartCoroutine(TimeFlow());
+
         AnimalGenerateTool.CreateAllAnimalThree();
     }
 
@@ -70,6 +68,45 @@ public class GameManager : SingletonMono<GameManager>
     public void RecoverGame()
     {
         Time.timeScale = 1;
+    }
+
+    private IEnumerator TimeFlow()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(secondsPerGameMinute); // 等待一段时间，表示游戏中的一分钟流逝
+
+            currentMinute++;
+
+            // 如果当前分钟数大于等于60，则表示已经过了一小时
+            if (currentMinute >= 60)
+            {
+                currentMinute = 0;
+                currentHour++;
+
+                // 如果当前小时数大于等于24，则表示已经过了一天
+                if (currentHour >= 24)
+                {
+                    currentHour = 0;
+                    currentDay++;
+
+                    // 如果当前天数大于15，则表示已经过了一个季度
+                    if (currentDay > 15)
+                    {
+                        currentDay = 1;
+                        currentSeason = (currentSeason % 4) + 1; // 季节循环：1-春季，2-夏季，3-秋季，4-冬季
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (timeCoroutine != null)
+        {
+            StopCoroutine(timeCoroutine);
+        }
     }
 
 #if UNITY_EDITOR

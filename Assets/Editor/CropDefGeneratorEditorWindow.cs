@@ -23,7 +23,6 @@ public class CropDefGeneratorEditorWindow : EditorWindow
     private void OnEnable()
     {
         Generator = new CropDefGenerator();
-
     }
 
     private void OnGUI()

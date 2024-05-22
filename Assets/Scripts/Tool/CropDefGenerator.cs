@@ -60,12 +60,11 @@ public class CropDefGenerator
         AssetDatabase.CreateFolder(saveRootPath, CropName);
 
         // 保存数据至指定路径
-        string ThingDataPath = $"{folderPath}/ThingDef_{CropName}.asset";
-        AssetDatabase.CreateAsset(cropDef, ThingDataPath);
+        string dataPath = $"{folderPath}/ThingDef_{CropName}.asset";
+        AssetDatabase.CreateAsset(cropDef, dataPath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"ThingDef {cropDef.CropName} and Prefab generated successfully!\n" +
-            "But also need to setting actually BlueprintBase script");
+        Debug.Log($"ThingDef {cropDef.CropName} and Prefab generated successfully!");
     }
 }

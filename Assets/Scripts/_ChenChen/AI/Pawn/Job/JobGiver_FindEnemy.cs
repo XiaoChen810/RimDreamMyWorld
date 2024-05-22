@@ -15,7 +15,7 @@ namespace ChenChen_AI
         {
             GameObject job = null;
             float distance = float.MaxValue;
-            foreach (var pawnObj in GameManager.Instance.PawnsList)
+            foreach (var pawnObj in GameManager.Instance.PawnGeneratorTool.PawnsList)
             {
                 //寻找与自己阵营不同的
                 if (pawnObj.GetComponent<Pawn>().Def.PawnFaction != pawn.Def.PawnFaction)

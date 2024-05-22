@@ -81,7 +81,7 @@ public class PlayManager : SingletonMono<PlayManager>
             Debug.Log($"Save a thing: {thingDef.DefName}");
         }
         // 保存全部棋子
-        foreach (var pawnObj in GameManager.Instance.PawnsList)
+        foreach (var pawnObj in GameManager.Instance.PawnGeneratorTool.PawnsList)
         {
             Pawn pawn = pawnObj.GetComponent<Pawn>();
             Data_PawnSave newPawnSave = new Data_PawnSave(

@@ -15,7 +15,7 @@ MonoBehaviour:
   DefName: "\u9493\u9C7C\u70B9"
   Type: 4
   Workload: 0
-  PreviewSprite: {fileID: 8968639404122398013, guid: d11cdf97827c4a34fac539c918e07219, type: 3}
+  PreviewSprite: {fileID: 21300000, guid: 1053ddb65b15d344ea1d8a0d484352ce, type: 3}
   IsObstacle: 0
   Prefab: {fileID: 7189548281308118863, guid: 9d8156d8e4f4d824bacbff6ff4822d45, type: 3}
   TileBase: {fileID: 0}

@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class WorkSpaceTool : MonoBehaviour
 {
-    private GameManager GameManager;
     private LineRenderer lineRenderer;
 
     [SerializedDictionary("SpaceName", "WorkSpace")]
@@ -19,25 +18,12 @@ public class WorkSpaceTool : MonoBehaviour
 
     private void Start()
     {
-        GameManager = GetComponent<GameManager>();
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
     }
 
     private int index = 0;
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            AddOneFarmWorkSpace();
-        }
-    }
-
-    public void AddOneFarmWorkSpace()
-    {
-        PanelManager.Instance.TogglePanel(new CropWorkSpacePanel(), ChenChen_Scene.SceneType.Main, true);
-    }
     
     /// <summary>
     /// 获取一种类型的工作区的GameObject
@@ -111,20 +97,24 @@ public class WorkSpaceTool : MonoBehaviour
     {
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePositionCeil;
+        Vector2 mousePositionFloor;
         Vector2 mouseDownPosition = mousePosition;
+
         bool flag = false;
         while (IsDoingWorkSpace)
         {
             // 监听鼠标位置
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePositionCeil = mousePosition;
+            mousePositionCeil.x = Mathf.Ceil(mousePosition.x);
+            mousePositionCeil.y = Mathf.Ceil(mousePosition.y);
+            mousePositionFloor = mousePosition;
+            mousePositionFloor.x = Mathf.Floor(mousePosition.x);
+            mousePositionFloor.y = Mathf.Floor(mousePosition.y);
             if (!flag)
             {
-                mouseDownPosition = mousePosition;
-                mouseDownPosition.x = Mathf.Ceil(mousePosition.x);
-                mouseDownPosition.y = Mathf.Ceil(mousePosition.y);
-                mousePosition.x = Mathf.Floor(mousePosition.x);
-                mousePosition.y = Mathf.Floor(mousePosition.y);
-                if (IsOk(mouseDownPosition, mousePosition))
+                if (IsOk(mousePositionCeil, mousePositionFloor))
                 {
                     ChangeColor(Color.green);
                 }
@@ -132,23 +122,19 @@ public class WorkSpaceTool : MonoBehaviour
                 {
                     ChangeColor(Color.red);
                 }
-                DrawLineBox(mouseDownPosition, mousePosition);
+                DrawLineBox(mousePositionCeil, mousePositionFloor);
             }
             // 当鼠标按下时，准备放置新工作区块
             if (Input.GetMouseButtonDown(0))
             {
-                mouseDownPosition = mousePosition;
-                mouseDownPosition.x = Mathf.Ceil(mousePosition.x);
-                mouseDownPosition.y = Mathf.Ceil(mousePosition.y);
+                mouseDownPosition = mousePositionCeil;
                 flag = true;
             }
             // 当鼠标持续按下时，检查当前位置是否符合要求，并提示
             if (Input.GetMouseButton(0) && flag)
             {
-                mousePosition.x = Mathf.Floor(mousePosition.x);
-                mousePosition.y = Mathf.Floor(mousePosition.y);
                 // 根据鼠标按下的位置和当前的位置绘制方框
-                if (IsOk(mouseDownPosition, mousePosition))
+                if (IsOk(mouseDownPosition, mousePositionFloor))
                 {
                     ChangeColor(Color.green);
                 }
@@ -156,14 +142,12 @@ public class WorkSpaceTool : MonoBehaviour
                 {
                     ChangeColor(Color.red);
                 }
-                DrawLineBox(mouseDownPosition, mousePosition);
+                DrawLineBox(mouseDownPosition, mousePositionFloor);
             }
             // 当鼠标松开时，确认放置
             if (Input.GetMouseButtonUp(0) && flag)
             {
-                mousePosition.x = Mathf.Floor(mousePosition.x);
-                mousePosition.y = Mathf.Floor(mousePosition.y);
-                if (IsOk(mouseDownPosition, mousePosition))
+                if (IsOk(mouseDownPosition, mousePositionFloor))
                 {
                     // 生成实例
                     GameObject obj = Instantiate(WorkSpacePrefab, transform);
@@ -172,7 +156,7 @@ public class WorkSpaceTool : MonoBehaviour
                     WorkSpace workSpace = obj.GetComponent<WorkSpace>();
 
                     // 设置sr的大小为方框大小
-                    workSpace.SetSize(mouseDownPosition, mousePosition);
+                    workSpace.SetSize(mouseDownPosition, mousePositionFloor);
                     workSpace.gameObject.SetActive(true);
 
                     // 重置LineRenderer

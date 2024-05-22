@@ -1,14 +1,29 @@
 ﻿using ChenChen_AI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnGeneratorTool
+public class PawnGeneratorTool : MonoBehaviour
 {
-    public GameManager GameManager;
-    public PawnGeneratorTool(GameManager gameManager)
+    [SerializeField] private List<GameObject> _pawnsList = new List<GameObject>();
+    /// <summary>
+    /// 游戏内全部的Pawn的GameObject列表
+    /// </summary>
+    public List<GameObject> PawnsList
     {
-        GameManager = gameManager;
+        get { return _pawnsList; }
     }
+
+    [SerializeField] private List<Pawn> _pawnWhenStartList = new List<Pawn>();
+    /// <summary>
+    /// 仅当进行人物选择时使用的角色列表
+    /// </summary>
+    public List<Pawn> PawnWhenStartList
+    {
+        get { return _pawnWhenStartList; }
+    }
+    public GameObject CharacterTest;
+    public GameObject GoblinPrefab;
 
     /// <summary>
     /// 生成Pawn
@@ -31,7 +46,7 @@ public class PawnGeneratorTool
             pawn.Def = kindDef;
             pawn.Info = info;
             pawn.Attribute = attribute;
-            GameManager.PawnsList.Add(newPawnObject);
+            PawnsList.Add(newPawnObject);
             return pawn;
         }
         else
@@ -63,7 +78,7 @@ public class PawnGeneratorTool
             }
             result = UnityEngine.Object.Instantiate(prefab, position, Quaternion.identity);
             result.name = kindDef.PawnName;
-            result.transform.SetParent(GameManager.transform, false);
+            result.transform.SetParent(transform, false);
             return true;
         }
     }
@@ -79,12 +94,12 @@ public class PawnGeneratorTool
 
     public bool RemovePawn(Pawn pawn)
     {
-        for (int i = 0; i < GameManager.PawnsList.Count; i++)
+        for (int i = 0; i < PawnsList.Count; i++)
         {
-            if (GameManager.PawnsList[i] == pawn.gameObject)
+            if (PawnsList[i] == pawn.gameObject)
             {
-                UnityEngine.Object.Destroy(GameManager.PawnsList[i].gameObject);
-                GameManager.PawnsList.RemoveAt(i);
+                UnityEngine.Object.Destroy(PawnsList[i].gameObject);
+                PawnsList.RemoveAt(i);
                 return true;
             }
         }
@@ -93,10 +108,10 @@ public class PawnGeneratorTool
 
     public void StartSelect()
     {
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
-        GameManager.PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
-        foreach (var pawn in GameManager.PawnWhenStartList)
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        foreach (var pawn in PawnWhenStartList)
         {
             pawn.Def.StopUpdate = true;
         }
@@ -104,11 +119,11 @@ public class PawnGeneratorTool
 
     public void EndSelect()
     {
-        for (int i = 0; i < GameManager.PawnWhenStartList.Count; i++)
+        for (int i = 0; i < PawnWhenStartList.Count; i++)
         {
-            RemovePawn(GameManager.PawnWhenStartList[i]);
+            RemovePawn(PawnWhenStartList[i]);
         }
-        GameManager.PawnWhenStartList.Clear();
+        PawnWhenStartList.Clear();
     }
 }
 

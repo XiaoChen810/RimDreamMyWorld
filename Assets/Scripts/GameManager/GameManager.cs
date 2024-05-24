@@ -6,6 +6,7 @@ using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using System;
 using ChenChen_AI;
+using UnityEngine.Rendering.Universal;
 
 public class GameManager : SingletonMono<GameManager>
 {
@@ -14,6 +15,7 @@ public class GameManager : SingletonMono<GameManager>
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
     public AnimalGenerateTool AnimalGenerateTool { get; private set; }
+    public MonsterGeneratorTool MasterGeneratorTool { get; private set; }
 
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
@@ -23,7 +25,7 @@ public class GameManager : SingletonMono<GameManager>
     public int currentDay = 1; // 当前天数，每季度15天
     public int currentHour = 0; // 当前小时，24小时制
     public int currentMinute = 0; // 当前分钟
-    public float secondsPerGameMinute = 5f; // 游戏中的每分钟等于现实中的秒数
+    public float secondsPerGameMinute = 0.7f; // 游戏中的每分钟等于现实中的秒数
 
     private Coroutine timeCoroutine; // 协程引用
 
@@ -44,6 +46,7 @@ public class GameManager : SingletonMono<GameManager>
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
+        MasterGeneratorTool = GetComponent<MonsterGeneratorTool>();
     }
 
     public void StartGame()
@@ -56,7 +59,6 @@ public class GameManager : SingletonMono<GameManager>
         _gameIsStart = true;
         //时间流逝
         timeCoroutine = StartCoroutine(TimeFlow());
-
         AnimalGenerateTool.CreateAllAnimalThree();
     }
 
@@ -128,7 +130,7 @@ public class GameManager : SingletonMono<GameManager>
     public void 测试按钮()
     {
         Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        Instantiate(Skeleton, random, Quaternion.identity, transform);
+        MasterGeneratorTool.GenerateMaster(random);
     }
 
 #endif

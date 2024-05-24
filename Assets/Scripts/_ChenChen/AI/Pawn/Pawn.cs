@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ChenChen_AI
 {
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(PawnMoveController))]
+    [RequireComponent(typeof(MoveController))]
     public abstract class Pawn : MonoBehaviour, IDetailView
     {
         /// <summary>

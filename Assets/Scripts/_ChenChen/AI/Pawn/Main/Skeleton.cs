@@ -20,11 +20,11 @@ namespace ChenChen_AI
                     if (distacne < chaseRange)
                     {
                         StateMachine.NextState = new PawnJob_Chase(this, pawn);
+                        lastGetJobTime = Time.time;
+                        return;
                     }
                 }
-                lastGetJobTime = Time.time;
             }
-
         }
     }
 }

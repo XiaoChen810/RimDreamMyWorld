@@ -11,11 +11,6 @@ namespace ChenChen_UISystem
         public DetailViewPanel_Thing(ThingBase thing, Callback onEnter, Callback onExit) : base(onEnter, onExit) 
         {
             this.thing = thing;
-        }
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
-        }      
+        }    
     }
 }

@@ -54,6 +54,7 @@ namespace ChenChen_AI
                 pawn.Info.Sleepiness.CurValue += Time.deltaTime;
             }
 
+            // Ë¯±¥ÁË
             if(pawn.Info.Sleepiness.IsMax)
             {
                 return StateType.Success;

@@ -22,11 +22,11 @@ namespace ChenChen_UISystem
         public override void OnEnter()
         {
             base.OnEnter();
-            // 关闭菜单的按钮
-            UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
-            {
-                PanelManager.RemoveTopPanel(this);
-            });
+            //// 关闭菜单的按钮
+            //UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
+            //{
+            //    PanelManager.RemoveTopPanel(this);
+            //});
             ItemName = UITool.TryGetChildComponentByName<Text>("ItemName");
             Texts = UITool.GetChildByName("TextContent").GetComponentsInChildren<Text>().ToList();
             Buttons = UITool.GetChildByName("BtnContent").GetComponentsInChildren<Button>().ToList();

@@ -423,6 +423,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17f1fc02b984040489a20e21b516facb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentSeason: 1
+  currentDay: 1
+  currentHour: 0
+  currentMinute: 0
+  secondsPerGameMinute: 5
+  Skeleton: {fileID: 8296502031032002486, guid: 829c24bc52b5d1d46a2a0507521263f5, type: 3}
 --- !u!4 &1154968097
 Transform:
   m_ObjectHideFlags: 0

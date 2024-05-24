@@ -12,7 +12,7 @@ public class DetailView_Thing : DetailView
     {
         thing = GetComponent<ThingBase>();
     }
-    protected override void AddPanel()
+    public override void OpenPanel()
     {
         PanelManager panelManager = DetailViewManager.Instance.PanelManager;
         panelManager.RemoveTopPanel(panelManager.GetTopPanel());
@@ -61,12 +61,10 @@ public class DetailView_Thing : DetailView
     public override void StartShow()
     {
         base.StartShow();
-        GetComponent<ThingBase>().DrawOutline_Sprite = true;
     }
 
     public override void EndShow()
     {
         base.EndShow();
-        GetComponent<ThingBase>().DrawOutline_Sprite = false;
     }
 }

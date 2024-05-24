@@ -22,14 +22,6 @@ namespace ChenChen_UISystem
             _narrativePanel = _panelManager.GetTopPanel() as NarrativePanel;
         }
 
-        private void Update()
-        {
-            if(Input.GetKeyUp(KeyCode.H))
-            {
-                _narrativePanel.AddOneNarrativeLog("Test" + DateTime.Now.ToString(), null);
-            }
-        }
-
         /// <summary>
         /// 叙述，可能是一个事件，或者一个突发情况等...
         /// </summary>

@@ -7,6 +7,7 @@ using ChenChen_UISystem;
 using ChenChen_Scene;
 using System.IO;
 using ChenChen_MapGenerator;
+using Unity.Burst.Intrinsics;
 
 namespace ChenChen_BuildingSystem
 {
@@ -20,14 +21,20 @@ namespace ChenChen_BuildingSystem
         public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
 
         [Header("包含全部已经生成的物体列表")]
-        //public List<Thing_Building> ThingBuildingGeneratedList;
+        /// <summary>
+        /// 不常遍历的列表
+        /// </summary>
+        public List<ThingBase> ThingBuildingGeneratedList_NotCommonlyUsed = new List<ThingBase>();
+        /// <summary>
+        /// 常遍历的列表
+        /// </summary>
         public List<ThingBase> ThingBuildingGeneratedList = new List<ThingBase>();
 
         private BuildingModeTool tool;
         public BuildingModeTool Tool // 处理物品的建造
         {
-            get 
-            { 
+            get
+            {
                 if (tool == null)
                 {
                     tool = new BuildingModeTool(this);
@@ -98,7 +105,15 @@ namespace ChenChen_BuildingSystem
         {
             if (obj.TryGetComponent<ThingBase>(out var thing))
             {
-                ThingBuildingGeneratedList.Add(thing);
+                if (thing.Def.Type == ThingType.Tree)
+                {
+                    ThingBuildingGeneratedList_NotCommonlyUsed.Add(thing);
+                }
+                else
+                {
+                    ThingBuildingGeneratedList.Add(thing);
+                }
+
                 Quadtree.Insert(obj);
             }
             else
@@ -119,8 +134,16 @@ namespace ChenChen_BuildingSystem
             }
             else
             {
-                Debug.Log("列表里没有这个物体");
-                return;
+                if (ThingBuildingGeneratedList_NotCommonlyUsed.Contains(building))
+                {
+                    ThingBuildingGeneratedList_NotCommonlyUsed.Remove(building);
+                    return;
+                }
+                else
+                {
+                    Debug.Log("列表里没有这个物体");
+                    return;
+                }
             }
         }
         /// <summary>
@@ -128,14 +151,24 @@ namespace ChenChen_BuildingSystem
         /// </summary>
         /// <param name="name"></param>
         /// <param name="needFree"> 是否需要一个没有被使用的 </param>
+        /// <param name="isNotCommonlyUsed"> 是否从不常用列表遍历 </param>
         /// <returns></returns>
-        public GameObject GetThingGenerated(string name = null, bool needFree = true)
+        public GameObject GetThingGenerated(string name = null, bool needFree = true, bool isNotCommonlyUsed = false)
         {
             foreach (var building in ThingBuildingGeneratedList)
             {
                 if (name != null && building.Def.DefName != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
                 return building.gameObject;
+            }
+            if (isNotCommonlyUsed)
+            {
+                foreach (var building in ThingBuildingGeneratedList_NotCommonlyUsed)
+                {
+                    if (name != null && building.Def.DefName != name) continue;
+                    if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    return building.gameObject;
+                }
             }
             return null;
         }
@@ -145,8 +178,9 @@ namespace ChenChen_BuildingSystem
         /// <param name="lifeState"> 物体处于什么阶段 </param>
         /// <param name="name"></param>
         /// <param name="needFree"> 是否需要一个没有被使用的 </param>
+        /// <param name="isNotCommonlyUsed"> 是否从不常用列表遍历 </param>
         /// <returns></returns>
-        public GameObject GetThingGenerated(BuildingLifeStateType lifeState, string name = null, bool needFree = true)
+        public GameObject GetThingGenerated(BuildingLifeStateType lifeState, string name = null, bool needFree = true, bool isNotCommonlyUsed = false)
         {
             foreach (var building in ThingBuildingGeneratedList)
             {
@@ -154,6 +188,16 @@ namespace ChenChen_BuildingSystem
                 if (name != null && building.Def.DefName != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
                 return building.gameObject;
+            }
+            if (isNotCommonlyUsed)
+            {
+                foreach (var building in ThingBuildingGeneratedList)
+                {
+                    if (building.LifeState != lifeState) continue;
+                    if (name != null && building.Def.DefName != name) continue;
+                    if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    return building.gameObject;
+                }
             }
             return null;
         }
@@ -163,8 +207,9 @@ namespace ChenChen_BuildingSystem
         /// <typeparam name="T">物体类型</typeparam>
         /// <param name="name">指定的名字（可选）</param>
         /// <param name="needFree">是否需要一个没有被使用的物体（默认值为 true）</param>
+        /// <param name="isNotCommonlyUsed"> 是否从不常用列表遍历 </param>
         /// <returns>符合条件的物体列表</returns>
-        public List<T> GetThingsGenerated<T>(string name = null, bool needFree = true) where T : ThingBase
+        public List<T> GetThingsGenerated<T>(string name = null, bool needFree = true, bool isNotCommonlyUsed = false) where T : ThingBase
         {
             List<T> list = new List<T>();
             foreach (var building in ThingBuildingGeneratedList)
@@ -173,6 +218,16 @@ namespace ChenChen_BuildingSystem
                 if (name != null && building.Def.DefName != name) continue;
                 if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
                 list.Add(component);
+            }
+            if (isNotCommonlyUsed)
+            {
+                foreach (var building in ThingBuildingGeneratedList)
+                {
+                    if (!building.TryGetComponent<T>(out T component)) continue;
+                    if (name != null && building.Def.DefName != name) continue;
+                    if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    list.Add(component);
+                }
             }
             return list;
         }
@@ -284,7 +339,7 @@ namespace ChenChen_BuildingSystem
         // 生成
         private void Generate(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
         {
-            GameObject thingObj = Instantiate(thingDef.Prefab, position , routation, transform);
+            GameObject thingObj = Instantiate(thingDef.Prefab, position, routation, transform);
             thingObj.name = thingDef.DefName;
             ThingBase thing = thingObj.GetComponent<ThingBase>();
             thing.OnPlaced(initLifdState, mapName);

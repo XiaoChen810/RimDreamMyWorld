@@ -30,11 +30,13 @@ public class SelectTool : MonoBehaviour
 
     private void InputUpdate()
     {
-        // 检查鼠标是否在UI上
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-
         if (UnityEngine.Input.GetMouseButtonDown(0))
         {
+            // 检查鼠标是否在UI上
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
             // 记录滑动开始的位置
             startPos = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
             isDragging = true;
@@ -56,6 +58,8 @@ public class SelectTool : MonoBehaviour
 
         if (UnityEngine.Input.GetMouseButtonUp(0))
         {
+            if (!isDragging) return;
+
             // 在滑动结束时处理多选
             HandleSelection(startPos, endPos);
             ResetLineRenderer();
@@ -91,12 +95,20 @@ public class SelectTool : MonoBehaviour
         lineRenderer.positionCount = 0;
     }
 
+    private List<DetailView> dvs = new();
     private void HandleSelection(Vector2 start, Vector2 end)
     {
         // 在这里处理多选逻辑
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(start, end);
 
         // 执行选中逻辑, 任何一个逻辑成功，就返回，顺序为优先级
+        foreach(var d in dvs)
+        {
+            //关闭上一次DetailView的选择
+            d.CloseIndicator();   
+            d.ClosePanel();
+        }
+        dvs.Clear();
         // 判断有无选中棋子
         if (Logic_Pawn(hitColliders)) return;
         // 判断有无选中物体
@@ -113,8 +125,20 @@ public class SelectTool : MonoBehaviour
             if (collider.CompareTag("Pawn"))
             {
                 Pawn pawn = collider.GetComponent<Pawn>();
-                pawn.OnPawnSelected();
+                dvs.Add(pawn.DetailView);
                 flag = true;
+            }
+        }
+        if(dvs.Count == 1)
+        {
+            dvs[0].OpenIndicator();
+            dvs[0].OpenPanel();
+        }
+        else if (dvs.Count > 1) 
+        {
+            foreach (var d in dvs)
+            {
+                d.OpenIndicator();
             }
         }
         return flag;
@@ -127,9 +151,20 @@ public class SelectTool : MonoBehaviour
             if (collider.CompareTag("Thing") || collider.CompareTag("Floor"))
             {
                 ThingBase thing = collider.GetComponent<ThingBase>();
-                DetailView dv = thing.DetailView;
-                dv.Selected();
+                dvs.Add(thing.DetailView);
                 flag = true;
+            }
+        }
+        if (dvs.Count == 1)
+        {
+            dvs[0].OpenIndicator();
+            dvs[0].OpenPanel();
+        }
+        else if (dvs.Count > 1)
+        {
+            foreach (var d in dvs)
+            {
+                d.OpenIndicator();
             }
         }
         return flag;
@@ -142,9 +177,20 @@ public class SelectTool : MonoBehaviour
             if (collider.CompareTag("WorkSpace"))
             {
                 WorkSpace workSpace = collider.GetComponent<WorkSpace>();
-                DetailView dv = workSpace.DetailView;
-                dv.Selected();
+                dvs.Add(workSpace.DetailView);
                 flag = true;
+            }
+        }
+        if (dvs.Count == 1)
+        {
+            dvs[0].OpenIndicator();
+            dvs[0].OpenPanel();
+        }
+        else if (dvs.Count > 1)
+        {
+            foreach (var d in dvs)
+            {
+                d.OpenIndicator();
             }
         }
         return flag;

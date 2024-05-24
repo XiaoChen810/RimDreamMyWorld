@@ -151,7 +151,7 @@ namespace ChenChen_BuildingSystem
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
             }
-            if (_detailView != null && _detailView.OnShow)
+            if (_detailView != null && _detailView.IsPanelOpen)
             {
                 PanelManager panel = DetailViewManager.Instance.PanelManager;
                 panel.RemoveTopPanel(panel.GetTopPanel());

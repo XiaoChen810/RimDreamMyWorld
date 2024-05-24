@@ -8,8 +8,10 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 500;
         private Pawn targetPawnComponent;
+
         public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
+
         }
 
         public override bool OnEnter()
@@ -32,19 +34,20 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
+            if (targetPawnComponent.Info.IsDead)
+            {
+                return StateType.Success;
+            }
             // 判断目标是否到达攻击距离
             if (pawn.MoveController.ReachDestination)
             {
                 // 设置人物正在工作
-                pawn.JobDoing();               
+                pawn.JobDoing();
 
-                // 进入下一个状态
-                if (!targetPawnComponent.Info.IsDead)
-                {
-                    IsSuccess = true;
-                    pawn.StateMachine.NextState = new PawnJob_Battle(pawn, target.GameObject);
-                    return StateType.Success;
-                }
+                // 进入攻击状态
+                IsSuccess = true;
+                pawn.StateMachine.NextState = new PawnJob_Attack(pawn, target.GameObject);
+                return StateType.Success;
             }
 
             return StateType.Doing;

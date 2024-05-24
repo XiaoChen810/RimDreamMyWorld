@@ -136,7 +136,6 @@ namespace ChenChen_BuildingSystem
         }
 
         // 绘制GUI
-        public bool DrawOutline_Sprite;    // 根据Sprite Render画
         public bool DrawOutline_Collider;    // 根据Box Collider2D画
         private Color centerColor = new Color(0f, 0f, 1f, 0.5f); // 透明蓝色
         private Color outlineColor = Color.white; // 纯白色
@@ -177,22 +176,6 @@ namespace ChenChen_BuildingSystem
 
                 // 绘制中心透明蓝色矩形
                 GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, screenSize.y), centerTexture);
-
-                // 绘制边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, outlineWidth), outlineTexture); // 上边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 左边框
-                GUI.DrawTexture(new Rect(screenBoundsMax.x - outlineWidth, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 右边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMin.y, screenSize.x, outlineWidth), outlineTexture); // 下边框
-            }
-            if (DrawOutline_Sprite)
-            {
-                // 计算建造物体的边界框
-                Bounds bounds = GetComponent<SpriteRenderer>().bounds;
-
-                // 计算建造物体边界框在屏幕上的位置和大小
-                Vector3 screenBoundsMin = Camera.main.WorldToScreenPoint(bounds.min);
-                Vector3 screenBoundsMax = Camera.main.WorldToScreenPoint(bounds.max);
-                Vector3 screenSize = screenBoundsMax - screenBoundsMin;
 
                 // 绘制边框
                 GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, outlineWidth), outlineTexture); // 上边框

@@ -1,21 +1,29 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChenChen_AI
 {
     public class GoblinMain : Pawn
     {
+        [SerializeField] private float chaseRange = 14.0f;
+
+        float lastGetJobTime = 0;
+
         protected override void TryToGetJob()
         {
-            //GameObject job = null;
-            //if (!Info.IsOnWork && Def.CanGetJob)
-            //{
-            //    job = new JobGiver_FindEnemy().TryIssueJobPackage(this);
-            //    if (job != null && !Info.IsOnBattle)
-            //    {
-            //        StateMachine.NextState = new PawnJob_Chase(this, job);
-            //        return;
-            //    }
-            //}
+            if (Time.time > lastGetJobTime + 2f)
+            {
+                foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
+                {
+                    float distacne = (Vector2.Distance(transform.position, pawn.transform.position));
+                    if (distacne < chaseRange)
+                    {
+                        StateMachine.NextState = new PawnJob_Chase(this, pawn);
+                    }
+                }
+                lastGetJobTime = Time.time;
+            }
+
         }
     }
 }

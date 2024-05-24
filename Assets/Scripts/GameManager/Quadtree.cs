@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class Quadtree
 {
-    private const int MAX_OBJECTS = 10; // 每个节点中最多包含的对象数量
-    private const int MAX_LEVELS = 5; // 四叉树的最大深度
+    private const int MAX_OBJECTS = 5; // 每个节点中最多包含的对象数量
+    private const int MAX_LEVELS = 6; // 四叉树的最大深度
 
     private int level; // 当前节点的深度
     private GameObject parent;// 当前节点的父对象   
@@ -67,8 +67,8 @@ public class Quadtree
 
         bool topQuadrant = pos.y >= horizontalMidpoint; // 对象在上半部分
         bool bottomQuadrant = pos.y <= horizontalMidpoint; // 对象在下半部分
-        bool leftQuadrant = pos.x < verticalMidpoint; // 对象在左半部分
-        bool rightQuadrant = pos.x > verticalMidpoint; // 对象在右半部分
+        bool leftQuadrant = pos.x <= verticalMidpoint; // 对象在左半部分
+        bool rightQuadrant = pos.x >= verticalMidpoint; // 对象在右半部分
 
         if (topQuadrant)
         {
@@ -164,7 +164,7 @@ public class Quadtree
         }
         else
         {
-            self.SetActive(true);
+            //self.SetActive(true);
             return;
         }
     }

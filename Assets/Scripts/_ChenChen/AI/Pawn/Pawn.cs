@@ -8,7 +8,7 @@ namespace ChenChen_AI
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PawnMoveController))]
-    public abstract class Pawn : MonoBehaviour
+    public abstract class Pawn : MonoBehaviour, IDetailView
     {
         /// <summary>
         /// 人物的状态机
@@ -88,6 +88,23 @@ namespace ChenChen_AI
             }
         }
 
+        // 细节视图
+        protected DetailView _detailView;
+        public DetailView DetailView
+        {
+            get
+            {
+                if (_detailView == null)
+                {
+                    if (!TryGetComponent<DetailView>(out _detailView))
+                    {
+                        _detailView = gameObject.AddComponent<DetailView_Pawn>();
+                    }
+                }
+                return _detailView;
+            }
+        }
+
         #region Job
 
         protected abstract void TryToGetJob();
@@ -141,54 +158,54 @@ namespace ChenChen_AI
 
         #region Battle
 
-        private Coroutine AttackCoroutine;
-        private bool isTriggerAttack = false;
+        //private Coroutine AttackCoroutine;
+        //private bool isTriggerAttack = false;
 
-        public bool TryToEnterBattle(Pawn battleTarget)
-        {
-            if (isTriggerAttack) return false;
-            _pawnInfo.IsOnBattle = true;
-            CurJobTarget = battleTarget.gameObject;
+        //public bool TryToEnterBattle(Pawn battleTarget)
+        //{
+        //    if (isTriggerAttack) return false;
+        //    _pawnInfo.IsOnBattle = true;
+        //    CurJobTarget = battleTarget.gameObject;
 
-            // 设置位置
-            Vector3 me = transform.position;
-            Vector3 him = battleTarget.gameObject.transform.position;
-            if (me.x < him.x)
-            {
-                MoveController.FilpRight();
-            }
-            else
-            {
-                MoveController.FilpLeft();
-            }
+        //    // 设置位置
+        //    Vector3 me = transform.position;
+        //    Vector3 him = battleTarget.gameObject.transform.position;
+        //    if (me.x < him.x)
+        //    {
+        //        MoveController.FilpRight();
+        //    }
+        //    else
+        //    {
+        //        MoveController.FilpLeft();
+        //    }
 
-            if (AttackCoroutine != null) StopCoroutine(AttackAnimCo());
-            AttackCoroutine = StartCoroutine(AttackAnimCo());
-            return true;
-        }
+        //    if (AttackCoroutine != null) StopCoroutine(AttackAnimCo());
+        //    AttackCoroutine = StartCoroutine(AttackAnimCo());
+        //    return true;
+        //}
 
-        public bool TryToEndBattle()
-        {
-            _pawnInfo.IsOnBattle = false;
-            CurJobTarget = null;
-            return true;
-        }
+        //public bool TryToEndBattle()
+        //{
+        //    _pawnInfo.IsOnBattle = false;
+        //    CurJobTarget = null;
+        //    return true;
+        //}
 
-        IEnumerator AttackAnimCo()
-        {
-            Debug.Log("Enter");
-            while (_pawnInfo.IsOnBattle)
-            {
-                yield return null;
-                if (!isTriggerAttack)
-                {
-                    isTriggerAttack = true;
-                    Animator.SetTrigger("IsAttack");
-                }
-                yield return new WaitForSeconds(0.76f + AttackSpeedWait);
-                isTriggerAttack = false;
-            }
-        }
+        //IEnumerator AttackAnimCo()
+        //{
+        //    Debug.Log("Enter");
+        //    while (_pawnInfo.IsOnBattle)
+        //    {
+        //        yield return null;
+        //        if (!isTriggerAttack)
+        //        {
+        //            isTriggerAttack = true;
+        //            Animator.SetTrigger("IsAttack");
+        //        }
+        //        yield return new WaitForSeconds(0.76f + AttackSpeedWait);
+        //        isTriggerAttack = false;
+        //    }
+        //}
 
         public void GetDamage(float damage)
         {
@@ -200,105 +217,6 @@ namespace ChenChen_AI
                 return;
             }
             Animator.SetTrigger("IsHurted");
-        }
-
-        #endregion
-
-        #region Indicator
-        
-        public void OnPawnSelected()
-        {
-            Info.IsSelect = !Info.IsSelect;
-            if(Info.IsSelect)
-            {
-                Indicator_DOFadeOne();
-            }
-            else
-            {
-                Indicator_DOFadeZero();
-            }
-        }
-
-        // Animation
-        protected void Indicator_DOFadeOne()
-        {
-            if (TryGetIndicator(out GameObject indicator))
-            {
-                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
-                sr.DOFade(1, 1);
-            }
-        }
-        protected void Indicator_DOFadeZero()
-        {
-            if (TryGetIndicator(out GameObject indicator))
-            {
-                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
-                sr.DOFade(0, 1);
-            }
-        }
-
-        // 获取人物的指示器，如果不存在则创建
-        private bool TryGetIndicator(out GameObject indicator)
-        {
-            indicator = null;
-            if (transform.Find("SelectionBox"))
-            {
-                indicator = transform.Find("SelectionBox").gameObject;
-                indicator.SetActive(true);
-            }
-            if (indicator == null)
-            {
-                indicator = Instantiate(Resources.Load<GameObject>("Views/SelectionBox"), gameObject.transform);
-                indicator.name = "SelectionBox";
-                indicator.SetActive(true);
-                SpriteRenderer sr = indicator.GetComponentInChildren<SpriteRenderer>();
-                sr.sortingLayerName = "Above";
-            }
-            if (indicator == null)
-            {
-                Debug.LogError("Failed to find or create the SelectionBox GameObject.");
-                return false;
-            }
-            return true;
-        }
-        #endregion
-
-        #region Need
-
-        //需求列表
-        [SerializeField] protected List<PawnNeed> _needsList;
-
-        //初始化需求列表
-        protected virtual List<PawnNeed> InitNeedsList()
-        {
-            return new List<PawnNeed>();
-        }
-
-        //尝试获取需求
-        protected virtual void TryToGetNeed()
-        {
-            
-        }
-
-        //间歇性获取需求
-        protected virtual IEnumerator GetIntermittentNeed()
-        {
-            while (true)
-            {
-                // 根据需求概率动态调整间隔时间
-                float averageProbability = CalculateAverageProbability();
-                float interval = Mathf.Lerp(30f, 60f, averageProbability); 
-
-                yield return new WaitForSeconds(interval);
-
-                TryToGetNeed(); // 尝试获取需求
-            }
-        }
-
-        // 计算平均需求概率
-        protected float CalculateAverageProbability()
-        {
-            return Random.value;
         }
 
         #endregion
@@ -317,9 +235,6 @@ namespace ChenChen_AI
             /* 设置图层Pawn和标签 */
             gameObject.layer = 7;
             gameObject.tag = "Pawn";
-
-            _needsList = InitNeedsList();
-            StartCoroutine(GetIntermittentNeed());
         }
 
         protected virtual void Update()

@@ -50,21 +50,26 @@ namespace ChenChen_UISystem
         /// <summary>
         /// 移除面板( 仅限顶层面板 )，然后恢复下一个面板
         /// </summary>
-        /// <param name="removedPanel"></param>
-        public void RemoveTopPanel(PanelBase removedPanel)
+        /// <param name="removedPanel"> 默认为空 </param>
+        public void RemoveTopPanel(PanelBase removedPanel = null)
         {
-            if (removedPanel == null) return;
-
             // 移除顶点面板
             if(_panelsStack.Count > 0)
             {
-                if( _panelsStack.Peek() == removedPanel)
+                if (removedPanel == null)
                 {
                     _panelsStack.Pop().OnExit();
                 }
                 else
                 {
-                    Debug.Log($"当前顶层UI不是{removedPanel.UIType.Name}");
+                    if (_panelsStack.Peek() == removedPanel)
+                    {
+                        _panelsStack.Pop().OnExit();
+                    }
+                    else
+                    {
+                        Debug.Log($"当前顶层UI不是{removedPanel.UIType.Name}");
+                    }
                 }
             }
             // 移除后将下一个面板解除暂停

@@ -6,7 +6,9 @@ namespace ChenChen_AI
 {
     public class JobGiver_Building : JobGiver
     {
-        public JobGiver_Building(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly)
+        private static readonly float interval_time = 0;
+
+        public JobGiver_Building(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, interval_time)
         {
         }
 

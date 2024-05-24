@@ -11,7 +11,7 @@ namespace ChenChen_MapGenerator
         /// 生成物体从新
         /// </summary>
         /// <param name="itemName"></param>
-        public void GenerateItem(string itemName, Vector2 pos, string mapName)
+        public void GenerateItem(string itemName, Vector2 pos, string mapName, bool isNotCommonlyUsed = false)
         {
             ThingDef thing_generated = ThingSystemManager.Instance.GetThingDef(itemName);
             if (thing_generated != null)

@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace ChenChen_AI
 {
-    public class PawnJob_Battle : PawnJob
+    public class PawnJob_Attack : PawnJob
     {
-        private readonly static float tick = 500;
+        private readonly static float tick = 50;
         private Pawn targetComponent;
+        private bool isAttacking;
 
-        public PawnJob_Battle(Pawn pawn, GameObject target) : base(pawn, tick,new TargetPtr(target))
+        public PawnJob_Attack(Pawn pawn, GameObject target) : base(pawn, tick,new TargetPtr(target))
         {
         }
 
@@ -21,7 +22,7 @@ namespace ChenChen_AI
                 return false;
             }
 
-            return pawn.TryToEnterBattle(targetComponent);
+            return true;
         }
 
         public override StateType OnUpdate()
@@ -45,14 +46,30 @@ namespace ChenChen_AI
                 return StateType.Failed;
             }
 
+            if (!isAttacking)
+            {
+                pawn.StartCoroutine(AttackCo());
+            }
+
             return StateType.Doing;
+        }
+
+        IEnumerator AttackCo()
+        {
+            isAttacking = true;
+            pawn.MoveController.enabled = false;
+            yield return new WaitForSeconds(pawn.AttackSpeed);
+            Debug.Log("发起攻击");
+            pawn.Animator.SetTrigger("IsAttack");
+            yield return new WaitForSeconds(pawn.AttackSpeedWait);
+            isAttacking = false;
+            pawn.MoveController.enabled = true;
+
         }
 
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.TryToEndBattle();
         }
 
         public override void OnInterrupt()

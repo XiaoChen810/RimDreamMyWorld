@@ -37,53 +37,31 @@ namespace ChenChen_AI
             {
                 StateMachine.NextState = new PawnJob_Fishing(this, job);
             }));
+            // 社交
+            jobGivers.Add(new JobGiver_Socialize((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Socialize(this, job);
+            }));
         }
 
+        private float _lastGetJobTime = 0;  
+        private float _getJobDuration = 0.2f;
         protected override void TryToGetJob()
-        {    
-            foreach (JobGiver jobGiver in jobGivers)
+        {
+            if (Time.time > _lastGetJobTime + _getJobDuration)
             {
-                GameObject job = jobGiver.TryIssueJobPackage(this);
-                if (job != null)
+                _lastGetJobTime = Time.time;
+                foreach (JobGiver jobGiver in jobGivers)
                 {
-                    CurJobTarget = job;
-                    return;
+                    GameObject job = jobGiver.TryIssueJobPackage(this);
+                    if (job != null)
+                    {
+                        CurJobTarget = job;
+                        return;
+                    }
                 }
             }
             return;
         }
-
-        protected override List<PawnNeed> InitNeedsList()
-        {
-            List<PawnNeed> needs = new List<PawnNeed>();
-            needs.Add(new PawnNeed_HavePet());
-            needs.Add(new PawnNeed_Misc("想要吃饭"));
-            needs.Add(new PawnNeed_Misc("想要睡觉"));
-            needs.Add(new PawnNeed_Misc("想要玩永杰无间"));
-            needs.Add(new PawnNeed_Misc("想要玩英雄联盟"));
-            return needs;
-        }
-
-
-        protected override void TryToGetNeed()
-        {
-            float needProbabilityRange = 0;
-            foreach (PawnNeed need in _needsList)
-            {
-                needProbabilityRange += need.Probability;
-            }
-            float randomProbability = Random.Range(0f, needProbabilityRange); 
-            for (int i = 0; i < _needsList.Count; i++)
-            {
-                randomProbability -= _needsList[i].Probability;
-                if (randomProbability <= 0) 
-                {
-                    string content = $"{Def.PawnName}{_needsList[i].Description}";
-                    ScenarioManager.Instance.Narrative(content, this.gameObject);
-                    return;
-                }
-            }
-        }
-
     }
 }

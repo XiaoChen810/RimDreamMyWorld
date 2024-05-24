@@ -145,7 +145,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -298,7 +298,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isStart: 0
   canMove: 1
-  speed: 2
   endReachedDistance: 0.2
   repathRate: 0.5
   destination: {x: 0, y: 0, z: 0}
@@ -307,6 +306,9 @@ MonoBehaviour:
   reachedEndOfPath: 1
   reachDestination: 1
   currentWaypoint: 0
+  _speed: 2
+  speedMagnification: 1
+  IsFaceRight: 1
   curUrgency: 1
 --- !u!114 &-5097333732888630307
 MonoBehaviour:
@@ -336,6 +338,9 @@ MonoBehaviour:
     CanGetJob: 0
     CanBattle: 0
     CanDrafted: 0
+    CanBuild: 1
+    CanPlant: 1
+    CanForaging: 1
   _pawnAttribute:
     A_Combat:
       _value: 7
@@ -370,12 +375,20 @@ MonoBehaviour:
       _interest: 1
       _exp: 4
   _pawnInfo:
-    IsDead: 0
-    IsSelect: 0
-    IsOnWork: 0
-    IsOnBattle: 0
-    IsDrafted: 0
-    HP: 0
+    isDead: 0
+    isSelect: 0
+    isOnWork: 0
+    isOnBattle: 0
+    isDrafted: 0
+    hp:
+      name: "\u5065\u5EB7\u503C"
+      curValue: 100
+      maxValue: 100
+    sleepiness:
+      name: "\u7761\u7720"
+      curValue: 100
+      maxValue: 100
+  chaseRange: 14
 --- !u!114 &-8733278393466760539
 MonoBehaviour:
   m_ObjectHideFlags: 0

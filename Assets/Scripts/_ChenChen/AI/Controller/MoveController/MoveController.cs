@@ -20,8 +20,6 @@ namespace ChenChen_AI
         [SerializeField] protected bool isStart = false;
         // 能否移动，isStart 和 canMove同时为 true 才会动
         [SerializeField] protected bool canMove = true;
-        // 速度倍率
-        [SerializeField] protected float speedMagnification = 1f;
         // 移动点更新的距离，也是判断到达目标点的距离
         [SerializeField] protected float endReachedDistance = 0.2f;
         // 开启动态刷新时，每次刷新的间隔时间
@@ -58,14 +56,20 @@ namespace ChenChen_AI
             }
         }
 
+        [Header("速度倍率")]
+        [SerializeField] protected float speedMagnification = 1f;
+
         [Header("面向右边")]
         public bool IsFaceRight;
 
         /// <summary>
-        /// Current path;
+        /// 当前路径;
         /// </summary>
         protected Path path;
 
+        /// <summary>
+        /// 是否到达目标点
+        /// </summary>
         public bool ReachDestination
         {
             get
@@ -195,7 +199,7 @@ namespace ChenChen_AI
             if (destination.y <= 0 || destination.y >= MapManager.Instance.CurMapHeight) return false;
             if (!_seeker.IsDone())
             {
-                Debug.Log(1);
+                Debug.Log(this.name + "当前路径未计算完");
                 return false;
             }
             // 新建路径

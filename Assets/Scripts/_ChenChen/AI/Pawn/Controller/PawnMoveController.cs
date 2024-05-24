@@ -14,7 +14,7 @@ namespace ChenChen_AI
         private Collider2D _collider;
         private LineRenderer _lineRenderer;
 
-        // 紧迫程度
+        [Header("紧迫程度")]
         [SerializeField] protected Urgency curUrgency = Urgency.Normal;
 
         private bool _isSwimming = false;
@@ -127,6 +127,7 @@ namespace ChenChen_AI
                     Speed = 2;
                     break;
             }
+            curUrgency = urgency;
             return StartPath(targetPos, endReachedDistance);
         }
 
@@ -135,7 +136,7 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="targetObj"></param>
         /// <returns></returns>
-        public void GoToHere(GameObject targetObj, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
+        public bool GoToHere(GameObject targetObj, Urgency urgency = Urgency.Normal, float endReachedDistance = 0.2f)
         {
             switch (urgency)
             {
@@ -152,7 +153,8 @@ namespace ChenChen_AI
                     Speed = 2;
                     break;
             }
-            StartPath(targetObj, endReachedDistance);
+            curUrgency = urgency;
+            return StartPath(targetObj, endReachedDistance);
         }
 
         #region DrawPath

@@ -32,7 +32,7 @@ public class GameManager : SingletonMono<GameManager>
     {
         get
         {
-            return string.Format("Season {0}, Day {1}, {2:00}:{3:00}", currentSeason, currentDay, currentHour, currentMinute);
+            return string.Format("Season {0} | Day {1}\n {2:00}:{3:00}", currentSeason, currentDay, currentHour, currentMinute);
         }
     }
 
@@ -110,10 +110,13 @@ public class GameManager : SingletonMono<GameManager>
     }
 
 #if UNITY_EDITOR
+    public GameObject Skeleton;
+    public GameObject Goblin;
 
     public void 生成一个敌人()
     {
-
+        Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
+        Instantiate(Goblin, random, Quaternion.identity, transform);
     }
 
     public void 退回开始场景()
@@ -125,7 +128,7 @@ public class GameManager : SingletonMono<GameManager>
     public void 测试按钮()
     {
         Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        AnimalGenerateTool.GenerateAnimal("绵羊", random);
+        Instantiate(Skeleton, random, Quaternion.identity, transform);
     }
 
 #endif

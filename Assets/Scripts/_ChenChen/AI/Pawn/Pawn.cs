@@ -25,6 +25,8 @@ namespace ChenChen_AI
         /// </summary>
         public Animator Animator { get; protected set; }
 
+        public EmotionController EmotionController { get; protected set; }
+
         [Header("当前任务")]
         public GameObject CurJobTarget;
         public List<string> CurrentStateList = new List<string>();
@@ -158,55 +160,6 @@ namespace ChenChen_AI
 
         #region Battle
 
-        //private Coroutine AttackCoroutine;
-        //private bool isTriggerAttack = false;
-
-        //public bool TryToEnterBattle(Pawn battleTarget)
-        //{
-        //    if (isTriggerAttack) return false;
-        //    _pawnInfo.IsOnBattle = true;
-        //    CurJobTarget = battleTarget.gameObject;
-
-        //    // 设置位置
-        //    Vector3 me = transform.position;
-        //    Vector3 him = battleTarget.gameObject.transform.position;
-        //    if (me.x < him.x)
-        //    {
-        //        MoveController.FilpRight();
-        //    }
-        //    else
-        //    {
-        //        MoveController.FilpLeft();
-        //    }
-
-        //    if (AttackCoroutine != null) StopCoroutine(AttackAnimCo());
-        //    AttackCoroutine = StartCoroutine(AttackAnimCo());
-        //    return true;
-        //}
-
-        //public bool TryToEndBattle()
-        //{
-        //    _pawnInfo.IsOnBattle = false;
-        //    CurJobTarget = null;
-        //    return true;
-        //}
-
-        //IEnumerator AttackAnimCo()
-        //{
-        //    Debug.Log("Enter");
-        //    while (_pawnInfo.IsOnBattle)
-        //    {
-        //        yield return null;
-        //        if (!isTriggerAttack)
-        //        {
-        //            isTriggerAttack = true;
-        //            Animator.SetTrigger("IsAttack");
-        //        }
-        //        yield return new WaitForSeconds(0.76f + AttackSpeedWait);
-        //        isTriggerAttack = false;
-        //    }
-        //}
-
         public void GetDamage(float damage)
         {
             _pawnInfo.HP.CurValue -= (int)damage;
@@ -232,9 +185,30 @@ namespace ChenChen_AI
             /* 配置状态机 */
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
+            /* 添加这个人物的情感组件 */
+            EmotionController = GetComponentInChildren<EmotionController>();
+
             /* 设置图层Pawn和标签 */
             gameObject.layer = 7;
             gameObject.tag = "Pawn";
+        }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.OnTimeAddOneMinute += UpdatePawnInfo;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnTimeAddOneMinute -= UpdatePawnInfo;
+        }
+
+        private void UpdatePawnInfo()
+        {
+            if(StateMachine.CurStateType != typeof(PawnJob_Sleep))
+            {
+                Info.Sleepiness.CurValue -= 0.07f;
+            }
         }
 
         protected virtual void Update()
@@ -245,6 +219,11 @@ namespace ChenChen_AI
             if (Def.StopUpdate) return;
             StateMachine.Update();
             if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
+
+            if(Input.GetKeyDown(KeyCode.X))
+            {
+                EmotionController.AddEmotion(EmotionController.EmotionsList.list[Random.Range(0, EmotionController.EmotionsList.list.Count)].type);
+            }
         }
 
         protected void 任务列表Debug()

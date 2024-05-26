@@ -37,6 +37,16 @@ namespace ChenChen_UISystem
             {
                 PanelManager.AddPanel(new ThingsPanel(ChenChen_BuildingSystem.ThingType.Furniture));
             });
+            // 选择建造工作台类型的按钮
+            UITool.TryGetChildComponentByName<Button>("Btn工作台").onClick.AddListener(() =>
+            {
+                PanelManager.AddPanel(new ThingsPanel(ChenChen_BuildingSystem.ThingType.ToolTable));
+            });
+            // 选择建造建筑类型的按钮
+            UITool.TryGetChildComponentByName<Button>("Btn建筑").onClick.AddListener(() =>
+            {
+                PanelManager.AddPanel(new ThingsPanel(ChenChen_BuildingSystem.ThingType.Building));
+            });
             // 关闭菜单的按钮
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {

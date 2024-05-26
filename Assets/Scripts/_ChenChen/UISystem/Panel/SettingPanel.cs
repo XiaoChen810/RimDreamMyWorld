@@ -16,7 +16,7 @@ namespace ChenChen_UISystem
         {
             UITool.TryGetChildComponentByName<Button>("SaveBtn").onClick.AddListener(() =>
             {
-                PlayManager.Instance.Save(data_MapSave: MapManager.Instance.CurMapSave);
+                PlayManager.Instance.Save();
             });
             //UITool.TryGetChildComponentByName<Button>("LoadBtn").onClick.AddListener(() =>
             //{

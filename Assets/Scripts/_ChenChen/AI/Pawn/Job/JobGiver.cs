@@ -8,13 +8,20 @@ namespace ChenChen_AI
     public abstract class JobGiver
     {
         protected Action<GameObject> onGetJobSuccessly;
+
+        // 间隔时间
         protected float intervalTime = 5;
+
+        // 概率触发
+        protected float probability = 1;
+
         private float lastGiverTime;
 
-        public JobGiver(Action<GameObject> onGetJobSuccessly, float intervalTime)
+        public JobGiver(Action<GameObject> onGetJobSuccessly, float intervalTime, float probability = 1)
         {
             this.onGetJobSuccessly = onGetJobSuccessly;
             this.intervalTime = intervalTime;
+            this.probability = probability;
         }
 
         // 尝试获取任务
@@ -24,8 +31,9 @@ namespace ChenChen_AI
         public virtual GameObject TryIssueJobPackage(Pawn pawn)
         {
             if (Time.time < lastGiverTime + intervalTime) return null;
+            if (UnityEngine.Random.value > probability) return null;
 
-            GameObject job = this.TryGiveJob(pawn);
+            GameObject job = TryGiveJob(pawn);
             if (job == null)
             {
                 return null;

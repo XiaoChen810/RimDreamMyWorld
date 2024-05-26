@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,14 @@ namespace ChenChen_AI
             set
             {
                 _currentState = value;
+            }
+        }
+
+        public Type CurStateType
+        {
+            get
+            {
+                return CurState.GetType();
             }
         }
 

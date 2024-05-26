@@ -157,10 +157,6 @@ namespace ChenChen_MapGenerator
         {
             Data_MapSave mapSave = gameSave.SaveMap;
             GenerateMap(mapSave, false);
-            foreach(var thingSave in gameSave.SaveThings)
-            {
-                ItemCreator.GenerateItem(thingSave);                   
-            }
         }
 
         /// <summary>
@@ -203,6 +199,8 @@ namespace ChenChen_MapGenerator
 
         public bool TryGetTilemap(string name, bool isObstacle,out Tilemap result)
         {
+            result = null;
+            if (_mapDatasDict[CurrentMapName].mapObject == null) return false;
             Transform grid = _mapDatasDict[CurrentMapName].mapObject.transform.Find("Grid");
             Transform tilemapTransform = grid.Find(name);
             if(tilemapTransform != null)

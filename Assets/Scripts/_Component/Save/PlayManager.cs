@@ -6,6 +6,7 @@ using ChenChen_AI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ChenChen_CropSystem;
 
 /// <summary>
 /// 游戏流程的管理，保存进度，加载进度等
@@ -41,7 +42,7 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         if(Input.GetKeyUp(KeyCode.Escape))
         {
-            PanelManager.TogglePanel(new SettingPanel());
+            PanelManager.TogglePanel(new SettingPanel(), SceneType.Main);
         }
     }
 
@@ -49,7 +50,7 @@ public class PlayManager : SingletonMono<PlayManager>
     /// 新建一个游戏存档并保存到列表，返回本次新建的存档
     /// </summary>
     /// <param name="saveName"></param>
-    public Data_GameSave Save(string saveName = null, Data_MapSave data_MapSave = null)
+    public Data_GameSave Save(string saveName = null)
     {
         if (SceneSystem.Instance.CurSceneType != SceneType.Main)
         {
@@ -60,12 +61,13 @@ public class PlayManager : SingletonMono<PlayManager>
         string saveDate = DateTime.Now.ToString();
         saveName = saveName == null ? "unnamed" : CurSave.SaveName;
         Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
+        // 保存游戏时长
+        saveData.currentSeason = GameManager.Instance.currentSeason;
+        saveData.currentDay = GameManager.Instance.currentDay;
+        saveData.currentHour = GameManager.Instance.currentHour;
+        saveData.currentMinute = GameManager.Instance.currentMinute;
         // 保存地图生成参数
-        if (data_MapSave == null)
-        {
-            data_MapSave = new Data_MapSave();
-        }
-        saveData.SaveMap = data_MapSave;
+        saveData.SaveMap = MapManager.Instance.CurMapSave;
         // 保存地图上所有的物品
         foreach (var thing in ThingSystemManager.Instance.ThingBuildingGeneratedList)
         {
@@ -78,7 +80,16 @@ public class PlayManager : SingletonMono<PlayManager>
                 thing.MapName,
                 thing.LifeState);
             saveData.SaveThings.Add(newThingSave);
-            Debug.Log($"Save a thing: {thingDef.DefName}");
+        }
+        foreach (var thing in ThingSystemManager.Instance.ThingBuildingGeneratedList_NotCommonlyUsed)
+        {
+            ThingDef thingDef = thing.Def;
+            Data_ThingSave newThingSave = new Data_ThingSave(thingDef.DefName,
+                thing.transform.position,
+                thing.transform.rotation,
+                thing.MapName,
+                thing.LifeState);
+            saveData.SaveThings.Add(newThingSave);
         }
         // 保存全部棋子
         foreach (var pawnObj in GameManager.Instance.PawnGeneratorTool.PawnsList)
@@ -91,6 +102,38 @@ public class PlayManager : SingletonMono<PlayManager>
                 pawn.Info
                 );
             saveData.SavePawns.Add(newPawnSave);
+        }
+        // 保存全部怪物
+        foreach(var monster in GameManager.Instance.MonsterGeneratorTool.MonstersList)
+        {
+            Data_MonsterSave newMonsterSave = new Data_MonsterSave(
+                monster.IndexId,
+                monster.transform.position
+                );
+            saveData.SaveMonster.Add(newMonsterSave);
+        }
+        // 保存工作区
+        foreach(var workSpace in GameManager.Instance.WorkSpaceTool.TotalWorkSpaceDictionary)
+        {
+            // 如果是种植区
+            if(workSpace.Value.WorkSpaceType == WorkSpaceType.Farm)
+            {
+                WorkSpace_Farm workSpace_Farm = workSpace.Value.GetComponent<WorkSpace_Farm>();
+                Data_FarmWorkSpaceSave data_FarmWorkSpaceSave = new Data_FarmWorkSpaceSave(workSpace_Farm.name, workSpace_Farm.CurCrop.CropName, workSpace_Farm.SR.bounds);
+                // 遍历全部作物列表
+                foreach(var cell in workSpace_Farm.Cells)
+                {
+                    Crop crop = cell.Value.Crop;
+                    Data_CropSave cropSave = new Data_CropSave(
+                        crop.transform.position,
+                        crop.CurNutrient,
+                        crop.CurPeriodIndex
+                        );
+                    data_FarmWorkSpaceSave.crops.Add(cropSave);
+                }
+                saveData.SaveFarmWorkSpace.Add(data_FarmWorkSpaceSave);
+            }
+            // 其他
         }
         // 判断是否有要覆盖的
         for (int i = 0; i < SaveList.Count; i++)
@@ -114,8 +157,23 @@ public class PlayManager : SingletonMono<PlayManager>
     /// <param name="gameSave"></param>
     public void Load(Data_GameSave gameSave)
     {
+        // 加载游戏时间
+        GameManager.Instance.InitGameTime(
+            gameSave.currentSeason,
+            gameSave.currentDay,
+            gameSave.currentHour,
+            gameSave.currentMinute
+            );
+        // 加载地图
         MapManager.Instance.LoadSceneMapFromSave(gameSave);
+        // 加载物品
+        MapManager.Instance.ItemCreator.LoadItemFromSave(gameSave);
+        // 加载Pawn
         GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(gameSave);
+        // 加载Monster
+        GameManager.Instance.MonsterGeneratorTool.LoadMonstersFromSave(gameSave);
+        // 加载种植区
+        GameManager.Instance.WorkSpaceTool.LoadFarmWorkSpaceFromSave(gameSave);
         CurSave = gameSave;
     }
 

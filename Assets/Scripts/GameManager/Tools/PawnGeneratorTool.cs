@@ -26,7 +26,7 @@ public class PawnGeneratorTool : MonoBehaviour
     public GameObject GoblinPrefab;
 
     /// <summary>
-    /// 生成Pawn
+    /// 生成Pawn，并添加到PawnsList
     /// </summary>
     /// <param name="kindDef"></param>
     /// <param name="position"></param>
@@ -115,6 +115,14 @@ public class PawnGeneratorTool : MonoBehaviour
         {
             pawn.Def.StopUpdate = true;
         }
+    }
+
+    public Pawn ReflashSelectPawn(int index)
+    {
+        RemovePawn(PawnWhenStartList[index]);
+        PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null);
+        PawnWhenStartList[index].Def.StopUpdate = true;
+        return PawnWhenStartList[index];
     }
 
     public void EndSelect()

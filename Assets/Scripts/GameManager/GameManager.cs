@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ChenChen_UISystem;
 using ChenChen_MapGenerator;
 using ChenChen_Scene;
 using System;
-using ChenChen_AI;
-using UnityEngine.Rendering.Universal;
 
 public class GameManager : SingletonMono<GameManager>
 {
@@ -15,7 +12,7 @@ public class GameManager : SingletonMono<GameManager>
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
     public AnimalGenerateTool AnimalGenerateTool { get; private set; }
-    public MonsterGeneratorTool MasterGeneratorTool { get; private set; }
+    public MonsterGeneratorTool MonsterGeneratorTool { get; private set; }
 
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
@@ -26,7 +23,7 @@ public class GameManager : SingletonMono<GameManager>
     public int currentHour = 0; // 当前小时，24小时制
     public int currentMinute = 0; // 当前分钟
     public float secondsPerGameMinute = 0.7f; // 游戏中的每分钟等于现实中的秒数
-
+    public event Action OnTimeAddOneMinute;   //当时间加了一分钟
     private Coroutine timeCoroutine; // 协程引用
 
     // 当前游戏时间
@@ -38,6 +35,14 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
+    public void InitGameTime(int season, int day, int hour, int minute)
+    {
+        currentSeason = season;
+        currentDay = day;
+        currentHour = hour;
+        currentMinute = minute;
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -46,7 +51,7 @@ public class GameManager : SingletonMono<GameManager>
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
-        MasterGeneratorTool = GetComponent<MonsterGeneratorTool>();
+        MonsterGeneratorTool = GetComponent<MonsterGeneratorTool>();
     }
 
     public void StartGame()
@@ -79,6 +84,7 @@ public class GameManager : SingletonMono<GameManager>
             yield return new WaitForSeconds(secondsPerGameMinute); // 等待一段时间，表示游戏中的一分钟流逝
 
             currentMinute++;
+            OnTimeAddOneMinute?.Invoke();
 
             // 如果当前分钟数大于等于60，则表示已经过了一小时
             if (currentMinute >= 60)
@@ -130,7 +136,7 @@ public class GameManager : SingletonMono<GameManager>
     public void 测试按钮()
     {
         Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        MasterGeneratorTool.GenerateMaster(random);
+        MonsterGeneratorTool.GenerateMaster(random);
     }
 
 #endif

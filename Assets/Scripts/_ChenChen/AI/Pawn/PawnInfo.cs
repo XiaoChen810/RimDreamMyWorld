@@ -54,7 +54,7 @@ namespace ChenChen_AI
             set { hp = value; }
         }
 
-        // 睡眠值
+        // 困意值
         [SerializeField] private Stats sleepiness = new Stats("睡眠", 100, 100);
         public Stats Sleepiness
         {
@@ -62,12 +62,20 @@ namespace ChenChen_AI
             set { sleepiness = value; }
         }
 
+        // 心情值
+        [SerializeField] private Stats happiness = new Stats("心情", 100, 100);
+        public Stats Happiness
+        {
+            get { return happiness; }
+            set { happiness = value; }
+        }
+
         // 构造函数
         public PawnInfo()
         {
         }
 
-        public PawnInfo(bool isDead, bool isSelect, bool isOnWork, bool isOnBattle, bool isDrafted, Stats hp, Stats sleepiness)
+        public PawnInfo(bool isDead, bool isSelect, bool isOnWork, bool isOnBattle, bool isDrafted, Stats hp, Stats sleepiness, Stats happiness)
         {
             IsDead = isDead;
             IsSelect = isSelect;
@@ -76,12 +84,13 @@ namespace ChenChen_AI
             IsDrafted = isDrafted;
             HP = hp;
             Sleepiness = sleepiness;
+            Happiness = happiness;
         }
 
         // 克隆方法
         public object Clone()
         {
-            return new PawnInfo(IsDead, IsSelect, IsOnWork, IsOnBattle, IsDrafted, HP.Clone(), Sleepiness.Clone());
+            return new PawnInfo(IsDead, IsSelect, IsOnWork, IsOnBattle, IsDrafted, HP.Clone(), Sleepiness.Clone(), Happiness.Clone());
         }
     }
 
@@ -103,9 +112,8 @@ namespace ChenChen_AI
             get { return curValue; }
             set
             {
-                // 限制当前值不小于 0
-                if (value < 0) curValue = 0;
-                else curValue = value;
+                // 限制当前值不小于 0 且不大于 maxValue
+                curValue = Mathf.Clamp(value, 0, maxValue);
             }
         }
 
@@ -127,8 +135,8 @@ namespace ChenChen_AI
         public Stats(string name, float curValue, float maxValue)
         {
             Name = name;
-            CurValue = curValue;
             MaxValue = maxValue;
+            CurValue = curValue;
         }
 
         // 克隆方法

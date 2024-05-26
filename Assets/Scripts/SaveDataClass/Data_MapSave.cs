@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Data_MapSave
+public struct Data_MapSave
 {
-    public Data_MapSave()
-    {
-
-    }
-
     public Data_MapSave(string mapName, int width, int height, int seed)
     {
         this.mapName = mapName;

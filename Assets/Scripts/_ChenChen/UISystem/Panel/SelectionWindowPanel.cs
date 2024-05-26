@@ -62,17 +62,17 @@ namespace ChenChen_UISystem
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox0/Refresh").onClick.AddListener(() =>
             {
-                p0.Attribute = new PawnAttribute();
+                p0 = GameManager.Instance.PawnGeneratorTool.ReflashSelectPawn(0);
                 UpdateAttributeValue(0, p0);
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox1/Refresh").onClick.AddListener(() =>
             {
-                p1.Attribute = new PawnAttribute();
+                p1 = GameManager.Instance.PawnGeneratorTool.ReflashSelectPawn(1);
                 UpdateAttributeValue(1, p1);
             });
             UITool.TryGetChildComponentByPath<Button>("PawnBox2/Refresh").onClick.AddListener(() =>
             {
-                p2.Attribute = new PawnAttribute();
+                p2 = GameManager.Instance.PawnGeneratorTool.ReflashSelectPawn(2);
                 UpdateAttributeValue(2, p2);
             });
             UpdateAttributeValue(0, p0);

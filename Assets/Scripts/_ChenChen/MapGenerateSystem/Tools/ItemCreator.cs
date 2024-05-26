@@ -24,9 +24,12 @@ namespace ChenChen_MapGenerator
         /// 生成物体从存档
         /// </summary>
         /// <param name="thingSave"></param>
-        public void GenerateItem(Data_ThingSave thingSave)
+        public void LoadItemFromSave(Data_GameSave gameSave)
         {
-            ThingSystemManager.Instance.TryGenerateThing(thingSave);
+            foreach (var thingSave in gameSave.SaveThings)
+            {
+                ThingSystemManager.Instance.TryGenerateThing(thingSave);
+            }         
         }
     }
 }

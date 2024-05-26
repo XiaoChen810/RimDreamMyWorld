@@ -7,7 +7,7 @@ using UnityEngine;
 /// 表明某位置有某物体，里面包含了物体的名字，位置，旋转，状态
 /// </summary>
 [System.Serializable]
-public class Data_ThingSave
+public struct Data_ThingSave
 {
     public string DefName;
     public Vector2 ThingPos;

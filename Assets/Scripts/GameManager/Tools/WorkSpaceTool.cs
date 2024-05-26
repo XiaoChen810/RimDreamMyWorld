@@ -69,6 +69,25 @@ public class WorkSpaceTool : MonoBehaviour
         StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, onPlace));
     }
 
+    public void LoadFarmWorkSpaceFromSave(Data_GameSave gameSave)
+    {
+        foreach(var fws in gameSave.SaveFarmWorkSpace)
+        {
+            // 加载种植区。
+            Vector2 vector_bl = new Vector2(fws.bounds.min.x, fws.bounds.min.y);
+            Vector2 vector_tr = new Vector2(fws.bounds.max.x, fws.bounds.max.y);
+            GameObject go = WorkSpacePlacedFinally(fws.workSpaceName, vector_bl, vector_tr);
+            WorkSpace_Farm wsf = go.GetComponent<WorkSpace_Farm>();
+            wsf.Init(fws.cropName);
+            // 将其已经种植的作物加载
+            foreach(var cropSave in fws.crops)
+            {
+                wsf.SetAPositionHadFarmed(cropSave);
+            }
+        }
+
+    }
+
     /// <summary>
     /// 扩张现有工作区
     /// </summary>
@@ -149,20 +168,10 @@ public class WorkSpaceTool : MonoBehaviour
             {
                 if (IsOk(mouseDownPosition, mousePositionFloor))
                 {
-                    // 生成实例
-                    GameObject obj = Instantiate(WorkSpacePrefab, transform);
-                    obj.name = newWorkSpaceName;
-                    obj.tag = "WorkSpace";
-                    WorkSpace workSpace = obj.GetComponent<WorkSpace>();
-
-                    // 设置sr的大小为方框大小
-                    workSpace.SetSize(mouseDownPosition, mousePositionFloor);
-                    workSpace.gameObject.SetActive(true);
-
+                    GameObject obj = WorkSpacePlacedFinally(newWorkSpaceName, mousePositionFloor, mouseDownPosition);
                     // 重置LineRenderer
                     ResetLineRenderer();
                     IsDoingWorkSpace = false;
-                    TotalWorkSpaceDictionary.Add(newWorkSpaceName, workSpace);
 
                     onPlace?.Invoke(obj);
                 }
@@ -184,7 +193,13 @@ public class WorkSpaceTool : MonoBehaviour
         {
             if (Mathf.Abs(start.x - end.x) < 1) return false;
             if (Mathf.Abs(start.y - end.y) < 1) return false;
-            Collider2D[] hitColliders = Physics2D.OverlapAreaAll(start, end);
+            Vector2 pa = start;
+            pa.x += (start.x < end.x) ? 0.05f : -0.05f;
+            pa.y += (start.y < end.y) ? 0.05f : -0.05f;
+            Vector2 pb = end;
+            pb.x += (end.x < start.x) ? 0.05f : -0.05f;
+            pb.y += (end.y < start.y) ? 0.05f : -0.05f;
+            Collider2D[] hitColliders = Physics2D.OverlapAreaAll(pa, pb);
             foreach (Collider2D collider in hitColliders)
             {
                 // 有任何一个碰撞体就返回
@@ -242,5 +257,21 @@ public class WorkSpaceTool : MonoBehaviour
             index--;
             IsDoingWorkSpace = false;
         }
+    }
+
+    private GameObject WorkSpacePlacedFinally(string newWorkSpaceName, Vector2 vector_bl, Vector2 vector_tr)
+    {
+        // 生成实例
+        GameObject obj = Instantiate(WorkSpacePrefab, transform);
+        obj.name = newWorkSpaceName;
+        obj.tag = "WorkSpace";
+        WorkSpace workSpace = obj.GetComponent<WorkSpace>();
+
+        // 设置sr的大小为方框大小
+        workSpace.SetSize(vector_tr, vector_bl);
+        workSpace.gameObject.SetActive(true);
+
+        TotalWorkSpaceDictionary.Add(newWorkSpaceName, workSpace);
+        return obj;
     }
 }

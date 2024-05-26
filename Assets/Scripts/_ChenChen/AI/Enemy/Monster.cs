@@ -4,18 +4,20 @@ using UnityEngine;
 
 namespace ChenChen_AI
 {
-    public class Master : MonoBehaviour
+    public class Monster : MonoBehaviour
     {
         /// <summary>
         /// 人物移动的控制
         /// </summary>
-        public MasterController MoveController { get; protected set; }
+        public MonsterController MoveController { get; protected set; }
 
         /// <summary>
         /// 人物动画状态控制
         /// </summary>
         public Animator Animator { get; protected set; }
 
+        [Header("Index ID")]
+        public int IndexId = -1;
         [Header("移动间隔")]
         public float moveDuration = 5;
         [Header("视野范围")]
@@ -23,7 +25,7 @@ namespace ChenChen_AI
 
         private void Start()
         {
-            MoveController = GetComponent<MasterController>();
+            MoveController = GetComponent<MonsterController>();
             Animator = GetComponent<Animator>();
             StartCoroutine(MoveCo());
         }

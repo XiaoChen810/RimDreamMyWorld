@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChenChen_AI
 {
-    public class MasterController : MoveController
+    public class MonsterController : MoveController
     {
         /// <summary>
         /// 前往到目标点

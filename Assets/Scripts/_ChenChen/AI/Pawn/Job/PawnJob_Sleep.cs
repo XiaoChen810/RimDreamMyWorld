@@ -52,6 +52,9 @@ namespace ChenChen_AI
 
                 // Ë¯¾õ
                 pawn.Info.Sleepiness.CurValue += Time.deltaTime;
+
+                // ÒÆ³ý½¹ÂÇ
+                pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
             }
 
             // Ë¯±¥ÁË

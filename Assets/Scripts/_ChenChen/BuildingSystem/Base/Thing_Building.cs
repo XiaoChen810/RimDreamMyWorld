@@ -158,8 +158,11 @@ namespace ChenChen_BuildingSystem
             }
             if (Def.IsObstacle)
             {
-                Bounds bounds = ColliderSelf.bounds;
-                AstarPath.active.UpdateGraphs(bounds);
+                if(AstarPath.active != null)
+                {
+                    Bounds bounds = ColliderSelf.bounds;
+                    AstarPath.active.UpdateGraphs(bounds);
+                }
             }
             ThingSystemManager.Instance.RemoveThingToList(this.gameObject);
         }

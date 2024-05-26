@@ -53,6 +53,9 @@ namespace ChenChen_AI
                 string narrative = $"{me} 正在和 {him} 畅所欲言";
                 ScenarioManager.Instance.Narrative(narrative, pawn.gameObject);
 
+                // 移除焦虑
+                pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
+
                 return StateType.Success;
             }
 

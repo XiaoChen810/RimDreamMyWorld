@@ -6,7 +6,7 @@ using ChenChen_CropSystem;
 public class WorkSpace_Farm : WorkSpace
 {
     [System.Serializable]
-    protected class Cell
+    public class Cell
     {
         public Vector2 pos;
         public bool isUse;
@@ -16,8 +16,7 @@ public class WorkSpace_Farm : WorkSpace
     /// <summary>
     /// 包含的所有网格
     /// </summary>
-    //protected List<Cell> _cells = new();
-    protected Dictionary<Vector2,Cell> _cells = new Dictionary<Vector2,Cell>();
+    public Dictionary<Vector2,Cell> Cells = new Dictionary<Vector2,Cell>();
 
     [SerializeField] protected CropDef _whatCrop;
     public CropDef CurCrop
@@ -25,9 +24,12 @@ public class WorkSpace_Farm : WorkSpace
         get { return _whatCrop; }
     }
 
+    /// <summary>
+    /// 当工作区大小改变后
+    /// </summary>
     protected override void AfterSizeChange()
     {
-        _cells.Clear();
+        Cells.Clear();
         Bounds bounds = SR.bounds;
 
         // 遍历所有整数点，创建并添加到_cells列表中
@@ -36,7 +38,7 @@ public class WorkSpace_Farm : WorkSpace
             for (float y = Mathf.Floor(bounds.min.y); y < Mathf.Ceil(bounds.max.y); y++)
             {
                 Vector2 cellPosition = new Vector2Int((int)x, (int)y) + new Vector2(0.5f, 0.5f);
-                _cells.Add(cellPosition, new Cell { pos = cellPosition, isUse = false, isFarm = false });
+                Cells.Add(cellPosition, new Cell { pos = cellPosition, isUse = false, isFarm = false });
             }
         }
     }
@@ -58,7 +60,7 @@ public class WorkSpace_Farm : WorkSpace
     /// <returns></returns>
     public bool TryGetAFarmingPosition(out Vector2 farmingPositon)
     {
-        foreach(var cell in _cells)
+        foreach(var cell in Cells)
         {
             if(!cell.Value.isUse && !cell.Value.isFarm)
             {
@@ -67,7 +69,7 @@ public class WorkSpace_Farm : WorkSpace
                 return true;
             }
         }
-        Debug.LogWarning("No Position Can Farm");
+        Debug.Log($"该种植区{name}已经满了，权限设为IsBooking");
         farmingPositon = Vector2.zero;
         _permission = PermissionType.IsBooking;                                
         return false;
@@ -80,9 +82,9 @@ public class WorkSpace_Farm : WorkSpace
     /// <returns></returns>
     public bool TrySetAPositionHadFarmed(Vector2 position)
     {
-        if (_cells.ContainsKey(position))
+        if (Cells.ContainsKey(position))
         {
-            Cell cell = _cells[position];
+            Cell cell = Cells[position];
             if (cell.pos == position && cell.isUse && !cell.isFarm)
             {
                 GameObject cropObj = new GameObject(_whatCrop.CropName);
@@ -101,11 +103,41 @@ public class WorkSpace_Farm : WorkSpace
         return false;
     }
 
+    /// <summary>
+    /// 在这个位置种植，一般是从存档中直接赋值
+    /// </summary>
+    /// <param name="data_CropSave"></param>
+    /// <returns></returns>
+    public void SetAPositionHadFarmed(Data_CropSave data_CropSave)
+    {
+        if (Cells.ContainsKey(data_CropSave.position))
+        {
+            Cell cell = Cells[data_CropSave.position];
+
+            GameObject cropObj = new GameObject(_whatCrop.CropName);
+            cropObj.transform.position = data_CropSave.position;
+            cropObj.transform.SetParent(transform, true);
+            Crop crop = cropObj.AddComponent<Crop>();
+            crop.Init(_whatCrop, this, data_CropSave);
+
+            cell.isFarm = true;
+            cell.isUse = false;
+            cell.Crop = crop;
+            return;
+
+        }
+        Debug.LogWarning("Warning");
+    }
+
+    /// <summary>
+    /// 返还一个位置，可能是中断种植或者收获作物时使用
+    /// </summary>
+    /// <param name="position"></param>
     public void ReturnAPosition(Vector2 position)
     {
-        if (_cells.ContainsKey(position))
+        if (Cells.ContainsKey(position))
         {
-            Cell cell = _cells[position];
+            Cell cell = Cells[position];
             if (cell.pos == position && cell.isUse && !cell.isFarm)
             {
                 cell.isUse = false;

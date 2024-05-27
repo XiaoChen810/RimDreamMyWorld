@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using ChenChen_BuildingSystem;
+using ChenChen_Thing;
 
 public class ThingDefGeneratorEditorWindow : EditorWindow
 {

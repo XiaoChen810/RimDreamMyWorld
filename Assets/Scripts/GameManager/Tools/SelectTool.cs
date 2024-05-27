@@ -1,5 +1,6 @@
 using ChenChen_AI;
-using ChenChen_BuildingSystem;
+using ChenChen_Thing;
+using ChenChen_UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -105,8 +106,11 @@ public class SelectTool : MonoBehaviour
         foreach(var d in dvs)
         {
             //关闭上一次DetailView的选择
-            d.CloseIndicator();   
-            d.ClosePanel();
+            if (d != null)
+            {
+                d.CloseIndicator();
+                d.ClosePanel();
+            }
         }
         dvs.Clear();
         // 判断有无选中棋子

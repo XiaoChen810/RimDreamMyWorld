@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using ChenChen_UISystem;
+using ChenChen_UI;
 
 namespace ChenChen_AI
 {
@@ -26,6 +26,11 @@ namespace ChenChen_AI
             jobGivers.Add(new JobGiver_Demolish((GameObject job) =>
             {
                 StateMachine.NextState = new PawnJob_Demolished(this, job);
+            }));
+            // ÇÐ³ý
+            jobGivers.Add(new JobGiver_Cut((GameObject job) =>
+            {
+                StateMachine.NextState = new PawnJob_Cut(this, job);
             }));
             // ÖÖÖ²
             jobGivers.Add(new JobGiver_Farming((GameObject job) =>

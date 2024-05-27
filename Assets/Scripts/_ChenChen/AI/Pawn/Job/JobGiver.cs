@@ -17,7 +17,7 @@ namespace ChenChen_AI
 
         private float lastGiverTime;
 
-        public JobGiver(Action<GameObject> onGetJobSuccessly, float intervalTime, float probability = 1)
+        public JobGiver(Action<GameObject> onGetJobSuccessly, float intervalTime = 5, float probability = 1)
         {
             this.onGetJobSuccessly = onGetJobSuccessly;
             this.intervalTime = intervalTime;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-using ChenChen_MapGenerator;
+using ChenChen_Map;
 
 namespace ChenChen_AI
 {
@@ -16,7 +16,7 @@ namespace ChenChen_AI
         [Header("Debug")]
         // 自身上一个位置
         protected Vector3 lastTransPositon;
-        // 开始寻路
+        // 开始移动
         [SerializeField] protected bool isStart = false;
         // 能否移动，isStart 和 canMove同时为 true 才会动
         [SerializeField] protected bool canMove = true;
@@ -80,6 +80,38 @@ namespace ChenChen_AI
 
         private float lastRepath = float.NegativeInfinity;
 
+        /// <summary>
+        /// 暂停移动
+        /// </summary>
+        public void StopMove()
+        {
+            canMove = false;
+        }
+
+        /// <summary>
+        /// 暂停移动一段时间
+        /// </summary>
+        /// <param name="time"></param>
+        public void StopMove(float time)
+        {
+            StartCoroutine(StopMoveCo(time));
+        }
+
+        IEnumerator StopMoveCo(float time)
+        {
+            canMove = false;
+            yield return new WaitForSeconds(time);
+            canMove = true;
+        }
+
+        /// <summary>
+        /// 恢复移动
+        /// </summary>
+        public void RecoverMove()
+        {
+            StopAllCoroutines();
+            canMove = true;
+        }
 
         protected virtual void Start()
         {
@@ -280,14 +312,29 @@ namespace ChenChen_AI
 
         public void FilpLeft()
         {
+            if (IsFaceRight)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                transform.localScale = Vector3.one;
+            }
             lastTransPositon = transform.position;
-            transform.localScale = new Vector3(-1, 1, 1);
+
         }
 
         public void FilpRight()
         {
+            if (IsFaceRight)
+            {
+                transform.localScale = Vector3.one;
+            }
+            else
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
             lastTransPositon = transform.position;
-            transform.localScale = Vector3.one;
         }
 
         #endregion

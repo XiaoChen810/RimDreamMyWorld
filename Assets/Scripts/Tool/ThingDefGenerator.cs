@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using ChenChen_BuildingSystem;
+using ChenChen_Thing;
 
 public class ThingDefGenerator
 {
@@ -76,7 +76,7 @@ public class ThingDefGenerator
                 CreateScript(folderPath, "Thing_Building");
                 break;
             case ThingType.Tree:
-                CreateThingPrefab<Thing_Trees>(ThingName, thingDef);
+                CreateThingPrefab<Thing_Tree>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Trees");
                 break;
             case ThingType.Wall:

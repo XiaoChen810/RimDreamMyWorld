@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-
+[System.Serializable]
 public class TargetPtr
 {
     public GameObject GameObject;

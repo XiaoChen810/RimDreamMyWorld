@@ -1,4 +1,4 @@
-﻿using ChenChen_UISystem;
+﻿using ChenChen_UI;
 using UnityEngine;
 
 namespace ChenChen_AI

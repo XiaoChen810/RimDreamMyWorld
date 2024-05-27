@@ -1,4 +1,4 @@
-﻿using ChenChen_BuildingSystem;
+﻿using ChenChen_Thing;
 using System;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace ChenChen_AI
         protected override GameObject TryGiveJob(Pawn pawn)
         {
             if(!pawn.Def.CanForaging) return null;
-            return ThingSystemManager.Instance.GetThingGenerated("钓鱼点", needFree: true);
+            return ThingSystemManager.Instance.GetThingInstance("钓鱼点", needFree: true);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ChenChen_AI;
 using AYellowpaper.SerializedCollections;
-using ChenChen_MapGenerator;
+using ChenChen_Map;
 
 public class AnimalGenerateTool : MonoBehaviour 
 {

@@ -1,4 +1,4 @@
-using ChenChen_BuildingSystem;
+using ChenChen_Thing;
 using UnityEngine;
 
 namespace ChenChen_AI

@@ -25,6 +25,11 @@ namespace ChenChen_AI
 
         private void Start()
         {
+            SpriteRenderer[] spriteRenderers = gameObject.GetComponentsInChildren<SpriteRenderer>();
+            for (int i = 0; i < spriteRenderers.Length; i++)
+            {
+                spriteRenderers[i].sortingLayerName = "Above";
+            }
             MoveController = GetComponent<MonsterController>();
             Animator = GetComponent<Animator>();
             StartCoroutine(MoveCo());
@@ -78,6 +83,15 @@ namespace ChenChen_AI
                 return true;
             }
             return false;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Pawn") && collision.TryGetComponent<Pawn>(out Pawn pawn))
+            {
+                pawn.GetDamage(5);
+                MoveController.StopMove(3);
+            }
         }
     }
 }

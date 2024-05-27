@@ -1,4 +1,4 @@
-using ChenChen_UISystem;
+using ChenChen_UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

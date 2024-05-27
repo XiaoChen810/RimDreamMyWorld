@@ -30,6 +30,10 @@ namespace ChenChen_AI
         {
             get
             {
+                if (CurState == null)
+                {
+                    return null;
+                }
                 return CurState.GetType();
             }
         }

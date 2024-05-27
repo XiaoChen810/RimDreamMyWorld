@@ -1,8 +1,8 @@
-using ChenChen_MapGenerator;
+using ChenChen_Map;
 using System.Linq;
 using UnityEngine;
 
-namespace ChenChen_BuildingSystem
+namespace ChenChen_Thing
 {
     public class 钓鱼点_Script : Thing_Building
     {

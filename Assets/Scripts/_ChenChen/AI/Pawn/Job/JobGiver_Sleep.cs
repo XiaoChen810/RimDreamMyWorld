@@ -1,5 +1,5 @@
-﻿using ChenChen_BuildingSystem;
-using ChenChen_UISystem;
+﻿using ChenChen_Thing;
+using ChenChen_UI;
 using System;
 using UnityEngine;
 
@@ -26,7 +26,7 @@ namespace ChenChen_AI
         private GameObject FindBed(Pawn pawn)
         {
             //先找自己的床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsGenerated<Thing_Bed>())
+            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>())
             {
                 if (bed.Owner == pawn)
                 {
@@ -36,7 +36,7 @@ namespace ChenChen_AI
             }
 
             // 再找空床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsGenerated<Thing_Bed>())
+            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>())
             {
                 if (bed.Owner == null)
                 {

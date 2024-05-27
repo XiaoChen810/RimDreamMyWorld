@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ChenChen_MapGenerator;
+using ChenChen_Map;
 using ChenChen_Scene;
 using System;
 
@@ -13,6 +13,7 @@ public class GameManager : SingletonMono<GameManager>
     public WorkSpaceTool WorkSpaceTool { get; private set; }
     public AnimalGenerateTool AnimalGenerateTool { get; private set; }
     public MonsterGeneratorTool MonsterGeneratorTool { get; private set; }
+    public TechnologyTool TechnologyTool { get; private set; }
 
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
@@ -52,6 +53,7 @@ public class GameManager : SingletonMono<GameManager>
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
         MonsterGeneratorTool = GetComponent<MonsterGeneratorTool>();
+        TechnologyTool = GetComponent<TechnologyTool>();
     }
 
     public void StartGame()
@@ -136,7 +138,7 @@ public class GameManager : SingletonMono<GameManager>
     public void ≤‚ ‘∞¥≈•()
     {
         Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        MonsterGeneratorTool.GenerateMaster(random);
+        MonsterGeneratorTool.GenerateMonster(random);
     }
 
 #endif

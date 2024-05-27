@@ -1,4 +1,4 @@
-﻿using ChenChen_BuildingSystem;
+﻿using ChenChen_Thing;
 using System;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace ChenChen_AI
         protected override GameObject TryGiveJob(Pawn pawn)
         {
             if (!pawn.Def.CanBuild) return null;
-            return ThingSystemManager.Instance.GetThingGenerated(BuildingLifeStateType.MarkDemolished, needFree: true);
+            return ThingSystemManager.Instance.GetThingInstance(BuildingLifeStateType.MarkDemolished, needFree: true);
         }
     }
 }

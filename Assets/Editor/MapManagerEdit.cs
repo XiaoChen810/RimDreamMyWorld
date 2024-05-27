@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using ChenChen_MapGenerator;
+using ChenChen_Map;
 
 [CustomEditor(typeof(MapManager))]
 public class MapManagerEdit : Editor

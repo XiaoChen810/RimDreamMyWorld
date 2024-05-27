@@ -1,12 +1,11 @@
-using ChenChen_BuildingSystem;
-using ChenChen_MapGenerator;
+using ChenChen_Thing;
+using ChenChen_Map;
 using ChenChen_Scene;
-using ChenChen_UISystem;
+using ChenChen_UI;
 using ChenChen_AI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using ChenChen_CropSystem;
 
 /// <summary>
 /// 游戏流程的管理，保存进度，加载进度等
@@ -69,22 +68,12 @@ public class PlayManager : SingletonMono<PlayManager>
         // 保存地图生成参数
         saveData.SaveMap = MapManager.Instance.CurMapSave;
         // 保存地图上所有的物品
-        foreach (var thing in ThingSystemManager.Instance.ThingBuildingGeneratedList)
+        foreach (var thing in ThingSystemManager.Instance.GetThingsInstance<ThingBase>())
         {
             // 保存
             ThingDef thingDef = thing.Def;
             Data_ThingSave newThingSave = new Data_ThingSave(
                 thingDef.DefName,
-                thing.transform.position,
-                thing.transform.rotation,
-                thing.MapName,
-                thing.LifeState);
-            saveData.SaveThings.Add(newThingSave);
-        }
-        foreach (var thing in ThingSystemManager.Instance.ThingBuildingGeneratedList_NotCommonlyUsed)
-        {
-            ThingDef thingDef = thing.Def;
-            Data_ThingSave newThingSave = new Data_ThingSave(thingDef.DefName,
                 thing.transform.position,
                 thing.transform.rotation,
                 thing.MapName,

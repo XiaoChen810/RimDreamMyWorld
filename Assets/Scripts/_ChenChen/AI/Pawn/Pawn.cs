@@ -1,3 +1,4 @@
+using ChenChen_UI;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -160,8 +161,12 @@ namespace ChenChen_AI
 
         #region Battle
 
+        private bool canDamaged = true;
+
         public void GetDamage(float damage)
         {
+            if (!canDamaged) return;
+
             _pawnInfo.HP.CurValue -= (int)damage;
             if (_pawnInfo.HP.IsSpace)
             {
@@ -170,6 +175,14 @@ namespace ChenChen_AI
                 return;
             }
             Animator.SetTrigger("IsHurted");
+            StartCoroutine(AvoidDamage(2));
+        }
+
+        IEnumerator AvoidDamage(float time)
+        {
+            canDamaged = false;
+            yield return new WaitForSeconds(time);
+            canDamaged = true;
         }
 
         #endregion

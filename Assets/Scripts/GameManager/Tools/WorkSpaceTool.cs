@@ -1,6 +1,7 @@
 using AYellowpaper.SerializedCollections;
-using ChenChen_MapGenerator;
-using ChenChen_UISystem;
+using ChenChen_Map;
+using ChenChen_Thing;
+using ChenChen_UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;

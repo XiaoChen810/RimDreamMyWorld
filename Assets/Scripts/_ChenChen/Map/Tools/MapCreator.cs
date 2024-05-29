@@ -28,8 +28,6 @@ namespace ChenChen_Map
         [SerializeField] private List<FlowerData> _flowersList;
         [Header("预生成物体数据")]
         [SerializeField] private List<ThingData> _prefabsList;
-        [Header("特效生成数据")]
-        [SerializeField] private List<EffectData> _effectsList;
 
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
@@ -101,7 +99,6 @@ namespace ChenChen_Map
             GenerateTileMap();
             GenerateFlowers();
             GenerateThings(mapData);
-            GenerateEffects();
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
@@ -337,52 +334,6 @@ namespace ChenChen_Map
             }
         }
 
-        private void GenerateEffects()
-        {
-            GameObject effectParent = new GameObject("Effect");
-            effectParent.transform.parent = this.transform;
-            foreach (var effect in _effectsList)
-            {
-                int generatedCount = 0;
-                List<Vector2> vector2s = new();
-                int flag = 0;   // 防止无限循环
-                while (generatedCount < effect.num && flag < 1000)
-                {
-                    // 随机生成一个位置
-                    Vector2 pos = new Vector2(UnityEngine.Random.Range(0, _width), UnityEngine.Random.Range(0, _height));
-
-                    // 检查节点位置，不会在同一个位置，间隔距离也不会小于effect.spacing
-                    bool validPosition = true;
-                    foreach (var vec in vector2s)
-                    {
-                        if (Vector2.Distance(pos, vec) < effect.spacing)
-                        {
-                            validPosition = false;
-                            break;
-                        }
-                    }
-
-                    if (validPosition)
-                    {
-                        Instantiate(effect.prefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity, effectParent.transform);
-                        generatedCount++;
-                        vector2s.Add(pos);
-                        flag = 0; // 重置flag，因为成功生成了一个有效位置
-                    }
-                    else
-                    {
-                        flag++;
-                    }
-                }
-
-                if (flag >= 1000)
-                {
-                    Debug.LogWarning("Failed to generate sufficient effects without overlap.");
-                }
-            }
-        }
-
-
         private TileBase GetTileBase(MapNode node)
         {
             foreach (var t in _terrainList)
@@ -423,7 +374,7 @@ namespace ChenChen_Map
                 Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Above";
+                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Bottom";
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;

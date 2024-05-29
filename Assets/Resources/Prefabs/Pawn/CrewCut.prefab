@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
-  m_SortingOrder: 100
+  m_SortingOrder: 0
   m_Sprite: {fileID: -1381946394016166999, guid: 135e8e12f0611134e966d77aa46aace4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -554,3 +554,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EmotionsList: {fileID: 11400000, guid: 172cbb01ba4657149b5cea7349a39b4c, type: 2}
+  CurEmotions: []

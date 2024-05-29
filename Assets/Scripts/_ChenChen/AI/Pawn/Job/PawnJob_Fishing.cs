@@ -36,7 +36,7 @@ namespace ChenChen_AI
             }
 
             // 设置目标点
-            bool flag = pawn.MoveController.GoToHere(target.Positon, Urgency.Normal);
+            bool flag = pawn.MoveController.GoToHere(target.Positon - new Vector3(0, 0.4f), Urgency.Normal);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");

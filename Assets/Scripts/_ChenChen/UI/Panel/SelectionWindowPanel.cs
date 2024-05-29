@@ -50,7 +50,7 @@ namespace ChenChen_UI
                     void GenerateSelectedPawn(Pawn select)
                     {
                         select.Def.StopUpdate = false;
-                        _ = GameManager.Instance.PawnGeneratorTool.GeneratePawn(new Vector3(UnityEngine.Random.Range(45, 55), UnityEngine.Random.Range(45, 55), 0),
+                        _ = GameManager.Instance.PawnGeneratorTool.GeneratePawn(new Vector3(UnityEngine.Random.Range(123, 127), UnityEngine.Random.Range(123, 127), 0),
                                                           select.Def,
                                                           select.Info,
                                                           select.Attribute);

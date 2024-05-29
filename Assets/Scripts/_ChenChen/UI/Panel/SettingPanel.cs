@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ChenChen_Scene;
-using ChenChen_Map;
 
 namespace ChenChen_UI
 {
@@ -12,11 +10,19 @@ namespace ChenChen_UI
         static readonly string path = "UI/Panel/Menus/SettingPanel";
         public SettingPanel() : base(new UIType(path)) { }
 
+        private string saveName = string.Empty;
+
         public override void OnEnter()
         {
+            saveName = PlayManager.Instance.CurSave.SaveName;
+            UITool.TryGetChildComponentByName<InputField>("SaveName").text = saveName;
+            UITool.TryGetChildComponentByName<InputField>("SaveName").onValueChanged.AddListener((string content) =>
+            {
+                saveName = content;
+            });
             UITool.TryGetChildComponentByName<Button>("SaveBtn").onClick.AddListener(() =>
             {
-                PlayManager.Instance.Save();
+                PlayManager.Instance.Save(saveName);
             });
             //UITool.TryGetChildComponentByName<Button>("LoadBtn").onClick.AddListener(() =>
             //{

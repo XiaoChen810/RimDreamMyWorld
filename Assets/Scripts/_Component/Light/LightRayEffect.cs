@@ -14,6 +14,8 @@ public class LightRayEffect : MonoBehaviour
     public float minXScale = 50f;
     public float maxXScale = 100f;
     public float speedXScale = 1f;
+    public Color dayLight;
+    public Color nightLight;
     private List<float> phaseOffsetsIntensity;
     private List<float> phaseOffsetsXScale;
     private List<float> phaseOffsetsYScale;
@@ -52,7 +54,12 @@ public class LightRayEffect : MonoBehaviour
 
             // 赋值
             rays[i].intensity = intensity;
-            rays[i].transform.localScale = new Vector3(xScale, yScale, rays[i].transform.localScale.z);
+            rays[i].transform.localScale = new Vector3(xScale, yScale, rays[i].transform.localScale.z);         
+
+            // 改变颜色
+            bool isDayLight = (GameManager.Instance.currentHour >= 6 && GameManager.Instance.currentHour <= 18);
+            rays[i].color = isDayLight ? dayLight : nightLight;
+
         }
     }
 }

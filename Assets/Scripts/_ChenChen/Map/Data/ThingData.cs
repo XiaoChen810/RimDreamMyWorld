@@ -15,17 +15,4 @@ namespace ChenChen_Map
 
         public int num;
     }
-
-    /// <summary>
-    /// 需要程序生成的特效数据
-    /// </summary>
-    [Serializable]
-    public struct EffectData
-    {
-        public GameObject prefab;
-
-        public int num;
-
-        public int spacing;
-    }
 }

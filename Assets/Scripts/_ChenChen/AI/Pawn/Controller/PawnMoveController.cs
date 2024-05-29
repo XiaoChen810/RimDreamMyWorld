@@ -35,9 +35,13 @@ namespace ChenChen_AI
             {
                 _pawn.StateMachine.TryChangeState(new PawnJob_Draft(_pawn, !_pawn.Info.IsDrafted));
             }
-            // 征兆情况下, 鼠标右击，移动到鼠标点
+            // 征兆情况下, 鼠标右击
             if (_pawn.Info.IsSelect && _pawn.Info.IsDrafted && Input.GetMouseButtonDown(1))
             {
+                Vector2 mouseInput = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Collider2D coll = Physics2D.OverlapPoint(mouseInput);
+
+                // 移动到鼠标点
                 _pawn.StateMachine.TryChangeState(
                     new PawnJob_Move(_pawn, Camera.main.ScreenToWorldPoint(Input.mousePosition)));
             }

@@ -89,6 +89,8 @@ namespace ChenChen_AI
         {
             if (collision.CompareTag("Pawn") && collision.TryGetComponent<Pawn>(out Pawn pawn))
             {
+                Debug.Log("Åöµ½Pawn");
+                Animator.SetTrigger("attack");
                 pawn.GetDamage(5);
                 MoveController.StopMove(3);
             }

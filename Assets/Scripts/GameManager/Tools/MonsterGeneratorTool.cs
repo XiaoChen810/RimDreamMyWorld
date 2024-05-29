@@ -47,7 +47,8 @@ public class MonsterGeneratorTool : MonoBehaviour
 
     private void SpawnMonsterInterval()
     {
-        if(MonstersList.Count >= spawnCountMax) return;
+        if (!GameManager.Instance.GameIsStart) return;
+        if (MonstersList.Count >= spawnCountMax) return;
 
         spawnTimer += Time.deltaTime;
 

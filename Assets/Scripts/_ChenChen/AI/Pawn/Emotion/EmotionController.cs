@@ -51,11 +51,14 @@ namespace ChenChen_AI
                     var emotionsCopy = CurEmotions.ToList();
                     foreach (var emotion in emotionsCopy)
                     {
-                        sr.DOFade(0, 0.9f);
-                        yield return new WaitForSeconds(1);
-                        sr.sprite = emotion.icon;
-                        sr.DOFade(1, 0.9f);
-                        yield return new WaitForSeconds(1);
+                        if (sr != null)
+                        {
+                            sr.DOFade(0, 0.9f);
+                            yield return new WaitForSeconds(1);
+                            sr.sprite = emotion.icon;
+                            sr.DOFade(1, 0.9f);
+                            yield return new WaitForSeconds(1);
+                        }
                     }
                 }
                 yield return null;
@@ -105,5 +108,11 @@ namespace ChenChen_AI
         {
             CurEmotions.RemoveAll(e => e.type == emotionType);
         }
+
+        private void OnDestroy()
+        {
+            DOTween.Kill(sr);
+        }
+
     }
 }

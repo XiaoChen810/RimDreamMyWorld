@@ -9,6 +9,8 @@ namespace ChenChen_Thing
         {
             base.OnEnable();
             tag = "Floor";
+            GetComponent<SpriteRenderer>().sortingLayerName = "Bottom";
+            GetComponent<SpriteRenderer>().sortingOrder = 0;
         }
 
         public override bool CanBuildHere()

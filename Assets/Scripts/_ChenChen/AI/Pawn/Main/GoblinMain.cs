@@ -23,7 +23,6 @@ namespace ChenChen_AI
                 }
                 lastGetJobTime = Time.time;
             }
-
         }
     }
 }

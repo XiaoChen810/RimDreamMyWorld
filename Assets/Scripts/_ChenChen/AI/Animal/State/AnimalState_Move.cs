@@ -17,7 +17,7 @@ namespace ChenChen_AI
             // 设置目标点
             if (!_animal.MoveController.GoToHere(_moveTargetPosition, Urgency.Wander, isAquaticAnimals: _animal.Def.IsAquaticAnimals))
             {
-                DebugLogDescription = ("无法移动到目标点");
+                //DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
             return true;

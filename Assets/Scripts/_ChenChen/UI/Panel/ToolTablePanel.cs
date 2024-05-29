@@ -23,6 +23,14 @@ namespace ChenChen_UI
 
             // 加载所有能制作的东西
             InitContent();
+
+            GameManager.Instance.PauseGame();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            GameManager.Instance.RecoverGame();
         }
 
         private void InitContent()
@@ -44,20 +52,29 @@ namespace ChenChen_UI
 
             foreach (var stuffdef in StorageManager.Instance.StuffDefDictionary)
             {
+                bool flag = true;
+                if (!stuffdef.Value.CanMake) flag = false;
                 foreach (string nt in stuffdef.Value.needsTechs)
                 {
                     // 有一个前置科技没解锁就下一个
-                    if (!GameManager.Instance.TechnologyTool.IsUnlock(nt)) continue;
+                    if (!GameManager.Instance.TechnologyTool.IsUnlock(nt))
+                    {
+                        flag = false;
+                        break;
+                    }
                 }
 
-                GameObject stuffMaker = Object.Instantiate(stuffMakerPrefab);
-                stuffMaker.name = $"StuffMaker";
-                stuffMaker.transform.Find("StuffName").GetComponent<Text>().text = stuffdef.Value.Name;
-                foreach (string need in stuffdef.Value.needs)
+                if (flag)
                 {
-                    stuffMaker.transform.Find("Needs").GetComponent<Text>().text += need + ",";
+                    GameObject stuffMaker = Object.Instantiate(stuffMakerPrefab);
+                    stuffMaker.name = $"StuffMaker";
+                    stuffMaker.transform.Find("StuffName").GetComponent<Text>().text = stuffdef.Value.Name;
+                    foreach (string need in stuffdef.Value.needs)
+                    {
+                        stuffMaker.transform.Find("Needs").GetComponent<Text>().text += need + ",";
+                    }
+                    stuffMaker.transform.SetParent(content.transform, false);
                 }
-                stuffMaker.transform.SetParent(content.transform, false);
             }
         }
     }

@@ -22,6 +22,7 @@ namespace ChenChen_AI
             _time += Time.deltaTime;
             if (_time > _waitTime)
             {
+                _waitTime = 0;
                 Vector2 p = _animal.transform.position;
                 p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
                 _animal.StateMachine.NextState = new AnimalState_Move(_animal, p);

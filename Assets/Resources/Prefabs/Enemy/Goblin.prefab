@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
-  m_SortingOrder: 100
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4308361166033338044, guid: 5e46ad15a52f1b14bac5042e133442a8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -386,6 +386,10 @@ MonoBehaviour:
       maxValue: 100
     sleepiness:
       name: "\u7761\u7720"
+      curValue: 100
+      maxValue: 100
+    happiness:
+      name: "\u5FC3\u60C5"
       curValue: 100
       maxValue: 100
   chaseRange: 14

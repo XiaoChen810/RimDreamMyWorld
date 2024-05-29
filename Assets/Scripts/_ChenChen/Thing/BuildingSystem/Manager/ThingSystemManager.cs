@@ -220,6 +220,13 @@ namespace ChenChen_Thing
 
             return list;
         }
+        public List<ThingBase> GetAllThingsInstance()
+        {
+            List<ThingBase> list = new();
+            list.AddRange(ThingList_Building);
+            list.AddRange(ThingList_Trees);
+            return list;
+        }
         /// <summary>
         /// 访问字典，找到存在的物品定义并返回
         /// </summary>

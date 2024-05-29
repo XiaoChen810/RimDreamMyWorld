@@ -17,6 +17,8 @@ namespace ChenChen_Thing
         public string Description;
         [Header("图片")]
         public Sprite Icon;
+        [Header("可以被制作")]
+        public bool CanMake;
         [Header("制作需要的材料")]
         public List<string> needs;
         [Header("制作需要的科技")]

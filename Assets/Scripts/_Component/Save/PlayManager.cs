@@ -60,6 +60,8 @@ public class PlayManager : SingletonMono<PlayManager>
         string saveDate = DateTime.Now.ToString();
         saveName = saveName == null ? "unnamed" : CurSave.SaveName;
         Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
+        // 保存摄像机位置
+        saveData.CameraPosition = Camera.main.transform.position;
         // 保存游戏时长
         saveData.currentSeason = GameManager.Instance.currentSeason;
         saveData.currentDay = GameManager.Instance.currentDay;
@@ -68,7 +70,7 @@ public class PlayManager : SingletonMono<PlayManager>
         // 保存地图生成参数
         saveData.SaveMap = MapManager.Instance.CurMapSave;
         // 保存地图上所有的物品
-        foreach (var thing in ThingSystemManager.Instance.GetThingsInstance<ThingBase>())
+        foreach (var thing in ThingSystemManager.Instance.GetAllThingsInstance())
         {
             // 保存
             ThingDef thingDef = thing.Def;
@@ -146,6 +148,8 @@ public class PlayManager : SingletonMono<PlayManager>
     /// <param name="gameSave"></param>
     public void Load(Data_GameSave gameSave)
     {
+        // 加载摄像机位置
+        Camera.main.transform.position = gameSave.CameraPosition;
         // 加载游戏时间
         GameManager.Instance.InitGameTime(
             gameSave.currentSeason,
@@ -175,11 +179,13 @@ public class PlayManager : SingletonMono<PlayManager>
         if (SaveList.Contains(save))
         {
             SaveList.Remove(save);
+            ES3.Save(root_save_name, SaveList);
         }
     }
 
     private void OnApplicationQuit()
     {
-        //Debug.Log("游戏退出，自动保存");
+        Save(CurSave.SaveName);
+        Debug.Log("游戏退出，自动保存");
     }
 }

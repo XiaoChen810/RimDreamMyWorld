@@ -520,6 +520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf2fe50bc6761243b579f6630d8308c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IndexId: -1
   moveDuration: 5
   seeRange: 10
 --- !u!114 &5830144829686817314

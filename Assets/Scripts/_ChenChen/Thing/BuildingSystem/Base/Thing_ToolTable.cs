@@ -12,12 +12,13 @@ namespace ChenChen_Thing
         private void Update()
         {
             // 检测鼠标点击事件
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !ThingSystemManager.Instance.Tool.OnBuildMode)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Collider2D[] hitColliders = Physics2D.OverlapPointAll(worldPosition);
+                foreach (Collider2D collider in hitColliders)
                 {
-                    if (hit.transform == this.transform)
+                    if (collider == ColliderSelf)
                     {
                         OnClick();
                     }

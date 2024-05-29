@@ -400,6 +400,9 @@ MonoBehaviour:
   minXScale: 250
   maxXScale: 300
   speedXScale: 0.05
+  dayLight: {r: 1, g: 1, b: 1, a: 1}
+  nightLight: {r: 0.10980392, g: 0.11764706, b: 0.85882354, a: 1}
+  lifeTime: 5
 --- !u!1 &8202986331057253974
 GameObject:
   m_ObjectHideFlags: 0

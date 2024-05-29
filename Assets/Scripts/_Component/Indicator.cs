@@ -13,6 +13,7 @@ public class Indicator : MonoBehaviour
         foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
         {
             sr.sortingLayerName = "Above";
+            sr.sortingOrder = 1;
         }
     }
 

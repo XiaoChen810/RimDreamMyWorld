@@ -260,7 +260,7 @@ namespace ChenChen_Map
                 Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Above";
+                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Bottom";
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;

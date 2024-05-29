@@ -20,6 +20,8 @@ public class Data_GameSave
 
     public string SaveDate;
 
+    public Vector3 CameraPosition;
+
     [Header("Time")]
     public int currentSeason = 1; 
     public int currentDay = 1; 

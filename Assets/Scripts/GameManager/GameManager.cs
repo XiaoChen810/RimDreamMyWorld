@@ -18,6 +18,9 @@ public class GameManager : SingletonMono<GameManager>
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
 
+    private bool _cinematicMode = false;
+    public bool CinematicMode { get { return _cinematicMode; } }  // 电影模式
+
     [Header("Time")]
     public int currentSeason = 1; // 当前季节，1为春季，2为夏季，3为秋季，4为冬季
     public int currentDay = 1; // 当前天数，每季度15天
@@ -54,6 +57,14 @@ public class GameManager : SingletonMono<GameManager>
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
         MonsterGeneratorTool = GetComponent<MonsterGeneratorTool>();
         TechnologyTool = GetComponent<TechnologyTool>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F11))
+        {
+            _cinematicMode = !_cinematicMode;
+        }
     }
 
     public void StartGame()

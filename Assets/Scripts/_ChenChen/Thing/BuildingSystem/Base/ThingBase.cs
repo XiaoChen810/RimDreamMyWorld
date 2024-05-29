@@ -166,6 +166,7 @@ namespace ChenChen_Thing
         }
         private void OnGUI()
         {
+            if (GameManager.Instance.CinematicMode) return;
             if (DrawOutline_Collider)
             {
                 // 计算建造物体的边界框

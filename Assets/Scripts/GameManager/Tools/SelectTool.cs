@@ -119,6 +119,8 @@ public class SelectTool : MonoBehaviour
         if (Logic_Thing(hitColliders)) return;
         // 判断有无工作区
         if (Logic_WorkSpace(hitColliders)) return;
+        // 判断有无地板
+        if (Logic_Floor(hitColliders)) return;
     }
 
     private bool Logic_Pawn(Collider2D[] hitColliders)
@@ -152,7 +154,33 @@ public class SelectTool : MonoBehaviour
         bool flag = false;
         foreach (Collider2D collider in hitColliders)
         {
-            if (collider.CompareTag("Thing") || collider.CompareTag("Floor"))
+            if (collider.CompareTag("Thing"))
+            {
+                ThingBase thing = collider.GetComponent<ThingBase>();
+                dvs.Add(thing.DetailView);
+                flag = true;
+            }
+        }
+        if (dvs.Count == 1)
+        {
+            dvs[0].OpenIndicator();
+            dvs[0].OpenPanel();
+        }
+        else if (dvs.Count > 1)
+        {
+            foreach (var d in dvs)
+            {
+                d.OpenIndicator();
+            }
+        }
+        return flag;
+    }
+    private bool Logic_Floor(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
+        {
+            if (collider.CompareTag("Floor"))
             {
                 ThingBase thing = collider.GetComponent<ThingBase>();
                 dvs.Add(thing.DetailView);

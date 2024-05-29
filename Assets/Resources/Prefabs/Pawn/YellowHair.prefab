@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EmotionsList: {fileID: 11400000, guid: 172cbb01ba4657149b5cea7349a39b4c, type: 2}
+  CurEmotions: []
 --- !u!1 &2095271158411462292
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
-  m_SortingOrder: 100
+  m_SortingOrder: 0
   m_Sprite: {fileID: -4487960324951269688, guid: 7fa5921d3b2d428439c381483fa4ff21, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMapDefaultTileBase: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
   lacunarrty: 0.08
-  needSaveForPrefab: 0
+  needSaveForPrefab: 1
   _terrainList:
   - probability: 0.2
     tilemapName: River
@@ -140,10 +140,3 @@ MonoBehaviour:
   - name: "\u6A31\u82B1\u6811"
     type: 1
     num: 500
-  _effectsList:
-  - prefab: {fileID: 8171373853705526921, guid: 31c8c27dfb42da54e9548d06b9d705f3, type: 3}
-    num: 0
-    spacing: 0
-  - prefab: {fileID: 7562996378230635062, guid: 6f2c22407115b0346b458fea01b60764, type: 3}
-    num: 5
-    spacing: 50

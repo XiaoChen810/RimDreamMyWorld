@@ -11,10 +11,13 @@ public class CameraCulling : MonoBehaviour
     public float FlashDistance = 1.0f;
     public float PreLoadRange = 5.0f;
 
-    // 剔除视野外的物体
-    private void Update()
+    private void OnEnable()
     {
-        if (!GameManager.Instance.GameIsStart) return;
+        GameManager.Instance.OnGameStart += Instance_OnGameStart;
+    }
+
+    private void Instance_OnGameStart()
+    {
         // 初始化
         if (cam == null || quadtree == null)
         {
@@ -23,6 +26,18 @@ public class CameraCulling : MonoBehaviour
             lastCameraPositon = cam.transform.position;
             Flash();
         }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= Instance_OnGameStart;
+    }
+
+    // 剔除视野外的物体
+    private void Update()
+    {
+        if (!GameManager.Instance.GameIsStart) return;
+
         if(Vector2.Distance(lastCameraPositon, cam.transform.position) >= FlashDistance)
         {
             lastCameraPositon = cam.transform.position;

@@ -10,7 +10,6 @@ namespace ChenChen_UI
         public static readonly string path = "UI/Component/LoadingPanel";
         private AnimatorTool _animatorTool;
         private bool _isStart;
-        private Slider _slider;
 
         public LoadingPanel(bool isStart, AnimatorTool animatorTool) : base(new UIType(path))
         {
@@ -22,8 +21,6 @@ namespace ChenChen_UI
         {
             base.OnEnter();
             Image background = UITool.GetChildByName("Background").GetComponent<Image>();
-            _slider = UITool.TryGetChildComponentByName<Slider>("ProgressSlider");
-            _animatorTool.ProgressSilder = _slider;
             if (_isStart)
             {
                 //background.color = new Color(0, 0, 0, 0);
@@ -31,11 +28,8 @@ namespace ChenChen_UI
             }
             else
             {
-                _slider.gameObject.SetActive(false);
-                background.color = new Color(0, 0, 0, 1);
-                background.DOFade(0, 2);
+                OnExit();
             }
-            OnExit(3);
         }
     }
 }

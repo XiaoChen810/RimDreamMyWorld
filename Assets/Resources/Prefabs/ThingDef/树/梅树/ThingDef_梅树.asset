@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "ThingDef_\u6885\u6811"
   m_EditorClassIdentifier: 
   DefName: "\u6885\u6811"
-  Type: 5
+  Type: 4
   Workload: 100
   PreviewSprite: {fileID: -2476179924918498030, guid: 802795dff0ff517469d6db1f50df8914, type: 3}
   IsObstacle: 0

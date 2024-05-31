@@ -24,8 +24,9 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            if (pawn.StateMachine.NextState != null || !(pawn.StateMachine.StateQueue.Count == 0))
+            if (pawn.StateMachine.NextState != null || pawn.StateMachine.StateQueue.Count != 0)
             {
+                Debug.Log(1);
                 pawn.EmotionController.RemoveEmotion(EmotionType.confused);
                 return StateType.Success;
             }

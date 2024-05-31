@@ -6,6 +6,8 @@ using UnityEditor;
 using System.IO;
 using ChenChen_Map;
 using UnityEngine.UIElements;
+using System;
+using System.Linq;
 
 namespace ChenChen_Thing
 {
@@ -18,14 +20,9 @@ namespace ChenChen_Thing
         [SerializedDictionary("名称", "物品定义")]
         public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
 
-        /// <summary>
-        /// Trees列表
-        /// </summary>
-        [SerializeField] private List<Thing_Tree> ThingList_Trees = new List<Thing_Tree>();
-        /// <summary>
-        /// Building列表
-        /// </summary>
-        [SerializeField] private List<Thing_Building> ThingList_Building = new List<Thing_Building>();
+        private Dictionary<Vector2, Thing_Tree> ThingDict_Tree = new();
+        private Dictionary<string, LinkedList<ThingBase>> ThingDict = new();
+
 
         private BuildingModeTool tool;
         public BuildingModeTool Tool // 处理物品的建造
@@ -95,20 +92,29 @@ namespace ChenChen_Thing
         #region Public
 
         /// <summary>
-        /// 将物体添加到已生成列表
+        /// 将物体添加到完成列表
         /// </summary>
         /// <param name="obj"></param>
         public void AddThingToList(GameObject obj)
         {
             if (obj.TryGetComponent<ThingBase>(out var thing))
             {
-                if (thing.Def.Type == ThingType.Tree)
+                switch (thing.Def.Type)
                 {
-                    ThingList_Trees.Add(thing.GetComponent<Thing_Tree>());
-                }
-                else
-                {
-                    ThingList_Building.Add(thing.GetComponent<Thing_Building>());
+                    case ThingType.Tree:
+                        ThingDict_Tree.Add(obj.transform.position, thing.GetComponent<Thing_Tree>());
+                        break;
+                    default:
+                        if (ThingDict.ContainsKey(thing.Def.DefName))
+                        {
+                            ThingDict[thing.Def.DefName].AddFirst(thing);
+                        }
+                        else
+                        {
+                            ThingDict.Add(thing.Def.DefName, new LinkedList<ThingBase>());
+                            ThingDict[thing.Def.DefName].AddFirst(thing);
+                        }
+                        break;
                 }
 
                 Quadtree.Insert(obj);
@@ -118,58 +124,78 @@ namespace ChenChen_Thing
                 Debug.LogWarning("检测到没有 ThingBase 组件的物体想添加进列表 ，已返回");
                 return;
             }
-        }
+        }        
         /// <summary>
-        /// 将物体移除已生成列表
+        /// 将物体移除
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">要移除的物体</param>
         public void RemoveThing(GameObject obj)
         {
+            // 检查传入的对象是否为null
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj), "传入的物体不能为空");
+            }
+
+            // 尝试获取 ThingBase 组件
             if (!obj.TryGetComponent<ThingBase>(out var thing))
             {
                 Debug.LogWarning($"{obj} 没有 <ThingBase> 组件");
                 return;
             }
-            else
+
+            // 根据 ThingBase 的类型移除相应的物体
+            switch (thing.Def.Type)
             {
-                if (thing.TryGetComponent<Thing_Building>(out Thing_Building building) && ThingList_Building.Contains(building))
-                {
-                    ThingList_Building.Remove(building);
-                    return;
-                }
-                if (thing.TryGetComponent<Thing_Tree>(out Thing_Tree tree) && ThingList_Trees.Contains(tree))
-                {
-                    ThingList_Trees.Remove(tree);
-                    return;
-                }
-                Debug.Log("列表里没有这个物体");
-                return;
+                case ThingType.Tree:
+                    // 检查是否成功移除
+                    if (!ThingDict_Tree.Remove(obj.transform.position))
+                    {
+                        Debug.LogWarning($"未能从 ThingDict_Tree 中移除位置为 {obj.transform.position} 的物体");
+                        throw new InvalidOperationException($"移除失败：在 ThingDict_Tree 中找不到位置为 {obj.transform.position} 的物体");
+                    }
+                    break;
+                default:
+                    // 检查字典中是否包含物体名称
+                    if (!ThingDict.ContainsKey(obj.name))
+                    {
+                        Debug.LogWarning($"ThingDict 中不存在键为 {obj.name} 的条目");
+                        throw new KeyNotFoundException($"移除失败：在 ThingDict 中找不到键为 {obj.name} 的条目");
+                    }
+
+                    // 检查是否成功移除
+                    if (!ThingDict[obj.name].Remove(thing))
+                    {
+                        Debug.LogWarning($"未能从 ThingDict 中移除名称为 {obj.name} 的物体");
+                        throw new InvalidOperationException($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
+                    }
+                    break;
             }
         }
         /// <summary>
-        /// 获取物体实例从已生成列表
+        /// 获取物体实例
         /// </summary>
         /// <param name="name"></param>
         /// <param name="needFree"> 是否需要一个没有被使用的 </param>
         /// <returns></returns>
-        public GameObject GetThingInstance(string name = null, bool needFree = true)
+        public GameObject GetThingInstance(string name, bool needFree = true)
         {
-            foreach (var building in ThingList_Building)
+            if (!ThingDict.ContainsKey(name))
             {
-                if (name != null && building.Def.DefName != name) continue;
-                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                return building.gameObject;
+                Debug.LogWarning($"ThingDict 中不存在键为 {name} 的条目");
             }
-            foreach (var tree in ThingList_Trees)
+            else
             {
-                if (name != null && tree.Def.DefName != name) continue;
-                if (needFree && (tree.TheUsingPawn != null || tree.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                return tree.gameObject;
+                foreach (var thing in ThingDict[name])
+                {
+                    if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    return thing.gameObject;
+                }
             }
             return null;
         }
         /// <summary>
-        /// 获取物体实例从已生成列表
+        /// 获取物体实例
         /// </summary>
         /// <param name="lifeState"> 物体处于什么阶段 </param>
         /// <param name="name"></param>
@@ -177,55 +203,82 @@ namespace ChenChen_Thing
         /// <returns></returns>
         public GameObject GetThingInstance(BuildingLifeStateType lifeState, string name = null, bool needFree = true)
         {
-            foreach (var building in ThingList_Building)
+            if (name != null && ThingDict.ContainsKey(name))
             {
-                if (building.LifeState != lifeState) continue;
-                if (name != null && building.Def.DefName != name) continue;
-                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                return building.gameObject;
-            }
-            foreach (var tree in ThingList_Trees)
+                Debug.LogWarning($"ThingDict 中不存在键为 {name} 的条目");
+                foreach (var thing in ThingDict[name])
+                {
+                    if (thing.LifeState != lifeState) continue;
+                    if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    return thing.gameObject;
+                }
+            }           
+            foreach (var thinglist in ThingDict)
             {
-                if (tree.LifeState != lifeState) continue;
-                if (name != null && tree.Def.DefName != name) continue;
-                if (needFree && (tree.TheUsingPawn != null || tree.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                return tree.gameObject;
+                foreach (var thing in thinglist.Value)
+                {
+                    if (thing.LifeState != lifeState) continue;
+                    if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    return thing.gameObject;
+                }
             }
             return null;
         }
         /// <summary>
-        /// 获取全部物体实例从已生成列表
+        /// 获取全部物体实例
         /// </summary>
         /// <typeparam name="T">物体类型</typeparam>
-        /// <param name="name">指定的名字（可选）</param>
         /// <param name="needFree">是否需要一个没有被使用的物体（默认值为 true）</param>
         /// <returns>符合条件的物体列表</returns>
-        public List<T> GetThingsInstance<T>(string name = null, bool needFree = true) where T : ThingBase
+        public List<T> GetThingsInstance<T>(BuildingLifeStateType lifeState = BuildingLifeStateType.None, bool needFree = true) where T : ThingBase
         {
             List<T> list = new List<T>();
-            foreach (var building in ThingList_Building)
+            foreach (var thinglist in ThingDict)
             {
-                if (!building.TryGetComponent<T>(out T component)) continue;
-                if (name != null && building.Def.DefName != name) continue;
-                if (needFree && (building.TheUsingPawn != null || building.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                list.Add(component);
+                foreach (var thing in thinglist.Value)
+                {
+                    if (thing is not T) continue;
+                    if (thing.LifeState != lifeState) continue;
+                    if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
+                    list.Add(thing as T);
+                }
             }
-            foreach (var tree in ThingList_Trees)
-            {
-                if (!tree.TryGetComponent<T>(out T component)) continue;
-                if (name != null && tree.Def.DefName != name) continue;
-                if (needFree && (tree.TheUsingPawn != null || tree.Permission != PermissionBase.PermissionType.IsFree)) continue;
-                list.Add(component);
-            }
-
             return list;
         }
+        /// <summary>
+        /// 获取全部物体实例
+        /// </summary>
+        /// <returns></returns>
         public List<ThingBase> GetAllThingsInstance()
         {
             List<ThingBase> list = new();
-            list.AddRange(ThingList_Building);
-            list.AddRange(ThingList_Trees);
+            foreach (var thingList in ThingDict)
+            {
+                foreach(var thing in thingList.Value)
+                {
+                    list.Add(thing as ThingBase);
+                }
+            }
+            foreach (var thing in ThingDict_Tree)
+            {
+                list.Add(thing.Value as ThingBase);
+            }
             return list;
+        }
+        /// <summary>
+        /// 获取一颗要砍的树
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetTreeToCut()
+        {
+            foreach (var tree in ThingDict_Tree)
+            {
+                if (tree.Value.IsMarkCut)
+                {
+                    return tree.Value.gameObject;
+                }
+            }
+            return null;
         }
         /// <summary>
         /// 访问字典，找到存在的物品定义并返回

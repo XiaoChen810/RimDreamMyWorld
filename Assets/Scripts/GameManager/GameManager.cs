@@ -18,6 +18,8 @@ public class GameManager : SingletonMono<GameManager>
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
 
+    public event Action OnGameStart;
+
     private bool _cinematicMode = false;
     public bool CinematicMode { get { return _cinematicMode; } }  // 电影模式
 
@@ -75,6 +77,7 @@ public class GameManager : SingletonMono<GameManager>
         }
         //正式开始
         _gameIsStart = true;
+        OnGameStart?.Invoke();
         //时间流逝
         timeCoroutine = StartCoroutine(TimeFlow());
         AnimalGenerateTool.CreateAllAnimalThree();
@@ -149,7 +152,7 @@ public class GameManager : SingletonMono<GameManager>
     public void 测试按钮()
     {
         Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        MonsterGeneratorTool.GenerateMonster(random);
+        MonsterGeneratorTool.GenerateMonster(random, 0);
     }
 
 #endif

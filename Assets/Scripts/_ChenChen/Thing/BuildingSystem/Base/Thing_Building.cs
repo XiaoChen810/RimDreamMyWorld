@@ -1,6 +1,4 @@
-using ChenChen_AI;
 using ChenChen_Map;
-using ChenChen_UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -14,41 +12,28 @@ namespace ChenChen_Thing
         {
             // 设置初始值
             Workload = WorkloadBuilt;
+            CurDurability = MaxDurability;
             MapName = mapName;
-            // 设置碰撞体
-            if (TryGetComponent<Collider2D>(out Collider2D coll))
-            {
-                if(coll != null)
-                {
-                    GetComponent<Collider2D>().isTrigger = true;
-                }
-                else
-                {
-                    coll = gameObject.AddComponent<BoxCollider2D>();  
-                    coll.isTrigger = true;
-                }
-            }
-            // 判断初始状态，需不需要标志建造
+
+            // 判断初始状态，需不需要标记建造
             ChangeLifeState(initial_State);
-            if(_lifeState == BuildingLifeStateType.None)
+            if (_lifeState == BuildingLifeStateType.None)
             {
                 ChangeLifeState(Workload <= 0 ? BuildingLifeStateType.FinishedBuilding : BuildingLifeStateType.MarkBuilding);
-            }      
+            }
         }
 
         public override void OnMarkBuild()
         {
-            // 变成半透明，表示还未完成
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            sr.color = new Color(1, 1, 1, 0f);
+            SR.color = new Color(1, 1, 1, 0f);
             DrawOutline_Collider = true;
-            Workload = Workload > 0 ? Workload :WorkloadBuilt;
+            Workload = Workload > 0 ? Workload : WorkloadBuilt;
         }
 
         public override void OnBuild(int value)
         {
             Workload -= value;
-            if(Workload <= 0)
+            if (Workload <= 0)
             {
                 Workload = 0;
                 ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
@@ -57,15 +42,13 @@ namespace ChenChen_Thing
 
         public override void OnCompleteBuild()
         {
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-
             // 在瓦片地图设置瓦片
             if (Def.TileBase != null)
             {
-                if (MapManager.Instance.TryGetTilemap("Building", true, out Tilemap buildingTilemap))
+                if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap tilemap))
                 {
-                    buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
-                    sr.color = new Color(1, 1, 1, 0f);
+                    tilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
+                    SR.color = new Color(1, 1, 1, 0f);
                 }
                 else
                 {
@@ -74,13 +57,13 @@ namespace ChenChen_Thing
             }
             else
             {
-                sr.color = new Color(1, 1, 1, 1f);
+                SR.color = new Color(1, 1, 1, 1f);
             }
 
             // 如果是障碍物,给所在的地图的该位置设置存在障碍物,设置碰撞体
             if (Def.IsObstacle)
             {
-                GetComponent<Collider2D>().isTrigger = false;
+                ColliderSelf.isTrigger = false;
                 gameObject.layer = 8; //"Obstacle"
                 if (AstarPath.active != null)
                 {
@@ -90,7 +73,6 @@ namespace ChenChen_Thing
             }
             CanDemolish = true;
             DrawOutline_Collider = false;
-            Workload = 0;
         }
 
         public override void OnCancelBuild()
@@ -110,7 +92,7 @@ namespace ChenChen_Thing
         public override void OnMarkDemolish()
         {
             _workload = Mathf.CeilToInt(Def.Workload * 0.5f);
-            if(Workload == 0)
+            if (Workload == 0)
             {
                 ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
             }
@@ -119,7 +101,7 @@ namespace ChenChen_Thing
         public override void OnDemolish(int value)
         {
             _workload -= value;
-            if(_workload <= 0)
+            if (_workload <= 0)
             {
                 _workload = 0;
                 ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
@@ -128,7 +110,6 @@ namespace ChenChen_Thing
 
         public override void OnDemolished()
         {
-            Debug.Log($"移除建筑：" + gameObject.name);
             Destroy(gameObject);
         }
 

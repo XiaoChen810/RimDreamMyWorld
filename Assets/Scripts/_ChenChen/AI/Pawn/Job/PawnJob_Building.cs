@@ -19,7 +19,7 @@ namespace ChenChen_AI
         {
             float ability = pawn.Attribute.A_Construction.Value;
             float a = 1 - (ability / 20);
-            _timeOne = Mathf.Lerp(0.5f, 3f, a);
+            _timeOne = Mathf.Lerp(0.1f, 1f, a);
         }
 
         public override bool OnEnter()

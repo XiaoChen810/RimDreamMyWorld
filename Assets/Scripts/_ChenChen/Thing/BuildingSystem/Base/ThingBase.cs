@@ -30,6 +30,8 @@ namespace ChenChen_Thing
         /// </summary>
         public BoxCollider2D ColliderSelf { get; protected set; }
 
+        public SpriteRenderer SR {  get; protected set; }
+
         /// <summary>
         /// 物品当前耐久度
         /// </summary>
@@ -120,6 +122,9 @@ namespace ChenChen_Thing
             }
         }
 
+        // 放置瓦片（如果有）的瓦片地图名
+        [SerializeField] protected string _tilemapName = "Building";
+
         // 细节视图
         protected DetailView _detailView;
         public virtual DetailView DetailView
@@ -139,7 +144,7 @@ namespace ChenChen_Thing
 
         // 绘制GUI
         public bool DrawOutline_Collider;    // 根据Box Collider2D画
-        private Color centerColor = new Color(0f, 0f, 1f, 0.5f); // 透明蓝色
+        private Color centerColor = new Color(0f, 0f, 1f, 0f); // 透明蓝色
         private Color outlineColor = Color.white; // 纯白色
         private float outlineWidth = 2f;
 
@@ -148,11 +153,14 @@ namespace ChenChen_Thing
         protected virtual void OnEnable()
         {
             gameObject.name = gameObject.name.Replace("(Clone)", "");
-            CurDurability = MaxDurability;
-            ColliderSelf = GetComponent<BoxCollider2D>();
             tag = "Thing";
-            GetComponent<SpriteRenderer>().sortingLayerName = "Middle";
-            GetComponent<SpriteRenderer>().sortingOrder = -(int)transform.position.y;
+
+            ColliderSelf = GetComponent<BoxCollider2D>();
+            ColliderSelf.isTrigger = true;
+
+            SR = GetComponent<SpriteRenderer>();
+            SR.sortingLayerName = "Middle";
+            SR.sortingOrder = -(int)transform.position.y;
 
             // 创建中心透明蓝色纹理
             centerTexture = new Texture2D(1, 1);
@@ -193,7 +201,7 @@ namespace ChenChen_Thing
             if (!Application.isPlaying) return;
             if (Def.TileBase != null)
             {
-                if (MapManager.Instance.TryGetTilemap("Building", true, out Tilemap buildingTilemap))
+                if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap buildingTilemap))
                 {
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
@@ -233,6 +241,7 @@ namespace ChenChen_Thing
             foreach(var coll in colliders)
             {
                 if (coll.gameObject == this.gameObject) continue;
+                if (coll.CompareTag("Pawn")) continue;
                 if (coll.CompareTag("Floor")) continue;
                 return false;              
             }

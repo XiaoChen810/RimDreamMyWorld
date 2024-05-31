@@ -1,16 +1,18 @@
-﻿using System;
+﻿using ChenChen_Map;
+using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace ChenChen_Thing
 {
-    public class Thing_Floor : Thing_Building
+    public class Thing_Floor : Thing_Architectural  
     {
         protected override void OnEnable()
         {
             base.OnEnable();
             tag = "Floor";
             GetComponent<SpriteRenderer>().sortingLayerName = "Bottom";
-            GetComponent<SpriteRenderer>().sortingOrder = 0;
+            GetComponent<SpriteRenderer>().sortingOrder = -1;
         }
 
         public override bool CanBuildHere()
@@ -32,12 +34,11 @@ namespace ChenChen_Thing
                     // 只要没有放过地板或者墙壁都可以放置在这里
                     if(otherCollider.gameObject.TryGetComponent<ThingBase>(out ThingBase thing))
                     {
-                        ThingType otherType = thing.Def.Type;
-                        if (otherType == ThingType.Floor)
+                        if (thing is Thing_Floor)
                         {
                             return false;
                         }
-                        if (otherType == ThingType.Wall)
+                        if (thing is Thing_Wall)
                         {
                             return false;
                         }

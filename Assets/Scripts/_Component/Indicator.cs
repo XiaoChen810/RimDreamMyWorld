@@ -34,10 +34,11 @@ public class Indicator : MonoBehaviour
         Vector2 sp_tr = new Vector2(Boxbounds.max.x, Boxbounds.max.y) + new Vector2(offset, offset);
 
         // 四个角落的结束位置
-        Vector2 ep_bl = new Vector2(Boxbounds.min.x, Boxbounds.min.y);
-        Vector2 ep_br = new Vector2(Boxbounds.max.x, Boxbounds.min.y);
-        Vector2 ep_tl = new Vector2(Boxbounds.min.x, Boxbounds.max.y);
-        Vector2 ep_tr = new Vector2(Boxbounds.max.x, Boxbounds.max.y);
+        float offset2 = 0.1f;
+        Vector2 ep_bl = new Vector2(Boxbounds.min.x + offset2, Boxbounds.min.y + offset2);
+        Vector2 ep_br = new Vector2(Boxbounds.max.x - offset2, Boxbounds.min.y + offset2);
+        Vector2 ep_tl = new Vector2(Boxbounds.min.x + offset2, Boxbounds.max.y - offset2);
+        Vector2 ep_tr = new Vector2(Boxbounds.max.x - offset2, Boxbounds.max.y - offset2);
 
         // 执行动画
         selectbox_bl.position = sp_bl;

@@ -7,6 +7,11 @@ namespace ChenChen_Thing
 {
     public enum ThingType : byte
     {
-        Floor, Wall, Building, Furniture, Other, Tree, ToolTable, Door
+        Architectural,  // 建筑构造
+        Building,   // 室外建筑
+        Furniture,  // 家具
+        Other,  // 其他
+        Tree,   // 树
+        ToolTable,  // 工具台
     }
 }

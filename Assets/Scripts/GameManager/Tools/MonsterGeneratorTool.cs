@@ -8,6 +8,9 @@ public class MonsterGeneratorTool : MonoBehaviour
 {
     public List<GameObject> MonsterPrefabs = new List<GameObject>();
 
+    /// <summary>
+    /// 场景现有的怪物列表
+    /// </summary>
     public List<Monster> MonstersList = new List<Monster>();
 
     private Transform monsterParent;
@@ -42,7 +45,11 @@ public class MonsterGeneratorTool : MonoBehaviour
 
     private void Update()
     {
-        SpawnMonsterInterval();
+        bool isDayLight = (GameManager.Instance.currentHour >= 6 && GameManager.Instance.currentHour <= 18);
+        if (!isDayLight)
+        {
+            SpawnMonsterInterval();
+        }
     }
 
     private void SpawnMonsterInterval()

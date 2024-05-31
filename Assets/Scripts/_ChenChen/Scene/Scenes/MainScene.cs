@@ -57,25 +57,12 @@ namespace ChenChen_Scene
 
             // 过场动画
             GameManager.Instance.AnimatorTool.Animation_LoadingScene();
-            Slider progressSilder = GameManager.Instance.AnimatorTool.ProgressSilder;
-            bool animationPlayed = false;
-            float timeAnimation = 0;
             // 等待异步加载操作完成
             while (!asyncLoad.isDone)
             {
                 yield return null;
 
-                if (asyncLoad.progress >= 0.1f && !animationPlayed)
-                {
-                    progressSilder.value = Mathf.Clamp((timeAnimation / 1f), 0, 0.9f);
-                    timeAnimation += Time.deltaTime;
-                    if (timeAnimation > 1f)
-                    {
-                        animationPlayed = true;
-                    }
-                }
-
-                if (animationPlayed)
+                if(asyncLoad.progress >= 0.1f)
                 {
                     asyncLoad.allowSceneActivation = true;
                 }

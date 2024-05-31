@@ -20,6 +20,7 @@ public class Cloud : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         sr.sprite = sprites[Random.Range(0, sprites.Count)];
         sr.color = color;
+        sr.DOFade(color.a, 1f);
 
         // 随机设定一个移动方向
         direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
@@ -47,6 +48,11 @@ public class Cloud : MonoBehaviour
             });
 
         }
+    }
+
+    private void OnDestroy()
+    {
+        sr.DOKill();
     }
 }
 

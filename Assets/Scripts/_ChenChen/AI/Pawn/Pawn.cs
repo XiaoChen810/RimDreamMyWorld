@@ -35,8 +35,7 @@ namespace ChenChen_AI
         [Header("人物逻辑属性")]
         public float WorkRange = 1;
         public float AttackRange = 1;
-        public float AttackSpeed = 0.76f;
-        public float AttackSpeedWait = 0.5f;
+        public float AttackSpeedWait = 2.5f;
 
         [Header("人物定义")]
         [SerializeField] private PawnKindDef _pawnKindDef;
@@ -163,10 +162,20 @@ namespace ChenChen_AI
 
         private bool canDamaged = true;
 
-        public void GetDamage(float damage)
+        public void GetDamage(GameObject enemy, float damage)
         {
-            if (!canDamaged) return;
+            //50概率反击，50概率逃跑
+            if (Random.value < 0.9f)
+            {
+                StateMachine.TryChangeState(new PawnJob_Attack(this, enemy));
+            }
+            else
+            {
+                StateMachine.TryChangeState(new PawnJob_Escape(this, enemy));
+            }
 
+            // 掉血逻辑
+            if (!canDamaged) return;
             _pawnInfo.HP.CurValue -= (int)damage;
             if (_pawnInfo.HP.IsSpace)
             {
@@ -175,6 +184,9 @@ namespace ChenChen_AI
                 return;
             }
             Animator.SetTrigger("IsHurted");
+            Vector3 dir = transform.position - enemy.transform.position;
+            dir.Normalize();
+            transform.position += dir * 0.5f;
             StartCoroutine(AvoidDamage(2));
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ChenChen_Thing
 {
     [RequireComponent(typeof(Collider2D))]
-    public class Thing_Wall : Thing_Building
+    public class Thing_Wall : Thing_Architectural
     {
     }
 }

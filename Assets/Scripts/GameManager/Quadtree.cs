@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TreeEditor;
-using UnityEditor.Experimental.GraphView;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Quadtree
@@ -161,11 +158,6 @@ public class Quadtree
             {
                 node.Retrieve(range);
             }
-        }
-        else
-        {
-            //self.SetActive(true);
-            return;
         }
     }
 

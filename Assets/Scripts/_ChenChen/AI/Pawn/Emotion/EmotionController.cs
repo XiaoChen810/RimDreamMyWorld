@@ -44,19 +44,26 @@ namespace ChenChen_AI
             {
                 if (CurEmotions.Count == 0)
                 {
-                    sr.sprite = null;
+                    sr.color = new Color(1, 1, 1, 0);
                 }
                 else
                 {
-                    var emotionsCopy = CurEmotions.ToList();
-                    foreach (var emotion in emotionsCopy)
+                    int index = 0;
+                    while(CurEmotions.Count > 0 && index < CurEmotions.Count)
                     {
                         if (sr != null)
                         {
-                            sr.DOFade(0, 0.9f);
+                            sr.DOFade(0, 0.5f);
                             yield return new WaitForSeconds(1);
-                            sr.sprite = emotion.icon;
-                            sr.DOFade(1, 0.9f);
+                            if(index < CurEmotions.Count)
+                            {
+                                sr.sprite = CurEmotions[index++].icon;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            sr.DOFade(1, 0.5f);
                             yield return new WaitForSeconds(1);
                         }
                     }

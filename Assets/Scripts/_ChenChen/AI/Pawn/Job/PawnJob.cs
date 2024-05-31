@@ -31,7 +31,13 @@ namespace ChenChen_AI
         public override bool OnEnter()
         {
             // 尝试取得权限，预定当前工作，标记目标被使用
-            if (target.IsGameObject && target.GameObject.TryGetComponent<PermissionBase>(out PermissionBase per))
+            if (target.IsGameObject && target.GameObject == null)
+            {
+                DebugLogDescription = ("目标为空");
+                return false;
+            }
+
+            if (target.GameObject.TryGetComponent<PermissionBase>(out PermissionBase per))
             {
                 if (!per.GetPermission(pawn))
                 {

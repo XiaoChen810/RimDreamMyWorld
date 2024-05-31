@@ -47,6 +47,7 @@ namespace ChenChen_AI
         public object Clone()
         {
             PawnKindDef clone = (PawnKindDef)MemberwiseClone();
+            clone.CanGetJob = true;
             return clone;
         }
     }

@@ -88,7 +88,7 @@ public class PawnGeneratorTool : MonoBehaviour
         foreach (var pawnSave in data_GameSave.SavePawns)
         {
             Data_PawnSave newPawnSave = (Data_PawnSave) pawnSave.Clone();
-            Pawn newPawn = GeneratePawn(newPawnSave.Position, newPawnSave.PawnKindDef, newPawnSave.PawnInfo, newPawnSave.PawnAttribute);
+            _ = GeneratePawn(newPawnSave.Position, newPawnSave.PawnKindDef, newPawnSave.PawnInfo, newPawnSave.PawnAttribute);
         }
     }
 

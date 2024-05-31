@@ -16,6 +16,8 @@ namespace ChenChen_AI
         [Header("Debug")]
         // 自身上一个位置
         protected Vector3 lastTransPositon;
+        // 停止
+        [SerializeField] protected bool isStop = false;
         // 开始移动
         [SerializeField] protected bool isStart = false;
         // 能否移动，isStart 和 canMove同时为 true 才会动
@@ -80,12 +82,14 @@ namespace ChenChen_AI
 
         private float lastRepath = float.NegativeInfinity;
 
+        private Coroutine StopMoveCoroutine;
+
         /// <summary>
         /// 暂停移动
         /// </summary>
         public void StopMove()
         {
-            canMove = false;
+            isStop = false;
         }
 
         /// <summary>
@@ -94,14 +98,15 @@ namespace ChenChen_AI
         /// <param name="time"></param>
         public void StopMove(float time)
         {
-            StartCoroutine(StopMoveCo(time));
+            StopCoroutine(StopMoveCoroutine);
+            StopMoveCoroutine = StartCoroutine(StopMoveCo(time));
         }
 
         IEnumerator StopMoveCo(float time)
         {
-            canMove = false;
+            isStop = false;
             yield return new WaitForSeconds(time);
-            canMove = true;
+            isStop = true;
         }
 
         /// <summary>
@@ -109,8 +114,8 @@ namespace ChenChen_AI
         /// </summary>
         public void RecoverMove()
         {
-            StopAllCoroutines();
-            canMove = true;
+            StopCoroutine(StopMoveCoroutine);
+            isStop = true;
         }
 
         protected virtual void Start()
@@ -125,6 +130,8 @@ namespace ChenChen_AI
 
         protected virtual void Update()
         {
+            if (isStop) return;
+
             if (!isStart) return;
 
             if (!targetIsAObject)
@@ -231,7 +238,6 @@ namespace ChenChen_AI
             if (destination.y <= 0 || destination.y >= MapManager.Instance.CurMapHeight) return false;
             if (!_seeker.IsDone())
             {
-                Debug.Log(this.name + "当前路径未计算完");
                 return false;
             }
             // 新建路径

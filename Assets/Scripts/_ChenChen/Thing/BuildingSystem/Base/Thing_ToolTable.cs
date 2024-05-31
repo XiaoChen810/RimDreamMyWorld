@@ -29,7 +29,7 @@ namespace ChenChen_Thing
         // 被点击时弹出制作菜单
         public void OnClick()
         {
-            PanelManager.Instance.AddPanel(new ToolTablePanel(), false);
+            //PanelManager.Instance.AddPanel(new ToolTablePanel(), false);
         }
     }
 }

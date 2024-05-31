@@ -90,7 +90,14 @@ namespace ChenChen_AI
         // 克隆方法
         public object Clone()
         {
-            return new PawnInfo(IsDead, IsSelect, IsOnWork, IsOnBattle, IsDrafted, HP.Clone(), Sleepiness.Clone(), Happiness.Clone());
+            PawnInfo clone = (PawnInfo)MemberwiseClone();
+            clone.IsSelect = false;
+            clone.IsOnWork = false;
+            clone.IsDrafted = false;
+            clone.HP = HP.Clone();
+            clone.Sleepiness = Sleepiness.Clone();
+            clone.Happiness = Happiness.Clone();
+            return clone;
         }
     }
 

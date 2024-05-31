@@ -151,8 +151,9 @@ MonoBehaviour:
   _permission: 0
   Def: {fileID: 11400000, guid: 660d035b1c007d64d973cf16f8d7590a, type: 2}
   _lifeState: 0
-  DrawOutline_Sprite: 0
+  _tilemapName: Building
   DrawOutline_Collider: 0
+  IsMarkCut: 0
 --- !u!1001 &7692688100417130509
 PrefabInstance:
   m_ObjectHideFlags: 0

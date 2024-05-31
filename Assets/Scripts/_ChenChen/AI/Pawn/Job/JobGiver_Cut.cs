@@ -7,22 +7,13 @@ namespace ChenChen_AI
 {
     public class JobGiver_Cut : JobGiver
     {
-        public JobGiver_Cut(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly)
+        public JobGiver_Cut(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, intervalTime: 8)
         {
         }
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            List<Thing_Tree> trees = ThingSystemManager.Instance.GetThingsInstance<Thing_Tree>();
-            foreach (Thing_Tree tree in trees)
-            {
-                if (tree.IsMarkCut)
-                {
-                    return tree.gameObject;
-                }
-            }
-
-            return null;
+            return ThingSystemManager.Instance.GetTreeToCut();
         }
     }
 }

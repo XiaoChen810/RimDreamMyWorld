@@ -19,9 +19,17 @@ namespace ChenChen_AI
         [Header("Index ID")]
         public int IndexId = -1;
         [Header("移动间隔")]
-        public float moveDuration = 5;
+        public float moveDuration = 0.5f;
         [Header("视野范围")]
         public float seeRange = 10;
+        [Header("攻击")]
+        public Pawn pawn;
+        public bool isBattling = false;
+        public float attackRange = 2;
+        public float attackWaitTime = 2.5f;
+        private bool attackWait = false;
+        [Header("血量")]
+        public float HP = 100;
 
         private void Start()
         {
@@ -39,61 +47,101 @@ namespace ChenChen_AI
         {
             while (true)
             {
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(moveDuration);
 
-                // 闲逛移动
+                if (isBattling) continue;
+
+                FindOtherPawn();
+
                 if (MoveController.ReachDestination)
                 {
-                    Vector2 p = transform.position;
-                    p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
-                    MoveController.GoToHere(p);
+                    if(pawn != null)
+                    {
+                        MoveController.GoToHere(pawn.transform.position, attackRange);
+                    }
+                    else
+                    {
+                        Vector2 p = transform.position;
+                        p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
+                        MoveController.GoToHere(p);
+                    }
                 }
-                else
-                {
-                    // 如果周围有其他人，走到最近的人
-                    if(FindOtherPawn()) continue; 
-
-                    // 等待moveDuration再执行下一次判断
-                    yield return new WaitForSeconds(moveDuration);
-                }
-
-
             }
         }
 
-        private bool FindOtherPawn()
+        private void FindOtherPawn()
         {
             float minDistance = float.MaxValue;
-            Vector3 targetPosition = transform.position;
-            foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
+            Pawn targetPawn = null;
+            foreach (var p in GameManager.Instance.PawnGeneratorTool.PawnsList)
             {
-                float distacne = (Vector2.Distance(transform.position, pawn.transform.position));
+                float distacne = (Vector2.Distance(transform.position, p.transform.position));
                 if (distacne < seeRange)
                 {
                     if (minDistance > distacne)
                     {
                         minDistance = distacne;
-                        targetPosition = pawn.transform.position;
+                        targetPawn = p.GetComponent<Pawn>();
                     }
                 }
             }
-            if (targetPosition != transform.position)
+            if (targetPawn != null)
             {
-                MoveController.GoToHere(targetPosition);
-                return true;
+                pawn = targetPawn;
             }
-            return false;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Pawn") && collision.TryGetComponent<Pawn>(out Pawn pawn))
+            if (collision.CompareTag("Pawn"))
             {
-                Debug.Log("碰到Pawn");
-                Animator.SetTrigger("attack");
-                pawn.GetDamage(5);
-                MoveController.StopMove(3);
+                isBattling = true;
             }
+            if(collision.CompareTag("PawnAttackBox"))
+            {
+                GetDamage(10);
+            }
+        }
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Pawn"))
+            {
+                isBattling = false;
+            }
+        }
+
+        private void Update()
+        {
+            if (!attackWait && isBattling && pawn != null)
+            {
+                attackWait = true;
+                Animator.SetTrigger("attack");
+                pawn.GetDamage(this.gameObject, 0);
+                StartCoroutine(AttackWaitCO());
+            }
+        }
+
+
+
+        IEnumerator AttackWaitCO()
+        {
+            yield return new WaitForSeconds(attackWaitTime);
+            attackWait = false;
+        }
+
+        public void GetDamage(float damage)
+        {
+            HP -= damage;
+            Animator.SetTrigger("hurt");
+            if (HP <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.Instance.MonsterGeneratorTool.MonstersList.Remove(this);
         }
     }
 }

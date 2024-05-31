@@ -71,6 +71,10 @@ public class ThingDefGenerator
         // 生成预制件和脚本
         switch (ThingType)
         {
+            case ThingType.Architectural:
+                CreateThingPrefab<Thing_Architectural>(ThingName, thingDef);
+                CreateScript(folderPath, "Thing_Architectural");
+                break;
             case ThingType.Building:
                 CreateThingPrefab<Thing_Building>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Building");
@@ -78,14 +82,6 @@ public class ThingDefGenerator
             case ThingType.Tree:
                 CreateThingPrefab<Thing_Tree>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Trees");
-                break;
-            case ThingType.Wall:
-                CreateThingPrefab<Thing_Wall>(ThingName, thingDef);
-                CreateScript(folderPath, "Thing_Wall");
-                break;
-            case ThingType.Floor:
-                CreateThingPrefab<Thing_Floor>(ThingName, thingDef);
-                CreateScript(folderPath, "Thing_Floor");
                 break;
             case ThingType.ToolTable:
                 CreateThingPrefab<Thing_ToolTable>(ThingName, thingDef);

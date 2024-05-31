@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,6 +150,5 @@ MonoBehaviour:
   _permission: 0
   Def: {fileID: 11400000, guid: 6741b3a41c5aac348a5c75ddf135f3dd, type: 2}
   _lifeState: 0
-  DrawOutline_Sprite: 0
   DrawOutline_Collider: 0
   _owner: {fileID: 0}

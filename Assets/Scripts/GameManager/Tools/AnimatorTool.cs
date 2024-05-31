@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class AnimatorTool : MonoBehaviour
 {
-    public Slider ProgressSilder;
-
     public void Animation_LoadingScene()
     {
         PanelManager.Instance.AddPanel(new LoadingPanel(true, this), false);

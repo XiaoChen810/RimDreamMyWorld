@@ -26,7 +26,7 @@ namespace ChenChen_AI
         private GameObject FindBed(Pawn pawn)
         {
             //先找自己的床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>())
+            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding))
             {
                 if (bed.Owner == pawn)
                 {
@@ -36,7 +36,7 @@ namespace ChenChen_AI
             }
 
             // 再找空床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>())
+            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding))
             {
                 if (bed.Owner == null)
                 {

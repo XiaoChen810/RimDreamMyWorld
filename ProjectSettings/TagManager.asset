@@ -12,6 +12,7 @@ TagManager:
   - WorkSpace
   - Animal
   - Floor
+  - PawnAttackBox
   layers:
   - Default
   - TransparentFX

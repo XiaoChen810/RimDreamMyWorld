@@ -29,11 +29,11 @@ namespace ChenChen_Thing
         /// <summary>
         /// 是否正处于建造模式中
         /// </summary>
-        [field: SerializeField] public bool OnBuildMode { get; private set; }
+        public bool OnBuildMode { get; private set; }
         /// <summary>
         /// 当前鼠标上的预览
         /// </summary>
-        [field: SerializeField] public GameObject MouseIndicator {  get; private set; }
+        public GameObject MouseIndicator;
 
         public BuildingModeTool(ThingSystemManager buildingSystemManager)
         {

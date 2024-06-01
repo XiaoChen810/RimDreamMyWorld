@@ -52,7 +52,15 @@ namespace ChenChen_UI
             if (panel == null) return;
             if (pawn == null) return;
             Content.Clear();
-            Content.AddRange(pawn.CurrentStateList);
+            Content.Add("当前工作：" + pawn.StateMachine.CurState.Description);
+            if (pawn.StateMachine.NextState != null)
+            {
+                Content.Add("下一个工作" + pawn.StateMachine.NextState.Description);
+            }
+            foreach (var state in pawn.StateMachine.StateQueue)
+            {
+                Content.Add("准备" + state.Description);
+            }
             panel.SetView(
                 pawn.name,
                 Content

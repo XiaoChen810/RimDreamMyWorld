@@ -5,9 +5,10 @@ namespace ChenChen_AI
 {
     public class PawnJob_Attack : PawnJob
     {
-        private readonly static float tick = 10;
+        private readonly static float tick = 500;
+
         private float _lastAttackTime;
-        public PawnJob_Attack(Pawn pawn, GameObject target) : base(pawn, tick,new TargetPtr(target))
+        public PawnJob_Attack(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
         }
 
@@ -24,15 +25,12 @@ namespace ChenChen_AI
             }
 
             pawn.JobToDo(target.GameObject);
-
+            this.Description = "攻击" + target.GameObject.name;
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            //var baseResult = base.OnUpdate();
-            //if (baseResult != StateType.Doing) return baseResult;
-
             //返回成功
             if (target.GameObject == null)
             {

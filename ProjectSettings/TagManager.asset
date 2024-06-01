@@ -13,6 +13,7 @@ TagManager:
   - Animal
   - Floor
   - PawnAttackBox
+  - MonsterAttackBox
   layers:
   - Default
   - TransparentFX

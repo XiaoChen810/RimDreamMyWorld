@@ -14,6 +14,7 @@ namespace ChenChen_AI
         public PawnJob_Move(Pawn pawn, Vector2 targetPos) : base(pawn, tick, new TargetPtr(targetPos))
         {
             this.pawn = pawn;
+            this.Description = "移动";
         }
 
         public override bool OnEnter()

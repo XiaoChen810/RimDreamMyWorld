@@ -40,6 +40,7 @@ namespace ChenChen_AI
             }
             // 设置人物无法接取工作
             pawn.JobToDo(_workSpace_Farm.gameObject);
+            this.Description = "正在前往" + target.GameObject.name + "种植";
 
             return true;
         }
@@ -54,6 +55,7 @@ namespace ChenChen_AI
             {
                 // 设置人物正在工作
                 pawn.JobDoing();
+                this.Description = "正在" + target.GameObject.name + "种植";
 
                 // 执行工作
                 _farmingTime -= Time.deltaTime;

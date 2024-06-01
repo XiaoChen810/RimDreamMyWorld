@@ -32,6 +32,7 @@ namespace ChenChen_AI
 
             // 设置人物接取工作
             pawn.JobToDo(bed.gameObject);
+            this.Description = "回床上睡觉";
 
             return true;
         }
@@ -46,6 +47,7 @@ namespace ChenChen_AI
             {
                 // 设置人物正在睡觉
                 pawn.JobDoing();
+                this.Description = "正在睡觉";
 
                 // 播放动画
                 pawn.Animator.SetBool("IsDie", true);

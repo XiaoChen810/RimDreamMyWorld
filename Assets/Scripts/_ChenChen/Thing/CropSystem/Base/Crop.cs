@@ -16,8 +16,7 @@ namespace ChenChen_Thing
             get { return _curNutrient; }
             set
             {
-                _curNutrient = value;
-                _curNutrient = _curNutrient > Def.GroupNutrientRequiries ? Def.GroupNutrientRequiries : _curNutrient;
+                _curNutrient = Mathf.Clamp(value, 0, Def.GroupNutrientRequiries);
             }
         }
 
@@ -30,9 +29,8 @@ namespace ChenChen_Thing
                 if (value > MaxPeriodIndex || value < 0)
                 {
                     Debug.LogWarning("out Range: " + value);
-                    return;
+                    _curPeriodIndex = Mathf.Clamp(value, 0, MaxPeriodIndex);
                 }
-                _curPeriodIndex = value;
                 _sr.sprite = Def.CropsSprites[value];
             }
         }
@@ -40,6 +38,8 @@ namespace ChenChen_Thing
         public int MaxPeriodIndex => Def.CropsSprites.Count - 1;  // 最大生长阶段
 
         private SpriteRenderer _sr;
+
+        [SerializeField] private float _wiltTime;
 
         public void Init(CropDef def, WorkSpace_Farm workSpace)
         {
@@ -62,11 +62,13 @@ namespace ChenChen_Thing
             _sr.sortingOrder = -(int)gameObject.transform.position.y;
             CurNutrient = save.CurNutrient;
             CurPeriodIndex = save.CurPeriodIndex;
+            groupSpeed = Def.GroupSpeed / 1440;
         }
 
         private void OnEnable()
         {
             GameManager.Instance.OnTimeAddOneMinute += Group;
+            _wiltTime = 0;
         }
 
         private void OnDisable()
@@ -74,11 +76,22 @@ namespace ChenChen_Thing
             GameManager.Instance.OnTimeAddOneMinute -= Group;
         }
 
+        private float groupSpeed;
         private void Group()
         {
-            float add = Def.GroupSpeed / 1440;
-            CurNutrient += add;
+            CurNutrient += groupSpeed;
             CurPeriodIndex = (int)(CurNutrient / Def.GroupNutrientRequiries * MaxPeriodIndex);
+
+            if(CurNutrient == MaxPeriodIndex)
+            {
+                _wiltTime += groupSpeed;
+            }
+
+            if (_wiltTime > Def.WiltTime)
+            {
+                Debug.Log("植物枯萎");
+                Destroy(gameObject);
+            }
         }
     }
 }

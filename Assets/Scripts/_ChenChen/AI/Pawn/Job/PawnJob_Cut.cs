@@ -29,8 +29,17 @@ namespace ChenChen_AI
                 return false;
             }
 
-            Vector3 offset = new Vector3 (-1, 0.3f);
-            Vector3 position = target.Positon + offset;
+            // 判断左边近还是右边近
+            Vector3 position;
+            if (pawn.transform.position.x < target.Positon.x)
+            {               
+                 position = target.Positon + new Vector3(-1, 0.3f); 
+            }
+            else
+            {
+                 position = target.Positon + new Vector3(2, 0.3f);
+            }
+
             if (!pawn.MoveController.GoToHere(position))
             {
                 DebugLogDescription = "前往目标点失败";
@@ -39,6 +48,8 @@ namespace ChenChen_AI
 
             // 设置人物接取工作
             pawn.JobToDo(target.GameObject);
+            this.Description = "前往砍伐" + target.GameObject.name;
+
             return true;
         }
 
@@ -52,6 +63,7 @@ namespace ChenChen_AI
             {
                 // 设置人物正在工作
                 pawn.JobDoing();
+                this.Description = "正在砍伐" + target.GameObject.name;
 
                 // 执行工作
                 _time += Time.deltaTime;
@@ -62,7 +74,7 @@ namespace ChenChen_AI
                 }
 
                 // 播放动画
-                pawn.MoveController.FilpRight();
+                pawn.MoveController.FilpIt(target.Positon.x);
                 pawn.Animator.SetBool("IsLumbering", true);
             }
 

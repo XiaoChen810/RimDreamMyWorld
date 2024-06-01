@@ -22,10 +22,16 @@ namespace ChenChen_AI
                 DebugLogDescription = ("目标无Pawn组件");
                 return false;
             }
+            // 设置人物目标点，前往目标，走过去
+            if(pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange))
+            {
+                DebugLogDescription = ("无法前往目标");
+                return false;
+            }
             // 设置人物无法接取工作
             pawn.JobToDo(target.GameObject);
-            // 设置人物目标点，前往目标，走过去
-            pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange);
+            this.Description = "正在追击" + target.GameObject.name;
+
             return true;
         }
 

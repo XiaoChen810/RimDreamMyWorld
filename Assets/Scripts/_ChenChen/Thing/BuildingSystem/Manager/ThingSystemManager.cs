@@ -151,23 +151,21 @@ namespace ChenChen_Thing
                     // 检查是否成功移除
                     if (!ThingDict_Tree.Remove(obj.transform.position))
                     {
-                        Debug.LogWarning($"未能从 ThingDict_Tree 中移除位置为 {obj.transform.position} 的物体");
-                        throw new InvalidOperationException($"移除失败：在 ThingDict_Tree 中找不到位置为 {obj.transform.position} 的物体");
+                        Debug.LogWarning($"移除失败：在 ThingDict_Tree 中找不到位置为 {obj.transform.position} 的物体");
+                        throw new InvalidOperationException();
                     }
                     break;
                 default:
                     // 检查字典中是否包含物体名称
                     if (!ThingDict.ContainsKey(obj.name))
                     {
-                        Debug.LogWarning($"ThingDict 中不存在键为 {obj.name} 的条目");
-                        throw new KeyNotFoundException($"移除失败：在 ThingDict 中找不到键为 {obj.name} 的条目");
+                        Debug.LogWarning($"移除失败：在 ThingDict 中找不到键为 {obj.name} 的条目");
                     }
 
                     // 检查是否成功移除
                     if (!ThingDict[obj.name].Remove(thing))
                     {
-                        Debug.LogWarning($"未能从 ThingDict 中移除名称为 {obj.name} 的物体");
-                        throw new InvalidOperationException($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
+                        Debug.LogWarning($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
                     }
                     break;
             }

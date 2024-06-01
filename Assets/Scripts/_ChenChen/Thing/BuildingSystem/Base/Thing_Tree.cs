@@ -12,7 +12,6 @@ namespace ChenChen_Thing
 
         public bool IsMarkCut;
 
-        //protected new DetailView _detailView;
         public override DetailView DetailView
         {
             get
@@ -27,6 +26,8 @@ namespace ChenChen_Thing
                 return _detailView;
             }
         }
+
+        public ParticleSystem particleEffect_WhenCut;
 
         private void Start()
         {
@@ -54,6 +55,7 @@ namespace ChenChen_Thing
         public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
         {
             ChangeLifeState(initial_State);
+            CurDurability = MaxDurability;
             MapName = mapName;
         }
 
@@ -67,9 +69,19 @@ namespace ChenChen_Thing
             CurDurability -= value;
             if (CurDurability <= 0)
             {
-                ThingSystemManager.Instance.RemoveThing(this.gameObject);
+                // 创建新的粒子系统物体
+                if (particleEffect_WhenCut != null)
+                {
+                    // 在当前位置和旋转下实例化粒子系统预制体
+                    ParticleSystem newParticleEffect = Instantiate(particleEffect_WhenCut, transform.position, transform.rotation);
+                    newParticleEffect.Play();
 
-                Destroy(gameObject, 0.1f);
+                    // 销毁粒子系统物体以节省资源（延迟销毁，确保播放完毕）
+                    Destroy(newParticleEffect.gameObject, newParticleEffect.main.duration + newParticleEffect.main.startLifetime.constantMax);
+                }
+
+                // 销毁游戏对象
+                Destroy(gameObject);
             }
         }
 

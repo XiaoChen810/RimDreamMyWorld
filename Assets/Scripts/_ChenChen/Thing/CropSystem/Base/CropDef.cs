@@ -23,5 +23,7 @@ namespace ChenChen_Thing
         public float GroupSpeed;
         [Header("所有阶段的图像")]
         public List<Sprite> CropsSprites;
+        [Header("成熟后多久会枯萎")]
+        public float WiltTime = 100;
     }
 }

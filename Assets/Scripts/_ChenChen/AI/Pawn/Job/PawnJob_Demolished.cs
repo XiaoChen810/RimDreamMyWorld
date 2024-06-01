@@ -7,7 +7,7 @@ namespace ChenChen_AI
     public class PawnJob_Demolished : PawnJob
     {
         private readonly static float tick = 50;
-        private Thing_Building targetComponent;
+        private ThingBase targetComponent;
         private float _time;
         private float _timeOne;
 
@@ -24,7 +24,7 @@ namespace ChenChen_AI
             if (baseResult != true) return baseResult;
 
             // 尝试获取蓝图
-            targetComponent = target.GetComponent<Thing_Building>();
+            targetComponent = target.GetComponent<ThingBase>();
             if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");
@@ -41,6 +41,7 @@ namespace ChenChen_AI
 
             // 设置人物无法接取工作
             pawn.JobToDo(target.GameObject);
+            this.Description = "前往拆除" + target.GameObject.name;
 
             return true;
         }
@@ -71,8 +72,8 @@ namespace ChenChen_AI
             {
                 // 设置人物正在工作
                 pawn.JobDoing();
+                this.Description = "正在拆除" + target.GameObject.name;
 
-                // 执行工作
                 // 执行工作
                 _time += Time.deltaTime;
                 if (_time > _timeOne)

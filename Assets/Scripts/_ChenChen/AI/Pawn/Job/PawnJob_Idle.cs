@@ -6,6 +6,7 @@ namespace ChenChen_AI
     public class PawnJob_Idle : PawnJob
     {
         private readonly static float tick = 10;
+
         float _time;
         float _waitTime = 5;
         /// <summary>
@@ -14,6 +15,7 @@ namespace ChenChen_AI
         public PawnJob_Idle(Pawn pawn) : base(pawn, tick, null)
         {
             this.pawn = pawn;
+            this.Description = "发呆";
         }
 
         public override bool OnEnter()
@@ -26,7 +28,6 @@ namespace ChenChen_AI
         {
             if (pawn.StateMachine.NextState != null || pawn.StateMachine.StateQueue.Count != 0)
             {
-                Debug.Log(1);
                 pawn.EmotionController.RemoveEmotion(EmotionType.confused);
                 return StateType.Success;
             }
@@ -46,6 +47,11 @@ namespace ChenChen_AI
                 return StateType.Success;
             }
             return StateType.Doing;
+        }
+
+        public override void OnInterrupt()
+        {
+            pawn.EmotionController.RemoveEmotion(EmotionType.confused);
         }
     }
 }

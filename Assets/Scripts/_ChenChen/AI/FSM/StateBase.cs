@@ -26,6 +26,12 @@ namespace ChenChen_AI
         /// </summary>
         public string DebugLogDescription { get; set; }
 
+        /// <summary>
+        /// ×´Ì¬ÃèÊö
+        /// </summary>
+        public string Description = string.Empty;
+
+
         public StateBase(StateMachine machine, StateBase next = null)
         {
             _stateMachine = machine;

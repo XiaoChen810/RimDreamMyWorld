@@ -9,6 +9,7 @@ namespace ChenChen_AI
 
         public PawnJob_Escape(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
+            this.Description = "ÕıÔÚÌÓÀë" + target.name;
         }
 
         public override bool OnEnter()
@@ -33,9 +34,6 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            var baseResult = base.OnUpdate();
-            if (baseResult != StateType.Doing) return baseResult;
-
             //Âß¼­
             if (pawn.MoveController.ReachDestination)
             {

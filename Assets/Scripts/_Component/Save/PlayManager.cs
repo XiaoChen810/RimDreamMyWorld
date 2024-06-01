@@ -115,12 +115,14 @@ public class PlayManager : SingletonMono<PlayManager>
                 foreach(var cell in workSpace_Farm.Cells)
                 {
                     Crop crop = cell.Value.Crop;
-                    Data_CropSave cropSave = new Data_CropSave(
-                        crop.transform.position,
-                        crop.CurNutrient,
-                        crop.CurPeriodIndex
-                        );
-                    data_FarmWorkSpaceSave.crops.Add(cropSave);
+                    if (crop != null)
+                    {
+                        Data_CropSave cropSave = new Data_CropSave(
+                            crop.transform.position,
+                            crop.CurNutrient,
+                            crop.CurPeriodIndex);
+                        data_FarmWorkSpaceSave.crops.Add(cropSave);
+                    }
                 }
                 saveData.SaveFarmWorkSpace.Add(data_FarmWorkSpaceSave);
             }

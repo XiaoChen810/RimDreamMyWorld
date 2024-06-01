@@ -113,12 +113,10 @@ public class WorkSpaceTool : MonoBehaviour
 
     }
 
-    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, Action<GameObject> onPlace)
+    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, Action<GameObject> onComplete)
     {
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePositionCeil;
-        Vector2 mousePositionFloor;
         Vector2 mouseDownPosition = mousePosition;
 
         bool flag = false;
@@ -126,15 +124,53 @@ public class WorkSpaceTool : MonoBehaviour
         {
             // 监听鼠标位置
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePositionCeil = mousePosition;
-            mousePositionCeil.x = Mathf.Ceil(mousePosition.x);
-            mousePositionCeil.y = Mathf.Ceil(mousePosition.y);
-            mousePositionFloor = mousePosition;
-            mousePositionFloor.x = Mathf.Floor(mousePosition.x);
-            mousePositionFloor.y = Mathf.Floor(mousePosition.y);
+
+            // 当鼠标按下时，准备放置新工作区块
+            if (Input.GetMouseButtonDown(0))
+            {
+                mouseDownPosition = mousePosition;
+                flag = true;
+            }
+
+            Vector2 pointA = mousePosition;
+            Vector2 pointB = flag ? mouseDownPosition : mousePosition;
+
+            // 计算矩形的边界
+            float minX = Mathf.Floor(Mathf.Min(pointA.x, pointB.x));
+            float maxX = Mathf.Ceil(Mathf.Max(pointA.x, pointB.x));
+            float minY = Mathf.Floor(Mathf.Min(pointA.y, pointB.y));
+            float maxY = Mathf.Ceil(Mathf.Max(pointA.y, pointB.y));
+
+            // 确保矩形的宽度和高度至少为1
+            if (maxX - minX < 1)
+            {
+                maxX = minX + 1;
+            }
+            if (maxY - minY < 1)
+            {
+                maxY = minY + 1;
+            }
+
+            // 计算矩形的四个顶点
+            Vector2 topLeft = new Vector2(minX, maxY);
+            Vector2 topRight = new Vector2(maxX, maxY);
+            Vector2 bottomLeft = new Vector2(minX, minY);
+            Vector2 bottomRight = new Vector2(maxX, minY);
+
+            // 设置顶点位置
+            Vector3[] corners = new Vector3[]
+            {
+            new Vector3(topLeft.x, topLeft.y, 0),
+            new Vector3(topRight.x, topRight.y, 0),
+            new Vector3(bottomRight.x, bottomRight.y, 0),
+            new Vector3(bottomLeft.x, bottomLeft.y, 0),
+            new Vector3(topLeft.x, topLeft.y, 0) // 回到起点
+            };
+
+            // 当鼠标未按下时
             if (!flag)
             {
-                if (IsOk(mousePositionCeil, mousePositionFloor))
+                if (IsOk(bottomLeft, topRight))
                 {
                     ChangeColor(Color.green);
                 }
@@ -142,19 +178,14 @@ public class WorkSpaceTool : MonoBehaviour
                 {
                     ChangeColor(Color.red);
                 }
-                DrawLineBox(mousePositionCeil, mousePositionFloor);
+                DrawLineBox(corners);
             }
-            // 当鼠标按下时，准备放置新工作区块
-            if (Input.GetMouseButtonDown(0))
-            {
-                mouseDownPosition = mousePositionCeil;
-                flag = true;
-            }
+
             // 当鼠标持续按下时，检查当前位置是否符合要求，并提示
             if (Input.GetMouseButton(0) && flag)
             {
                 // 根据鼠标按下的位置和当前的位置绘制方框
-                if (IsOk(mouseDownPosition, mousePositionFloor))
+                if (IsOk(bottomLeft, topRight))
                 {
                     ChangeColor(Color.green);
                 }
@@ -162,19 +193,19 @@ public class WorkSpaceTool : MonoBehaviour
                 {
                     ChangeColor(Color.red);
                 }
-                DrawLineBox(mouseDownPosition, mousePositionFloor);
+                DrawLineBox(corners);
             }
             // 当鼠标松开时，确认放置
             if (Input.GetMouseButtonUp(0) && flag)
             {
-                if (IsOk(mouseDownPosition, mousePositionFloor))
+                if (IsOk(mouseDownPosition, mouseDownPosition))
                 {
-                    GameObject obj = WorkSpacePlacedFinally(newWorkSpaceName, mousePositionFloor, mouseDownPosition);
+                    GameObject obj = WorkSpacePlacedFinally(newWorkSpaceName, bottomLeft, topRight);
                     // 重置LineRenderer
                     ResetLineRenderer();
                     IsDoingWorkSpace = false;
 
-                    onPlace?.Invoke(obj);
+                    onComplete?.Invoke(obj);
                 }
                 else
                 {
@@ -190,16 +221,15 @@ public class WorkSpaceTool : MonoBehaviour
             yield return null;
         }
 
-        bool IsOk(Vector2 start, Vector2 end)
+        bool IsOk(Vector2 bl, Vector2 tr)
         {
-            if (Mathf.Abs(start.x - end.x) < 1) return false;
-            if (Mathf.Abs(start.y - end.y) < 1) return false;
-            Vector2 pa = start;
-            pa.x += (start.x < end.x) ? 0.05f : -0.05f;
-            pa.y += (start.y < end.y) ? 0.05f : -0.05f;
-            Vector2 pb = end;
-            pb.x += (end.x < start.x) ? 0.05f : -0.05f;
-            pb.y += (end.y < start.y) ? 0.05f : -0.05f;
+            // 计算矩形范围, 剔除边线
+            Vector2 pa = bl;
+            pa.x += 0.05f;
+            pa.y += 0.05f;
+            Vector2 pb = tr;
+            pb.x += -0.05f;
+            pb.y += -0.05f;
             Collider2D[] hitColliders = Physics2D.OverlapAreaAll(pa, pb);
             foreach (Collider2D collider in hitColliders)
             {
@@ -207,10 +237,10 @@ public class WorkSpaceTool : MonoBehaviour
                 return false;
             }
             var nodes = MapManager.Instance.CurMapNodes;
-            int minx = start.x < end.x ? (int)start.x : (int)end.x;
-            int maxx = start.x > end.x ? (int)start.x : (int)end.x;
-            int miny = start.y < end.y ? (int)start.y : (int)end.y;
-            int maxy = start.y > end.y ? (int)start.y : (int)end.y;
+            int minx = bl.x < tr.x ? (int)bl.x : (int)tr.x;
+            int maxx = bl.x > tr.x ? (int)bl.x : (int)tr.x;
+            int miny = bl.y < tr.y ? (int)bl.y : (int)tr.y;
+            int maxy = bl.y > tr.y ? (int)bl.y : (int)tr.y;
             for (int i = minx; i < maxx + 1; i++)
             {
                 for (int j = miny; j < maxy + 1; j++)
@@ -224,19 +254,11 @@ public class WorkSpaceTool : MonoBehaviour
             return true;
         }
 
-        void DrawLineBox(Vector2 start, Vector2 end)
+        void DrawLineBox(Vector3[] corners)
         {
-            // 定义线的顶点
-            Vector3[] positions = new Vector3[5];
-            positions[0] = new Vector3(start.x, start.y, 0);
-            positions[1] = new Vector3(end.x, start.y, 0);
-            positions[2] = new Vector3(end.x, end.y, 0);
-            positions[3] = new Vector3(start.x, end.y, 0);
-            positions[4] = new Vector3(start.x, start.y, 0);
-
             // 设置线的顶点
             lineRenderer.positionCount = 5;
-            lineRenderer.SetPositions(positions);
+            lineRenderer.SetPositions(corners);
         }
 
         void ResetLineRenderer()

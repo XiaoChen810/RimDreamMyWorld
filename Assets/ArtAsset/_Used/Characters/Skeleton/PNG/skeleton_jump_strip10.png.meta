@@ -139,10 +139,10 @@ TextureImporter:
       name: skeleton_jump_strip10_0
       rect:
         serializedVersion: 2
-        x: 42
-        y: 24
-        width: 13
-        height: 16
+        x: 0
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,10 +160,10 @@ TextureImporter:
       name: skeleton_jump_strip10_1
       rect:
         serializedVersion: 2
-        x: 137
-        y: 24
-        width: 15
-        height: 13
+        x: 96
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,10 +181,10 @@ TextureImporter:
       name: skeleton_jump_strip10_2
       rect:
         serializedVersion: 2
-        x: 234
-        y: 24
-        width: 13
-        height: 16
+        x: 192
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,10 +202,10 @@ TextureImporter:
       name: skeleton_jump_strip10_3
       rect:
         serializedVersion: 2
-        x: 330
-        y: 25
-        width: 13
-        height: 16
+        x: 288
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,10 +223,10 @@ TextureImporter:
       name: skeleton_jump_strip10_4
       rect:
         serializedVersion: 2
-        x: 425
-        y: 26
-        width: 15
-        height: 15
+        x: 384
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,10 +244,10 @@ TextureImporter:
       name: skeleton_jump_strip10_5
       rect:
         serializedVersion: 2
-        x: 521
-        y: 27
-        width: 15
-        height: 14
+        x: 480
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,10 +265,10 @@ TextureImporter:
       name: skeleton_jump_strip10_6
       rect:
         serializedVersion: 2
-        x: 617
-        y: 25
-        width: 15
-        height: 16
+        x: 576
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -286,10 +286,10 @@ TextureImporter:
       name: skeleton_jump_strip10_7
       rect:
         serializedVersion: 2
-        x: 713
-        y: 24
-        width: 15
-        height: 10
+        x: 672
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -307,10 +307,10 @@ TextureImporter:
       name: skeleton_jump_strip10_8
       rect:
         serializedVersion: 2
-        x: 809
-        y: 24
-        width: 15
-        height: 13
+        x: 768
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,10 +328,10 @@ TextureImporter:
       name: skeleton_jump_strip10_9
       rect:
         serializedVersion: 2
-        x: 906
-        y: 24
-        width: 13
-        height: 16
+        x: 864
+        y: 0
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

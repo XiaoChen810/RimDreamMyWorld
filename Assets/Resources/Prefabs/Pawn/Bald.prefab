@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 7
   m_Name: AttackBox
   m_TagString: PawnAttackBox
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1525450362315113660}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66,7 +66,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.0103083, y: 0.7178507}
+  m_Offset: {x: -1, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -76,7 +76,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 2.5, y: 3}
   m_EdgeRadius: 0
 --- !u!1 &1950350381161743984
 GameObject:
@@ -491,7 +491,7 @@ MonoBehaviour:
   CurJobTarget: {fileID: 0}
   CurrentStateList: []
   WorkRange: 1.35
-  AttackRange: 3
+  AttackRange: 2
   AttackSpeedWait: 2
   _pawnKindDef:
     PawnName: 

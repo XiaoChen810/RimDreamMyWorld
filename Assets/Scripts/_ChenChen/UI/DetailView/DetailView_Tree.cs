@@ -24,6 +24,7 @@ namespace ChenChen_UI
             if (tree == null) return;
             Content.Clear();
             Content.Add($"耐久度: {tree.CurDurability} / {tree.MaxDurability}");
+            if (tree.TheUsingPawn != null) Content.Add($"使用者: {tree.TheUsingPawn.name}");
             panel.SetView(
                 tree.Def.DefName,
                 Content);

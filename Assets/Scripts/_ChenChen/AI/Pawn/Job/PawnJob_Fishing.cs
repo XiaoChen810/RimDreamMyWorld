@@ -44,6 +44,7 @@ namespace ChenChen_AI
             }
             // 设置人物状态
             pawn.JobToDo(target.GameObject);
+            this.Description = "正在前往钓鱼";
 
             return true;
         }   
@@ -57,6 +58,7 @@ namespace ChenChen_AI
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();
+                this.Description = "正在钓鱼";
                 _time += Time.deltaTime;
                 pawn.MoveController.FilpRight();
             }
@@ -88,6 +90,11 @@ namespace ChenChen_AI
             base.OnExit();
 
             pawn.Animator.SetInteger("IsFishing", 0);
+        }
+
+        public override void OnInterrupt()
+        {
+            OnExit();
         }
     }
 }

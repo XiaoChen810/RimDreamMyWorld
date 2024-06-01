@@ -9,6 +9,7 @@ namespace ChenChen_AI
         public PawnJob_Draft(Pawn pawn, bool openOrclose) : base(pawn, tick, null)
         {
             pawn.Info.IsDrafted = openOrclose;
+            this.Description = "Õ÷Õ×ÖÐ";
         }
 
         public override bool OnEnter()

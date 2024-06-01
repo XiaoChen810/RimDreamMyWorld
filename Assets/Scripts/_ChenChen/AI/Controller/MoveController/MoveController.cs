@@ -6,11 +6,9 @@ using ChenChen_Map;
 
 namespace ChenChen_AI
 {
-    [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Seeker))]
     public abstract class MoveController : MonoBehaviour
     {
-        protected Rigidbody2D _rb;
         protected Seeker _seeker;
 
         [Header("Debug")]
@@ -120,7 +118,6 @@ namespace ChenChen_AI
 
         protected virtual void Start()
         {
-            _rb = GetComponent<Rigidbody2D>();
             _seeker = GetComponent<Seeker>();
 
             // init
@@ -132,7 +129,10 @@ namespace ChenChen_AI
         {
             if (isStop) return;
 
-            if (!isStart) return;
+            if (!isStart && transform.position != destination)
+            {
+                return;
+            }
 
             if (!targetIsAObject)
             {
@@ -341,6 +341,18 @@ namespace ChenChen_AI
                 transform.localScale = new Vector3(-1, 1, 1);
             }
             lastTransPositon = transform.position;
+        }
+
+        public void FilpIt(float x)
+        {
+            if(transform.position.x < x)
+            {
+                FilpRight();
+            }
+            else
+            {
+                FilpLeft();
+            }
         }
 
         #endregion

@@ -33,6 +33,7 @@ namespace ChenChen_AI
 
             // 设置人物接取工作
             pawn.JobToDo(targetPawn.gameObject);
+            this.Description = $"准备和{targetPawn.name}一起玩";
 
             return true;
         }
@@ -53,6 +54,7 @@ namespace ChenChen_AI
                 string narrative = $"{me} 正在和 {him} 畅所欲言";
                 ScenarioManager.Instance.Narrative(narrative, pawn.gameObject);
 
+                this.Description = $"正在和{him}一起玩";
                 // 移除焦虑
                 pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
 

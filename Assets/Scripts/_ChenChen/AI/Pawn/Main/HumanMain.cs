@@ -68,5 +68,21 @@ namespace ChenChen_AI
             }
             return;
         }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("MonsterAttackBox"))
+            {
+                Monster monster = collision.GetComponentInParent<Monster>();
+                if (monster != null)
+                {
+                    GetDamage(monster.gameObject, monster.attackDamage);
+                }
+                else
+                {
+                    Debug.LogWarning("没有组件");
+                }
+            }
+        }
     }
 }

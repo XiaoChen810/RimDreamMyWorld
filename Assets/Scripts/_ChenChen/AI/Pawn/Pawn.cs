@@ -36,6 +36,7 @@ namespace ChenChen_AI
         public float WorkRange = 1;
         public float AttackRange = 1;
         public float AttackSpeedWait = 2.5f;
+        public float AttackDamage = 0;
 
         [Header("人物定义")]
         [SerializeField] private PawnKindDef _pawnKindDef;
@@ -156,6 +157,23 @@ namespace ChenChen_AI
             _pawnKindDef.CanGetJob = false;
         }
 
+        /// <summary>
+        /// 暂停当前工作，并停止接受工作一段时间
+        /// </summary>
+        /// <param name="wait"></param>
+        public void StopJob(float wait)
+        {
+            StateMachine.TryChangeState(null);
+            StartCoroutine(StopJobCo(wait));
+
+            IEnumerator StopJobCo(float wait)
+            {
+                _pawnKindDef.CanGetJob = false;
+                yield return new WaitForSeconds(wait);
+                _pawnKindDef.CanGetJob = true;
+            }
+        }
+
         #endregion
 
         #region Battle
@@ -164,8 +182,12 @@ namespace ChenChen_AI
 
         public void GetDamage(GameObject enemy, float damage)
         {
-            //50概率反击，50概率逃跑
-            if (Random.value < 0.9f)
+            // 无敌帧返回
+            if (!canDamaged) return;
+
+            // 中断当前工作,然后50概率反击，50概率逃跑
+            StopJob(10);
+            if (Random.value < 0.5f)
             {
                 StateMachine.TryChangeState(new PawnJob_Attack(this, enemy));
             }
@@ -174,19 +196,18 @@ namespace ChenChen_AI
                 StateMachine.TryChangeState(new PawnJob_Escape(this, enemy));
             }
 
-            // 掉血逻辑
-            if (!canDamaged) return;
-            _pawnInfo.HP.CurValue -= (int)damage;
+            _pawnInfo.HP.CurValue -= damage;
+
+            // 血条为空则死亡
             if (_pawnInfo.HP.IsSpace)
             {
                 Info.IsDead = true;
-                gameObject.SetActive(false);
+                Destroy(gameObject);
                 return;
             }
+
+            // 触发动画和无敌帧
             Animator.SetTrigger("IsHurted");
-            Vector3 dir = transform.position - enemy.transform.position;
-            dir.Normalize();
-            transform.position += dir * 0.5f;
             StartCoroutine(AvoidDamage(2));
         }
 
@@ -241,13 +262,10 @@ namespace ChenChen_AI
 #if UNITY_EDITOR
             任务列表Debug();
 #endif
-            if (Def.StopUpdate) return;
-            StateMachine.Update();
-            if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
-
-            if(Input.GetKeyDown(KeyCode.X))
+            if (!Def.StopUpdate)
             {
-                EmotionController.AddEmotion(EmotionController.EmotionsList.list[Random.Range(0, EmotionController.EmotionsList.list.Count)].type);
+                StateMachine.Update();
+                if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
             }
         }
 
@@ -265,6 +283,11 @@ namespace ChenChen_AI
             {
                 CurrentStateList.Add("准备" + task.ToString());
             }
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.Instance.PawnGeneratorTool.RemovePawn(this);
         }
     }
 }

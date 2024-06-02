@@ -1,5 +1,4 @@
 ﻿using ChenChen_AI;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,8 +21,6 @@ public class PawnGeneratorTool : MonoBehaviour
     {
         get { return _pawnWhenStartList; }
     }
-    public GameObject CharacterTest;
-    public GameObject GoblinPrefab;
 
     /// <summary>
     /// 生成Pawn，并添加到PawnsList
@@ -43,9 +40,9 @@ public class PawnGeneratorTool : MonoBehaviour
         // 尝试获取Pawn组件并赋值
         if (newPawnObject.TryGetComponent<Pawn>(out Pawn pawn))
         {
-            pawn.Def = kindDef;
-            pawn.Info = info;
-            pawn.Attribute = attribute;
+            pawn.Def = (PawnKindDef)kindDef.Clone();
+            pawn.Info = (PawnInfo)info.Clone();
+            pawn.Attribute = (PawnAttribute)attribute.Clone();
             PawnsList.Add(newPawnObject);
             return pawn;
         }
@@ -55,6 +52,7 @@ public class PawnGeneratorTool : MonoBehaviour
             return null;
         }
 
+        // 根据定义生成一个Pawn
         bool TryInitGameObject(PawnKindDef kindDef, out GameObject result)
         {
             GameObject prefab = null;
@@ -64,11 +62,8 @@ public class PawnGeneratorTool : MonoBehaviour
             }
             if (prefab == null)
             {
-                PawnKindDef ramdomPawnKindDef = StaticPawnDef.GetRandomPawn();
-                kindDef.PrefabPath = ramdomPawnKindDef.PrefabPath;
-                kindDef.PawnDescription = ramdomPawnKindDef.PawnDescription;
+                kindDef = StaticPawnDef.GetRandomPawn();
                 prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
-                Debug.Log("从现有Prefab中随机挑选了一个");
             }
             if (prefab == null)
             {
@@ -108,9 +103,10 @@ public class PawnGeneratorTool : MonoBehaviour
 
     public void StartSelect()
     {
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null));
+        // 在三个固定位置生成随机人物
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
         foreach (var pawn in PawnWhenStartList)
         {
             pawn.Def.StopUpdate = true;
@@ -119,6 +115,7 @@ public class PawnGeneratorTool : MonoBehaviour
 
     public Pawn ReflashSelectPawn(int index)
     {
+        // 刷新指定位置的人物
         RemovePawn(PawnWhenStartList[index]);
         PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null);
         PawnWhenStartList[index].Def.StopUpdate = true;

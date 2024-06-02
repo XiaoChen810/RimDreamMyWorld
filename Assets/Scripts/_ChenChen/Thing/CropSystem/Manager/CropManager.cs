@@ -1,7 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChenChen_Thing
@@ -13,7 +10,7 @@ namespace ChenChen_Thing
     {
         [Header("包含全部作物定义的字典")]
         [SerializedDictionary("名称", "作物定义")]
-        public SerializedDictionary<string, CropDef> CropDefDictionary;
+        public SerializedDictionary<string, CropDef> CropDefDictionary = new();
 
         protected override void Awake()
         {
@@ -23,27 +20,25 @@ namespace ChenChen_Thing
 
         private void LoadAllCropDefData()
         {
-            CropDefDictionary = new SerializedDictionary<string, CropDef>();
+            // 加载所有CropDef资源
+            CropDef[] defs = Resources.LoadAll<CropDef>("Prefabs/CropDef");
 
-            // 获取指定路径下的所有CropDef文件
-            string[] CropDefDataFiles = AssetDatabase.FindAssets("t:CropDef", new[] { "Assets/Resources/Prefabs/CropDef" });
-
-            foreach (var CropDefDataFile in CropDefDataFiles)
+            foreach (var def in defs)
             {
-                // 根据GUID加载ThingDef
-                string CropDefDataAssetPath = AssetDatabase.GUIDToAssetPath(CropDefDataFile);
-                CropDef CropDefData = AssetDatabase.LoadAssetAtPath<CropDef>(CropDefDataAssetPath);
-
-                if (CropDefData != null)
+                if (def != null)
                 {
-                    if (!CropDefDictionary.ContainsKey(CropDefData.CropName))
+                    if (!CropDefDictionary.ContainsKey(def.CropName))
                     {
-                        CropDefDictionary.Add(CropDefData.CropName, CropDefData);
+                        CropDefDictionary.Add(def.CropName, def);
                     }
                     else
                     {
-                        Debug.LogWarning($"BlueprintData with name '{CropDefData.CropName}' already exists. Skipping.");
+                        Debug.LogWarning($"CropDef with name '{def.CropName}' already exists. Skipping.");
                     }
+                }
+                else
+                {
+                    Debug.LogError("Failed to load CropDef.");
                 }
             }
         }

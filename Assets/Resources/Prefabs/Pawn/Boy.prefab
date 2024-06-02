@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6877535934130755005
 Transform:
   m_ObjectHideFlags: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1dc93eaa36411740b6ab623ccf2a5ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EmotionsList: {fileID: 11400000, guid: 172cbb01ba4657149b5cea7349a39b4c, type: 2}
+  EmotionsList: {fileID: 11400000, guid: 5cea66b657cc4104cb08c51744f0397a, type: 2}
   CurEmotions: []
 --- !u!1 &4914543888182076259
 GameObject:
@@ -410,11 +410,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275a7c97c0fd72f49a4d2db7e6ce4266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EmotionController: {fileID: 7163122601493988128}
   CurJobTarget: {fileID: 0}
   CurrentStateList: []
   WorkRange: 1.35
   AttackRange: 2
   AttackSpeedWait: 2
+  AttackDamage: 20
   _pawnKindDef:
     PawnName: 
     PawnFaction: 

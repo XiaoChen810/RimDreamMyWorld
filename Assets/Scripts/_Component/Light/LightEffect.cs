@@ -36,7 +36,8 @@ public class LightEffect : MonoBehaviour
         }
 
         GenerateEffect("ั๔นโ", 5);
-        StartCoroutine(CloudsCo());
+        StartCoroutine(CloudsCo());  
+        StartCoroutine(LightRaysCo());
     }
 
     IEnumerator CloudsCo()
@@ -57,6 +58,24 @@ public class LightEffect : MonoBehaviour
             else
             {
                 float time = UnityEngine.Random.Range(5, 15f);
+                yield return new WaitForSeconds(time);
+            }
+        }
+    }
+
+    IEnumerator LightRaysCo()
+    {
+        while (true)
+        {
+            int count = 0;
+            foreach (Transform child in transform)
+            {
+                if (child.name == "ั๔นโ") count++;
+            }
+            if (count < 5)
+            {
+                GenerateEffect("ั๔นโ");
+                float time = 60f;
                 yield return new WaitForSeconds(time);
             }
         }

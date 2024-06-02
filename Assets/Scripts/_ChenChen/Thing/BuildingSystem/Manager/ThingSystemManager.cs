@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
-using UnityEditor;
 using System.IO;
 using ChenChen_Map;
-using UnityEngine.UIElements;
 using System;
-using System.Linq;
 
 namespace ChenChen_Thing
 {
@@ -64,27 +61,25 @@ namespace ChenChen_Thing
 
         private void LoadAllThingDefData()
         {
-            ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
+            // 加载所有ThingDef资源
+            ThingDef[] defs = Resources.LoadAll<ThingDef>("Prefabs/ThingDef");
 
-            // 获取指定路径下的所有ThingDef文件
-            string[] ThingDataFiles = AssetDatabase.FindAssets("t:ThingDef", new[] { "Assets/Resources/Prefabs/ThingDef" });
-
-            foreach (var ThingDataFile in ThingDataFiles)
+            foreach (var def in defs)
             {
-                // 根据GUID加载ThingDef
-                string ThingDataAssetPath = AssetDatabase.GUIDToAssetPath(ThingDataFile);
-                ThingDef ThingData = AssetDatabase.LoadAssetAtPath<ThingDef>(ThingDataAssetPath);
-
-                if (ThingData != null)
+                if (def != null)
                 {
-                    if (!ThingDefDictionary.ContainsKey(ThingData.DefName))
+                    if (!ThingDefDictionary.ContainsKey(def.DefName))
                     {
-                        ThingDefDictionary.Add(ThingData.DefName, ThingData);
+                        ThingDefDictionary.Add(def.DefName, def);
                     }
                     else
                     {
-                        Debug.LogWarning($"ThingDef with name '{ThingData.DefName}' already exists. Skipping.");
+                        Debug.LogWarning($"ThingDef with name '{def.DefName}' already exists. Skipping.");
                     }
+                }
+                else
+                {
+                    Debug.LogError("Failed to load ThingDef.");
                 }
             }
         }
@@ -102,7 +97,15 @@ namespace ChenChen_Thing
                 switch (thing.Def.Type)
                 {
                     case ThingType.Tree:
-                        ThingDict_Tree.Add(obj.transform.position, thing.GetComponent<Thing_Tree>());
+                        if (!ThingDict_Tree.ContainsKey(obj.transform.position))
+                        {
+                            ThingDict_Tree.Add(obj.transform.position, thing.GetComponent<Thing_Tree>());
+                        }
+                        else
+                        {
+                            Debug.LogWarning("相同的键被添加");
+                        }
+
                         break;
                     default:
                         if (ThingDict.ContainsKey(thing.Def.DefName))

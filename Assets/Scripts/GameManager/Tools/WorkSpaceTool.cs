@@ -22,9 +22,15 @@ public class WorkSpaceTool : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
+
+        index_farm = 0;
+        while (TotalWorkSpaceDictionary.ContainsKey($"种植区{index_farm}"))
+        {
+            index_farm++;
+        }
     }
 
-    private int index = 0;
+    private int index_farm = 0;
     
     /// <summary>
     /// 获取一种类型的工作区的GameObject
@@ -47,14 +53,14 @@ public class WorkSpaceTool : MonoBehaviour
     }
 
     /// <summary>
-    /// 添加一个新的 种植 工作区
+    /// 添加一个新的 种植区
     /// </summary>
-    public void AddNewWorkSpace(string newWorkSpaceName, string cropName)
+    public void AddNewWorkSpace(string cropName)
     {
-        newWorkSpaceName = newWorkSpaceName + index++.ToString();
+        string newWorkSpaceName = $"种植区{index_farm++}";
         if (TotalWorkSpaceDictionary.ContainsKey(newWorkSpaceName))
         {
-            Debug.LogWarning("不会生成相同名字的工作区");
+            Debug.LogWarning("不会生成相同名字的种植区");
             return;
         }
 
@@ -277,7 +283,7 @@ public class WorkSpaceTool : MonoBehaviour
         void Cancel()
         {
             ResetLineRenderer();
-            index--;
+            index_farm--;
             IsDoingWorkSpace = false;
         }
     }

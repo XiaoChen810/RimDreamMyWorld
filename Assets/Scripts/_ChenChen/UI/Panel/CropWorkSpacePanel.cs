@@ -54,7 +54,7 @@ namespace ChenChen_UI
                 btn.onClick.AddListener(() =>
                 {
                     string cropName = btn.name.Replace("CropWorkSpace", "");
-                    GameManager.Instance.WorkSpaceTool.AddNewWorkSpace($"种植区", cropName);
+                    GameManager.Instance.WorkSpaceTool.AddNewWorkSpace(cropName);
                     PanelManager.RemovePanel(this);
                 });
             }

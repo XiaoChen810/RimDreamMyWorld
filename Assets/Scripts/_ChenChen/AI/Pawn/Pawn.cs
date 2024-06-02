@@ -1,8 +1,6 @@
 using ChenChen_UI;
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -26,7 +24,7 @@ namespace ChenChen_AI
         /// </summary>
         public Animator Animator { get; protected set; }
 
-        public EmotionController EmotionController { get; protected set; }
+        public EmotionController EmotionController;
 
         [Header("当前任务")]
         public GameObject CurJobTarget;
@@ -231,9 +229,6 @@ namespace ChenChen_AI
             /* 配置状态机 */
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
-            /* 添加这个人物的情感组件 */
-            EmotionController = GetComponentInChildren<EmotionController>();
-
             /* 设置图层Pawn和标签 */
             gameObject.layer = 7;
             gameObject.tag = "Pawn";
@@ -242,11 +237,18 @@ namespace ChenChen_AI
         private void OnEnable()
         {
             GameManager.Instance.OnTimeAddOneMinute += UpdatePawnInfo;
+            GameManager.Instance.OnGameStart += Instance_OnGameStart;
+        }
+
+        private void Instance_OnGameStart()
+        {
+            transform.Find("Emotion").gameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
             GameManager.Instance.OnTimeAddOneMinute -= UpdatePawnInfo;
+            GameManager.Instance.OnGameStart -= Instance_OnGameStart;
         }
 
         private void UpdatePawnInfo()

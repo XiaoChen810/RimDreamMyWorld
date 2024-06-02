@@ -19,17 +19,24 @@ namespace ChenChen_UI
 
         public override void OnEnter()
         {
-            LoadAllSave();
+            selectedGameSave = PlayManager.Instance.CurSave;
+            // 判断有无存档
+            if(selectedGameSave != null)
+            {
+                UITool.TryGetChildComponentByName<Text>("提示").text = "是否继续游戏？";
+            }
+            else
+            {
+                UITool.TryGetChildComponentByName<Text>("提示").text = "无存档\n请新建游戏";
+            }
+
+            // 新开始
             UITool.TryGetChildComponentByName<Button>("BtnNew").onClick.AddListener(() =>
             {
+                Debug.Log("New Game");
                 SceneSystem.Instance.SetScene(new InitScene());
             });
-            UITool.TryGetChildComponentByName<Button>("BtnDelete").onClick.AddListener(() =>
-            {
-                PlayManager.Instance.Delete(selectedGameSave);
-                selectedGameSave = null;
-                LoadAllSave();
-            });
+            // 继续游戏
             UITool.TryGetChildComponentByName<Button>("BtnContinue").onClick.AddListener(() =>
             {
                 if (selectedGameSave != null)
@@ -38,58 +45,27 @@ namespace ChenChen_UI
                     Action onPreloadAnimation = () =>
                     {
                         Debug.Log("Continue Game");
-                    }; 
-                    Action onPostLoadScene= () =>
+                    };
+                    Action onPostLoadScene = () =>
                     {
                         // 加载游戏存档
-                        PlayManager.Instance.Load(selectedGameSave);
+                        PlayManager.Instance.Load();
                         // 打开刚刚加载的存档的地图
                         MapManager.Instance.LoadOrGenerateSceneMap(selectedGameSave.SaveMap.mapName);
                     };
                     SceneSystem.Instance.SetScene(new MainScene(onPreloadAnimation, onPostLoadScene, 1f));
                 }
-            });         
-        }
-
-        private void LoadAllSave()
-        {
-            // 获取装内容的子物体
-            GameObject content = UITool.GetChildByName("Content");
-            // 检查是否有GridLayoutGroup组件
-            GridLayoutGroup glg = UITool.TryGetChildComponentByName<GridLayoutGroup>("Content");
-            // 获取存档的预制件
-            string saveDefaultPath = "UI/Component/SaveDefault";
-            GameObject savePrefab = Resources.Load(saveDefaultPath) as GameObject;
-            if (savePrefab == null)
-            {
-                Debug.LogError("存档的预制件为空, 检查位置: " + saveDefaultPath);
-                PanelManager.RemoveTopPanel(this);
-                return;
-            }
-            // 先清空内容
-            for (int i = 0; i < content.transform.childCount; i++)
-            {
-                GameObject.Destroy(content.transform.GetChild(i).gameObject);
-            }
-            // 加载所有存档
-            foreach (var save in PlayManager.Instance.SaveList)
-            {
-                GameObject saveInstance = UnityEngine.Object.Instantiate(savePrefab);
-                saveInstance.transform.SetParent(content.transform, false);
-                SaveDefaultPanel saveDefaultPanel = saveInstance.GetComponent<SaveDefaultPanel>();
-                saveDefaultPanel.Data_GameSave = save;
-                saveDefaultPanel.TextName.text = $"Name: {save.SaveName}";
-                saveDefaultPanel.TextDate.text = $"Date: {save.SaveDate}";
-            }
-            // 获取内容中的全部按钮添加功能
-            Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);
-            foreach (var btn in btnContents)
-            {
-                btn.onClick.AddListener(() =>
+                else
                 {
-                    selectedGameSave = btn.GetComponent<SaveDefaultPanel>().Data_GameSave;
-                });
-            }
+                    UITool.TryGetChildComponentByName<Text>("提示").text = "无存档\n请点击新建";
+                }
+
+            });
+            // 关闭窗口
+            UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
+            {
+                PanelManager.RemoveTopPanel(this);
+            });
         }
     }
 }

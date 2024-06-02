@@ -14,11 +14,11 @@ public class PlayManager : SingletonMono<PlayManager>
 {
     private static readonly string root_save_name = "GameSave";
 
-    public List<Data_GameSave> SaveList = new List<Data_GameSave>();
     public PanelManager PanelManager { get; private set; }
 
     [Header("本次游戏加载的存档")]
-    public Data_GameSave CurSave;
+    public Data_GameSave CurSave = null;
+    public string CurSaveName => CurSave == null ? string.Empty : CurSave.SaveName;
 
     private void Start()
     {
@@ -28,12 +28,19 @@ public class PlayManager : SingletonMono<PlayManager>
 
         if (ES3.KeyExists(root_save_name))
         {
-            SaveList = ES3.Load<List<Data_GameSave>>(root_save_name);
+            CurSave = ES3.Load<Data_GameSave>(root_save_name);
+            if (CurSave != null)
+            {
+                // 加载声音大小
+                AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
+                AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
+            }
             Debug.Log($"成功加载存档{root_save_name}资源");
         }
         else
         {
             Debug.Log($"未能加载存档{root_save_name}资源");
+            CurSave = null;
         }
     }
 
@@ -41,7 +48,7 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         if(Input.GetKeyUp(KeyCode.Escape))
         {
-            PanelManager.TogglePanel(new SettingPanel(), SceneType.Main);
+            PanelManager.TogglePanel(new SettingPanel());
         }
     }
 
@@ -49,7 +56,7 @@ public class PlayManager : SingletonMono<PlayManager>
     /// 新建一个游戏存档并保存到列表，返回本次新建的存档
     /// </summary>
     /// <param name="saveName"></param>
-    public Data_GameSave Save(string saveName = null)
+    public Data_GameSave Save()
     {
         if (SceneSystem.Instance.CurSceneType != SceneType.Main)
         {
@@ -57,11 +64,12 @@ public class PlayManager : SingletonMono<PlayManager>
             return null;
         }
         // 新建存档
-        string saveDate = DateTime.Now.ToString();
-        saveName = saveName == null ? "unnamed" : CurSave.SaveName;
-        Data_GameSave saveData = new Data_GameSave(saveName, saveDate);
+        Data_GameSave saveData = new Data_GameSave("存档", DateTime.Now.ToString());
         // 保存摄像机位置
         saveData.CameraPosition = Camera.main.transform.position;
+        // 保存声音大小
+        saveData.BGMVolume = AudioManager.Instance.bgmSource.volume;
+        saveData.SFXVolume = AudioManager.Instance.sfxSource.volume;
         // 保存游戏时长
         saveData.currentSeason = GameManager.Instance.currentSeason;
         saveData.currentDay = GameManager.Instance.currentDay;
@@ -128,19 +136,10 @@ public class PlayManager : SingletonMono<PlayManager>
             }
             // 其他
         }
-        // 判断是否有要覆盖的
-        for (int i = 0; i < SaveList.Count; i++)
-        {
-            if (SaveList[i].SaveName == saveData.SaveName)
-            {
-                SaveList[i] = saveData;
-                Debug.Log("覆盖了");
-            }
-        }
-        if(!SaveList.Contains(saveData)) SaveList.Add(saveData);
+        CurSave = saveData;
         // 最后，保存存档
-        ES3.Save(root_save_name, SaveList);
-        Debug.Log($"成功保存存档{saveName}资源, 日期{saveDate}");
+        ES3.Save(root_save_name, CurSave);
+        Debug.Log($"成功保存存档{CurSave.SaveName}资源, 日期{CurSave.SaveDate}");
         return saveData;
     }
 
@@ -148,46 +147,53 @@ public class PlayManager : SingletonMono<PlayManager>
     /// 加载一个游戏存档
     /// </summary>
     /// <param name="gameSave"></param>
-    public void Load(Data_GameSave gameSave)
+    public void Load()
     {
+        if(CurSave == null)
+        {
+            Debug.LogWarning("存档为空无法加载");
+            return;
+        }
         // 加载摄像机位置
-        Camera.main.transform.position = gameSave.CameraPosition;
+        Camera.main.transform.position = CurSave.CameraPosition;
+        // 加载声音大小
+        AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
+        AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
         // 加载游戏时间
         GameManager.Instance.InitGameTime(
-            gameSave.currentSeason,
-            gameSave.currentDay,
-            gameSave.currentHour,
-            gameSave.currentMinute
+            CurSave.currentSeason,
+            CurSave.currentDay,
+            CurSave.currentHour,
+            CurSave.currentMinute
             );
         // 加载地图
-        MapManager.Instance.LoadSceneMapFromSave(gameSave);
+        MapManager.Instance.LoadSceneMapFromSave(CurSave);
         // 加载物品
-        MapManager.Instance.ItemCreator.LoadItemFromSave(gameSave);
+        MapManager.Instance.ItemCreator.LoadItemFromSave(CurSave);
         // 加载Pawn
-        GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(gameSave);
+        GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(CurSave);
         // 加载Monster
-        GameManager.Instance.MonsterGeneratorTool.LoadMonstersFromSave(gameSave);
+        GameManager.Instance.MonsterGeneratorTool.LoadMonstersFromSave(CurSave);
         // 加载种植区
-        GameManager.Instance.WorkSpaceTool.LoadFarmWorkSpaceFromSave(gameSave);
-        CurSave = gameSave;
+        GameManager.Instance.WorkSpaceTool.LoadFarmWorkSpaceFromSave(CurSave);
     }
 
     /// <summary>
     /// 删除一个游戏存档
     /// </summary>
     /// <param name="save"></param>
-    public void Delete(Data_GameSave save)
+    public void Delete()
     {
-        if (SaveList.Contains(save))
-        {
-            SaveList.Remove(save);
-            ES3.Save(root_save_name, SaveList);
-        }
+        CurSave = null;
+        ES3.Save(root_save_name, CurSave);
     }
 
     private void OnApplicationQuit()
     {
-        Save(CurSave.SaveName);
-        Debug.Log("游戏退出，自动保存");
+        //Debug.Log("游戏退出，自动保存");
+        //if(CurSave != null)
+        //{
+        //    Save();
+        //}
     }
 }

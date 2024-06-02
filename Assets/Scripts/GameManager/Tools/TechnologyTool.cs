@@ -1,7 +1,4 @@
-using ChenChen_Thing;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class TechnologyTool : MonoBehaviour
@@ -16,20 +13,16 @@ public class TechnologyTool : MonoBehaviour
 
     private void Start()
     {
-        LoadAllDefData();
+        LoadAllTechnologyDefData();
     }
 
-    private void LoadAllDefData()
+    private void LoadAllTechnologyDefData()
     {
-        // 获取指定路径下的所有TechnologyDef文件
-        string[] DataFiles = AssetDatabase.FindAssets("t:TechnologyDef", new[] { "Assets/Resources/Prefabs/TechnologyDef" });
+        // 加载所有TechnologyDef资源
+        TechnologyDef[] defs = Resources.LoadAll<TechnologyDef>("Prefabs/TechnologyDef");
 
-        foreach (var dataFile in DataFiles)
+        foreach (var def in defs)
         {
-            // 根据GUID加载Def
-            string dataAssetPath = AssetDatabase.GUIDToAssetPath(dataFile);
-            TechnologyDef def = AssetDatabase.LoadAssetAtPath<TechnologyDef>(dataAssetPath);
-
             if (def != null)
             {
                 if (!TotalTechnologyDef.ContainsKey(def.TechnologyName))
@@ -43,7 +36,7 @@ public class TechnologyTool : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Failed to load TechnologyDef at path '{dataAssetPath}'.");
+                Debug.LogError("Failed to load TechnologyDef.");
             }
         }
     }

@@ -1,5 +1,5 @@
-﻿using ChenChen_Thing;
-using System;
+﻿#if UNITY_EDITOR
+using ChenChen_Thing;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -67,3 +67,4 @@ public class CropDefGenerator
         Debug.Log($"ThingDef {cropDef.CropName} and Prefab generated successfully!");
     }
 }
+#endif

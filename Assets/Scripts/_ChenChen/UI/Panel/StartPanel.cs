@@ -16,7 +16,7 @@ namespace ChenChen_UI
             UITool.TryGetChildComponentByName<Button>("BtnPlay").onClick.AddListener(() =>
             {
                 // 当按下这个按钮时进行的方法
-                PanelManager.AddPanel(new SavesPanel(), false);
+                PanelManager.AddPanel(new SavesPanel());
             });
         }
     }

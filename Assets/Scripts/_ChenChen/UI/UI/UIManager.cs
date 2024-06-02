@@ -40,6 +40,28 @@ namespace ChenChen_UI
         }
 
         /// <summary>
+        /// 获取单个的一个UI对象，世界空间
+        /// </summary>
+        /// <param name="type"> UI对象的类型数据 </param>
+        /// <returns></returns>
+        public GameObject GetOrGenerateSingleUI_WorldSpace(UIType type)
+        {
+            GameObject canvas = GameObject.Find("CanvasWorld");
+            if (canvas == null)
+            {
+                Debug.LogError("画布对象不存在");
+                return null;
+            }
+            if (UIDict.ContainsKey(type)) return UIDict[type];
+
+            // 如果不存在则生成一个
+            GameObject newUI = GameObject.Instantiate(Resources.Load<GameObject>(type.Path), canvas.transform);
+            newUI.name = type.Name;
+            UIDict.Add(type, newUI);
+            return newUI;
+        }
+
+        /// <summary>
         /// 删除一个UI对象
         /// </summary>
         /// <param name="type">UI对象的类型数据</param>

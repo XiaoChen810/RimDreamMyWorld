@@ -1,5 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChenChen_Thing
@@ -34,27 +33,25 @@ namespace ChenChen_Thing
 
         private void LoadAllStuffDefData()
         {
-            StuffDefDictionary = new SerializedDictionary<string, StuffDef>();
+            // 加载所有CropDef资源
+            StuffDef[] defs = Resources.LoadAll<StuffDef>("Prefabs/StuffDef");
 
-            // 获取指定路径下的所有ThingDef文件
-            string[] DefDataFiles = AssetDatabase.FindAssets("t:StuffDef", new[] { "Assets/Resources/Prefabs/StuffDef" });
-
-            foreach (var def in DefDataFiles)
+            foreach (var def in defs)
             {
-                // 根据GUID加载Def
-                string StuffDefDataAssetPath = AssetDatabase.GUIDToAssetPath(def);
-                StuffDef stuffDef = AssetDatabase.LoadAssetAtPath<StuffDef>(StuffDefDataAssetPath);
-
-                if (stuffDef != null)
+                if (def != null)
                 {
-                    if (!StuffDefDictionary.ContainsKey(stuffDef.Name))
+                    if (!StuffDefDictionary.ContainsKey(def.Name))
                     {
-                        StuffDefDictionary.Add(stuffDef.Name, stuffDef);
+                        StuffDefDictionary.Add(def.Name, def);
                     }
                     else
                     {
-                        Debug.LogWarning($"材料定义 '{stuffDef.Name}' 重复加载。 跳过。");
+                        Debug.LogWarning($"StuffDef with name '{def.Name}' already exists. Skipping.");
                     }
+                }
+                else
+                {
+                    Debug.LogError("Failed to load CropStuffDefDef.");
                 }
             }
         }

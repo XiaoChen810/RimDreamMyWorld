@@ -30,7 +30,6 @@ public class GameManager : SingletonMono<GameManager>
     public int currentMinute = 0; // 当前分钟
     public float secondsPerGameMinute = 0.7f; // 游戏中的每分钟等于现实中的秒数
     public event Action OnTimeAddOneMinute;   //当时间加了一分钟
-    private Coroutine timeCoroutine; // 协程引用
 
     // 当前游戏时间
     public string CurrentTime
@@ -79,7 +78,7 @@ public class GameManager : SingletonMono<GameManager>
         _gameIsStart = true;
         OnGameStart?.Invoke();
         //时间流逝
-        timeCoroutine = StartCoroutine(TimeFlow());
+        StartCoroutine(TimeFlow());
         AnimalGenerateTool.CreateAllAnimalThree();
     }
 
@@ -125,29 +124,7 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
-    private void OnDestroy()
-    {
-        if (timeCoroutine != null)
-        {
-            StopCoroutine(timeCoroutine);
-        }
-    }
-
 #if UNITY_EDITOR
-    public GameObject Skeleton;
-    public GameObject Goblin;
-
-    public void 生成一个敌人()
-    {
-        Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        Instantiate(Goblin, random, Quaternion.identity, transform);
-    }
-
-    public void 退回开始场景()
-    {
-        MapManager.Instance.CloseSceneMap(MapManager.Instance.CurrentMapName);
-        SceneSystem.Instance.SetScene(new StartScene());
-    }
 
     public void 测试按钮()
     {

@@ -1,6 +1,5 @@
+#if UNITY_EDITOR
 using ChenChen_Thing;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -58,3 +57,4 @@ public class StuffDefGenerator
         Debug.Log($"ThingDef {stuffDef.Name} and Prefab generated successfully!");
     }
 }
+#endif

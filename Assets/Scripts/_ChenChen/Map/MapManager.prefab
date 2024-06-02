@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMapDefaultTileBase: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
   lacunarrty: 0.08
-  needSaveForPrefab: 1
+  needSaveForPrefab: 0
   _terrainList:
   - probability: 0.2
     tilemapName: River

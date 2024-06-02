@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.IO;
 
 
 namespace ChenChen_Map
@@ -32,7 +30,7 @@ namespace ChenChen_Map
         /// <summary>
         /// 生成地图，并把返回对应的地图GameObject
         /// </summary>
-        public MapData GenerateMap(MapData mapData)
+        public MapData GenerateMap(MapData mapData, bool isSave)
         {
             MapData result = mapData;
             // 全局参数
@@ -41,17 +39,7 @@ namespace ChenChen_Map
             _nodes = new MapNode[_width, _height];
             Random.InitState(mapData.seed);
 
-            if (LoadMapPrefab(mapData, out GameObject mapObj))
-            {
-                InitNodeNoiseValue();
-                InitNodeType();
-                CheckNode();
-                result.mapNodes = _nodes;
-                result.mapObject = mapObj;
-                return result;
-            }
-
-            Debug.Log("第一次生成地图" + mapData.mapName);
+            Debug.Log("生成地图" + mapData.mapName);
             // 地图的Object
             _mapObj = new GameObject(mapData.mapName);
             _mapObj.transform.parent = transform;
@@ -92,79 +80,22 @@ namespace ChenChen_Map
                 newObj.transform.parent = grid.transform;
                 if (!_layerDict.ContainsKey(f.tilemapName)) _layerDict.Add(f.tilemapName, tilemap);
             }
-
+            // 噪声
             InitNodeNoiseValue();
+            // 根据噪声设置类型
             InitNodeType();
+            // 剔除穿帮节点
             CheckNode();
+            // 生成瓦片地图
             GenerateTileMap();
+            // 生成花草
             GenerateFlowers();
-            GenerateThings(mapData);
+            // 如果是第一次生成地图，则同时生成环境
+            if(!isSave) GenerateThings(mapData);
 
             result.mapNodes = _nodes;
             result.mapObject = _mapObj;
-            SetStaticRecursively(result.mapObject, StaticEditorFlags.BatchingStatic);
-            if(needSaveForPrefab) SaveMapPrefab(mapData);
             return result;
-
-            static void SetStaticRecursively(GameObject obj, StaticEditorFlags flags)
-            {
-                // 设置当前对象的静态属性
-                if (obj.TryGetComponent<Tilemap>(out _))
-                {
-                    GameObjectUtility.SetStaticEditorFlags(obj, flags);
-                }
-                // 递归设置所有子对象的静态属性
-                foreach (Transform child in obj.transform)
-                {
-                    SetStaticRecursively(child.gameObject, flags);
-                }
-            }
-        }
-
-        private void SaveMapPrefab(MapData mapData)
-        {
-            if (mapData.mapName == "临时地图") return;
-            string saveDirectory = "Assets/SavedGameObjects/";
-            string path = "Assets/SavedGameObjects/" + mapData.mapName + mapData.seed + ".prefab";
-            if (!string.IsNullOrEmpty(path))
-            {
-                //创建目录如果它不存在
-                AssetDatabase.Refresh();
-                if (!Directory.Exists(saveDirectory))
-                {
-                    Directory.CreateDirectory(saveDirectory);
-                }
-                PrefabUtility.SaveAsPrefabAsset(_mapObj, path);
-                // 刷新资产数据库
-                AssetDatabase.Refresh();
-
-                Debug.Log("GameObject saved as Prefab: " + path);
-            }
-        }
-
-        public bool LoadMapPrefab(MapData mapData, out GameObject map)
-        {
-            map = null;
-            string prefabPath = "Assets/SavedGameObjects/" + mapData.mapName + mapData.seed + ".prefab";
-            if (string.IsNullOrEmpty(prefabPath))
-                return false;
-
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-            if (prefab != null)
-            {
-                map = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-                map.name = mapData.mapName;
-                map.transform.parent = transform;
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                Debug.Log("GameObject Prefab loaded: " + prefabPath);
-                return true;
-            }
-            else
-            {
-                Debug.LogWarning("Prefab not found at path: " + prefabPath);
-                return false;
-            }
         }
 
         #region 地图生成
@@ -269,9 +200,12 @@ namespace ChenChen_Map
                 for (int i = 0; i < count * flower.probability; i++)
                 {
                     if (theGrassTile.Count == 0) return;
+                    // 随机选一块草地
                     int randomIndex = Random.Range(0, theGrassTile.Count);
                     Vector3Int pos = new Vector3Int(theGrassTile[randomIndex].position.x, theGrassTile[randomIndex].position.y);
+                    // 随机选一种草
                     TileBase tile = flower.tile[Random.Range(0, flower.tile.Count)];
+                    // 生成
                     GetTileamp(flower.tilemapName).SetTile(pos, tile);
                 }
             }
@@ -314,7 +248,7 @@ namespace ChenChen_Map
             {
                 int generatedCount = 0;
                 int flag = 0;   // 防止无限循环
-                while (generatedCount < thing.num || flag > 1000)
+                while (generatedCount < thing.num && flag < 1000)
                 {
                     // 随机生成一个位置
                     Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, _width), UnityEngine.Random.Range(0, _height));

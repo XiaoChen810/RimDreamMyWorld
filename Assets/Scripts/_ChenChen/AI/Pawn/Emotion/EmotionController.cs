@@ -16,7 +16,7 @@ namespace ChenChen_AI
         public List<Emotion> CurEmotions = new();
 
         private SpriteRenderer sr;
-        private Dictionary<EmotionType, Emotion> emotionsDict;
+        private Dictionary<EmotionType, Emotion> emotionsDict = new();
 
         private void OnEnable()
         {
@@ -51,21 +51,18 @@ namespace ChenChen_AI
                     int index = 0;
                     while(CurEmotions.Count > 0 && index < CurEmotions.Count)
                     {
-                        if (sr != null)
+                        sr.DOFade(0, 0.5f);
+                        yield return new WaitForSeconds(1);
+                        if (index < CurEmotions.Count)
                         {
-                            sr.DOFade(0, 0.5f);
-                            yield return new WaitForSeconds(1);
-                            if(index < CurEmotions.Count)
-                            {
-                                sr.sprite = CurEmotions[index++].icon;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                            sr.DOFade(1, 0.5f);
-                            yield return new WaitForSeconds(1);
+                            sr.sprite = CurEmotions[index++].icon;
                         }
+                        else
+                        {
+                            break;
+                        }
+                        sr.DOFade(1, 0.5f);
+                        yield return new WaitForSeconds(1);
                     }
                 }
                 yield return null;
@@ -75,11 +72,14 @@ namespace ChenChen_AI
         private void InitializeEmotionsDict()
         {
             emotionsDict = new Dictionary<EmotionType, Emotion>();
-            foreach (Emotion e in EmotionsList.list)
+            if (EmotionsList != null)
             {
-                if (!emotionsDict.ContainsKey(e.type))
+                foreach (Emotion e in EmotionsList.list)
                 {
-                    emotionsDict.Add(e.type, e);
+                    if (!emotionsDict.ContainsKey(e.type))
+                    {
+                        emotionsDict.Add(e.type, e);
+                    }
                 }
             }
         }

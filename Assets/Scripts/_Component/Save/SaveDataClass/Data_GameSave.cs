@@ -22,6 +22,9 @@ public class Data_GameSave
 
     public Vector3 CameraPosition;
 
+    public float BGMVolume = 0;
+    public float SFXVolume = 0;
+
     [Header("Time")]
     public int currentSeason = 1; 
     public int currentDay = 1; 

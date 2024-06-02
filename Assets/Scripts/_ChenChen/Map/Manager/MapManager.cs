@@ -85,13 +85,14 @@ namespace ChenChen_Map
         /// </summary>
         /// <param name="mapSave"> 生成地图用的数据 </param>
         /// <param name="mapObjectActive"> 生成的地图是否立即作为当前场景 </param>
-        private void GenerateMap(Data_MapSave mapSave, bool mapObjectActive)
+        /// <param name="isSave"> 是存档 </param>
+        private void GenerateMap(Data_MapSave mapSave, bool mapObjectActive, bool isSave)
         {    
             if (!_mapDatasDict.ContainsKey(mapSave.mapName))
             {
                 MapData mapData = new(mapSave);
                 if (MapCreator == null) MapCreator = GetComponent<MapCreator>();
-                mapData = MapCreator.GenerateMap(mapData);
+                mapData = MapCreator.GenerateMap(mapData, isSave);
                 if (mapObjectActive)
                 {
                     CurrentMapName = mapData.mapName;
@@ -139,20 +140,24 @@ namespace ChenChen_Map
                                         MapWidthOfGenerate,
                                         MapHeightOfGenerate,
                                         seed == -1 ? System.DateTime.Now.GetHashCode() : seed);
-                GenerateMap(mapSave, true);
+                GenerateMap(mapSave, true, false);
             }
-            AstarPath.active.Scan();
-            AstarPath.active.AddWorkItem(new AstarWorkItem(() =>
+            // 更新寻路
+            if (AstarPath.active != null)
             {
-                foreach (var mapNode in CurMapNodes)
+                AstarPath.active.Scan();
+                AstarPath.active.AddWorkItem(new AstarWorkItem(() =>
                 {
-                    if (mapNode.type == NodeType.water)
+                    foreach (var mapNode in CurMapNodes)
                     {
-                        SetNodePenalty((Vector2)mapNode.position, 1000);
-                        SetSurroundingNodesPenalty((Vector2)mapNode.position, 1000);
+                        if (mapNode.type == NodeType.water)
+                        {
+                            SetNodePenalty((Vector2)mapNode.position, 1000);
+                            SetSurroundingNodesPenalty((Vector2)mapNode.position, 1000);
+                        }
                     }
-                }
-            }));
+                }));
+            }
         }
 
         /// <summary>
@@ -201,7 +206,7 @@ namespace ChenChen_Map
         public void LoadSceneMapFromSave(Data_GameSave gameSave)
         {
             Data_MapSave mapSave = gameSave.SaveMap;
-            GenerateMap(mapSave, false);
+            GenerateMap(mapSave, false, true);
         }
 
         /// <summary>
@@ -235,9 +240,9 @@ namespace ChenChen_Map
             }
 #else
             Destroy(transform.Find(mapName).gameObject);
-            if (SceneMapDatasDict.ContainsKey(mapName))
+            if (_mapDatasDict.ContainsKey(mapName))
             {
-                SceneMapDatasDict.Remove(mapName);
+                _mapDatasDict.Remove(mapName);
             }
 #endif
         }

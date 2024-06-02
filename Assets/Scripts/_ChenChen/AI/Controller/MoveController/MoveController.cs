@@ -240,6 +240,10 @@ namespace ChenChen_AI
             {
                 return false;
             }
+            if(AstarPath.active == null)
+            {
+                return false;
+            }
             // 新建路径
             ABPath newPath = ABPath.Construct(transform.position, destination);
             // 开始计算路径

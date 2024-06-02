@@ -32,14 +32,13 @@ namespace ChenChen_AI
         {
             if (Time.time < lastGiverTime + intervalTime) return null;
             if (UnityEngine.Random.value > probability) return null;
-
+            lastGiverTime = Time.time;
             GameObject job = TryGiveJob(pawn);
             if (job == null)
             {
                 return null;
             }
             onGetJobSuccessly?.Invoke(job);
-            lastGiverTime = Time.time;
             return job;
         }
     }

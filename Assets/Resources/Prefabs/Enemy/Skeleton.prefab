@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4942437846740371970
 Transform:
   m_ObjectHideFlags: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   seeRange: 30
   pawn: {fileID: 0}
   isBattling: 0
-  attackDamage: 0
+  attackDamage: 1
   attackRange: 1.5
   attackWaitTime: 3
   HP: 100

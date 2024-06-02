@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ChenChen_Map
 {
     /// <summary>
-    /// 场景地图数据
+    /// 地图数据，包括地图名字，大小，种子，节点列表，对应实例
     /// </summary>
     [System.Serializable]
     public class MapData
@@ -19,6 +19,7 @@ namespace ChenChen_Map
             this.width = save.width;
             this.height = save.height;
             this.seed = save.seed;
+            this.mapNodes = new MapNode[width,height];
         }
         public string mapName;
         public int width, height;

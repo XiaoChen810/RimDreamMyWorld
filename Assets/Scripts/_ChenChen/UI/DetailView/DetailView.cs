@@ -32,6 +32,8 @@ namespace ChenChen_UI
             IsIndicatorOpen = true;
             indicator.gameObject.SetActive(true);
             indicator.DoAnim();
+
+            AudioManager.Instance.PlaySFX("OpenIndicator");
         }
         /// <summary>
         /// ¹Ø±ÕÖ¸Ê¾Æ÷

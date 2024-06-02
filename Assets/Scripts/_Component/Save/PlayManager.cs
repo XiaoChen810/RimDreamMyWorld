@@ -14,15 +14,12 @@ public class PlayManager : SingletonMono<PlayManager>
 {
     private static readonly string root_save_name = "GameSave";
 
-    public PanelManager PanelManager { get; private set; }
-
     [Header("本次游戏加载的存档")]
     public Data_GameSave CurSave = null;
     public string CurSaveName => CurSave == null ? string.Empty : CurSave.SaveName;
 
     private void Start()
     {
-        PanelManager = new PanelManager();
         //加载开始场景
         SceneSystem.Instance.SetScene(new StartScene());
 
@@ -48,12 +45,12 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         if(Input.GetKeyUp(KeyCode.Escape))
         {
-            PanelManager.TogglePanel(new SettingPanel());
+            PanelManager.Instance.TogglePanel(new SettingPanel());
         }
     }
 
     /// <summary>
-    /// 新建一个游戏存档并保存到列表，返回本次新建的存档
+    /// 新建游戏存档并保存到列表，返回本次新建的存档
     /// </summary>
     /// <param name="saveName"></param>
     public Data_GameSave Save()
@@ -144,7 +141,7 @@ public class PlayManager : SingletonMono<PlayManager>
     }
 
     /// <summary>
-    /// 加载一个游戏存档
+    /// 加载游戏存档
     /// </summary>
     /// <param name="gameSave"></param>
     public void Load()
@@ -179,7 +176,7 @@ public class PlayManager : SingletonMono<PlayManager>
     }
 
     /// <summary>
-    /// 删除一个游戏存档
+    /// 删除游戏存档
     /// </summary>
     /// <param name="save"></param>
     public void Delete()

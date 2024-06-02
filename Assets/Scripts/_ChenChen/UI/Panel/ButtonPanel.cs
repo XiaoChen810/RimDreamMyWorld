@@ -9,6 +9,7 @@ namespace ChenChen_UI
         public Button T;
         public Button P;
         public Button B;
+        public Button Setting;
 
         private void Start()
         {
@@ -27,6 +28,10 @@ namespace ChenChen_UI
             if (B != null) B.onClick.AddListener(() =>
             {
                 PanelManager.Instance.TogglePanel(new StoragesPanel(), ChenChen_Scene.SceneType.Main, true);
+            });
+            if (Setting != null) Setting.onClick.AddListener(() =>
+            {
+                PanelManager.Instance.TogglePanel(new SettingPanel(), ChenChen_Scene.SceneType.Main, true);
             });
         }
     }

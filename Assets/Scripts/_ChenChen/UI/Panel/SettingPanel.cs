@@ -16,12 +16,12 @@ namespace ChenChen_UI
         {
             // SAVE
             saveName = PlayManager.Instance.CurSaveName;
-            UITool.TryGetChildComponentByName<InputField>("SaveName").text = saveName;
-            UITool.TryGetChildComponentByName<InputField>("SaveName").onValueChanged.AddListener((string content) =>
-            {
-                Debug.Log("改变存档名字");
-                saveName = content;
-            });
+            UITool.TryGetChildComponentByName<InputField>("SaveName").text = saveName == string.Empty ? "无存档" : saveName;
+            //UITool.TryGetChildComponentByName<InputField>("SaveName").onValueChanged.AddListener((string content) =>
+            //{
+            //    Debug.Log("改变存档名字");
+            //    saveName = content;
+            //});
             UITool.TryGetChildComponentByName<Button>("SaveBtn").onClick.AddListener(() =>
             {
                 PlayManager.Instance.Save();

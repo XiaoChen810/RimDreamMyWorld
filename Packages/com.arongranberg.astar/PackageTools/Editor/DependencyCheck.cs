@@ -59,7 +59,7 @@ namespace Pathfinding.Util {
 			v[2] = new string(v[2].TakeWhile(char.IsDigit).ToArray());
 			var patch = int.Parse(v[2]);
 			if (major == 2022 && minor == 3 && patch < 21) {
-				Debug.LogError("This version of Unity has a bug which causes components in the A* Pathfinding Project to randomly stop working. Please update to unity 2022.3.21 or later.");
+				//Debug.LogError("This version of Unity has a bug which causes components in the A* Pathfinding Project to randomly stop working. Please update to unity 2022.3.21 or later.");
 			}
 		}
 	}

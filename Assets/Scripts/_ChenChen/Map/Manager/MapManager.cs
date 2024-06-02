@@ -247,6 +247,13 @@ namespace ChenChen_Map
 #endif
         }
 
+        /// <summary>
+        /// 在当前地图上获取Tilemap，如果不存在，则新生成一个
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="isObstacle"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public bool TryGetTilemap(string name, bool isObstacle,out Tilemap result)
         {
             result = null;
@@ -265,10 +272,13 @@ namespace ChenChen_Map
                 Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Bottom";
+                TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
+                tr.sortingLayerName = "Bottom";
+                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
+                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");
                 if (isObstacle)
                 {
-                    newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                    newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
                     newObj.layer = 8; //Obstacle Layer

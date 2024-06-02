@@ -34,6 +34,7 @@ namespace ChenChen_UI
             UITool.TryGetChildComponentByName<Button>("BtnNew").onClick.AddListener(() =>
             {
                 Debug.Log("New Game");
+                PlayManager.Instance.Delete();
                 SceneSystem.Instance.SetScene(new InitScene());
             });
             // ¼ÌÐøÓÎÏ·

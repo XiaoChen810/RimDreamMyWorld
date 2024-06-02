@@ -75,7 +75,7 @@ public class LightEffect : MonoBehaviour
             if (count < 5)
             {
                 GenerateEffect("ั๔นโ");
-                float time = 60f;
+                float time = 15f;
                 yield return new WaitForSeconds(time);
             }
         }

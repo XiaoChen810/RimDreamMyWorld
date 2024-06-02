@@ -66,7 +66,7 @@ public class LightRayEffect : MonoBehaviour
         time += Time.deltaTime;
         if(time > 30)
         {
-            if(Vector2.Distance(transform.position,Camera.main.transform.position) > 30f)
+            if(Vector2.Distance(transform.parent.position,Camera.main.transform.position) > 30f)
             {
                 Destroy(gameObject);
             }

@@ -52,14 +52,17 @@ namespace ChenChen_Map
             foreach (var t in _terrainList)
             {
                 GameObject newObj = new GameObject(t.tilemapName);
-                Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingOrder = t.layerSort;
                 newObj.transform.parent = grid.transform;
+                Tilemap tilemap = newObj.AddComponent<Tilemap>();
+                TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
+                tr.sortingOrder = t.layerSort;
+                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
+                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");           
                 if (t.isObstacle)
                 {
-                    newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                    newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Outlines;
                     newObj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
                 }
                 if (!_layerDict.ContainsKey(t.tilemapName))
@@ -308,10 +311,13 @@ namespace ChenChen_Map
                 Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingLayerName = "Bottom";
+                TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
+                tr.sortingLayerName = "Bottom";
+                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
+                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");
                 if (isObstacle)
                 {
-                    newObj.AddComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                    newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;
                     newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
                     newObj.layer = 8; //Obstacle Layer

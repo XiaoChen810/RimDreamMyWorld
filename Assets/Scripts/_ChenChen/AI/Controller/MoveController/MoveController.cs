@@ -82,47 +82,16 @@ namespace ChenChen_AI
 
         private Coroutine StopMoveCoroutine;
 
-        /// <summary>
-        /// ‘›Õ£“∆∂Ø
-        /// </summary>
-        public void StopMove()
+        public virtual void Init()
         {
-            isStop = false;
-        }
-
-        /// <summary>
-        /// ‘›Õ£“∆∂Ø“ª∂Œ ±º‰
-        /// </summary>
-        /// <param name="time"></param>
-        public void StopMove(float time)
-        {
-            StopCoroutine(StopMoveCoroutine);
-            StopMoveCoroutine = StartCoroutine(StopMoveCo(time));
-        }
-
-        IEnumerator StopMoveCo(float time)
-        {
-            isStop = false;
-            yield return new WaitForSeconds(time);
-            isStop = true;
-        }
-
-        /// <summary>
-        /// ª÷∏¥“∆∂Ø
-        /// </summary>
-        public void RecoverMove()
-        {
-            StopCoroutine(StopMoveCoroutine);
-            isStop = true;
+            lastTransPositon = transform.position;
+            destination = transform.position;
         }
 
         protected virtual void Start()
         {
             _seeker = GetComponent<Seeker>();
-
-            // init
-            lastTransPositon = transform.position;
-            destination = transform.position;
+            Init();
         }
 
         protected virtual void Update()
@@ -194,6 +163,42 @@ namespace ChenChen_AI
             reachDestination = true;
             isStart = false;
         }
+
+        #region Move
+        /// <summary>
+        /// ‘›Õ£“∆∂Ø
+        /// </summary>
+        public void StopMove()
+        {
+            isStop = false;
+        }
+
+        /// <summary>
+        /// ‘›Õ£“∆∂Ø“ª∂Œ ±º‰
+        /// </summary>
+        /// <param name="time"></param>
+        public void StopMove(float time)
+        {
+            StopCoroutine(StopMoveCoroutine);
+            StopMoveCoroutine = StartCoroutine(StopMoveCo(time));
+        }
+
+        IEnumerator StopMoveCo(float time)
+        {
+            isStop = false;
+            yield return new WaitForSeconds(time);
+            isStop = true;
+        }
+
+        /// <summary>
+        /// ª÷∏¥“∆∂Ø
+        /// </summary>
+        public void RecoverMove()
+        {
+            StopCoroutine(StopMoveCoroutine);
+            isStop = true;
+        }
+        #endregion
 
         #region Path
 

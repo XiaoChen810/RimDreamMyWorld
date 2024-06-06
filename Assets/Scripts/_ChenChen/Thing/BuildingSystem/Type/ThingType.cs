@@ -13,5 +13,7 @@ namespace ChenChen_Thing
         Other,  // 其他
         Tree,   // 树
         ToolTable,  // 工具台
+        Light,  // 光
+        Defend, // 防卫
     }
 }

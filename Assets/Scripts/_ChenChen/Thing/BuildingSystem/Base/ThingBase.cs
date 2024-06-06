@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using ChenChen_Map;
-using ChenChen_AI;
-using static UnityEngine.Rendering.DebugUI;
-using System.Linq;
 using ChenChen_UI;
 using UnityEngine.Tilemaps;
 
 namespace ChenChen_Thing
 {
+    [RequireComponent(typeof(BoxCollider2D))]
     public abstract class ThingBase : PermissionBase, IBlueprint, IDemolish, IDetailView 
     {
         /// <summary>
@@ -30,6 +28,9 @@ namespace ChenChen_Thing
         /// </summary>
         public BoxCollider2D ColliderSelf { get; protected set; }
 
+        /// <summary>
+        /// 物品自身SpriteRenderer
+        /// </summary>
         public SpriteRenderer SR {  get; protected set; }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace ChenChen_Thing
             ColliderSelf = GetComponent<BoxCollider2D>();
             ColliderSelf.isTrigger = true;
 
-            SR = GetComponent<SpriteRenderer>();
+            SR = GetComponentInChildren<SpriteRenderer>();
             SR.sortingLayerName = "Middle";
             SR.sortingOrder = -(int)transform.position.y;
 
@@ -219,7 +220,10 @@ namespace ChenChen_Thing
                     AstarPath.active.UpdateGraphs(bounds);
                 }
             }
-            ThingSystemManager.Instance.RemoveThing(this.gameObject);
+            if(!string.Equals(name, BuildingModeTool.mouseIndicator_string))
+            {
+                ThingSystemManager.Instance.RemoveThing(this.gameObject);
+            }
         }
 
         /// <summary>

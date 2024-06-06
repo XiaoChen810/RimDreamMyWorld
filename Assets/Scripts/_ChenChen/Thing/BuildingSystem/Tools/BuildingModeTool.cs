@@ -40,6 +40,7 @@ namespace ChenChen_Thing
             BuildingSystemManager = buildingSystemManager;
         }
 
+        public static readonly string mouseIndicator_string = "MouseIndicator";
         /// <summary>
         /// Start
         /// </summary>
@@ -49,6 +50,7 @@ namespace ChenChen_Thing
             CurBuildingDef = def;
             CurBuildingName = def.DefName;
             MouseIndicator = UnityEngine.Object.Instantiate(CurBuildingDef.Prefab);
+            MouseIndicator.name = mouseIndicator_string;
             MouseIndicator.SetActive(true);
             CurBuildingBase = MouseIndicator.GetComponent<ThingBase>();
             OnBuildMode = true;
@@ -67,7 +69,7 @@ namespace ChenChen_Thing
                 MouseIndicator.transform.position = placePosition + new Vector3(CurBuildingDef.Offset.x, CurBuildingDef.Offset.y);
 
                 // 如果能建造则设置主体为绿色，否则为红色
-                SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();               
+                SpriteRenderer sr = CurBuildingBase.SR;
                 if (CurBuildingBase.CanBuildHere())
                 {
                     sr.color = Color.green;

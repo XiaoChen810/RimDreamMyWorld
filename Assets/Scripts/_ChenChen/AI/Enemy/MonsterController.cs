@@ -27,6 +27,8 @@ namespace ChenChen_AI
 
         protected override void Update()
         {
+            if (_monster.IsDie) return;
+
             base.Update();
             UpdateMoveAnimation();
         }

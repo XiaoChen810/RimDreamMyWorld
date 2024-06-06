@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ChenChen_AI
 {
@@ -30,8 +31,26 @@ namespace ChenChen_AI
         public float attackDamage = 0;
         public float attackRange = 2;
         public float attackWaitTime = 2.5f;
-        [Header("血量")]
-        public float HP = 100;
+        [Header("属性")]
+        public float MaxHp = 100;
+        public bool IsDie;
+
+        private float Hp;
+        private float _lastMoveTime; 
+        private float _lastAttackTime;
+        private float _diedTime;
+        private ObjectPool<GameObject> _pool;
+
+        public void Init(ObjectPool<GameObject> pool = null)
+        {
+            _pool = pool;
+            isBattling = false;
+            Hp = MaxHp;
+            IsDie = false;
+            _lastMoveTime = -_lastAttackTime;
+            _lastAttackTime = -_lastAttackTime;
+            _diedTime = 0;
+        }
 
         private void Start()
         {
@@ -42,17 +61,96 @@ namespace ChenChen_AI
             }
             MoveController = GetComponent<MonsterController>();
             Animator = GetComponent<Animator>();
-            StartCoroutine(MoveCo());
-            StartCoroutine(AttackCo());
+            Init();
+        }
+        private void Update()
+        {
+            if(IsDie)
+            {
+                // 死亡超过一定时间尸体消失，放回池中
+                _diedTime += Time.deltaTime;
+                if(_diedTime > 5)
+                {
+                    if(_pool != null)
+                    {
+                        _pool.Release(gameObject);
+                        return;
+                    }
+                    Destroy(gameObject);
+                }
+                return;
+            }
+
+            // 每隔moveDuration进行一次判断
+            if (Time.time > _lastMoveTime + moveDuration)
+            {
+                _lastMoveTime = Time.time;
+
+                // 正在战斗时有不同的判断
+                if (isBattling)
+                {
+                    if (pawn == null)
+                    {
+                        FindOtherPawn();
+                    }
+                }
+                else
+                {
+                    FindOtherPawn();
+
+                    if (MoveController.ReachDestination)
+                    {
+                        if (pawn != null)
+                        {
+                            MoveController.GoToHere(pawn.transform.position, attackRange);
+                        }
+                        else
+                        {
+                            // 未发现敌人，随便走走，但会逐渐向中心点偏移
+                            Vector2 p = transform.position;
+                            p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
+                            Vector2 center = new Vector3(ChenChen_Map.MapManager.Instance.CurMapWidth / 2, ChenChen_Map.MapManager.Instance.CurMapHeight / 2) - transform.position;
+                            p += Random.value * 0.05f * center ;
+                            MoveController.GoToHere(p);
+                        }
+                    }
+                }
+            }
+
+            // 当超过上一次攻击时间进行判断判断
+            if (Time.time > _lastAttackTime + attackWaitTime)
+            {
+                // 战斗状态下进行判断
+                if (isBattling && pawn != null)
+                {
+                    MoveController.FilpIt(pawn.transform.position.x);
+                    Animator.SetTrigger("attack");
+                    _lastAttackTime = Time.time;
+                }
+            }
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // Pawn攻击盒
             if (collision.CompareTag("PawnAttackBox"))
             {
                 Pawn p = collision.GetComponentInParent<Pawn>();
                 if (p != null)
                 {
                     GetDamage(p.AttackDamage);
+                }
+                else
+                {
+                    Debug.LogWarning("没有组件");
+                }
+            }
+            // Bullet攻击盒
+            if (collision.CompareTag("BulletAttackBox"))
+            {
+                Bullet b = collision.GetComponent<Bullet>();
+                if (b != null)
+                {
+                    GetDamage(b.damage);
                 }
                 else
                 {
@@ -82,57 +180,6 @@ namespace ChenChen_AI
                 isBattling = false;
             }
         }
-        IEnumerator MoveCo()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(moveDuration);
-
-                // 正在战斗时有不同的判断
-                if (isBattling)
-                {
-                    if(pawn == null)
-                    {
-                        FindOtherPawn();
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-
-                FindOtherPawn();
-
-                if (MoveController.ReachDestination)
-                {
-                    if(pawn != null)
-                    {
-                        MoveController.GoToHere(pawn.transform.position, attackRange);
-                    }
-                    else
-                    {
-                        Vector2 p = transform.position;
-                        p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
-                        MoveController.GoToHere(p);
-                    }
-                }
-            }
-        }
-        IEnumerator AttackCo()
-        {
-            while(true)
-            {
-                yield return null;
-
-                if (isBattling && pawn != null)
-                {
-                    MoveController.FilpIt(pawn.transform.position.x);
-                    Animator.SetTrigger("attack");
-                    // 攻击后等待一段时间再判断
-                    yield return new WaitForSeconds(attackWaitTime);
-                }
-            }
-        }
         private void FindOtherPawn()
         {
             float minDistance = float.MaxValue;
@@ -156,14 +203,15 @@ namespace ChenChen_AI
         }
         private void GetDamage(float damage)
         {
-            HP -= damage;
+            Hp -= damage;
             Animator.SetTrigger("hurt");
-            if (HP <= 0)
+            if (Hp <= 0)
             {
-                Destroy(gameObject);
+                IsDie = true;
+                Animator.SetBool("IsDie", true);
             }
         }
-        private void OnDestroy()
+        private void OnDisable()
         {
             GameManager.Instance.MonsterGeneratorTool.MonstersList.Remove(this);
         }

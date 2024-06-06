@@ -22,7 +22,11 @@ public class Indicator : MonoBehaviour
     /// </summary>
     public void DoAnim()
     {
-        Bounds Boxbounds = transform.parent.GetComponent<SpriteRenderer>().bounds;
+        if (!transform.parent.TryGetComponent<SpriteRenderer>(out SpriteRenderer psr))
+        {
+            return;
+        }
+        Bounds Boxbounds = psr.bounds;
 
         float offset = 0.5f;    // 动画偏移量
         float duration = 0.5f;  // 动画时间

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefName: "\u5C0F\u67DC"
   Type: 2
-  Workload: 0
+  Workload: 30
   PreviewSprite: {fileID: 1601116473, guid: c3bfbf672d89f444e90971c8bd7830af, type: 3}
   IsObstacle: 0
   Prefab: {fileID: 8469187076587775291, guid: 9728a9c05fe52d340be583fc2e9b0279, type: 3}

@@ -14,9 +14,12 @@ namespace ChenChen_UI
         private PanelManager _panelManager;
         private NarrativePanel _narrativePanel;
 
+        public bool Open = true;
+
         protected override void Awake()
         {
             base.Awake();
+            if (!Open) return;
             _panelManager = new PanelManager();
             _panelManager.AddPanel(new NarrativePanel(this));
             _narrativePanel = _panelManager.GetTopPanel() as NarrativePanel;
@@ -29,8 +32,11 @@ namespace ChenChen_UI
         /// <param name="target"> 指向目标 </param>
         public void Narrative(string content, GameObject target)
         {
-            string text = $"{GameManager.Instance.currentHour}:{GameManager.Instance.currentMinute} " + content;
-            _narrativePanel.AddOneNarrativeLog(text, target);          
+            if(_narrativePanel != null)
+            {
+                string text = $"{GameManager.Instance.currentHour}:{GameManager.Instance.currentMinute} " + content;
+                _narrativePanel.AddOneNarrativeLog(text, target);
+            }    
         }
     }
 }

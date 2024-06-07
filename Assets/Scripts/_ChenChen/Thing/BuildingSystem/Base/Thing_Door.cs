@@ -6,7 +6,9 @@ namespace ChenChen_Thing
     [RequireComponent(typeof(Collider2D))]
     public class Thing_Door : Thing_Architectural
     {
+        [Header("门")]
         [SerializeField] private bool isOpen;
+        [SerializeField] private SpriteRenderer srDoor;
         [SerializeField] private Sprite doorOpenSprite;
 
         public bool IsOpen
@@ -30,14 +32,20 @@ namespace ChenChen_Thing
             }
         }
 
+        public override void OnCompleteBuild()
+        {
+            base.OnCompleteBuild();
+            SR.color = new Color(1, 1, 1, 0);
+        }
+
         protected void OpenDoor()
         {
-            GetComponent<SpriteRenderer>().sprite = Def.PreviewSprite;
+            srDoor.sprite = Def.PreviewSprite;
         }
 
         protected void CloseDoor()
         {
-            GetComponent<SpriteRenderer>().sprite = doorOpenSprite;
+            srDoor.sprite = doorOpenSprite;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

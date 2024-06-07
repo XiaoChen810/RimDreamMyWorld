@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class AudioManager : SingletonMono<AudioManager>
 {
-    public static AudioManager instance;
-
     public AudioSource bgmSource; // ±≥æ∞“Ù¿÷AudioSource
     public AudioSource sfxSource; // “Ù–ßAudioSource
 

@@ -29,6 +29,9 @@ namespace ChenChen_Thing
         [Header("最后生成的瓦片")]
         public TileBase TileBase;
 
+        [Header("是否选择不生成实体")]
+        public bool IsNotInstancing;
+
         [Header("耐久度")]
         public int Durability;
 

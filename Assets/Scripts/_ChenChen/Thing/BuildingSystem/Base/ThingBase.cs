@@ -63,7 +63,7 @@ namespace ChenChen_Thing
         }
 
 
-        protected int _workload;
+        protected int _workload = -1;
         /// <summary>
         /// 物品剩余工作量
         /// </summary>
@@ -99,6 +99,7 @@ namespace ChenChen_Thing
         {
             if (change != _lifeState)
             {
+                _lifeState = change;
                 switch (change)
                 {
                     case BuildingLifeStateType.MarkBuilding:
@@ -114,7 +115,6 @@ namespace ChenChen_Thing
                         OnDemolished();
                         break;
                 }
-                _lifeState = change;
             }
             else
             {
@@ -151,10 +151,13 @@ namespace ChenChen_Thing
 
         private Texture2D centerTexture;
         private Texture2D outlineTexture;
+
         protected virtual void OnEnable()
         {
-            gameObject.name = gameObject.name.Replace("(Clone)", "");
+            name = name.Replace("(Clone)", "").Trim();
+            name = name.Replace("_Prefab", "").Trim();
             tag = "Thing";
+            MapName = MapManager.Instance.CurrentMapName;
 
             ColliderSelf = GetComponent<BoxCollider2D>();
             ColliderSelf.isTrigger = true;
@@ -172,6 +175,9 @@ namespace ChenChen_Thing
             outlineTexture = new Texture2D(1, 1);
             outlineTexture.SetPixel(0, 0, outlineColor);
             outlineTexture.Apply();
+
+            // 触发基本函数
+            OnPlaced();
         }
         private void OnGUI()
         {
@@ -200,6 +206,9 @@ namespace ChenChen_Thing
         private void OnDestroy()
         {
             if (!Application.isPlaying) return;
+            // 移除从ThingSystemManager
+            ThingSystemManager.Instance.RemoveThing(this.gameObject);
+            // 如果有瓦片，把对应瓦片地图的瓦片清除
             if (Def.TileBase != null)
             {
                 if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap buildingTilemap))
@@ -207,11 +216,13 @@ namespace ChenChen_Thing
                     buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                 }
             }
+            // 如果打开着详情面板，则关闭
             if (_detailView != null && _detailView.IsPanelOpen)
             {
                 PanelManager panel = DetailViewManager.Instance.PanelManager;
                 panel.RemoveTopPanel(panel.GetTopPanel());
             }
+            // 如果是障碍物，刷新寻路算法的节点
             if (Def.IsObstacle)
             {
                 if (AstarPath.active != null)
@@ -219,10 +230,6 @@ namespace ChenChen_Thing
                     Bounds bounds = ColliderSelf.bounds;
                     AstarPath.active.UpdateGraphs(bounds);
                 }
-            }
-            if(!string.Equals(name, BuildingModeTool.mouseIndicator_string))
-            {
-                ThingSystemManager.Instance.RemoveThing(this.gameObject);
             }
         }
 
@@ -241,9 +248,10 @@ namespace ChenChen_Thing
             // 执行碰撞检测，只检测指定图层的碰撞器
             Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
 
-            // 遍历检测到的碰撞器，如果有任何一个碰撞器存在,除了地板，则返回 false，表示无法放置游戏对象
+            // 遍历检测到的碰撞器，如果有任何一个不符合条件，则返回 false，表示无法放置游戏对象
             foreach(var coll in colliders)
             {
+                // 忽略
                 if (coll.gameObject == this.gameObject) continue;
                 if (coll.CompareTag("Pawn")) continue;
                 if (coll.CompareTag("Floor")) continue;
@@ -254,17 +262,123 @@ namespace ChenChen_Thing
             return true;
         }
 
+        /// <summary>
+        /// 建造该物体
+        /// </summary>
+        public virtual void Building()
+        {
+            ChangeLifeState(BuildingLifeStateType.MarkBuilding);
+        }
+
+        /// <summary>
+        /// 拆除该物体
+        /// </summary>
+        public virtual void Demolish()
+        {
+            ChangeLifeState(BuildingLifeStateType.MarkDemolished);
+        }
 
         // 实现接口中定义的属性和方法
-        public abstract void OnPlaced(BuildingLifeStateType initial_State, string mapName);
-        public virtual void OnMarkBuild() { throw new System.NotImplementedException(); }
-        public virtual void OnBuild(int value) { throw new System.NotImplementedException(); }
-        public virtual void OnCompleteBuild() { throw new System.NotImplementedException(); }
-        public virtual void OnCancelBuild() { throw new System.NotImplementedException(); }
-        public virtual void OnInterpretBuild() { throw new System.NotImplementedException(); }
-        public virtual void OnMarkDemolish() { throw new System.NotImplementedException(); }
-        public virtual void OnDemolish(int value) { throw new System.NotImplementedException(); }
-        public virtual void OnDemolished() { throw new System.NotImplementedException(); }
-        public virtual void OnCanclDemolish() { throw new System.NotImplementedException(); }
+        public abstract void OnPlaced();
+        public virtual void OnMarkBuild()
+        {
+            SR.color = new Color(1, 1, 1, 0f);
+            DrawOutline_Collider = true;
+            // 如果所需工作量为0，直接完成
+            if (WorkloadBuilt <= 0)
+            {
+                ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
+                return;
+            }
+            // 只有第一次标记建造，才设置工作量
+            if (Workload <= -1)
+            {
+                Workload = WorkloadBuilt;
+            }
+        }
+        public virtual void OnBuild(int value)
+        {
+            Workload -= value;
+            if (Workload <= 0)
+            {
+                Workload = 0;
+                ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
+            }
+        }
+        public virtual void OnCompleteBuild()
+        {
+            // 在瓦片地图设置瓦片
+            if (Def.TileBase != null)
+            {
+                if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap tilemap))
+                {
+                    tilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), Def.TileBase);
+                    SR.color = new Color(1, 1, 1, 0f);
+                }
+                else
+                {
+                    Debug.LogError("Error in set tile");
+                }
+            }
+            else
+            {
+                SR.color = new Color(1, 1, 1, 1f);
+            }
+
+            // 如果是障碍物,给所在的地图的该位置设置存在障碍物,设置碰撞体
+            if (Def.IsObstacle)
+            {
+                ColliderSelf.isTrigger = false;
+                gameObject.layer = 8; //"Obstacle"
+                if (AstarPath.active != null)
+                {
+                    Bounds bounds = ColliderSelf.bounds;
+                    AstarPath.active.UpdateGraphs(bounds);
+                }
+                else
+                {
+                    Debug.LogError("AstarPath.active is null");
+                }
+            }
+            CanDemolish = true;
+            DrawOutline_Collider = false;
+        }
+        public virtual void OnCancelBuild()
+        {
+            Destroy(gameObject);
+        }
+        public virtual void OnInterpretBuild()
+        {
+            ChangeLifeState(BuildingLifeStateType.MarkBuilding);
+        }
+        public virtual void OnMarkDemolish()
+        {
+            // 拆除的工作量是当前耐久
+            Workload = CurDurability;
+            if (CurDurability <= 0)
+            {
+                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
+            }
+        }
+        public virtual void OnDemolish(int value)
+        {
+            CurDurability -= value;
+            if (CurDurability <= 0)
+            {
+                CurDurability = 0;
+                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
+            }
+            // 更新工作量
+            Workload = CurDurability;
+        }
+        public virtual void OnDemolished()
+        {
+            Destroy(gameObject);
+        }
+        public virtual void OnCanclDemolish()
+        {
+            // 回到刚建造完的时候
+            ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
+        }
     }
 }

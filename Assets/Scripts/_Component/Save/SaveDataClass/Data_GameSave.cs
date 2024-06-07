@@ -5,8 +5,15 @@ using ChenChen_AI;
 [System.Serializable]
 public class Data_GameSave
 {
+    public Data_GameSave()
+    {
+        IsNew = true;
+        SaveName = string.Empty;
+    }
+
     public Data_GameSave(string saveName, string saveDate)
     {
+        IsNew = true;
         SaveName = saveName;
         SaveDate = saveDate;
         SaveThings = new List<Data_ThingSave>();
@@ -15,15 +22,21 @@ public class Data_GameSave
         SaveFarmWorkSpace = new List<Data_FarmWorkSpaceSave>();
     }
 
+    public bool IsNew = true;
+
     // ´æµµÃû×Ö
     public string SaveName;
 
     public string SaveDate;
 
     public Vector3 CameraPosition;
+    public float CameraMoveSpeed;   
+    public float CameraZoomSpeed;
+    public bool CameraUseKeyboard = true;
+    public bool CameraUseEdge = true;
 
-    public float BGMVolume = 0;
-    public float SFXVolume = 0;
+    public float BGMVolume = 0.2f;
+    public float SFXVolume = 1;
 
     [Header("Time")]
     public int currentSeason = 1; 

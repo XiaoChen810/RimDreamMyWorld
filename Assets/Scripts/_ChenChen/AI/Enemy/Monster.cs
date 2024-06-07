@@ -25,12 +25,14 @@ namespace ChenChen_AI
         public float moveDuration = 0.5f;
         [Header("视野范围")]
         public float seeRange = 10;
-        [Header("攻击")]
+        [Header("寻敌")]
         public Pawn pawn;
         public bool isBattling = false;
+        public float findDuaration = 5f;
+        [Header("攻击")]
         public float attackDamage = 0;
         public float attackRange = 2;
-        public float attackWaitTime = 2.5f;
+        public float attackDuaration = 2.5f;
         [Header("属性")]
         public float MaxHp = 100;
         public bool IsDie;
@@ -38,6 +40,7 @@ namespace ChenChen_AI
         private float Hp;
         private float _lastMoveTime; 
         private float _lastAttackTime;
+        private float _lastFindTime;
         private float _diedTime;
         private ObjectPool<GameObject> _pool;
 
@@ -49,6 +52,7 @@ namespace ChenChen_AI
             IsDie = false;
             _lastMoveTime = -_lastAttackTime;
             _lastAttackTime = -_lastAttackTime;
+            _lastFindTime = -_lastFindTime;
             _diedTime = 0;
         }
 
@@ -81,46 +85,41 @@ namespace ChenChen_AI
                 return;
             }
 
-            // 每隔moveDuration进行一次判断
+            // 每隔moveDuration进行一次移动判断
             if (Time.time > _lastMoveTime + moveDuration)
             {
                 _lastMoveTime = Time.time;
 
-                // 正在战斗时有不同的判断
-                if (isBattling)
+                // 有攻击目标会走向攻击目标
+                if (pawn != null)
                 {
-                    if (pawn == null)
-                    {
-                        FindOtherPawn();
-                    }
+                    MoveController.GoToHere(pawn.transform.position, attackRange);
                 }
                 else
                 {
-                    FindOtherPawn();
-
-                    if (MoveController.ReachDestination)
+                    // 在没有攻击目标和移动目标且不在战斗情况下
+                    if (MoveController.ReachDestination && !isBattling)
                     {
-                        if (pawn != null)
-                        {
-                            MoveController.GoToHere(pawn.transform.position, attackRange);
-                        }
-                        else
-                        {
-                            // 未发现敌人，随便走走，但会逐渐向中心点偏移
-                            Vector2 p = transform.position;
-                            p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
-                            Vector2 center = new Vector3(ChenChen_Map.MapManager.Instance.CurMapWidth / 2, ChenChen_Map.MapManager.Instance.CurMapHeight / 2) - transform.position;
-                            p += Random.value * 0.05f * center ;
-                            MoveController.GoToHere(p);
-                        }
+                        // 没有攻击目标，随便走走，但会逐渐向中心点偏移
+                        Vector2 p = transform.position;
+                        p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
+                        Vector2 center = new Vector3(ChenChen_Map.MapManager.Instance.CurMapWidth / 2, ChenChen_Map.MapManager.Instance.CurMapHeight / 2) - transform.position;
+                        p += Random.value * 0.05f * center;
+                        MoveController.GoToHere(p);
                     }
                 }
             }
-
-            // 当超过上一次攻击时间进行判断判断
-            if (Time.time > _lastAttackTime + attackWaitTime)
+            // 每隔findDuaration进行一次寻敌判断
+            if (Time.time > _lastFindTime + findDuaration)
             {
-                // 战斗状态下进行判断
+                _lastFindTime = Time.time;
+                // 找一个视野范围内最近的目标
+                FindOtherPawn();
+            }
+            // 当超过上一次攻击时间进行攻击判断
+            if (Time.time > _lastAttackTime + attackDuaration)
+            {
+                // 战斗状态下，且目标不为空，面向目标，播放攻击动画
                 if (isBattling && pawn != null)
                 {
                     MoveController.FilpIt(pawn.transform.position.x);
@@ -128,6 +127,9 @@ namespace ChenChen_AI
                     _lastAttackTime = Time.time;
                 }
             }
+
+            // 判断攻击目标有无进入攻击距离
+            IsEnterAttackRange();
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -150,6 +152,7 @@ namespace ChenChen_AI
                 Bullet b = collision.GetComponent<Bullet>();
                 if (b != null)
                 {
+                    b.Hit();    // 打中后子弹消失
                     GetDamage(b.damage);
                 }
                 else
@@ -158,26 +161,18 @@ namespace ChenChen_AI
                 }
             }
         }
-        private void OnTriggerStay2D(Collider2D collision)
+        private void IsEnterAttackRange()
         {
-            // 已经在战斗中，返回，减少计算
-            if (isBattling) return;
-            if (collision.CompareTag("Pawn") && collision.TryGetComponent<Pawn>(out Pawn p))
+            if (pawn != null)
             {
-                // 如果不是我的目标，返回
-                if (p != pawn) return;
-                // 如果未进入攻击距离，返回
-                if(Vector2.Distance(p.transform.position,this.transform.position) > attackRange) return;
-                isBattling = true;
-            }
-        }
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.CompareTag("Pawn") && collision.TryGetComponent<Pawn>(out Pawn p))
-            {
-                // 如果不是我的目标，返回
-                if (p != pawn) return;
-                isBattling = false;
+                // 如果超出太远的距离则不追了
+                if(!StaticFuction.CompareDistance(pawn.transform.position, this.transform.position, seeRange))
+                {
+                    pawn = null;
+                    return;
+                }
+                // 如果进入攻击距离
+                isBattling = StaticFuction.CompareDistance(pawn.transform.position, this.transform.position, attackRange);
             }
         }
         private void FindOtherPawn()

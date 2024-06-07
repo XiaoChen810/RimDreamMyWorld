@@ -53,7 +53,7 @@ namespace ChenChen_UI
                 panel.RemoveAllButton();
                 panel.SetButton("²ð³ý", () =>
                 {
-                    thing.ChangeLifeState(BuildingLifeStateType.MarkDemolished);
+                    thing.Demolish();
                 });
             }
         }

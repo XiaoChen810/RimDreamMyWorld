@@ -85,7 +85,14 @@ namespace ChenChen_Thing
         }
 
         #region Public
-
+        /// <summary>
+        /// 打开建造模式，通过name放置蓝图
+        /// </summary>
+        /// <param name="name"></param>
+        public void OpenBuildingMode(string name)
+        {
+            Tool.BuildStart(GetThingDef(name));
+        }
         /// <summary>
         /// 将物体添加到完成列表
         /// </summary>
@@ -120,7 +127,14 @@ namespace ChenChen_Thing
                         break;
                 }
 
-                Quadtree.Insert(obj);
+                if(Tool.OnBuildMode && Tool._mouseIndicator == obj)
+                {
+                    Debug.Log("不添加建造预览指示器");
+                }
+                else
+                {
+                    Quadtree.Insert(obj);
+                }
             }
             else
             {
@@ -155,7 +169,7 @@ namespace ChenChen_Thing
                     if (!ThingDict_Tree.Remove(obj.transform.position))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict_Tree 中找不到位置为 {obj.transform.position} 的物体");
-                        throw new InvalidOperationException();
+                        return;
                     }
                     break;
                 default:
@@ -163,16 +177,20 @@ namespace ChenChen_Thing
                     if (!ThingDict.ContainsKey(obj.name))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict 中找不到键为 {obj.name} 的条目");
+                        return;
                     }
 
                     // 检查是否成功移除
                     if (!ThingDict[obj.name].Remove(thing))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
+                        return;
                     }
                     break;
             }
         }
+
+        #region 获取物体实例
         /// <summary>
         /// 获取物体实例
         /// </summary>
@@ -343,19 +361,10 @@ namespace ChenChen_Thing
             Debug.LogWarning($"未能找到{name}的定义");
             return null;
         }
-        /// <summary>
-        /// 打开建造模式，通过name放置蓝图
-        /// </summary>
-        /// <param name="name"></param>
-        public void OpenBuildingMode(string name)
-        {
-            Tool.BuildStart(GetThingDef(name));
-        }
-        /// <summary>
-        /// 尝试生成一个物体
-        /// </summary>
-        /// <param name="thingSave"> 物体存档 </param>
-        /// <returns></returns>
+        #endregion
+
+        #region 尝试生成一个物体
+        // 从存档
         public bool TryGenerateThing(Data_ThingSave thingSave)
         {
             ThingDef thingDef = GetThingDef(thingSave.DefName);
@@ -370,31 +379,34 @@ namespace ChenChen_Thing
                 Debug.LogError($"定义 {thingDef.DefName}定义的预制件为空");
                 return false;
             }
-            Generate(thingDef, thingSave.ThingPos, thingSave.ThingRot, thingSave.LifeState, thingSave.MapName);
+            GameObject obj = Generate(thingDef, thingSave.ThingPos, thingSave.ThingRot);
+            obj.GetComponent<ThingBase>().ChangeLifeState(thingSave.LifeState);
             return true;
         }
         // 直接使用定义
-        public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
+        public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation)
         {
-            Generate(thingDef, position + thingDef.Offset, routation, initLifdState, mapName);
+            GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
+            obj.GetComponent<ThingBase>().Building();
             return true;
         }
         // 直接使用名字
-        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
+        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation)
         {
             ThingDef thingDef = GetThingDef(thingName);
-            Generate(thingDef, position + thingDef.Offset, routation, initLifdState, mapName);
+            GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
+            obj.GetComponent<ThingBase>().Building();
             return true;
         }
         // 生成
-        private void Generate(ThingDef thingDef, Vector2 position, Quaternion routation, BuildingLifeStateType initLifdState, string mapName)
+        private GameObject Generate(ThingDef thingDef, Vector2 position, Quaternion routation)
         {
-            GameObject thingObj = Instantiate(thingDef.Prefab, position, routation, transform);
-            thingObj.name = thingDef.DefName;
-            ThingBase thing = thingObj.GetComponent<ThingBase>();
-            thing.OnPlaced(initLifdState, mapName);
-            AddThingToList(thingObj);
+            GameObject obj = Instantiate(thingDef.Prefab, position, routation, transform);
+            AddThingToList(obj);
+            if (GameManager.Instance.GameIsStart) AudioManager.Instance.PlaySFX("Placed");
+            return obj;
         }
+        #endregion
 
         #endregion
     }

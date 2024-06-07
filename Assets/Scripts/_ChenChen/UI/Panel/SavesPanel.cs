@@ -15,19 +15,19 @@ namespace ChenChen_UI
         {
         }
 
-        private Data_GameSave selectedGameSave;
+        private Data_GameSave curSave;
 
         public override void OnEnter()
         {
-            selectedGameSave = PlayManager.Instance.CurSave;
-            // 判断有无存档
-            if(selectedGameSave != null)
+            curSave = PlayManager.Instance.CurSave;
+            // 判断是否是新存档
+            if(curSave.IsNew)
             {
-                UITool.TryGetChildComponentByName<Text>("提示").text = "是否继续游戏？";
+                UITool.TryGetChildComponentByName<Text>("提示").text = "无存档\n请新建游戏";
             }
             else
             {
-                UITool.TryGetChildComponentByName<Text>("提示").text = "无存档\n请新建游戏";
+                UITool.TryGetChildComponentByName<Text>("提示").text = "是否继续游戏？";
             }
 
             // 新开始
@@ -40,7 +40,7 @@ namespace ChenChen_UI
             // 继续游戏
             UITool.TryGetChildComponentByName<Button>("BtnContinue").onClick.AddListener(() =>
             {
-                if (selectedGameSave != null)
+                if (!curSave.IsNew)
                 {
                     PanelManager.RemoveTopPanel(this);
                     Action onPreloadAnimation = () =>
@@ -52,7 +52,7 @@ namespace ChenChen_UI
                         // 加载游戏存档
                         PlayManager.Instance.Load();
                         // 打开刚刚加载的存档的地图
-                        MapManager.Instance.LoadOrGenerateSceneMap(selectedGameSave.SaveMap.mapName);
+                        MapManager.Instance.LoadOrGenerateSceneMap(curSave.SaveMap.mapName);
                     };
                     SceneSystem.Instance.SetScene(new MainScene(onPreloadAnimation, onPostLoadScene, 1f));
                 }

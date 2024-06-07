@@ -15,29 +15,33 @@ public class PlayManager : SingletonMono<PlayManager>
     private static readonly string root_save_name = "GameSave";
 
     [Header("本次游戏加载的存档")]
-    public Data_GameSave CurSave = null;
-    public string CurSaveName => CurSave == null ? string.Empty : CurSave.SaveName;
+    public Data_GameSave CurSave = new Data_GameSave();
+    public string CurSaveName => CurSave.SaveName;
 
     private void Start()
     {
         //加载开始场景
         SceneSystem.Instance.SetScene(new StartScene());
+        CurSave = new Data_GameSave(); 
 
         if (ES3.KeyExists(root_save_name))
         {
-            CurSave = ES3.Load<Data_GameSave>(root_save_name);
-            if (CurSave != null)
+            ES3.LoadInto(root_save_name, CurSave);
+            // 加载声音大小
+            AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
+            AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
+            if (CurSave.IsNew)
             {
-                // 加载声音大小
-                AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
-                AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
+                Debug.Log($"成功加载存档{root_save_name}资源, 但存档是新的");
             }
-            Debug.Log($"成功加载存档{root_save_name}资源");
+            else
+            {
+                Debug.Log($"成功加载存档{root_save_name}资源");
+            }
         }
         else
         {
             Debug.Log($"未能加载存档{root_save_name}资源");
-            CurSave = null;
         }
     }
 
@@ -50,9 +54,8 @@ public class PlayManager : SingletonMono<PlayManager>
     }
 
     /// <summary>
-    /// 新建游戏存档并保存到列表，返回本次新建的存档
+    /// 保存游戏存档
     /// </summary>
-    /// <param name="saveName"></param>
     public Data_GameSave Save()
     {
         if (SceneSystem.Instance.CurSceneType != SceneType.Main)
@@ -62,8 +65,12 @@ public class PlayManager : SingletonMono<PlayManager>
         }
         // 新建存档
         Data_GameSave saveData = new Data_GameSave("存档", DateTime.Now.ToString());
-        // 保存摄像机位置
+        // 保存摄像机
         saveData.CameraPosition = Camera.main.transform.position;
+        saveData.CameraMoveSpeed = Camera.main.GetComponent<CameraController>().MoveSpeed;
+        saveData.CameraZoomSpeed = Camera.main.GetComponent<CameraController>().ZoomSpeed;
+        saveData.CameraUseKeyboard = Camera.main.GetComponent<CameraController>().UseKeyboard;
+        saveData.CameraUseEdge = Camera.main.GetComponent<CameraController>().UseEdge;
         // 保存声音大小
         saveData.BGMVolume = AudioManager.Instance.bgmSource.volume;
         saveData.SFXVolume = AudioManager.Instance.sfxSource.volume;
@@ -134,7 +141,8 @@ public class PlayManager : SingletonMono<PlayManager>
             // 其他
         }
         CurSave = saveData;
-        // 最后，保存存档
+        CurSave.IsNew = false;
+        // 最后，写入存档
         ES3.Save(root_save_name, CurSave);
         Debug.Log($"成功保存存档{CurSave.SaveName}资源, 日期{CurSave.SaveDate}");
         return saveData;
@@ -146,13 +154,17 @@ public class PlayManager : SingletonMono<PlayManager>
     /// <param name="gameSave"></param>
     public void Load()
     {
-        if(CurSave == null)
+        if (CurSave == null)
         {
             Debug.LogWarning("存档为空无法加载");
             return;
         }
         // 加载摄像机位置
         Camera.main.transform.position = CurSave.CameraPosition;
+        Camera.main.GetComponent<CameraController>().MoveSpeed = CurSave.CameraMoveSpeed;
+        Camera.main.GetComponent<CameraController>().ZoomSpeed = CurSave.CameraZoomSpeed;
+        Camera.main.GetComponent<CameraController>().UseKeyboard = CurSave.CameraUseKeyboard;
+        Camera.main.GetComponent<CameraController>().UseEdge = CurSave.CameraUseEdge;
         // 加载声音大小
         AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
         AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
@@ -176,12 +188,12 @@ public class PlayManager : SingletonMono<PlayManager>
     }
 
     /// <summary>
-    /// 删除游戏存档
+    /// 删除游戏存档，只是变成新的
     /// </summary>
     /// <param name="save"></param>
     public void Delete()
     {
-        CurSave = null;
+        CurSave = new();
         ES3.Save(root_save_name, CurSave);
     }
 

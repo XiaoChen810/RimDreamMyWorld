@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05e26f88b41b3c3409fec8a9b2881016, type: 3}
-  m_Name: "ThingDef_\u5355\u62C9\u95E8"
+  m_Name: "ThingDef_\u62C6\u9664"
   m_EditorClassIdentifier: 
-  DefName: "\u5355\u62C9\u95E8"
+  DefName: "\u62C6\u9664"
   Type: 0
   Workload: 0
-  PreviewSprite: {fileID: -1745512642, guid: d83ad136966dcc64c830ef9c105da7e9, type: 3}
+  PreviewSprite: {fileID: 21300000, guid: d919900d2b192ef4c8cb97a04929f771, type: 3}
   IsObstacle: 0
-  Prefab: {fileID: 4858768571360318026, guid: a204d6f9681fdf24fb8ee310edb2fa6b, type: 3}
+  Prefab: {fileID: 5320758787578764240, guid: dbd486ed94b6d0f46b5786d1d5b9dd10, type: 3}
   TileBase: {fileID: 0}
   IsNotInstancing: 0
-  Durability: 50
+  Durability: 100
   Offset: {x: 0.5, y: 0.5}
-  CanRotation: 1
+  CanRotation: 0

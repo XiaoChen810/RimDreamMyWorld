@@ -28,7 +28,8 @@ namespace ChenChen_Thing
             _bulletPool = new ObjectPool<GameObject>(Create, Get, Release);
             StartCoroutine(PeriodicScan());
         }
-        public override void OnPlaced(BuildingLifeStateType initial_State, string mapName)
+
+        public override void OnPlaced()
         {
             Debug.Log("建造一个小型炮台");
         }
@@ -92,13 +93,18 @@ namespace ChenChen_Thing
                 if (monster.IsDie) continue;
                 if (StaticFuction.CompareDistance(transform.position, monster.transform.position, scanRadius))
                 {
-                    // 处理发现的敌人
-                    RotateTopTowards(monster.transform.position);
-                    ShootBullet();
-                    break; // 发现一个敌人后停止扫描
+                    // 做一条2D射线，检查有无墙体（CompareTag（“Wall”））如果没有阻挡，则转向敌人，发射
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, monster.transform.position - transform.position, scanRadius);
+                    if (hit.collider == null || !hit.collider.CompareTag("Wall"))
+                    {
+                        RotateTopTowards(monster.transform.position);
+                        ShootBullet();
+                        break; // 发现一个敌人后停止扫描
+                    }
                 }
             }
         }
+
 
         private IEnumerator PeriodicScan()
         {

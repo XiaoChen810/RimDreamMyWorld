@@ -22,27 +22,33 @@ public class Indicator : MonoBehaviour
     /// </summary>
     public void DoAnim()
     {
-        if (!transform.parent.TryGetComponent<SpriteRenderer>(out SpriteRenderer psr))
+        if (!transform.parent.TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
         {
             return;
         }
-        Bounds Boxbounds = psr.bounds;
+        Bounds Boxbounds = sr.bounds;
 
-        float offset = 0.5f;    // 动画偏移量
+        // 取最大矩形框
+        //Vector2 min = new Vector2(Mathf.Floor(Boxbounds.min.x), Mathf.Floor(Boxbounds.min.y));
+        //Vector2 max = new Vector2(Mathf.Ceil(Boxbounds.max.x), Mathf.Ceil(Boxbounds.max.y)); 
+        Vector2 min = new Vector2(Boxbounds.min.x, Boxbounds.min.y);
+        Vector2 max = new Vector2(Boxbounds.max.x, Boxbounds.max.y);
+
         float duration = 0.5f;  // 动画时间
 
         // 四个角落的开始的位置
-        Vector2 sp_bl = new Vector2(Boxbounds.min.x, Boxbounds.min.y) + new Vector2(-offset, -offset);
-        Vector2 sp_br = new Vector2(Boxbounds.max.x, Boxbounds.min.y) + new Vector2(offset, -offset);
-        Vector2 sp_tl = new Vector2(Boxbounds.min.x, Boxbounds.max.y) + new Vector2(-offset, offset);
-        Vector2 sp_tr = new Vector2(Boxbounds.max.x, Boxbounds.max.y) + new Vector2(offset, offset);
+        float offset1 = 0.5f;    
+        Vector2 sp_bl = new Vector2(min.x, min.y) + new Vector2(-offset1, -offset1);
+        Vector2 sp_br = new Vector2(max.x, min.y) + new Vector2(offset1, -offset1);
+        Vector2 sp_tl = new Vector2(min.x, max.y) + new Vector2(-offset1, offset1);
+        Vector2 sp_tr = new Vector2(max.x, max.y) + new Vector2(offset1, offset1);
 
         // 四个角落的结束位置
         float offset2 = 0.1f;
-        Vector2 ep_bl = new Vector2(Boxbounds.min.x + offset2, Boxbounds.min.y + offset2);
-        Vector2 ep_br = new Vector2(Boxbounds.max.x - offset2, Boxbounds.min.y + offset2);
-        Vector2 ep_tl = new Vector2(Boxbounds.min.x + offset2, Boxbounds.max.y - offset2);
-        Vector2 ep_tr = new Vector2(Boxbounds.max.x - offset2, Boxbounds.max.y - offset2);
+        Vector2 ep_bl = new Vector2(min.x + offset2, min.y + offset2);
+        Vector2 ep_br = new Vector2(max.x - offset2, min.y + offset2);
+        Vector2 ep_tl = new Vector2(min.x + offset2, max.y - offset2);
+        Vector2 ep_tr = new Vector2(max.x - offset2, max.y - offset2);
 
         // 执行动画
         selectbox_bl.position = sp_bl;
@@ -58,7 +64,8 @@ public class Indicator : MonoBehaviour
 
     private void Update()
     {
-        if(transform.parent.localScale.x > 0)
+        // 不跟随父类缩放
+        if (transform.parent.localScale.x > 0)
         {
             transform.localScale = Vector3.one;
         }
@@ -67,5 +74,8 @@ public class Indicator : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
+        // 不跟随父类旋转
+        transform.rotation = Quaternion.identity;
     }
+
 }

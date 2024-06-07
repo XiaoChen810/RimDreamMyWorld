@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -7,15 +8,44 @@ public class CameraController : MonoBehaviour
     public bool UseEdge = true;     // 边缘移动
     public bool UseMouse = true;    // 鼠标中键
 
-    public float moveSpeed = 10f; // 摄像机移动速度
-    public float edgeScrollThreshold = 10f; // 鼠标到屏幕边缘的距离，单位是像素
+    [Header("Speed")]
+    public float speedMin = 10; // 速度的最小值
+    public float speedMax = 30; // 速度的最大值
+    [SerializeField] private float moveSpeed = 10f; // 摄像机移动速度
+    public float MoveSpeed
+    {
+        get
+        {
+            return moveSpeed;
+        }
+        set
+        {
+            moveSpeed = Mathf.Clamp(value, speedMin, speedMax);
+        }
+    }
 
+    [Header("Zoom")]
     public float zoomMin = 5; // 缩放的最小值
     public float zoomMax = 20; // 缩放的最大值
-    [Range(1, 50)] public int zoomSpeed = 10; // 缩放速度，范围为1到50
+    public float zoomSpeedMin = 20; // 缩放的最小值
+    public float zoomSpeedMax = 50; // 缩放的最大值
+    [SerializeField] private float zoomSpeed = 30; // 缩放速度
+    public float ZoomSpeed
+    {
+        get
+        {
+            return zoomSpeed;
+        }
+        set
+        {
+            zoomSpeed = Mathf.Clamp(value, zoomSpeedMin, zoomSpeedMax);
+        }
+    }
 
-    public Vector2 moveBoundsMin; // 移动边界的最小值
-    public Vector2 moveBoundsMax; // 移动边界的最大值
+    [Header("Range")]
+    public Vector2 moveBoundsMin = new Vector2(5, 5); // 移动边界的最小值
+    public Vector2 moveBoundsMax = new Vector2(245, 245); // 移动边界的最大值
+    public float edgeScrollThreshold = 10f; // 鼠标到屏幕边缘的距离，单位是像素
 
     private Vector3 lastMousePosition; // 上一次鼠标位置
 
@@ -93,7 +123,7 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButton(2)) // 鼠标中键按住
         {
             Vector3 delta = Input.mousePosition - lastMousePosition;
-            Vector3 moveDirection = new Vector3(-delta.x, -delta.y, 0) * moveSpeed * 0.2f * Time.deltaTime;
+            Vector3 moveDirection = new Vector3(-delta.x, -delta.y, 0) * moveSpeed * Time.deltaTime;
             Vector3 newPosition = transform.position + moveDirection;
             transform.position = ApplyBounds(newPosition);
             lastMousePosition = Input.mousePosition;
@@ -103,6 +133,7 @@ public class CameraController : MonoBehaviour
     // 缩放摄像机的方法
     void ZoomCamera(float scrollInput)
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         float currentZoom = Camera.main.orthographicSize;
         float zoomDelta = -scrollInput * zoomSpeed;
         float newZoom = Mathf.Lerp(currentZoom, currentZoom + zoomDelta, Time.deltaTime * zoomSpeed);

@@ -29,11 +29,6 @@ namespace ChenChen_Thing
             StartCoroutine(PeriodicScan());
         }
 
-        public override void OnPlaced()
-        {
-            Debug.Log("建造一个小型炮台");
-        }
-
         #region Pool
         private GameObject Create()
         {

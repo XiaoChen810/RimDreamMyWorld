@@ -74,8 +74,8 @@ public class ThingDefGenerator
                 CreateThingPrefab<Thing_Architectural>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Architectural");
                 break;
-            case ThingType.Building:
-                CreateThingPrefab<Thing_Building>(ThingName, thingDef);
+            case ThingType.Furniture:
+                CreateThingPrefab<Thing_Furniture>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Building");
                 break;
             case ThingType.Tree:
@@ -87,7 +87,7 @@ public class ThingDefGenerator
                 CreateScript(folderPath, "Thing_ToolTable");
                 break;
             default:
-                CreateThingPrefab<Thing_Building>(ThingName, thingDef);
+                CreateThingPrefab<Thing_Furniture>(ThingName, thingDef);
                 CreateScript(folderPath, "Thing_Building");
                 break;
         }

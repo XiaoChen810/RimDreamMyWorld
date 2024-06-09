@@ -96,13 +96,13 @@ namespace ChenChen_AI
 
         protected virtual void Update()
         {
+            // 停止则返回
             if (isStop) return;
 
-            if (!isStart && transform.position != destination)
-            {
-                return;
-            }
+            // 如果没有开始则返回
+            if (!isStart) return;
 
+            // 如果目标不是一个物体
             if (!targetIsAObject)
             {
                 targetDestination = null;
@@ -114,19 +114,13 @@ namespace ChenChen_AI
                 lastRepath = Time.time;
                 ReflashDestination(targetDestination != null ? targetDestination.position : destination, endReachedDistance);
             }
-            //Debug.Log($"Time.time  {Time.time} > lastRepath + repathRate {lastRepath + repathRate} _seeker.IsDone() {_seeker.IsDone()}");
 
+            // 路径为空时返回
+            if (path == null) return;
 
-            if (path == null)
-            {
-                return;
-            }
-
+            // 判断是否到达
             reachedEndOfPath = false;
-
-            float distanceToWaypoint;
-            distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
-            if (distanceToWaypoint < endReachedDistance)
+            if (StaticFuction.CompareDistance(transform.position, path.vectorPath[currentWaypoint],endReachedDistance))
             {
                 if (currentWaypoint + 1 < path.vectorPath.Count)
                 {
@@ -136,8 +130,7 @@ namespace ChenChen_AI
                 {
                     if (targetIsAObject)
                     {
-                        float distanceToTarget = Vector3.Distance(transform.position, targetDestination.position);
-                        if (distanceToTarget > endReachedDistance)
+                        if(!StaticFuction.CompareDistance(transform.position, targetDestination.position, endReachedDistance))
                         {
                             return;
                         }
@@ -147,7 +140,7 @@ namespace ChenChen_AI
                 }
             }
 
-            // 移动
+            // 移动，通过直接改变Transform的位置
             var speedFactor = !reachedEndOfPath ? Speed : 0;
             speedFactor = !reachDestination ? speedFactor : 0;
             speedFactor = canMove ? speedFactor : 0;
@@ -205,13 +198,13 @@ namespace ChenChen_AI
         /// <summary>
         /// 前往到目标点
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="target">目标点</param>
         /// <returns></returns>
-        protected bool StartPath(Vector3 destination, float endReachedDistance = 0.2f)
+        protected bool StartPath(Vector3 target, float endReachedDistance = 0.2f)
         {
             targetDestination = null;
             targetIsAObject = false;
-            if(!ReflashDestination(destination, endReachedDistance))
+            if(!ReflashDestination(target, endReachedDistance))
             {
                 return false;
             }
@@ -221,12 +214,12 @@ namespace ChenChen_AI
         /// <summary>
         /// 跟随目标
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="target">目标GameObject</param>
         /// <returns></returns>
-        protected bool StartPath(GameObject destination, float endReachedDistance = 0.2f)
+        protected bool StartPath(GameObject target, float endReachedDistance = 0.2f)
         {
             // 设置要追踪的目标
-            targetDestination = destination.transform;
+            targetDestination = target.transform;
             targetIsAObject = true;
             if (!ReflashDestination(targetDestination.position, endReachedDistance))
             {
@@ -237,6 +230,10 @@ namespace ChenChen_AI
             return true;
         }
 
+        /// <summary>
+        /// 刷新目标节点
+        /// </summary>
+        /// <returns></returns>
         private bool ReflashDestination(Vector3 destination, float endReachedDistance)
         {
             if (destination.x <= 0 || destination.x >= MapManager.Instance.CurMapWidth) return false;
@@ -249,8 +246,11 @@ namespace ChenChen_AI
             {
                 return false;
             }
+            // 转换目标点为格子中心
+            Vector3Int toInt = StaticFuction.VectorTransToInt(destination);
+            Vector3 to = new Vector3(toInt.x + 0.5f, toInt.y + 0.5f);
             // 新建路径
-            ABPath newPath = ABPath.Construct(transform.position, destination);
+            ABPath newPath = ABPath.Construct(transform.position, to);
             // 开始计算路径
             _seeker.StartPath(newPath, callback: (p) =>
             {
@@ -259,9 +259,9 @@ namespace ChenChen_AI
                 {
                     // 判断路径是否可达
                     Vector3 end = p.vectorPath[p.vectorPath.Count - 1];
-                    if (Vector2.Distance(end, destination) < endReachedDistance)
+                    if (Vector2.Distance(end, to) < endReachedDistance)
                     {
-                        this.destination = destination;
+                        this.destination = to;
                         this.endReachedDistance = endReachedDistance;
                         if (path != null) path.Release(this);
                         path = p;

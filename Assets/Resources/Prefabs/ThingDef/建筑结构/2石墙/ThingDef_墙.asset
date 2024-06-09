@@ -15,10 +15,11 @@ MonoBehaviour:
   DefName: "\u5899"
   Type: 0
   Workload: 0
-  PreviewSprite: {fileID: 769501568, guid: 2c7ac77386a7f6147bf85e3077d808bd, type: 3}
-  IsObstacle: 1
-  Prefab: {fileID: 5320758787578764240, guid: 7503d9b6c88a06b458b4db8f9cd76395, type: 3}
-  TileBase: {fileID: 11400000, guid: a46fe3c9d67040d458c1afa285969831, type: 2}
   Durability: 250
-  Offset: {x: 0.5, y: 0.5}
+  PreviewSprite: {fileID: 769501568, guid: 2c7ac77386a7f6147bf85e3077d808bd, type: 3}
+  Prefab: {fileID: 5320758787578764240, guid: 7503d9b6c88a06b458b4db8f9cd76395, type: 3}
+  Offset: {x: 0, y: 0}
+  IsObstacle: 1
+  TileBase: {fileID: 11400000, guid: a46fe3c9d67040d458c1afa285969831, type: 2}
+  IsNotInstancing: 0
   CanRotation: 0

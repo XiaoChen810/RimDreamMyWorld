@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChenChen_Thing
 {
-    public class Thing_ToolTable : Thing_Building
+    public class Thing_ToolTable : Thing_Furniture
     {
         public bool IsSuccess { get; private set; }
 

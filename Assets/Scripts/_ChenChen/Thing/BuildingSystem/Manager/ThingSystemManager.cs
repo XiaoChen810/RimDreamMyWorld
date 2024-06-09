@@ -127,14 +127,7 @@ namespace ChenChen_Thing
                         break;
                 }
 
-                if(Tool.OnBuildMode && Tool._mouseIndicator == obj)
-                {
-                    Debug.Log("不添加建造预览指示器");
-                }
-                else
-                {
-                    Quadtree.Insert(obj);
-                }
+                Quadtree.Insert(obj);
             }
             else
             {
@@ -176,10 +169,8 @@ namespace ChenChen_Thing
                     // 检查字典中是否包含物体名称
                     if (!ThingDict.ContainsKey(obj.name))
                     {
-                        Debug.LogWarning($"移除失败：在 ThingDict 中找不到键为 {obj.name} 的条目");
                         return;
                     }
-
                     // 检查是否成功移除
                     if (!ThingDict[obj.name].Remove(thing))
                     {
@@ -199,11 +190,7 @@ namespace ChenChen_Thing
         /// <returns></returns>
         public GameObject GetThingInstance(string name, bool needFree = true)
         {
-            if (!ThingDict.ContainsKey(name))
-            {
-                Debug.LogWarning($"ThingDict 中不存在键为 {name} 的条目");
-            }
-            else
+            if (ThingDict.ContainsKey(name))
             {
                 foreach (var thing in ThingDict[name])
                 {
@@ -224,7 +211,6 @@ namespace ChenChen_Thing
         {
             if (name != null && ThingDict.ContainsKey(name))
             {
-                Debug.LogWarning($"ThingDict 中不存在键为 {name} 的条目");
                 foreach (var thing in ThingDict[name])
                 {
                     if (thing.LifeState != lifeState) continue;

@@ -42,11 +42,6 @@ namespace ChenChen_Thing
             }
         }
 
-        public override void OnPlaced()
-        {
-            CurDurability = MaxDurability;
-        }
-
         public void OnMarkCut()
         {
             IsMarkCut = true;

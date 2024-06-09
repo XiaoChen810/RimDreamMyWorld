@@ -6,7 +6,7 @@ namespace ChenChen_AI
     public class PawnJob_Fishing : PawnJob
     {
         private readonly static float tick = 50;
-        private Thing_Building curTargetComponent;
+        private Thing_Furniture curTargetComponent;
 
         private float _time;
         private float animTime1 = 1.135f;
@@ -28,7 +28,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            curTargetComponent = target.GetComponent<Thing_Building>();
+            curTargetComponent = target.GetComponent<Thing_Furniture>();
             if (curTargetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");

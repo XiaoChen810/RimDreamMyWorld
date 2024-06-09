@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: "ThingDef_\u7EA2\u5730\u6BEF"
   m_EditorClassIdentifier: 
   DefName: "\u7EA2\u5730\u6BEF"
-  Type: 2
+  Type: 1
   Workload: 20
-  PreviewSprite: {fileID: -4857367318145518952, guid: c3bfbf672d89f444e90971c8bd7830af, type: 3}
-  IsObstacle: 0
-  Prefab: {fileID: 0}
-  TileBase: {fileID: 0}
   Durability: 50
+  PreviewSprite: {fileID: -4857367318145518952, guid: c3bfbf672d89f444e90971c8bd7830af, type: 3}
+  Prefab: {fileID: 0}
   Offset: {x: 0, y: 0}
+  IsObstacle: 0
+  TileBase: {fileID: 0}
+  IsNotInstancing: 0
   CanRotation: 0

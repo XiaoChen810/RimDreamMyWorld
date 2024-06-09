@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ChenChen_Thing
 {
     [RequireComponent(typeof(Collider2D))]
-    public class Thing_Bed : Thing_Building
+    public class Thing_Bed : Thing_Furniture
     {
         [SerializeField] private Pawn _owner;
         public Pawn Owner

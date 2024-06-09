@@ -14,6 +14,8 @@ public abstract class PermissionBase : MonoBehaviour
         IsUsed = 2,
     }
 
+    [Header("权限")]
+
     // 使用的棋子
     [SerializeField] protected Pawn _theUsingPawn;
     public Pawn TheUsingPawn

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChenChen_Thing
 {
-    public class Thing_灯 : Thing_Building
+    public class Thing_灯 : Thing_Furniture
     {
         public Animator anim;
         public bool IsOpen;

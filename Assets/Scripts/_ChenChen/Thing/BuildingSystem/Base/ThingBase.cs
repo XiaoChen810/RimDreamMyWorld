@@ -8,6 +8,7 @@ namespace ChenChen_Thing
     [RequireComponent(typeof(BoxCollider2D))]
     public abstract class ThingBase : PermissionBase, IBlueprint, IDemolish, IDetailView 
     {
+        [Header("物品属性")]
         /// <summary>
         /// 物品自身的定义
         /// </summary>
@@ -179,6 +180,7 @@ namespace ChenChen_Thing
             // 触发基本函数
             OnPlaced();
         }
+
         private void OnGUI()
         {
             if (GameManager.Instance.CinematicMode) return;
@@ -279,7 +281,10 @@ namespace ChenChen_Thing
         }
 
         // 实现接口中定义的属性和方法
-        public abstract void OnPlaced();
+        public virtual void OnPlaced()
+        {
+            CurDurability = MaxDurability;
+        }
         public virtual void OnMarkBuild()
         {
             SR.color = new Color(1, 1, 1, 0f);

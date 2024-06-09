@@ -9,34 +9,38 @@ namespace ChenChen_Thing
     [CreateAssetMenu(menuName = "定义/物体", fileName = "ThingDef", order = 0)]
     public class ThingDef : ScriptableObject
     {
+        [Header("必须属性")]
         public string DefName;
-
-        [Header("类型")]
         public ThingType Type;
 
-        [Header("建造所需工作量")]
+        [Tooltip("建造所需工作量")]
         public int Workload;
 
-        [Header("预览图")]
-        public Sprite PreviewSprite;
-
-        [Header("是否是障碍物")]
-        public bool IsObstacle;
-
-        [Header("最后生成的建筑的预制体")]
-        public GameObject Prefab;
-
-        [Header("最后生成的瓦片")]
-        public TileBase TileBase;
-
-        [Header("是否选择不生成实体")]
-        public bool IsNotInstancing;
-
-        [Header("耐久度")]
+        [Tooltip("耐久度")]
         public int Durability;
 
-        [Header("其他属性")]
-        public Vector2 Offset;
+        [Tooltip("预览图")]
+        public Sprite PreviewSprite;
+
+        [Tooltip("最后生成的建筑的预制体")]
+        public GameObject Prefab;
+
+        [Tooltip("生成位置偏移量")]
+        public Vector2 Offset = new Vector2(0.5f, 0.5f);
+
+        //----------------------------------------------------------------------
+        [Header("可选属性")]
+
+        [Tooltip("是否是障碍物")]
+        public bool IsObstacle;
+
+        [Tooltip("最后生成的瓦片")]
+        public TileBase TileBase;
+
+        [Tooltip("是否选择不生成实体")]
+        public bool IsNotInstancing;
+
+        [Tooltip("其他属性")]
         public bool CanRotation;
 
     }

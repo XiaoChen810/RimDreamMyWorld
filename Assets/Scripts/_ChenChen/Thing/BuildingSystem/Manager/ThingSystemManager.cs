@@ -139,7 +139,7 @@ namespace ChenChen_Thing
         /// 将物体移除
         /// </summary>
         /// <param name="obj">要移除的物体</param>
-        public void RemoveThing(GameObject obj)
+        public bool RemoveThing(GameObject obj)
         {
             // 检查传入的对象是否为null
             if (obj == null)
@@ -151,7 +151,7 @@ namespace ChenChen_Thing
             if (!obj.TryGetComponent<ThingBase>(out var thing))
             {
                 Debug.LogWarning($"{obj} 没有 <ThingBase> 组件");
-                return;
+                return false;
             }
 
             // 根据 ThingBase 的类型移除相应的物体
@@ -162,23 +162,25 @@ namespace ChenChen_Thing
                     if (!ThingDict_Tree.Remove(obj.transform.position))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict_Tree 中找不到位置为 {obj.transform.position} 的物体");
-                        return;
+                        return false;
                     }
                     break;
                 default:
                     // 检查字典中是否包含物体名称
                     if (!ThingDict.ContainsKey(obj.name))
                     {
-                        return;
+                        return false;
                     }
                     // 检查是否成功移除
                     if (!ThingDict[obj.name].Remove(thing))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
-                        return;
+                        return false;
                     }
                     break;
             }
+
+            return true;
         }
 
         #region 获取物体实例

@@ -209,28 +209,30 @@ namespace ChenChen_Thing
         {
             if (!Application.isPlaying) return;
             // 移除从ThingSystemManager
-            ThingSystemManager.Instance.RemoveThing(this.gameObject);
-            // 如果有瓦片，把对应瓦片地图的瓦片清除
-            if (Def.TileBase != null)
+            if (ThingSystemManager.Instance.RemoveThing(this.gameObject))
             {
-                if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap buildingTilemap))
+                // 如果有瓦片，把对应瓦片地图的瓦片清除
+                if (Def.TileBase != null)
                 {
-                    buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
+                    if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap buildingTilemap))
+                    {
+                        buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
+                    }
                 }
-            }
-            // 如果打开着详情面板，则关闭
-            if (_detailView != null && _detailView.IsPanelOpen)
-            {
-                PanelManager panel = DetailViewManager.Instance.PanelManager;
-                panel.RemoveTopPanel(panel.GetTopPanel());
-            }
-            // 如果是障碍物，刷新寻路算法的节点
-            if (Def.IsObstacle)
-            {
-                if (AstarPath.active != null)
+                // 如果打开着详情面板，则关闭
+                if (_detailView != null && _detailView.IsPanelOpen)
                 {
-                    Bounds bounds = ColliderSelf.bounds;
-                    AstarPath.active.UpdateGraphs(bounds);
+                    PanelManager panel = DetailViewManager.Instance.PanelManager;
+                    panel.RemoveTopPanel(panel.GetTopPanel());
+                }
+                // 如果是障碍物，刷新寻路算法的节点
+                if (Def.IsObstacle)
+                {
+                    if (AstarPath.active != null)
+                    {
+                        Bounds bounds = ColliderSelf.bounds;
+                        AstarPath.active.UpdateGraphs(bounds);
+                    }
                 }
             }
         }

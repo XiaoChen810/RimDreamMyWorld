@@ -70,6 +70,7 @@ namespace ChenChen_Map
                 return MapHeightOfGenerate;
             }
         }
+
         public MapNode[,] CurMapNodes => _mapDatasDict[CurrentMapName].mapNodes;
 
         protected override void Awake()

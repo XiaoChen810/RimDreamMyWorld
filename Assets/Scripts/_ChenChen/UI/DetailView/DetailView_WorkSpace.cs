@@ -25,16 +25,16 @@ namespace ChenChen_UI
         {
             if (panel == null) return;
             if (workSpace == null) return;
-            Content.Clear();
+            content.Clear();
             // 如果工作区是农业类型的特殊情况
             if (workSpace_Farm != null)
             {
-                Content.Add($"当前种植作物: {workSpace_Farm.CurCrop.CropName}");
+                content.Add($"当前种植作物: {workSpace_Farm.CurCrop.CropName}");
             }
             //Content.Add($"使用者: {(workSpace.TheUsingPawn != null ? workSpace.TheUsingPawn.name : null)}");
             panel.SetView(
                 workSpace.name,
-                Content
+                content
                 );
         }
     }

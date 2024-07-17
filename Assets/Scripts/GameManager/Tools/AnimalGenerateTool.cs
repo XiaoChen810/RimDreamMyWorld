@@ -4,6 +4,7 @@ using UnityEngine;
 using ChenChen_AI;
 using AYellowpaper.SerializedCollections;
 using ChenChen_Map;
+using System.Linq;
 
 public class AnimalGenerateTool : MonoBehaviour 
 {
@@ -23,24 +24,18 @@ public class AnimalGenerateTool : MonoBehaviour
 
 
     private int index = 0;
-    public Animal GenerateAnimal(string name, Vector2 positon)
+    public Animal GenerateAnimal(string name, Vector2 position)
     {
         if (!AnimalDefs.ContainsKey(name))
         {
             Debug.LogWarning("没有这个动物的预制件");
             return null;
         }
-        GameObject newAnimalObj = Instantiate(AnimalDefs[name].Prefab);
+        GameObject newAnimalObj = Instantiate(AnimalDefs[name].Prefab, position, Quaternion.identity);
         newAnimalObj.name = $"{name} {index++}";
-        newAnimalObj.transform.position = positon;
-        if (!transform.Find("Animals"))
-        {
-            GameObject parent = new GameObject("Animals");
-            parent.transform.parent = transform;
-        }
-        newAnimalObj.transform.SetParent(transform.Find("Animals"), false);
 
         Animal newAnimal = newAnimalObj.GetComponent<Animal>();
+        newAnimal.Init(AnimalDefs.First(x => x.Key == name).Value, new AnimalInfo());
         AnimalList.Add(newAnimal);
         return newAnimal;
     }

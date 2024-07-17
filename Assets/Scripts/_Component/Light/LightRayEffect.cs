@@ -20,8 +20,6 @@ public class LightRayEffect : MonoBehaviour
     private List<float> phaseOffsetsXScale;
     private List<float> phaseOffsetsYScale;
 
-    private float time = 0;
-
     private void Start()
     {
         //给每个光线随机一个偏移值
@@ -61,15 +59,6 @@ public class LightRayEffect : MonoBehaviour
             // 改变颜色
             bool isDayLight = (GameManager.Instance.currentHour >= 6 && GameManager.Instance.currentHour <= 18);
             rays[i].color = isDayLight ? dayLight : nightLight;
-        }
-
-        time += Time.deltaTime;
-        if(time > 30)
-        {
-            if(Vector2.Distance(transform.parent.position,Camera.main.transform.position) > 30f)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 }

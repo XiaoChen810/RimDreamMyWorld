@@ -70,6 +70,10 @@ namespace ChenChen_Thing
                 {
                     if (!ThingDefDictionary.ContainsKey(def.DefName))
                     {
+                        if (def.Prefab == null)
+                        {
+                            Debug.LogWarning($"{def.DefName} 的预制件为空");
+                        }
                         ThingDefDictionary.Add(def.DefName, def);
                     }
                     else

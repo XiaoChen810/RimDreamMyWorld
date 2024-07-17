@@ -115,6 +115,8 @@ public class SelectTool : MonoBehaviour
         dvs.Clear();
         // 判断有无选中棋子
         if (Logic_Pawn(hitColliders)) return;
+        // 判断有无选中动物
+        if (Logic_Animal(hitColliders)) return;
         // 判断有无选中物体
         if (Logic_Thing(hitColliders)) return;
         // 判断有无工作区
@@ -135,18 +137,22 @@ public class SelectTool : MonoBehaviour
                 flag = true;
             }
         }
-        if(dvs.Count == 1)
+        DetailViewOpen();
+        return flag;
+    }
+    private bool Logic_Animal(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
         {
-            dvs[0].OpenIndicator();
-            dvs[0].OpenPanel();
-        }
-        else if (dvs.Count > 1) 
-        {
-            foreach (var d in dvs)
+            if (collider.CompareTag("Animal"))
             {
-                d.OpenIndicator();
+                Animal animal = collider.GetComponent<Animal>();
+                dvs.Add(animal.DetailView);
+                flag = true;
             }
         }
+        DetailViewOpen();
         return flag;
     }
     private bool Logic_Thing(Collider2D[] hitColliders)
@@ -161,18 +167,7 @@ public class SelectTool : MonoBehaviour
                 flag = true;
             }
         }
-        if (dvs.Count == 1)
-        {
-            dvs[0].OpenIndicator();
-            dvs[0].OpenPanel();
-        }
-        else if (dvs.Count > 1)
-        {
-            foreach (var d in dvs)
-            {
-                d.OpenIndicator();
-            }
-        }
+        DetailViewOpen();
         return flag;
     }
     private bool Logic_Floor(Collider2D[] hitColliders)
@@ -187,18 +182,7 @@ public class SelectTool : MonoBehaviour
                 flag = true;
             }
         }
-        if (dvs.Count == 1)
-        {
-            dvs[0].OpenIndicator();
-            dvs[0].OpenPanel();
-        }
-        else if (dvs.Count > 1)
-        {
-            foreach (var d in dvs)
-            {
-                d.OpenIndicator();
-            }
-        }
+        DetailViewOpen();
         return flag;
     }
     private bool Logic_WorkSpace(Collider2D[] hitColliders)
@@ -213,6 +197,12 @@ public class SelectTool : MonoBehaviour
                 flag = true;
             }
         }
+        DetailViewOpen();
+        return flag;
+    }
+
+    private void DetailViewOpen()
+    {
         if (dvs.Count == 1)
         {
             dvs[0].OpenIndicator();
@@ -225,7 +215,6 @@ public class SelectTool : MonoBehaviour
                 d.OpenIndicator();
             }
         }
-        return flag;
     }
 }
 

@@ -22,12 +22,12 @@ namespace ChenChen_UI
         {
             if (panel == null) return;
             if (tree == null) return;
-            Content.Clear();
-            Content.Add($"耐久度: {tree.CurDurability} / {tree.MaxDurability}");
-            if (tree.TheUsingPawn != null) Content.Add($"使用者: {tree.TheUsingPawn.name}");
+            content.Clear();
+            content.Add($"耐久度: {tree.CurDurability} / {tree.MaxDurability}");
+            if (tree.TheUsingPawn != null) content.Add($"使用者: {tree.TheUsingPawn.name}");
             panel.SetView(
                 tree.Def.DefName,
-                Content);
+                content);
             if (tree.IsMarkCut)
             {
                 panel.RemoveAllButton();

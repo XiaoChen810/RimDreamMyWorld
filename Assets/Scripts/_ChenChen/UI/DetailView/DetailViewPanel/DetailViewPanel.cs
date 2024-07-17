@@ -36,9 +36,9 @@ namespace ChenChen_UI
             }
         }
 
-        public void SetView(string itemName, List<string> content)
+        public void SetView(string titleName, List<string> content)
         {
-            ItemName.text = itemName;
+            ItemName.text = titleName;
             if(content.Count > Texts.Count)
             {
                 Debug.LogWarning($"最大加载{Texts.Count}行内容");

@@ -23,13 +23,13 @@ namespace ChenChen_UI
         {
             if (panel == null) return;
             if (thing == null) return;
-            Content.Clear();
-            Content.Add($"耐久度: {thing.CurDurability} / {thing.MaxDurability}");
-            Content.Add($"剩余工作量: {thing.Workload}");
-            Content.Add($"使用者: {(thing.TheUsingPawn != null ? thing.TheUsingPawn.name : null)}");
+            content.Clear();
+            content.Add($"耐久度: {thing.CurDurability} / {thing.MaxDurability}");
+            content.Add($"剩余工作量: {thing.Workload}");
+            content.Add($"使用者: {(thing.TheUsingPawn != null ? thing.TheUsingPawn.name : null)}");
             panel.SetView(
                 thing.Def.DefName,
-                Content
+                content
                 );
 
             if (thing.LifeState == BuildingLifeStateType.MarkBuilding)

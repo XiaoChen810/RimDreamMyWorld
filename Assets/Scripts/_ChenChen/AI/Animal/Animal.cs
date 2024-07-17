@@ -1,3 +1,4 @@
+using ChenChen_UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace ChenChen_AI
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(AnimalMoveController))]
-    public abstract class Animal : MonoBehaviour
+    public abstract class Animal : MonoBehaviour, IDetailView
     {
         /// <summary>
         /// 动物状态机
@@ -23,11 +24,42 @@ namespace ChenChen_AI
         /// </summary>
         public Animator Animator { get; protected set; }
 
-        public AnimalDef Def;
-        public AnimalInfo Info;
+        /// <summary>
+        /// 动物定义
+        /// </summary>
+        public AnimalDef Def { get; protected set; }
 
-        [Header("当前状态")]
-        public List<string> CurrentStateList = new List<string>();
+        /// <summary>
+        /// 动物信息
+        /// </summary>
+        [SerializeField] protected AnimalInfo _info;
+        public AnimalInfo Info
+        {
+            get { return _info; }
+            protected set { _info = value; }
+        }
+
+        protected DetailView _detailView;
+        public DetailView DetailView
+        {
+            get
+            {
+                if (_detailView == null)
+                {
+                    if (!TryGetComponent<DetailView>(out _detailView))
+                    {
+                        _detailView = gameObject.AddComponent<DetailView_Animal>();
+                    }
+                }
+                return _detailView;
+            }
+        }
+
+        public void Init(AnimalDef def, AnimalInfo info)
+        {
+            Def = def;
+            Info = (AnimalInfo)info.Clone();
+        }
 
         protected virtual void Start()
         {
@@ -45,29 +77,19 @@ namespace ChenChen_AI
             gameObject.tag = "Animal";
         }
 
-        public void Init(AnimalDef def,AnimalInfo info)
-        {
-            Def = def;
-            Info = info;
-        }
-
         protected virtual void Update()
         {
-#if UNITY_EDITOR
-            任务列表Debug();
-#endif
             StateMachine.Update();
         }
 
-        protected void 任务列表Debug()
+        public void FlagTrade()
         {
-            CurrentStateList.Clear();
-            CurrentStateList.Add("正在：" + StateMachine.CurState?.ToString());
-            CurrentStateList.Add("下一个：" + StateMachine.NextState?.ToString());
-            foreach (var task in StateMachine.StateQueue)
-            {
-                CurrentStateList.Add("准备" + task.ToString());
-            }
+            Info.IsFlagTrade = true;
+        }
+
+        public void CancelTrade()
+        {
+            Info.IsFlagTrade = false;
         }
     }
 }

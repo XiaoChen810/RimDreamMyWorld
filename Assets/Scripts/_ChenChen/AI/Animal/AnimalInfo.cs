@@ -6,10 +6,18 @@ namespace ChenChen_AI
     public class AnimalInfo : ICloneable
     {
         // 剩余生命值
-        public float Health;
+        public float Health = 100;
+
+        // 是否被驯服
+        public bool IsTrade;
+
+        // 是否标记驯服
+        public bool IsFlagTrade;
+
         public object Clone()
         {
-            throw new NotImplementedException();
+            object clone = this.MemberwiseClone();
+            return clone;
         }
     }
 }

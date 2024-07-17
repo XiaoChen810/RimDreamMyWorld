@@ -37,7 +37,7 @@ public class LightEffect : MonoBehaviour
 
         GenerateEffect("ั๔นโ", 5);
         StartCoroutine(CloudsCo());  
-        StartCoroutine(LightRaysCo());
+        //StartCoroutine(LightRaysCo());
     }
 
     IEnumerator CloudsCo()

@@ -16,7 +16,7 @@ namespace ChenChen_UI
         /// <summary>
         /// 当前面板上输出的内容
         /// </summary>
-        public List<string> Content = new List<string>();
+        protected List<string> content = new List<string>();
 
         /// <summary>
         /// 显示指示器
@@ -51,9 +51,15 @@ namespace ChenChen_UI
         }
 
         /// <summary>
-        /// 打开显示面板
+        /// 打开面板，打开自己的面板，命名方式一般为DetailViewPanel_[Name]。
         /// </summary>
         public abstract void OpenPanel();
+
+        /// <summary>
+        /// 当前显示的面板如果是自己的，会进行更新操作
+        /// </summary>
+        /// <param name="panel"></param>
+        protected abstract void UpdateShow(DetailViewPanel panel);
 
         public virtual void ClosePanel()
         {
@@ -62,8 +68,6 @@ namespace ChenChen_UI
                 DetailViewManager.Instance.PanelManager.RemoveTopPanel();
             }
         }
-
-        protected abstract void UpdateShow(DetailViewPanel panel);
 
         protected virtual void Update()
         {

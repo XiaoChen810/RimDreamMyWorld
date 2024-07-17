@@ -15,6 +15,7 @@ TagManager:
   - PawnAttackBox
   - MonsterAttackBox
   - BulletAttackBox
+  - Wall
   layers:
   - Default
   - TransparentFX

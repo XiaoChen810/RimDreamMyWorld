@@ -128,8 +128,7 @@ public class GameManager : SingletonMono<GameManager>
 
     public void ≤‚ ‘∞¥≈•()
     {
-        Vector2 random = new Vector2(UnityEngine.Random.Range(0, MapManager.Instance.CurMapWidth), UnityEngine.Random.Range(0, MapManager.Instance.CurMapHeight));
-        MonsterGeneratorTool.GenerateMonster(random, 0);
+        MonsterGeneratorTool.SpawnMassiveMonsters(15);
     }
 
 #endif

@@ -41,7 +41,7 @@ namespace ChenChen_Thing
             float width = Mathf.Abs(oneV.x - twoV.x);
             float height = Mathf.Abs(oneV.y - twoV.y);
             SR.size = new Vector2(width, height);
-            //transform.localScale = new Vector3(width, height, 1);
+            Coll.size = new Vector2(width, height);
             transform.position = (oneV + twoV) / 2f;
 
             AfterSizeChange();

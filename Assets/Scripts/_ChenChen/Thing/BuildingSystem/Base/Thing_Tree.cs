@@ -1,13 +1,18 @@
 using ChenChen_Thing;
 using ChenChen_UI;
 using UnityEngine;
+using DG.Tweening;
 
 namespace ChenChen_Thing
 {
     [RequireComponent(typeof(Collider2D))]
     public class Thing_Tree : ThingBase, ICut
-    {
+    {  
+        private float shakeDuraion = 0.5f;
+        private float shakeStrength = 3f;
+
         public bool IsMarkCut;
+        public ParticleSystem particleEffect_WhenCut;
 
         public override DetailView DetailView
         {
@@ -22,9 +27,7 @@ namespace ChenChen_Thing
                 }
                 return _detailView;
             }
-        }
-
-        public ParticleSystem particleEffect_WhenCut;
+        }     
 
         private void OnTriggerStay2D(Collider2D collision)
         {
@@ -50,6 +53,9 @@ namespace ChenChen_Thing
         public void OnCut(int value)
         {
             CurDurability -= value;
+
+            transform.DOShakeRotation(shakeDuraion, shakeStrength);
+
             if (CurDurability <= 0)
             {
                 // 创建新的粒子系统物体
@@ -71,6 +77,12 @@ namespace ChenChen_Thing
         public void OnCanclCut()
         {
             IsMarkCut = false;
+        }
+
+        protected override void OnDestroy()
+        {
+            DOTween.KillAll();
+            base.OnDestroy();
         }
     }
 }

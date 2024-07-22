@@ -23,19 +23,19 @@ namespace ChenChen_AI
         }
 
         // 是否在工作
-        [SerializeField] private bool isOnWork;
-        public bool IsOnWork
+        [SerializeField] private bool isInWork;
+        public bool IsInWork
         {
-            get { return isOnWork; }
-            set { isOnWork = value; }
+            get { return isInWork; }
+            set { isInWork = value; }
         }
 
         // 是否在战斗
-        [SerializeField] private bool isOnBattle;
-        public bool IsOnBattle
+        [SerializeField] private bool isInBattle;
+        public bool IsInBattle
         {
-            get { return isOnBattle; }
-            set { isOnBattle = value; }
+            get { return isInBattle; }
+            set { isInBattle = value; }
         }
 
         // 是否被征召
@@ -79,8 +79,8 @@ namespace ChenChen_AI
         {
             IsDead = isDead;
             IsSelect = isSelect;
-            IsOnWork = isOnWork;
-            IsOnBattle = isOnBattle;
+            IsInWork = isOnWork;
+            IsInBattle = isOnBattle;
             IsDrafted = isDrafted;
             HP = hp;
             Sleepiness = sleepiness;
@@ -92,7 +92,7 @@ namespace ChenChen_AI
         {
             PawnInfo clone = (PawnInfo)MemberwiseClone();
             clone.IsSelect = false;
-            clone.IsOnWork = false;
+            clone.IsInWork = false;
             clone.IsDrafted = false;
             clone.HP = HP.Clone();
             clone.Sleepiness = Sleepiness.Clone();
@@ -137,6 +137,9 @@ namespace ChenChen_AI
 
         // 是否达到最小值
         public bool IsSpace => CurValue <= 0;
+
+        // 当前百分比
+        public float Percentage => CurValue / MaxValue;
 
         // 构造函数
         public Stats(string name, float curValue, float maxValue)

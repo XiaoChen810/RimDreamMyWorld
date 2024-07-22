@@ -8,7 +8,8 @@ namespace ChenChen_AI
     public class JobGiver_FindEnemy : JobGiver
     {
         private static readonly float interval_time = 1;
-        public JobGiver_FindEnemy(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, interval_time)
+        private static readonly string jobName = "Ñ²Âß";
+        public JobGiver_FindEnemy(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, interval_time)
         {
         }
 

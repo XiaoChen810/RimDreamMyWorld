@@ -28,7 +28,7 @@ namespace ChenChen_UI
             }
             else
             {
-                OnExit();
+                PanelManager.Instance.RemovePanel(this);
             }
         }
     }

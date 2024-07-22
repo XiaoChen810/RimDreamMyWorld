@@ -91,5 +91,24 @@ namespace ChenChen_AI
         {
             Info.IsFlagTrade = false;
         }
+
+        public void Trade()
+        {
+            Info.IsOnTrade = true;
+        }
+
+        public void StopTrade()
+        {
+            Info.IsOnTrade = false;
+        }
+
+        public void CompleteTrade()
+        {
+            Info.IsTrade = true;
+            Info.IsFlagTrade= false;
+            Info.IsOnTrade = false;
+        }
+
+        public bool WaitToTrade => Info.IsFlagTrade && !Info.IsOnTrade;
     }
 }

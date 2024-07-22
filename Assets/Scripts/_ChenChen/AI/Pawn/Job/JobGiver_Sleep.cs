@@ -8,7 +8,8 @@ namespace ChenChen_AI
     public class JobGiver_Sleep : JobGiver
     {
         private static readonly float interval_time = 5;
-        public JobGiver_Sleep(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, interval_time)
+
+        public JobGiver_Sleep(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
         {
         }
 

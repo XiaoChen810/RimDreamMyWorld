@@ -9,19 +9,31 @@ namespace ChenChen_AI
     {
         protected Action<GameObject> onGetJobSuccessly;
 
+        // 优先级
+        public int Priority = 1;
+
+        // 名字
+        public string JobName = string.Empty;
+
         // 间隔时间
         protected float intervalTime = 5;
 
         // 概率触发
         protected float probability = 1;
 
+        // 上一次分配时间
         private float lastGiverTime;
 
-        public JobGiver(Action<GameObject> onGetJobSuccessly, float intervalTime = 5, float probability = 1)
+        public JobGiver(Action<GameObject> onGetJobSuccessly, string jobName = null, float intervalTime = 5, float probability = 1)
         {
             this.onGetJobSuccessly = onGetJobSuccessly;
             this.intervalTime = intervalTime;
             this.probability = probability;
+
+            if (jobName != null )
+            {
+                JobName = jobName;
+            }            
         }
 
         // 尝试获取任务

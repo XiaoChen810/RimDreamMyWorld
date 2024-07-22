@@ -29,7 +29,7 @@ namespace ChenChen_UI
             // Close
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
             });
 
             GameManager.Instance.PauseGame();

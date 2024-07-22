@@ -117,7 +117,7 @@ public class PawnGeneratorTool : MonoBehaviour
     {
         // 刷新指定位置的人物
         RemovePawn(PawnWhenStartList[index]);
-        PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), null);
+        PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute());
         PawnWhenStartList[index].Def.StopUpdate = true;
         return PawnWhenStartList[index];
     }

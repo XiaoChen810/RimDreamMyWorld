@@ -122,10 +122,7 @@ namespace ChenChen_UI
         public virtual void OnExit()
         {
             onExitCallback?.Invoke();
-            if (UITool.TryGetOrAddComponent<Transform>(out Transform trans))
-            {
-                GameObject.Destroy(trans.gameObject);
-            }
+            UIManager.DestroyUI(this.UIType);
         }
 
         /// <summary>
@@ -150,7 +147,7 @@ namespace ChenChen_UI
         protected void UseBlueprintByName(string name)
         {
             ThingSystemManager.Instance.OpenBuildingMode(name);
-            PanelManager.RemoveTopPanel(this);
+            PanelManager.RemovePanel(this);
         }
     }
 }

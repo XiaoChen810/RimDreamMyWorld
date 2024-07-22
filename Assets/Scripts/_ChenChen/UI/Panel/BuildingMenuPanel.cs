@@ -51,7 +51,7 @@ namespace ChenChen_UI
             // 关闭菜单的按钮
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
             });
 
         }

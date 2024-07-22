@@ -13,7 +13,8 @@ namespace ChenChen_AI
         /// </summary>
         public EmotionList EmotionsList;
 
-        public List<Emotion> CurEmotions = new();
+        private List<Emotion> curEmotionsList = new();
+        private Emotion curEmotion;
 
         private SpriteRenderer sr;
         private Dictionary<EmotionType, Emotion> emotionsDict = new();
@@ -42,20 +43,22 @@ namespace ChenChen_AI
         {
             while (true)
             {
-                if (CurEmotions.Count == 0)
+                if (curEmotionsList.Count == 0)
                 {
                     sr.color = new Color(1, 1, 1, 0);
                 }
                 else
                 {
                     int index = 0;
-                    while(CurEmotions.Count > 0 && index < CurEmotions.Count)
+                    while(curEmotionsList.Count > 0 && index < curEmotionsList.Count)
                     {
                         sr.DOFade(0, 0.5f);
                         yield return new WaitForSeconds(1);
-                        if (index < CurEmotions.Count)
+                        if (index < curEmotionsList.Count)
                         {
-                            sr.sprite = CurEmotions[index++].icon;
+                            sr.sprite = curEmotionsList[index].icon;
+                            curEmotion = curEmotionsList[index];
+                            index++;
                         }
                         else
                         {
@@ -98,22 +101,27 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if (CurEmotions.Any(e => e.type == emotionType)) return false;
+            if (curEmotionsList.Any(e => e.type == emotionType)) return false;
 
             Emotion e = emotionsDict[emotionType];
             sr.sprite = e.icon;
-            CurEmotions.Add(e);
+            curEmotionsList.Add(e);
             return true;
         }
 
         public void RemoveEmotion()
         {
-            CurEmotions.Clear();
+            sr.sprite = null;
+            curEmotionsList.Clear();
         }
 
         public void RemoveEmotion(EmotionType emotionType)
         {
-            CurEmotions.RemoveAll(e => e.type == emotionType);
+            if(curEmotion.type == emotionType)
+            {
+                sr.sprite = null;
+            }
+            curEmotionsList.RemoveAll(e => e.type == emotionType);
         }
 
         private void OnDestroy()

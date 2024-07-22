@@ -7,7 +7,9 @@ namespace ChenChen_AI
 {
     public class JobGiver_Cut : JobGiver
     {
-        public JobGiver_Cut(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, intervalTime: 8)
+        private static readonly string jobName = "砍伐";
+
+        public JobGiver_Cut(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, intervalTime: 8)
         {
         }
 

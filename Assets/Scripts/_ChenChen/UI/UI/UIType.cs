@@ -20,5 +20,16 @@ namespace ChenChen_UI
             this.Path = Path;
             Name = Path.Substring(Path.LastIndexOf('/') + 1);
         }
+
+        public override bool Equals(object obj)
+        {
+            UIType other = obj as UIType;
+            return other != null && other.Name == Name && other.Path == Path;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

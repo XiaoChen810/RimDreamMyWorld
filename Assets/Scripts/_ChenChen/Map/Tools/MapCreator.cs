@@ -1,3 +1,4 @@
+using Pathfinding.RVO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,39 +50,45 @@ namespace ChenChen_Map
             grid.transform.parent = _mapObj.transform;
             // 添加Terrain相关的Tilemap
             _layerDict = new Dictionary<string, Tilemap>();
+            var material = Resources.Load<Material>("Materials/Material-Tilemap");
             foreach (var t in _terrainList)
             {
-                GameObject newObj = new GameObject(t.tilemapName);
-                newObj.transform.parent = grid.transform;
-                Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
-                tr.sortingOrder = t.layerSort;
-                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
-                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");           
-                if (t.isObstacle)
-                {
-                    newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;
-                    newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
-                    newObj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
-                }
                 if (!_layerDict.ContainsKey(t.tilemapName))
-                {
+                {            
+                    GameObject obj = new GameObject(t.tilemapName);
+                    obj.transform.parent = grid.transform;
+                    Tilemap tilemap = obj.AddComponent<Tilemap>();
+                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
+                    tr.sortingOrder = t.layerSort;
+                    tr.material = material;
+                    if (t.isObstacle)
+                    {
+                        obj.AddComponent<TilemapCollider2D>().usedByComposite = true;
+                        obj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                        obj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                        obj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
+                    }
+                    if (t.type == NodeType.water)
+                    {
+                        obj.tag = "Water";
+                    }
                     _layerDict.Add(t.tilemapName, tilemap);
-                }
-                if (t.type == NodeType.water)
-                {
-                    newObj.tag = "Water";
                 }
             }
             // 添加Flower相关的Tilemap
             foreach (var f in _flowersList)
             {
-                GameObject newObj = new GameObject(f.tilemapName);
-                Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                newObj.AddComponent<TilemapRenderer>().sortingOrder = f.layerSort;
-                newObj.transform.parent = grid.transform;
-                if (!_layerDict.ContainsKey(f.tilemapName)) _layerDict.Add(f.tilemapName, tilemap);
+                if (!_layerDict.ContainsKey(f.tilemapName))
+                {
+                    GameObject obj = new GameObject(f.tilemapName);
+                    obj.transform.parent = grid.transform;
+                    Tilemap tilemap = obj.AddComponent<Tilemap>();
+                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
+                    tr.sortingOrder = f.layerSort;
+                    tr.material = material;
+
+                    _layerDict.Add(f.tilemapName, tilemap);
+                }
             }
             // 噪声
             InitNodeNoiseValue();
@@ -313,8 +320,8 @@ namespace ChenChen_Map
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
                 tr.sortingLayerName = "Bottom";
-                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
-                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");
+                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Material-Tilemap.mat
+                tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;

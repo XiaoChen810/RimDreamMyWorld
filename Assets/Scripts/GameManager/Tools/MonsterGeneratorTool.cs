@@ -140,7 +140,7 @@ public class MonsterGeneratorTool : MonoBehaviour
 
     private void Update()
     {
-        bool isDayLight = (GameManager.Instance.currentHour >= 6 && GameManager.Instance.currentHour <= 18);
+        bool isDayLight = GameManager.Instance.IsDayTime;
         if (!isDayLight)
         {
             SpawnMonsterInterval();

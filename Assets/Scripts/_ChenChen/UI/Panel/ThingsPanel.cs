@@ -21,7 +21,7 @@ namespace ChenChen_UI
             InitContent(ThingType);
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
             });
         }
 
@@ -40,7 +40,7 @@ namespace ChenChen_UI
             if (btnPrefab == null)
             {
                 Debug.LogError("按钮的预制件为空, 检查位置: UI/Component/BtnBlueprintDefault");
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
                 return;
             }
             // 根据蓝图字典,设置成对应的按钮添加到内容(content)中

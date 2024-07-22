@@ -43,7 +43,7 @@ namespace ChenChen_UI
         public override void OpenPanel()
         {
             PanelManager panel = DetailViewManager.Instance.PanelManager;
-            panel.RemoveTopPanel(panel.GetTopPanel());
+            panel.RemovePanel(panel.GetTopPanel());
             panel.AddPanel(new DetailViewPanel_Pawn(pawn, StartShow, EndShow));
         }
 
@@ -52,7 +52,10 @@ namespace ChenChen_UI
             if (panel == null) return;
             if (pawn == null) return;
             content.Clear();
-            content.Add("当前工作：" + pawn.StateMachine.CurState.Description);
+            if (pawn.StateMachine.CurState != null)
+            {
+                content.Add("当前工作：" + pawn.StateMachine.CurState.Description);
+            }         
             if (pawn.StateMachine.NextState != null)
             {
                 content.Add("下一个工作" + pawn.StateMachine.NextState.Description);

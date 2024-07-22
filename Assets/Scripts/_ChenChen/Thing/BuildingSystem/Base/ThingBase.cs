@@ -205,7 +205,7 @@ namespace ChenChen_Thing
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if (!Application.isPlaying) return;
             // 移除从ThingSystemManager
@@ -223,7 +223,7 @@ namespace ChenChen_Thing
                 if (_detailView != null && _detailView.IsPanelOpen)
                 {
                     PanelManager panel = DetailViewManager.Instance.PanelManager;
-                    panel.RemoveTopPanel(panel.GetTopPanel());
+                    panel.RemovePanel(panel.GetTopPanel());
                 }
                 // 如果是障碍物，刷新寻路算法的节点
                 if (Def.IsObstacle)

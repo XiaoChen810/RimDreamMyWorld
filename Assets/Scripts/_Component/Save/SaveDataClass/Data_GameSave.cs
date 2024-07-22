@@ -35,8 +35,8 @@ public class Data_GameSave
     public bool CameraUseKeyboard = true;
     public bool CameraUseEdge = true;
 
-    public float BGMVolume = 0.2f;
-    public float SFXVolume = 1;
+    public float BGMVolume = 0.3f;
+    public float SFXVolume = 0.7f;
 
     [Header("Time")]
     public int currentSeason = 1; 

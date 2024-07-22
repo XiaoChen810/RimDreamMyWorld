@@ -27,8 +27,7 @@ namespace ChenChen_AI
         public override StateType OnUpdate()
         {
             if (pawn.StateMachine.NextState != null || pawn.StateMachine.StateQueue.Count != 0)
-            {
-                pawn.EmotionController.RemoveEmotion(EmotionType.confused);
+            {              
                 return StateType.Success;
             }
 
@@ -44,9 +43,19 @@ namespace ChenChen_AI
                 Vector2 p = pawn.transform.position;
                 p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
                 pawn.StateMachine.NextState = new PawnJob_Move(pawn, p);
-                return StateType.Success;
+                return StateType.Failed;
             }
             return StateType.Doing;
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+
+            if(IsSuccess)
+            {
+                pawn.EmotionController.RemoveEmotion(EmotionType.confused);
+            }
         }
 
         public override void OnInterrupt()

@@ -30,7 +30,7 @@ namespace ChenChen_UI
             if (pawnInfomationPrefab == null)
             {
                 Debug.LogError("预制件为空, 检查位置: " + pawnInfomationPrefabPath);
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
                 return;
             }
 

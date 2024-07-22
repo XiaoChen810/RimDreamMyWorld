@@ -11,7 +11,7 @@ namespace ChenChen_Thing
 
         private void Update()
         {
-            bool isDayLight = (GameManager.Instance.currentHour >= 6 && GameManager.Instance.currentHour <= 18);
+            bool isDayLight = GameManager.Instance.IsDayTime;
             IsOpen = !isDayLight;
 
             anim.SetBool("IsOpen",IsOpen);

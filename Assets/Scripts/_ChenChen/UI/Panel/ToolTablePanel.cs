@@ -18,7 +18,7 @@ namespace ChenChen_UI
             // 关闭菜单的按钮
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
             });
 
             // 加载所有能制作的东西
@@ -46,7 +46,7 @@ namespace ChenChen_UI
             if (stuffMakerPrefab == null)
             {
                 Debug.LogError("预制件为空, 检查位置: " + path);
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
                 return;
             }
 

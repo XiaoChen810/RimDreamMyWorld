@@ -27,9 +27,6 @@ public class PlayManager : SingletonMono<PlayManager>
         if (ES3.KeyExists(root_save_name))
         {
             ES3.LoadInto(root_save_name, CurSave);
-            // 加载声音大小
-            AudioManager.Instance.bgmSource.volume = CurSave.BGMVolume;
-            AudioManager.Instance.sfxSource.volume = CurSave.SFXVolume;
             if (CurSave.IsNew)
             {
                 Debug.Log($"成功加载存档{root_save_name}资源, 但存档是新的");

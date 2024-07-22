@@ -19,13 +19,19 @@ namespace ChenChen_AI
         /// </summary>
         public StateBase CurState
         {
-            get { return _currentState; }
+            get
+            { 
+                return _currentState; 
+            }
             set
             {
                 _currentState = value;
             }
         }
 
+        /// <summary>
+        /// 当前状态类型
+        /// </summary>
         public Type CurStateType
         {
             get

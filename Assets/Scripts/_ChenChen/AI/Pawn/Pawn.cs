@@ -2,6 +2,7 @@ using ChenChen_UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChenChen_AI
 {
@@ -35,6 +36,30 @@ namespace ChenChen_AI
         public float AttackRange = 1;
         public float AttackSpeedWait = 2.5f;
         public float AttackDamage = 0;
+
+        [Header("条")]
+        [SerializeField] private Slider myBar;// 一个滑动条，可以用来显示进度
+        [SerializeField] private GameObject myPanel;      
+
+        public void ChangeMyBar(float value)
+        {
+            Mathf.Clamp01(value);
+            if (myBar != null)
+            {
+                if(value > 0)
+                {
+                    myPanel.SetActive(true);
+                    myBar.value = value;
+                }
+                else
+                {
+                    myPanel.SetActive(false);
+                    myBar.value = 0f;
+                }       
+            }        
+        }
+
+        #region - 属性 - 
 
         [Header("人物定义")]
         [SerializeField] private PawnKindDef _pawnKindDef;
@@ -106,18 +131,20 @@ namespace ChenChen_AI
             }
         }
 
-        #region Job
+        #endregion
+
+        #region - Job -
 
         protected abstract void TryToGetJob();
 
         /// <summary>
-        /// Go to work for job
+        /// Going to work for job, but not in work now;
         /// </summary>
         /// <param name="job"></param>
         public void JobToDo(GameObject job)
         {
             _pawnKindDef.CanGetJob = false;
-            _pawnInfo.IsOnWork = false;
+            _pawnInfo.IsInWork = false;
             CurJobTarget = job;
         }
 
@@ -126,7 +153,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobDoing()
         {
-            _pawnInfo.IsOnWork = true;
+            _pawnInfo.IsInWork = true;
         }
 
         /// <summary>
@@ -135,7 +162,7 @@ namespace ChenChen_AI
         public void JobDone()
         {
             _pawnKindDef.CanGetJob = true;
-            _pawnInfo.IsOnWork = false;
+            _pawnInfo.IsInWork = false;
             CurJobTarget = null;
         }
 
@@ -174,7 +201,7 @@ namespace ChenChen_AI
 
         #endregion
 
-        #region Battle
+        #region - Battle -
 
         private bool canDamaged = true;
 
@@ -218,6 +245,8 @@ namespace ChenChen_AI
 
         #endregion
 
+        #region - Life -
+
         protected virtual void Start()
         {
             /* 添加这个人物的移动组件 */
@@ -239,6 +268,13 @@ namespace ChenChen_AI
             GameManager.Instance.OnTimeAddOneMinute += UpdatePawnInfo;
             GameManager.Instance.OnGameStart += Instance_OnGameStart;
         }
+        private void UpdatePawnInfo()
+        {
+            if (StateMachine.CurStateType != typeof(PawnJob_Sleep))
+            {
+                Info.Sleepiness.CurValue -= 0.07f;
+            }
+        }
 
         private void Instance_OnGameStart()
         {
@@ -251,14 +287,6 @@ namespace ChenChen_AI
             GameManager.Instance.OnGameStart -= Instance_OnGameStart;
         }
 
-        private void UpdatePawnInfo()
-        {
-            if(StateMachine.CurStateType != typeof(PawnJob_Sleep))
-            {
-                Info.Sleepiness.CurValue -= 0.07f;
-            }
-        }
-
         protected virtual void Update()
         {
 #if UNITY_EDITOR
@@ -267,7 +295,7 @@ namespace ChenChen_AI
             if (!Def.StopUpdate)
             {
                 StateMachine.Update();
-                if (!Info.IsOnWork && Def.CanGetJob) TryToGetJob();
+                if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
             }
         }
 
@@ -291,5 +319,7 @@ namespace ChenChen_AI
         {
             GameManager.Instance.PawnGeneratorTool.RemovePawn(this);
         }
+
+        #endregion
     }
 }

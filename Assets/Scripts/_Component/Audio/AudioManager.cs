@@ -17,6 +17,16 @@ public class AudioManager : SingletonMono<AudioManager>
     public AudioClipItem[] bgmClips;  // ±≥æ∞“Ù¿÷ºÙº≠ ˝◊È
     public AudioClipItem[] sfxClips;  // “Ù–ßºÙº≠ ˝◊È
 
+    private void Update()
+    {
+        if(!bgmSource.isPlaying)
+        {
+            AudioClipItem clipItem = bgmClips[Random.Range(0, bgmClips.Length)];
+            bgmSource.clip = clipItem.clip;
+            bgmSource.Play();
+        }
+    }
+
     // «–ªª±≥æ∞“Ù¿÷
     public void SwitchBGM(string name)
     {

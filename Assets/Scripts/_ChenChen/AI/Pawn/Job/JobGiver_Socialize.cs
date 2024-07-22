@@ -10,7 +10,7 @@ namespace ChenChen_AI
         private static readonly float interval_time = 20;
         private static readonly float probability_threshold = 0.5f;
 
-        public JobGiver_Socialize(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, interval_time, probability_threshold)
+        public JobGiver_Socialize(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time, probability_threshold)
         {
         }
 

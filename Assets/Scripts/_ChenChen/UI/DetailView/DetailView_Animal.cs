@@ -18,7 +18,7 @@ namespace ChenChen_UI
         public override void OpenPanel()
         {
             PanelManager panel = DetailViewManager.Instance.PanelManager;
-            panel.RemoveTopPanel(panel.GetTopPanel());
+            panel.RemovePanel(panel.GetTopPanel());
             panel.AddPanel(new DetailViewPanel_Animal(animal, StartShow, EndShow));
         }
 

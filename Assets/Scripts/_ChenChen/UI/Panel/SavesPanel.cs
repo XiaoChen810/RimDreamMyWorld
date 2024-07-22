@@ -42,7 +42,7 @@ namespace ChenChen_UI
             {
                 if (!curSave.IsNew)
                 {
-                    PanelManager.RemoveTopPanel(this);
+                    PanelManager.RemovePanel(this);
                     Action onPreloadAnimation = () =>
                     {
                         Debug.Log("Continue Game");
@@ -65,7 +65,7 @@ namespace ChenChen_UI
             // ¹Ø±Õ´°¿Ú
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {
-                PanelManager.RemoveTopPanel(this);
+                PanelManager.RemovePanel(this);
             });
         }
     }

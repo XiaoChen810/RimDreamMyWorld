@@ -14,6 +14,9 @@ namespace ChenChen_AI
         // 是否标记驯服
         public bool IsFlagTrade;
 
+        // 是否正在被驯服
+        public bool IsOnTrade;
+
         public object Clone()
         {
             object clone = this.MemberwiseClone();

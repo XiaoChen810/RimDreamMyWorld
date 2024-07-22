@@ -5,12 +5,20 @@ public class ObjectPtr : MonoBehaviour
 {
     public TargetPtr Target { get; private set; }
 
-    private Button Button;
+    [Header("移动到目标事件的按钮")]
+    [SerializeField] private Button target_Btn;
 
-    public void Init(TargetPtr target)
+    public virtual void Init(TargetPtr target)
     {
-        Button = GetComponentInChildren<Button>();
-        Target = target;
-        Button.onClick.AddListener(target.CameraMoveToTarget);
+        if(target_Btn != null)
+        {
+            Target = target;
+            target_Btn.onClick.AddListener(target.CameraMoveToTarget);
+        }
+        else
+        {
+            Debug.LogError("组件为空");
+        }
+
     }
 }

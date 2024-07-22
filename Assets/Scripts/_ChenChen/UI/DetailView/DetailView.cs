@@ -11,16 +11,15 @@ namespace ChenChen_UI
     {
         public bool IsPanelOpen = false;
         public bool IsIndicatorOpen = false;
+
         protected Indicator indicator;
+        protected PanelBase myPanel;
 
         /// <summary>
         /// 当前面板上输出的内容
         /// </summary>
         protected List<string> content = new List<string>();
 
-        /// <summary>
-        /// 显示指示器
-        /// </summary>
         public virtual void OpenIndicator()
         {
             if (indicator == null)
@@ -35,39 +34,24 @@ namespace ChenChen_UI
 
             AudioManager.Instance.PlaySFX("OpenIndicator");
         }
-        /// <summary>
-        /// 关闭指示器
-        /// </summary>
+
         public virtual void CloseIndicator()
         {
-            if (indicator == null)
-            {
-                GameObject go = Instantiate(Resources.Load<GameObject>("Views/Indicator"), gameObject.transform);
-                indicator = go.GetComponent<Indicator>();
-                indicator.gameObject.name = "Indicator";
-            }
             IsIndicatorOpen = false;
-            indicator.gameObject.SetActive(false);
+            if (indicator != null)
+            {
+                indicator.gameObject.SetActive(false);
+            }            
         }
 
-        /// <summary>
-        /// 打开面板，打开自己的面板，命名方式一般为DetailViewPanel_[Name]。
-        /// </summary>
         public abstract void OpenPanel();
-
-        /// <summary>
-        /// 当前显示的面板如果是自己的，会进行更新操作
-        /// </summary>
-        /// <param name="panel"></param>
-        protected abstract void UpdateShow(DetailViewPanel panel);
 
         public virtual void ClosePanel()
         {
-            if (IsPanelOpen)
-            {
-                DetailViewManager.Instance.PanelManager.RemoveTopPanel();
-            }
+            DetailViewManager.Instance.PanelManager.RemovePanel(DetailViewManager.Instance.PanelManager.GetTopPanel());
         }
+
+        protected abstract void UpdateShow(DetailViewPanel panel);
 
         protected virtual void Update()
         {

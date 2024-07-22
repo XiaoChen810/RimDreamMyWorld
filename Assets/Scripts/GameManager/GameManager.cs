@@ -30,6 +30,8 @@ public class GameManager : SingletonMono<GameManager>
     public int currentMinute = 0; // 当前分钟
     public float secondsPerGameMinute = 0.7f; // 游戏中的每分钟等于现实中的秒数
     public event Action OnTimeAddOneMinute;   //当时间加了一分钟
+    [SerializeField] private Vector2 dayLine;
+    public bool IsDayTime => currentHour >= dayLine.x && currentHour <= dayLine.y;
 
     // 当前游戏时间
     public string CurrentTime

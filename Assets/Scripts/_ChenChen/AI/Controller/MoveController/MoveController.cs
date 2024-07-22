@@ -9,6 +9,7 @@ namespace ChenChen_AI
     [RequireComponent(typeof(Seeker))]
     public abstract class MoveController : MonoBehaviour
     {
+        //protected PathFinder _pathFinder;
         protected Seeker _seeker;
 
         [Header("Debug")]

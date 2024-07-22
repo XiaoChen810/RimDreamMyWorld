@@ -6,6 +6,12 @@ namespace ChenChen_Map
 {
     public class PathFinder
     {
+        public PathFinder(MapManager mapManager)
+        {
+            this.mapManager = mapManager;
+            InitNode();
+        }
+
         private MapManager mapManager;
 
         private PathNode[,] origin;

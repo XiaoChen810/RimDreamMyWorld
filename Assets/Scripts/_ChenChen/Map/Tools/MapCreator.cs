@@ -40,7 +40,7 @@ namespace ChenChen_Map
             _nodes = new MapNode[_width, _height];
             Random.InitState(mapData.seed);
 
-            Debug.Log("生成地图" + mapData.mapName);
+            //Debug.Log("生成地图" + mapData.mapName);
             // 地图的Object
             _mapObj = new GameObject(mapData.mapName);
             _mapObj.transform.parent = transform;

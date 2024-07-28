@@ -57,7 +57,7 @@ namespace ChenChen_AI
             {
                 _pawn.Animator.SetBool("IsWalk", false);
                 _pawn.Animator.SetBool("IsRun", false);
-                _pawn.Animator.SetBool("IsSwimming", false);
+                _pawn.Animator.SetBool("IsSwimming", _isSwimming);
                 return;
             }
             if (!_isSwimming)

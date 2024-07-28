@@ -49,7 +49,7 @@ namespace ChenChen_AI
 
             // 找到所有非抽象的PawnJob子类
             var pawnJobTypes = types.Where(t => t.IsSubclassOf(typeof(PawnJob)) && !t.IsAbstract);
-
+            
             foreach (var pawnJobType in pawnJobTypes)
             {
                 Action<GameObject> onGetJobSuccessly = (GameObject job) =>
@@ -119,4 +119,4 @@ namespace ChenChen_AI
 
 
     }
-}
+} 

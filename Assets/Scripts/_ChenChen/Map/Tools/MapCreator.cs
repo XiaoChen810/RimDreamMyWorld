@@ -41,22 +41,65 @@ namespace ChenChen_Map
             Random.InitState(mapData.seed);
 
             //Debug.Log("生成地图" + mapData.mapName);
+            InitMapObject(mapData);
+            // 噪声
+            InitNodeNoiseValue();
+            // 根据噪声设置类型
+            InitNodeType();
+            // 剔除穿帮节点
+            CheckNode();
+            // 生成瓦片地图
+            GenerateTileMap();
+            // 生成花草环境
+            GenerateFlowers();
+            // 如果是第一次生成地图，则同时生成环境
+            if (!isSave) GenerateThings(mapData);
+
+            result.mapNodes = _nodes;
+            result.mapObject = _mapObj;
+            return result;
+        }
+
+        #region 地图生成
+
+        private void InitMapObject(MapData mapData)
+        {
             // 地图的Object
             _mapObj = new GameObject(mapData.mapName);
             _mapObj.transform.parent = transform;
+            InitMapTilemap();
+
+        }
+
+        private void InitMapTilemap()
+        {
             // 添加Grid组件
             GameObject grid = new GameObject("Grid");
             grid.AddComponent<Grid>();
             grid.transform.parent = _mapObj.transform;
-            // 添加Terrain相关的Tilemap
+            // 添加相关的Tilemap
             _layerDict = new Dictionary<string, Tilemap>();
             var material = Resources.Load<Material>("Materials/Material-Tilemap");
+            foreach (var f in _flowersList)
+            {
+                if (!_layerDict.ContainsKey(f.tilemapName))
+                {
+                    GameObject obj = new GameObject(f.tilemapName);
+                    obj.transform.SetParent(grid.transform);
+                    Tilemap tilemap = obj.AddComponent<Tilemap>();
+                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
+                    tr.sortingOrder = f.layerSort;
+                    tr.material = material;
+
+                    _layerDict.Add(f.tilemapName, tilemap);
+                }
+            }
             foreach (var t in _terrainList)
             {
                 if (!_layerDict.ContainsKey(t.tilemapName))
-                {            
+                {
                     GameObject obj = new GameObject(t.tilemapName);
-                    obj.transform.parent = grid.transform;
+                    obj.transform.SetParent(grid.transform);
                     Tilemap tilemap = obj.AddComponent<Tilemap>();
                     TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
                     tr.sortingOrder = t.layerSort;
@@ -75,44 +118,9 @@ namespace ChenChen_Map
                     _layerDict.Add(t.tilemapName, tilemap);
                 }
             }
-            // 添加Flower相关的Tilemap
-            foreach (var f in _flowersList)
-            {
-                if (!_layerDict.ContainsKey(f.tilemapName))
-                {
-                    GameObject obj = new GameObject(f.tilemapName);
-                    obj.transform.parent = grid.transform;
-                    Tilemap tilemap = obj.AddComponent<Tilemap>();
-                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
-                    tr.sortingOrder = f.layerSort;
-                    tr.material = material;
-
-                    _layerDict.Add(f.tilemapName, tilemap);
-                }
-            }
-            // 噪声
-            InitNodeNoiseValue();
-            // 根据噪声设置类型
-            InitNodeType();
-            // 剔除穿帮节点
-            CheckNode();
-            // 生成瓦片地图
-            GenerateTileMap();
-            // 生成花草
-            GenerateFlowers();
-            // 如果是第一次生成地图，则同时生成环境
-            if(!isSave) GenerateThings(mapData);
-
-            result.mapNodes = _nodes;
-            result.mapObject = _mapObj;
-            return result;
         }
 
-        #region 地图生成
-
-        /// <summary>
-        /// 设置地图噪声值
-        /// </summary>
+        // 设置地图噪声值
         private void InitNodeNoiseValue()
         {
             float randomOffset = Random.Range(-1000, 1000);
@@ -142,9 +150,7 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 设置瓦片类型
-        /// </summary>
+        // 设置瓦片类型
         private void InitNodeType()
         {
             for (int y = 0; y < _height; y++)
@@ -163,9 +169,7 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 最终的生成瓦片地图，给对应的地图设置瓦片
-        /// </summary>
+        // 最终的生成瓦片地图
         private void GenerateTileMap()
         {
             Tilemap mainMap = GetTileamp("Grass");
@@ -183,21 +187,17 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 生成花草
-        /// </summary>
+        // 生成花草
         private void GenerateFlowers()
         {
             foreach (var flower in _flowersList)
             {
-                // 统计剩下多少块草地
                 int count = 0;
                 List<MapNode> theGrassTile = new List<MapNode>();
                 foreach (var node in _nodes)
                 {
                     if (node.type == flower.type)
                     {
-                        // 上下左右没有其他类型的瓦片
                         if (flower.farFormOtherTile && Has(node.position.x, node.position.y, flower.type))
                         {
                             continue;
@@ -220,7 +220,6 @@ namespace ChenChen_Map
                 }
             }
 
-            // 周围有其他类型
             bool Has(int x, int y, NodeType me)
             {
                 bool flag = false;
@@ -238,7 +237,6 @@ namespace ChenChen_Map
                 return flag;
             }
 
-            // 是不同的类型
             bool IsOtherType(int x, int y, NodeType me)
             {
                 if (y + 1 > _height || y - 1 < 0) return true;
@@ -247,9 +245,7 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 生成预制件
-        /// </summary>
+        // 生成预制件
         private void GenerateThings(MapData mapData)
         {
             List<Vector2Int> vector2Ints = new(); 
@@ -339,9 +335,7 @@ namespace ChenChen_Map
 
         #region 检查地图数据，剔除不合理内容
 
-        /// <summary>
-        /// 剔除掉一些单独突出的数据，防止穿帮
-        /// </summary>
+        // 剔除掉一些单独突出的数据，防止穿帮
         private void CheckNode()
         {
             bool flag = false;
@@ -366,11 +360,7 @@ namespace ChenChen_Map
             Debug.LogError("ERROR");
         }
 
-        /// <summary>
-        /// 剔除单个的瓦片，剔除只有一块突出的瓦片，剔除仅上下左右连接的瓦片
-        /// </summary>
-        /// <param name="check"></param>
-        /// <param name="substitute"></param>
+        // 剔除单个的瓦片，剔除只有一块突出的瓦片，剔除仅上下左右连接的瓦片
         private bool CheckTileMapDataIndividual(int x, int y, NodeType check, NodeType substitute)
         {
 
@@ -407,14 +397,7 @@ namespace ChenChen_Map
             return true;
         }
 
-        /// <summary>
-        /// 剔除不可以相邻的瓦片，并替换成对应的瓦片
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="check"></param>
-        /// <param name="cannot"></param>
-        /// <param name="substitute"></param>
+        // 剔除不可以相邻的瓦片，并替换成对应的瓦片
         /// <returns></returns>
         private bool CheckTileMapDataOutline(int x, int y, NodeType check, NodeType cannot, NodeType substitute)
         {

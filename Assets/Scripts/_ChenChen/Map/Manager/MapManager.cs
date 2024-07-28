@@ -274,8 +274,7 @@ namespace ChenChen_Map
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
                 tr.sortingLayerName = "Bottom";
-                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Sprite-Lit-Default.mat
-                tr.material = Resources.Load<Material>("Materials/Sprite-Lit-Default");
+                tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;

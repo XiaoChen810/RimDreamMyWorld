@@ -10,8 +10,6 @@ namespace ChenChen_AI
     {
         public string PawnName;
 
-        public string PawnFaction;
-
         public string PawnDescription;
 
         public string PrefabPath;
@@ -35,10 +33,9 @@ namespace ChenChen_AI
 
         public PawnKindDef() { }
 
-        public PawnKindDef(string pawnName, string pawnFaction, string pawnDescription, string prefabPath)
+        public PawnKindDef(string pawnName, string pawnDescription, string prefabPath)
         {
             PawnName = pawnName;
-            PawnFaction = pawnFaction;
             PawnDescription = pawnDescription;
             PrefabPath = prefabPath;
             StopUpdate = false;

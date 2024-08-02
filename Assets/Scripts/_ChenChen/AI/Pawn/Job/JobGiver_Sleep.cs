@@ -13,12 +13,11 @@ namespace ChenChen_AI
         {
         }
 
-        private float sleepy_threshold = 0.3f;    // 困意的阈值 0 ~ 1。
+        private float sleepy_threshold = 0.3f; 
         private bool noBed;
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            // 如果困了
             if (pawn.Info.Sleepiness.CurValue > sleepy_threshold * pawn.Info.Sleepiness.MaxValue) return null;
 
             return FindBed(pawn);
@@ -26,8 +25,9 @@ namespace ChenChen_AI
 
         private GameObject FindBed(Pawn pawn)
         {
-            //先找自己的床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding))
+            var beds = ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding);
+
+            foreach (var bed in beds)
             {
                 if (bed.Owner == pawn)
                 {
@@ -36,8 +36,7 @@ namespace ChenChen_AI
                 }
             }
 
-            // 再找空床
-            foreach (var bed in ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding))
+            foreach (var bed in beds)
             {
                 if (bed.Owner == null)
                 {
@@ -50,10 +49,7 @@ namespace ChenChen_AI
             if (!noBed)
             {
                 noBed = true;
-                string narrative = $"{pawn.Def.PawnName} 想要睡觉，但没有床...";
-                ScenarioManager.Instance.Narrative(narrative, pawn.gameObject);
 
-                //添加焦虑
                 pawn.EmotionController.AddEmotion(EmotionType.distressed);
             }
 

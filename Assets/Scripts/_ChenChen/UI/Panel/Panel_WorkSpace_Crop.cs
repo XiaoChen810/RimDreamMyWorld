@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class CropWorkSpacePanel : PanelBase
+    public class Panel_WorkSpace_Crop : PanelBase
     {
         private static readonly string path = "UI/Panel/Menus/CropWorkSpacePanel";
 
-        public CropWorkSpacePanel() : base(new UIType(path))
+        public Panel_WorkSpace_Crop() : base(new UIType(path))
         {
         }
 
@@ -26,11 +26,7 @@ namespace ChenChen_UI
         private void InitContent()
         {
             Dictionary<string, CropDef> dict = CropManager.Instance.CropDefDictionary;
-            // 获取装内容的子物体
             GameObject content = UITool.GetChildByName("Content");
-            // 检查是否有GridLayoutGroup组件
-            GridLayoutGroup glg = UITool.TryGetChildComponentByName<GridLayoutGroup>("Content");
-            // 获取按钮的预制件
             GameObject btnPrefab = Resources.Load("UI/Component/BtnBlueprintDefault") as GameObject;
             if (btnPrefab == null)
             {
@@ -38,16 +34,14 @@ namespace ChenChen_UI
                 PanelManager.RemovePanel(this);
                 return;
             }
-            // 根据蓝图字典,设置成对应的按钮添加到内容(content)中
             foreach (var item in dict)
             {
                 GameObject btnInstance = Object.Instantiate(btnPrefab);
                 btnInstance.name = $"CropWorkSpace{item.Value.CropName}";
-                GameObject btnImage = btnInstance.transform.Find("Image").gameObject;
-                btnImage.GetComponent<Image>().sprite = item.Value.CropIcon;
                 btnInstance.transform.SetParent(content.transform, false);
+                GameObject btnImage = btnInstance.transform.Find("Image").gameObject;
+                btnImage.GetComponent<Image>().sprite = item.Value.CropIcon;               
             }
-            // 获取内容中的全部子物体
             Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);
             foreach (var btn in btnContents)
             {

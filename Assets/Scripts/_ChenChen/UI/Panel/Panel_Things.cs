@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class ThingsPanel : PanelBase
+    public class Panel_Things : PanelBase
     {
         static readonly string path = "UI/Panel/Menus/ThingsPanel";
 
@@ -14,7 +14,7 @@ namespace ChenChen_UI
         private GameObject content;
         private ThingPool thingPool;
 
-        public ThingsPanel(ThingType thingType) : base(new UIType(path))
+        public Panel_Things(ThingType thingType) : base(new UIType(path))
         {
             this.ThingType = thingType;
         }

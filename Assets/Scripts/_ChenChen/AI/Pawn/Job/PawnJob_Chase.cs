@@ -22,13 +22,13 @@ namespace ChenChen_AI
                 DebugLogDescription = ("目标无Pawn组件");
                 return false;
             }
-            // 设置人物目标点，前往目标，走过去
+
             if(pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange))
             {
                 DebugLogDescription = ("无法前往目标");
                 return false;
             }
-            // 设置人物无法接取工作
+
             pawn.JobToDo(target.GameObject);
             this.Description = "正在追击" + target.GameObject.name;
 
@@ -44,13 +44,11 @@ namespace ChenChen_AI
             {
                 return StateType.Success;
             }
-            // 判断目标是否到达攻击距离
+
             if (pawn.MoveController.ReachDestination)
             {
-                // 设置人物正在工作
                 pawn.JobDoing();
 
-                // 进入攻击状态
                 IsSuccess = true;
                 pawn.StateMachine.NextState = new PawnJob_Attack(pawn, target.GameObject);
                 return StateType.Success;

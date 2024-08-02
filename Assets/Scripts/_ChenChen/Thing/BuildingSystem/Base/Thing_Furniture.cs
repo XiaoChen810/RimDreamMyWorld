@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ChenChen_Thing
 {
-    public class Thing_Furniture : ThingBase
+    public class Thing_Furniture : Thing
     {
         // ÎïÌåÑÕÉ«
         private Color drawColor = Color.white;

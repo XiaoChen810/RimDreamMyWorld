@@ -46,7 +46,7 @@ public class PlayManager : SingletonMono<PlayManager>
     {
         if(Input.GetKeyUp(KeyCode.Escape))
         {
-            PanelManager.Instance.TogglePanel(new SettingPanel());
+            PanelManager.Instance.TogglePanel(new Panel_Setting());
         }
     }
 
@@ -92,11 +92,10 @@ public class PlayManager : SingletonMono<PlayManager>
             saveData.SaveThings.Add(newThingSave);
         }
         // 保存全部棋子
-        foreach (var pawnObj in GameManager.Instance.PawnGeneratorTool.PawnsList)
+        foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
         {
-            Pawn pawn = pawnObj.GetComponent<Pawn>();
             Data_PawnSave newPawnSave = new Data_PawnSave(
-                pawnObj.transform.position,
+                pawn.transform.position,
                 pawn.Def,
                 pawn.Attribute,
                 pawn.Info

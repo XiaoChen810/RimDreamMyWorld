@@ -13,12 +13,11 @@ namespace ChenChen_Thing
     /// </summary>
     public class ThingSystemManager : SingletonMono<ThingSystemManager>
     {
-        [Header("包含全部物品定义的字典")]
         [SerializedDictionary("名称", "物品定义")]
         public SerializedDictionary<string, ThingDef> ThingDefDictionary = new SerializedDictionary<string, ThingDef>();
 
         private Dictionary<Vector2, Thing_Tree> ThingDict_Tree = new();
-        private Dictionary<string, LinkedList<ThingBase>> ThingDict = new();
+        private Dictionary<string, LinkedList<Thing>> ThingDict_Misc = new();
 
 
         private BuildingModeTool tool;
@@ -103,7 +102,7 @@ namespace ChenChen_Thing
         /// <param name="obj"></param>
         public void AddThingToList(GameObject obj)
         {
-            if (obj.TryGetComponent<ThingBase>(out var thing))
+            if (obj.TryGetComponent<Thing>(out var thing))
             {
                 switch (thing.Def.Type)
                 {
@@ -119,14 +118,14 @@ namespace ChenChen_Thing
 
                         break;
                     default:
-                        if (ThingDict.ContainsKey(thing.Def.DefName))
+                        if (ThingDict_Misc.ContainsKey(thing.Def.DefName))
                         {
-                            ThingDict[thing.Def.DefName].AddFirst(thing);
+                            ThingDict_Misc[thing.Def.DefName].AddFirst(thing);
                         }
                         else
                         {
-                            ThingDict.Add(thing.Def.DefName, new LinkedList<ThingBase>());
-                            ThingDict[thing.Def.DefName].AddFirst(thing);
+                            ThingDict_Misc.Add(thing.Def.DefName, new LinkedList<Thing>());
+                            ThingDict_Misc[thing.Def.DefName].AddFirst(thing);
                         }
                         break;
                 }
@@ -152,7 +151,7 @@ namespace ChenChen_Thing
             }
 
             // 尝试获取 ThingBase 组件
-            if (!obj.TryGetComponent<ThingBase>(out var thing))
+            if (!obj.TryGetComponent<Thing>(out var thing))
             {
                 Debug.LogWarning($"{obj} 没有 <ThingBase> 组件");
                 return false;
@@ -171,12 +170,12 @@ namespace ChenChen_Thing
                     break;
                 default:
                     // 检查字典中是否包含物体名称
-                    if (!ThingDict.ContainsKey(obj.name))
+                    if (!ThingDict_Misc.ContainsKey(obj.name))
                     {
                         return false;
                     }
                     // 检查是否成功移除
-                    if (!ThingDict[obj.name].Remove(thing))
+                    if (!ThingDict_Misc[obj.name].Remove(thing))
                     {
                         Debug.LogWarning($"移除失败：在 ThingDict 中找不到名称为 {obj.name} 的物体");
                         return false;
@@ -196,9 +195,9 @@ namespace ChenChen_Thing
         /// <returns></returns>
         public GameObject GetThingInstance(string name, bool needFree = true)
         {
-            if (ThingDict.ContainsKey(name))
+            if (ThingDict_Misc.ContainsKey(name))
             {
-                foreach (var thing in ThingDict[name])
+                foreach (var thing in ThingDict_Misc[name])
                 {
                     if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
                     return thing.gameObject;
@@ -215,16 +214,16 @@ namespace ChenChen_Thing
         /// <returns></returns>
         public GameObject GetThingInstance(BuildingLifeStateType lifeState, string name = null, bool needFree = true)
         {
-            if (name != null && ThingDict.ContainsKey(name))
+            if (name != null && ThingDict_Misc.ContainsKey(name))
             {
-                foreach (var thing in ThingDict[name])
+                foreach (var thing in ThingDict_Misc[name])
                 {
                     if (thing.LifeState != lifeState) continue;
                     if (needFree && (thing.TheUsingPawn != null || thing.Permission != PermissionBase.PermissionType.IsFree)) continue;
                     return thing.gameObject;
                 }
             }           
-            foreach (var thinglist in ThingDict)
+            foreach (var thinglist in ThingDict_Misc)
             {
                 foreach (var thing in thinglist.Value)
                 {
@@ -241,10 +240,10 @@ namespace ChenChen_Thing
         /// <typeparam name="T">物体类型</typeparam>
         /// <param name="needFree">是否需要一个没有被使用的物体（默认值为 true）</param>
         /// <returns>符合条件的物体列表</returns>
-        public List<T> GetThingsInstance<T>(BuildingLifeStateType lifeState = BuildingLifeStateType.None, bool needFree = true) where T : ThingBase
+        public List<T> GetThingsInstance<T>(BuildingLifeStateType lifeState = BuildingLifeStateType.None, bool needFree = true) where T : Thing
         {
             List<T> list = new List<T>();
-            foreach (var thinglist in ThingDict)
+            foreach (var thinglist in ThingDict_Misc)
             {
                 foreach (var thing in thinglist.Value)
                 {
@@ -260,19 +259,19 @@ namespace ChenChen_Thing
         /// 获取全部物体实例
         /// </summary>
         /// <returns></returns>
-        public List<ThingBase> GetAllThingsInstance()
+        public List<Thing> GetAllThingsInstance()
         {
-            List<ThingBase> list = new();
-            foreach (var thingList in ThingDict)
+            List<Thing> list = new();
+            foreach (var thingList in ThingDict_Misc)
             {
                 foreach(var thing in thingList.Value)
                 {
-                    list.Add(thing as ThingBase);
+                    list.Add(thing as Thing);
                 }
             }
             foreach (var thing in ThingDict_Tree)
             {
-                list.Add(thing.Value as ThingBase);
+                list.Add(thing.Value as Thing);
             }
             return list;
         }
@@ -372,14 +371,14 @@ namespace ChenChen_Thing
                 return false;
             }
             GameObject obj = Generate(thingDef, thingSave.ThingPos, thingSave.ThingRot);
-            obj.GetComponent<ThingBase>().ChangeLifeState(thingSave.LifeState);
+            obj.GetComponent<Thing>().ChangeLifeState(thingSave.LifeState);
             return true;
         }
         // 直接使用定义
         public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation)
         {
             GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
-            obj.GetComponent<ThingBase>().Building();
+            obj.GetComponent<Thing>().Building();
             return true;
         }
         // 直接使用名字
@@ -387,7 +386,7 @@ namespace ChenChen_Thing
         {
             ThingDef thingDef = GetThingDef(thingName);
             GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
-            obj.GetComponent<ThingBase>().Building();
+            obj.GetComponent<Thing>().Building();
             return true;
         }
         // 生成

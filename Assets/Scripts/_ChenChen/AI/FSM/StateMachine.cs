@@ -116,17 +116,14 @@ namespace ChenChen_AI
             {
                 switch (_currentState.OnUpdate())
                 {
-                    //状态完成
                     case StateType.Success:
                         _currentState.IsSuccess = true;
                         TryChangeState(_currentState.NextStateDefault);
                         break;
-                    //状态失败把当前状态设为空
                     case StateType.Failed:
                         _currentState.OnExit();
                         _currentState = null;
                         break;
-                    //状态正在进行,计时,超时切换
                     case StateType.Doing:
                         if (_tickTime > Time.time + _maxTick)
                         {
@@ -134,7 +131,6 @@ namespace ChenChen_AI
                             TryChangeState();
                         }
                         break;
-                    //状态中断触发中断函数
                     case StateType.Interrupt:
                         InterruptState();
                         break;
@@ -147,14 +143,12 @@ namespace ChenChen_AI
 
         public void TryChangeState(StateBase newState = null)
         {
-            // 当前状态的默认
             if (newState != null)
             {
                 ChangeState(newState);
                 return;
             }
 
-            // 状态机下一个目标状态
             if (_nextState != null)
             {
                 ChangeState(_nextState);
@@ -162,14 +156,12 @@ namespace ChenChen_AI
                 return;
             }
 
-            // 如果当前队列不为空，则从队列中抽一个状态出来
             if (_StateQueue.Count > 0)
             {
                 ChangeState(_StateQueue.Dequeue());
                 return;
             }
 
-            // 都为空则设置为默认
             ChangeState(_defaultState);
         }
 
@@ -179,28 +171,23 @@ namespace ChenChen_AI
         /// <param name="newState"></param>
         private void ChangeState(StateBase newState)
         {
-            // 如果当前状态未完成
             if (_currentState != null && !_currentState.IsSuccess)
             {
                 InterruptState();
             }
             else if (_currentState != null)
             {
-                // 退出当前状态
                 _currentState.OnExit();
             }
 
-            // 切换到新状态
             _currentState = newState;
             if (_currentState != null)
             {
                 if (_currentState.OnEnter())
                 {
-                    //Debug.Log($"{Owner.name}切换成状态: " + _currentState);
                     MaxTick = newState.MaxTick;
                     return;
                 }
-                // 未成功进入
                 if(_currentState.DebugLogDescription != null)
                 {
                     string log = _currentState.DebugLogDescription;

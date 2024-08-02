@@ -35,26 +35,20 @@ namespace ChenChen_UI
                 currentPanel.OnPause();
             }
 
-            // 删除同样类型的旧的面板
             if(removeOldPanel)
             {
                 RemovePanel(nextPanel);
             }
-           
-            // 获取或创建nextPanel
-            GameObject nextPanelObject = _manager.GetOrGenerateSingleUI(nextPanel.UIType);
-            // 初始化nextPanel的UITool
-            nextPanel.Init(new UITool(nextPanelObject));
-            // 初始化nextPanel的PanelManager为自己
-            nextPanel.Init(this);
-            // 初始化nextPanel的UIManager
-            nextPanel.Init(_manager);
-            // 把nextPanel压入栈
-            if(addToStack)
+
+            if (addToStack)
             {
                 _panelsStack.Push(nextPanel);
-            }     
-            // 调用nextPanel进入时的方法
+            }
+
+            GameObject nextPanelObject = _manager.GetOrGenerateSingleUI(nextPanel.UIType);
+            nextPanel.Init(new UITool(nextPanelObject));
+            nextPanel.Init(this);
+            nextPanel.Init(_manager);
             nextPanel.OnEnter();
         }
 
@@ -66,13 +60,11 @@ namespace ChenChen_UI
             if (_panelsStack.Count == 0) return;
 
             Stack<PanelBase> temp = new();
-            // 找到要移除的面板并移除
             while (_panelsStack.Count > 0)
             {
                 if (_panelsStack.Peek() == removedPanel)
                 {
                     _panelsStack.Pop().OnExit();
-                    // 将其下一层的面板解冻
                     if (_panelsStack.Count > 0)
                     {
                         if (_panelsStack.Peek().IsStopping)
@@ -85,7 +77,6 @@ namespace ChenChen_UI
                     temp.Push(_panelsStack.Pop());
                 }
             }
-            // 将剩下的面板放回
             while (temp.Count > 0)
             {
                 _panelsStack.Push(temp.Pop());
@@ -97,13 +88,11 @@ namespace ChenChen_UI
             if (_panelsStack.Count == 0) return;
 
             Stack<PanelBase> temp = new();
-            // 找到要移除的面板并移除
             while (_panelsStack.Count > 0)
             {
                 if (_panelsStack.Peek().UIType == removedPanelType)
                 {
                     _panelsStack.Pop().OnExit();
-                    // 将其下一层的面板解冻
                     if (_panelsStack.Count > 0)
                     {
                         if (_panelsStack.Peek().IsStopping)
@@ -116,7 +105,6 @@ namespace ChenChen_UI
                     temp.Push(_panelsStack.Pop());
                 }
             }
-            // 将剩下的面板放回
             while (temp.Count > 0)
             {
                 _panelsStack.Push(temp.Pop());

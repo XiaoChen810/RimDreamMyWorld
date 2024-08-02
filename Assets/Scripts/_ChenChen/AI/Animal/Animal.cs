@@ -63,16 +63,11 @@ namespace ChenChen_AI
 
         protected virtual void Start()
         {
-            /* 添加这个人物的移动组件 */
             MoveController = GetComponent<AnimalMoveController>();
-
-            /* 添加这个人物的动画组件 */
             Animator = GetComponent<Animator>();
 
-            /* 配置状态机 */
             StateMachine = new StateMachine(this.gameObject, new AnimalState_Idle(this));
 
-            /* 设置图层Pawn和标签 */
             gameObject.layer = 9;
             gameObject.tag = "Animal";
         }

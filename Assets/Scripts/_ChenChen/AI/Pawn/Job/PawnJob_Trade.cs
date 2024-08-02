@@ -24,7 +24,6 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            //逻辑
             if (animal == null)
             {
                 DebugLogDescription = "对应参数错误，该目标动物组件不存在";
@@ -56,7 +55,6 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
-            //逻辑
             if (target.GameObject == null)
             {
                 return StateType.Failed;
@@ -70,7 +68,6 @@ namespace ChenChen_AI
 
                 if(timer >= tradeDuration)
                 {
-                    // 计算是否成功驯服并退出
                     animal.CompleteTrade();
                     return StateType.Success;
                 }
@@ -82,7 +79,6 @@ namespace ChenChen_AI
         {
             base.OnExit();
 
-            //逻辑 
             pawn.ChangeMyBar(0);
             animal.StopTrade();
         }

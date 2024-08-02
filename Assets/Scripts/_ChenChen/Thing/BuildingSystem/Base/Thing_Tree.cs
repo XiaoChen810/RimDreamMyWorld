@@ -6,7 +6,7 @@ using DG.Tweening;
 namespace ChenChen_Thing
 {
     [RequireComponent(typeof(Collider2D))]
-    public class Thing_Tree : ThingBase, ICut
+    public class Thing_Tree : Thing, ICut
     {  
         private float shakeDuraion = 0.5f;
         private float shakeStrength = 3f;

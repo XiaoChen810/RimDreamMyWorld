@@ -8,11 +8,11 @@ public class AnimatorTool : MonoBehaviour
 {
     public void Animation_LoadingScene()
     {
-        PanelManager.Instance.AddPanel(new LoadingPanel(true, this), false);
+        PanelManager.Instance.AddPanel(new Panel_Loading(true, this), false);
     }
 
     public void Animation_EndLoadingScene()
     {
-        PanelManager.Instance.AddPanel(new LoadingPanel(false, this));
+        PanelManager.Instance.AddPanel(new Panel_Loading(false, this));
     }
 }

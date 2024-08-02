@@ -73,54 +73,28 @@ namespace ChenChen_Map
 
         private void InitMapTilemap()
         {
-            // 添加Grid组件
             GameObject grid = new GameObject("Grid");
             grid.AddComponent<Grid>();
             grid.transform.parent = _mapObj.transform;
-            // 添加相关的Tilemap
             _layerDict = new Dictionary<string, Tilemap>();
-            var material = Resources.Load<Material>("Materials/Material-Tilemap");
-            foreach (var f in _flowersList)
-            {
-                if (!_layerDict.ContainsKey(f.tilemapName))
-                {
-                    GameObject obj = new GameObject(f.tilemapName);
-                    obj.transform.SetParent(grid.transform);
-                    Tilemap tilemap = obj.AddComponent<Tilemap>();
-                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
-                    tr.sortingOrder = f.layerSort;
-                    tr.material = material;
-
-                    _layerDict.Add(f.tilemapName, tilemap);
-                }
-            }
             foreach (var t in _terrainList)
             {
-                if (!_layerDict.ContainsKey(t.tilemapName))
-                {
-                    GameObject obj = new GameObject(t.tilemapName);
-                    obj.transform.SetParent(grid.transform);
-                    Tilemap tilemap = obj.AddComponent<Tilemap>();
-                    TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
-                    tr.sortingOrder = t.layerSort;
-                    tr.material = material;
-                    if (t.isObstacle)
-                    {
-                        obj.AddComponent<TilemapCollider2D>().usedByComposite = true;
-                        obj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                        obj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
-                        obj.layer = (t.type == NodeType.water) ? 4 : 8; //Water Layer or Obstacle Layer
-                    }
-                    if (t.type == NodeType.water)
-                    {
-                        obj.tag = "Water";
-                    }
-                    _layerDict.Add(t.tilemapName, tilemap);
-                }
+                GetOrSetTileamp(name: t.tilemapName,
+                    parent: grid,
+                    isObstacle: false,
+                    layerSort: t.layerSort,
+                    tag: (t.type == NodeType.water) ? "Water" : null);
+            }
+            foreach (var f in _flowersList)
+            {
+                GetOrSetTileamp(name: f.tilemapName,
+                    parent: grid,
+                    isObstacle: false,
+                    layerSort: f.layerSort
+                    );
             }
         }
 
-        // 设置地图噪声值
         private void InitNodeNoiseValue()
         {
             float randomOffset = Random.Range(-1000, 1000);
@@ -150,7 +124,6 @@ namespace ChenChen_Map
             }
         }
 
-        // 设置瓦片类型
         private void InitNodeType()
         {
             for (int y = 0; y < _height; y++)
@@ -169,10 +142,9 @@ namespace ChenChen_Map
             }
         }
 
-        // 最终的生成瓦片地图
         private void GenerateTileMap()
         {
-            Tilemap mainMap = GetTileamp("Grass");
+            Tilemap mainMap = GetOrSetTileamp("Grass");
             for (int x = 0; x < _width; x++)
             {
                 for (int y = 0; y < _height; y++)
@@ -187,7 +159,6 @@ namespace ChenChen_Map
             }
         }
 
-        // 生成花草
         private void GenerateFlowers()
         {
             foreach (var flower in _flowersList)
@@ -216,7 +187,7 @@ namespace ChenChen_Map
                     // 随机选一种草
                     TileBase tile = flower.tile[Random.Range(0, flower.tile.Count)];
                     // 生成
-                    GetTileamp(flower.tilemapName).SetTile(pos, tile);
+                    GetOrSetTileamp(flower.tilemapName).SetTile(pos, tile);
                 }
             }
 
@@ -245,7 +216,6 @@ namespace ChenChen_Map
             }
         }
 
-        // 生成预制件
         private void GenerateThings(MapData mapData)
         {
             List<Vector2Int> vector2Ints = new(); 
@@ -289,11 +259,10 @@ namespace ChenChen_Map
             {
                 if (t.type == node.type)
                 {
-                    //return _mapObj.transform.Find(t.tilemapName).GetComponent<Tilemap>();
-                    return _layerDict[t.tilemapName];
+                    return GetOrSetTileamp(t.tilemapName);
                 }
             }
-            Debug.Log($"未能找到对应的Tilemap : {node.position.x}, {node.position.y}");
+            Debug.LogError($"未能找到对应的Tilemap : {node.position.x}, {node.position.y}");
             return null;
         }
 
@@ -303,7 +272,7 @@ namespace ChenChen_Map
         /// <param name="name"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public Tilemap GetTileamp(string name, GameObject parent = null, bool isObstacle = true)
+        public Tilemap GetOrSetTileamp(string name, GameObject parent = null, bool isObstacle = true, int layerSort = 0, string tag = null)
         {
             if(_layerDict != null && _layerDict.ContainsKey(name))
             {
@@ -311,27 +280,48 @@ namespace ChenChen_Map
             }
             else
             {
-                Debug.Log($"未能找到对应的Tilemap，已重新生成了一个 : {name}");
-                GameObject newObj = new GameObject(name);
-                Tilemap tilemap = newObj.AddComponent<Tilemap>();
-                TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
-                tr.sortingLayerName = "Bottom";
-                // 默认光照材质Sprite-Lit-Default，Assets/Resources/Materials/Material-Tilemap.mat
-                tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
-                if (isObstacle)
-                {
-                    newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;
-                    newObj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    newObj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
-                    newObj.layer = 8; //Obstacle Layer
-                }
-                newObj.transform.parent = parent.transform;
-                _layerDict.Add(name, tilemap);
+                Tilemap tilemap = CreateTilemap(name, parent, isObstacle, layerSort, tag);
+
                 return tilemap;
             }
         }
 
-        #endregion
+        private Tilemap CreateTilemap(string name, GameObject parent, bool isObstacle, int layerSort, string tag)
+        {
+            Debug.Log($"未能找到对应的Tilemap，所以重新生成了一个 : {name}");
+
+            GameObject obj = new GameObject(name);
+            obj.transform.parent = parent.transform;
+
+            Tilemap tilemap = obj.AddComponent<Tilemap>();
+            _layerDict.Add(name, tilemap);
+
+            TilemapRenderer tr = obj.AddComponent<TilemapRenderer>();
+#if UNITY_EDITOR              
+            //Bug
+#else
+            tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
+#endif
+            tr.sortingOrder = layerSort;
+            tr.sortingLayerName = "Bottom";
+            
+            if (tag != null)
+            {
+                obj.tag = "Water";
+            }
+
+            if (isObstacle)
+            {
+                obj.AddComponent<TilemapCollider2D>().usedByComposite = true;
+                obj.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                obj.AddComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
+                obj.layer = (obj.CompareTag("Water")) ? 4 : 8; //Water Layer or Obstacle Layer
+            }
+
+            return tilemap;
+        }
+
+#endregion
 
         #region 检查地图数据，剔除不合理内容
 

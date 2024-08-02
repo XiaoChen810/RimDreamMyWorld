@@ -35,14 +35,13 @@ namespace ChenChen_AI
                 return false;
             }
 
-            // 设置目标点
             bool flag = pawn.MoveController.GoToHere(target.Positon - new Vector3(0, 0.4f), Urgency.Normal);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
-            // 设置人物状态
+
             pawn.JobToDo(target.GameObject);
             this.Description = "正在前往钓鱼";
 
@@ -54,7 +53,6 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
-            // 到达后
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();

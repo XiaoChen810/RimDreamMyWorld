@@ -28,23 +28,18 @@ namespace ChenChen_AI
         private GameObject FindFriend(Pawn pawn)
         {
             List<GameObject> otherPawns = new();
-            //找一个除了自己以外的Pawn
-            foreach (var otherPawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
+            IReadOnlyList<Pawn> pawnsList = GameManager.Instance.PawnGeneratorTool.PawnsList;
+
+            foreach (var otherPawn in pawnsList)
             {
-                if (otherPawn != pawn) otherPawns.Add(otherPawn);
+                if (otherPawn != pawn) otherPawns.Add(otherPawn.gameObject);
             }
 
-            //有无其他Pawn
             if (otherPawns.Count <= 1)
             {
-                //输出需求，一次
                 if (!isAlone)
                 {
                     isAlone = true;
-                    string narrative = $"{pawn.Def.PawnName} 想要交朋友，但只有它一个人...";
-                    ScenarioManager.Instance.Narrative(narrative, pawn.gameObject);
-
-                    //添加焦虑
                     pawn.EmotionController.AddEmotion(EmotionType.distressed);
                 }
                 return null;

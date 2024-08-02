@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 namespace ChenChen_Thing
 {
     [RequireComponent(typeof(BoxCollider2D))]
-    public abstract class ThingBase : PermissionBase, IBlueprint, IDemolish, IDetailView 
+    public abstract class Thing : PermissionBase, IBlueprint, IDemolish, IDetailView 
     {
         [Header("物品属性")]
         /// <summary>

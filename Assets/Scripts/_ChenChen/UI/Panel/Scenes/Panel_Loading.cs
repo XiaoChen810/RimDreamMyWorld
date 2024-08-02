@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class LoadingPanel : PanelBase
+    public class Panel_Loading : PanelBase
     {
         public static readonly string path = "UI/Component/LoadingPanel";
         private AnimatorTool _animatorTool;
         private bool _isStart;
 
-        public LoadingPanel(bool isStart, AnimatorTool animatorTool) : base(new UIType(path))
+        public Panel_Loading(bool isStart, AnimatorTool animatorTool) : base(new UIType(path))
         {
             _isStart = isStart;
             _animatorTool = animatorTool;

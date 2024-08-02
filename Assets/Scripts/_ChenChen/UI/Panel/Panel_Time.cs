@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class TimePanel : MonoBehaviour
+    public class Panel_Time : MonoBehaviour
     {
         public Text timeText;
 

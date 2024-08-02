@@ -98,7 +98,7 @@ public class ThingDefGenerator
         Debug.Log($"ThingDef {thingDef.DefName} and Prefab generated successfully!\n" +
             "But also need to setting actually BlueprintBase script");
 
-        void CreateThingPrefab<T>(string name, ThingDef def) where T : ThingBase
+        void CreateThingPrefab<T>(string name, ThingDef def) where T : Thing
         {
             if (def.Prefab == null)
             {
@@ -116,7 +116,7 @@ public class ThingDefGenerator
                 BoxCollider2D boxCollider = prefab.AddComponent<BoxCollider2D>();
                 boxCollider.isTrigger = true;
                 // 添加对应的基类
-                ThingBase ThingBase = prefab.AddComponent<T>();
+                Thing ThingBase = prefab.AddComponent<T>();
                 ThingBase.Def = def;
                 // 设置路径，保存为预制件
                 PrefabUtility.SaveAsPrefabAsset(prefab, $"{folderPath}/{ThingName}_Prefab.prefab");

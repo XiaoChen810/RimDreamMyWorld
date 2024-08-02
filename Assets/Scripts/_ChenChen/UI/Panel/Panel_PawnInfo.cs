@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class PawnInfoPanel : PanelBase
+    public class Panel_PawnInfo : PanelBase
     {
         static readonly string path = "UI/Panel/Menus/PawnInfoPanel";
         static readonly string workPriorityPrefabPath = "UI/Component/WorkPriority";
-        public PawnInfoPanel(Pawn pawn) : base(new UIType(path))
+        public Panel_PawnInfo(Pawn pawn) : base(new UIType(path))
         {
             this.pawn = pawn;
         }

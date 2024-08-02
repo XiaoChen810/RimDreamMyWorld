@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class AnimalsListPanel : PanelBase
+    public class Panel_AnimalsList : PanelBase
     {
         private static readonly string path = "UI/Panel/Menus/AnimalsListPanel";
         private static readonly string animalInfomationPrefabPath = "UI/Component/AnimalInfomation";
 
-        public AnimalsListPanel() : base(new UIType(path))
+        public Panel_AnimalsList() : base(new UIType(path))
         {
         }
 

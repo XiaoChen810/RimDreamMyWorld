@@ -18,10 +18,10 @@ public class GameManager : SingletonMono<GameManager>
     private bool _gameIsStart = false;
     public bool GameIsStart { get { return _gameIsStart; } }
 
-    public event Action OnGameStart;
-
     private bool _cinematicMode = false;
     public bool CinematicMode { get { return _cinematicMode; } }  // 电影模式
+
+    public event Action OnGameStart;
 
     [Header("Time")]
     public int currentSeason = 1; // 当前季节，1为春季，2为夏季，3为秋季，4为冬季
@@ -49,6 +49,8 @@ public class GameManager : SingletonMono<GameManager>
         currentHour = hour;
         currentMinute = minute;
     }
+
+    public static readonly string PLAYER_FACTION = "Player";
 
     protected override void Awake()
     {
@@ -130,8 +132,36 @@ public class GameManager : SingletonMono<GameManager>
 
     public void 测试按钮()
     {
-        MonsterGeneratorTool.SpawnMassiveMonsters(15);
+        MapManager mapManager = MapManager.Instance;
+        // 地图中心
+        Vector2Int center = new Vector2Int(mapManager.CurMapWidth / 2, mapManager.CurMapHeight / 2);
+
+        // 生成范围
+        int radius = 10;
+        // 生成数量
+        int numbers = 10;
+
+        // 选择方位
+        Vector2Int direction = Vector2Int.zero;
+
+        // 例如选择向东
+        direction = new Vector2Int(1, 0);
+
+        for (int i = 0; i < numbers; i++)
+        {
+            // 生成随机偏移
+            Vector2Int randomPosition = center + direction * 125;
+            randomPosition += new Vector2Int(UnityEngine.Random.Range(-radius, radius), UnityEngine.Random.Range(-radius, radius));
+
+            // 确保生成的位置在地图边界内
+            randomPosition.x = Mathf.Clamp(randomPosition.x, 0, mapManager.CurMapWidth - 1);
+            randomPosition.y = Mathf.Clamp(randomPosition.y, 0, mapManager.CurMapHeight - 1);
+
+            // 生成Pawn
+            PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y), faction: "enemy");
+        }
     }
+
 
 #endif
 }

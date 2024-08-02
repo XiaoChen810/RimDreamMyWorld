@@ -34,14 +34,11 @@ namespace ChenChen_AI
             _time += Time.deltaTime;
             if (_time > _waitTime)
             {
-                if (pawn.EmotionController.AddEmotion(EmotionType.confused))
-                {
-                    string content = $"{pawn.name}有点无聊，他现在没事可做";
-                    ScenarioManager.Instance.Narrative(content, pawn.gameObject);
-                }
+                pawn.EmotionController.AddEmotion(EmotionType.confused);
 
                 Vector2 p = pawn.transform.position;
                 p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
+
                 pawn.StateMachine.NextState = new PawnJob_Move(pawn, p);
                 return StateType.Failed;
             }

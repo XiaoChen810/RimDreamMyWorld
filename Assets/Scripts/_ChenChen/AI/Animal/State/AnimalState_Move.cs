@@ -14,10 +14,8 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            // 设置目标点
             if (!_animal.MoveController.GoToHere(_moveTargetPosition, Urgency.Wander, isAquaticAnimals: _animal.Def.IsAquaticAnimals))
             {
-                //DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
             return true;
@@ -25,7 +23,6 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            // 判断是否到达目标点
             if (_animal.MoveController.ReachDestination)
             {
                 return StateType.Success;

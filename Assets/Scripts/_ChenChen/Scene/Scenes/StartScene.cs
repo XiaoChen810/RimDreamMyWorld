@@ -25,7 +25,7 @@ namespace ChenChen_Scene
             else
             {
                 panelManager = new PanelManager();
-                panelManager.AddPanel(new StartPanel());
+                panelManager.AddPanel(new Panel_StartScene());
             }
 
         }
@@ -40,7 +40,7 @@ namespace ChenChen_Scene
         private void WhenSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             panelManager = new PanelManager();
-            panelManager.AddPanel(new StartPanel());
+            panelManager.AddPanel(new Panel_StartScene());
             Debug.Log($"{sceneName}≥°æ∞º”‘ÿÕÍ±œ");
         } 
     }

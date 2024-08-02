@@ -4,9 +4,9 @@ namespace ChenChen_UI
 {
     public class DetailViewPanel_Thing : DetailViewPanel
     {
-        private ThingBase thing;
+        private Thing thing;
 
-        public DetailViewPanel_Thing(ThingBase thing, Callback onEnter, Callback onExit) : base(onEnter, onExit) 
+        public DetailViewPanel_Thing(Thing thing, Callback onEnter, Callback onExit) : base(onEnter, onExit) 
         {
             this.thing = thing;
         }    

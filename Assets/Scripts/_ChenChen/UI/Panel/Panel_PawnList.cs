@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using ChenChen_AI;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class PawnListPanel : PanelBase
+    public class Panel_PawnList : PanelBase
     {
         static readonly string path = "UI/Panel/Menus/PawnListPanel";
 
-        public PawnListPanel() : base(new UIType(path))
+        public Panel_PawnList() : base(new UIType(path))
         {
         }
 
@@ -34,7 +37,9 @@ namespace ChenChen_UI
                 return;
             }
 
-            foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
+            List<Pawn> list = GameManager.Instance.PawnGeneratorTool.PawnsList.Where(p => p.Faction == GameManager.PLAYER_FACTION).ToList();
+
+            foreach (var pawn in list)
             {
                 GameObject pawnInfomation = Object.Instantiate(pawnInfomationPrefab);
                 pawnInfomation.name = $"BtnBlueprint{pawn.name}";

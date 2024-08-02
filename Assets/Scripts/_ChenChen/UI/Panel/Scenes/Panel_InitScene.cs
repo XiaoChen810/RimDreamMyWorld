@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class SelectionWindowPanel : PanelBase
+    public class Panel_InitScene : PanelBase
     {
         static readonly string path = "UI/Panel/Scene/SelectionWindowPanel";
         private GameManager gameManager;
@@ -17,7 +17,7 @@ namespace ChenChen_UI
         //private Vector3 vp1 = new Vector3(-5, 1.3f, 0);
         //private Vector3 vp2 = new Vector3(0, 1.3f, 0);
         //private Vector3 vp3 = new Vector3(5, 1.3f, 0);
-        public SelectionWindowPanel() : base(new UIType(path))
+        public Panel_InitScene() : base(new UIType(path))
         {
             gameManager = GameManager.Instance;
             gameManager.PawnGeneratorTool.StartSelect();
@@ -38,9 +38,8 @@ namespace ChenChen_UI
                 };
                 Action onPostLoadScene = () =>
                 {
-                    // 生成一个新场景
                     MapManager.Instance.LoadOrGenerateSceneMap(StaticDef.Map_Default_Name);
-                    // 生成选择的棋子
+
                     GenerateSelectedPawn(p0);
                     GenerateSelectedPawn(p1);
                     GenerateSelectedPawn(p2);

@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class ToolTablePanel : PanelBase
+    public class Panel_ToolTable : PanelBase
     {
         private static readonly string path = "UI/Panel/Menus/ToolTablePanel";
 
-        public ToolTablePanel() : base(new UIType(path))
+        public Panel_ToolTable() : base(new UIType(path))
         {
         }
 

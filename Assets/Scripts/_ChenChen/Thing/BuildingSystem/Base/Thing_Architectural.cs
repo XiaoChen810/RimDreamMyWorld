@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChenChen_Thing
 {
-    public class Thing_Architectural : ThingBase
+    public class Thing_Architectural : Thing
     {
         protected override void OnEnable()
         {

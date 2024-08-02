@@ -120,7 +120,7 @@ MonoBehaviour:
     type: 1
   - probability: 0.03
     tilemapName: "\u6C34\u4E2D"
-    layerSort: 5
+    layerSort: 6
     tile:
     - {fileID: 11400000, guid: 4f01ec944e45ef84aabc02d5dd378366, type: 2}
     - {fileID: 11400000, guid: 0b97ad1217c97f144a341a27f224a1ec, type: 2}

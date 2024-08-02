@@ -71,7 +71,6 @@ namespace ChenChen_AI
         {
             if(IsDie)
             {
-                // 死亡超过一定时间尸体消失，放回池中
                 _diedTime += Time.deltaTime;
                 if(_diedTime > 5)
                 {
@@ -85,22 +84,18 @@ namespace ChenChen_AI
                 return;
             }
 
-            // 每隔moveDuration进行一次移动判断
             if (Time.time > _lastMoveTime + moveDuration)
             {
                 _lastMoveTime = Time.time;
 
-                // 有攻击目标会走向攻击目标
                 if (pawn != null)
                 {
                     MoveController.GoToHere(pawn.transform.position, attackRange);
                 }
                 else
                 {
-                    // 在没有攻击目标和移动目标且不在战斗情况下
                     if (MoveController.ReachDestination && !isBattling)
                     {
-                        // 没有攻击目标，随便走走，但会逐渐向中心点偏移
                         Vector2 p = transform.position;
                         p += new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
                         Vector2 center = new Vector3(ChenChen_Map.MapManager.Instance.CurMapWidth / 2, ChenChen_Map.MapManager.Instance.CurMapHeight / 2) - transform.position;
@@ -109,17 +104,15 @@ namespace ChenChen_AI
                     }
                 }
             }
-            // 每隔findDuaration进行一次寻敌判断
+
             if (Time.time > _lastFindTime + findDuaration)
             {
                 _lastFindTime = Time.time;
-                // 找一个视野范围内最近的目标
                 FindOtherPawn();
             }
-            // 当超过上一次攻击时间进行攻击判断
+
             if (Time.time > _lastAttackTime + attackDuaration)
             {
-                // 战斗状态下，且目标不为空，面向目标，播放攻击动画
                 if (isBattling && pawn != null)
                 {
                     MoveController.FilpIt(pawn.transform.position.x);
@@ -128,12 +121,10 @@ namespace ChenChen_AI
                 }
             }
 
-            // 判断攻击目标有无进入攻击距离
             IsEnterAttackRange();
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            // Pawn攻击盒
             if (collision.CompareTag("PawnAttackBox"))
             {
                 Pawn p = collision.GetComponentInParent<Pawn>();
@@ -146,7 +137,7 @@ namespace ChenChen_AI
                     Debug.LogWarning("没有组件");
                 }
             }
-            // Bullet攻击盒
+
             if (collision.CompareTag("BulletAttackBox"))
             {
                 Bullet b = collision.GetComponent<Bullet>();
@@ -165,13 +156,11 @@ namespace ChenChen_AI
         {
             if (pawn != null)
             {
-                // 如果超出太远的距离则不追了
                 if(!StaticFuction.CompareDistance(pawn.transform.position, this.transform.position, seeRange))
                 {
                     pawn = null;
                     return;
                 }
-                // 如果进入攻击距离
                 isBattling = StaticFuction.CompareDistance(pawn.transform.position, this.transform.position, attackRange);
             }
         }

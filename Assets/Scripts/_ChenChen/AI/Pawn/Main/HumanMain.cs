@@ -23,7 +23,6 @@ namespace ChenChen_AI
             if (jobGivers.Contains(changed))
             {
                 changed.Priority = value;
-                // 将列表重新按优先级大到小排列
                 jobGivers = jobGivers.OrderByDescending(jg => jg.Priority).ToList();
             }
             else
@@ -37,17 +36,12 @@ namespace ChenChen_AI
             base.Start();
             jobGivers = new List<JobGiver>();
 
-            // 使用反射自动添加JobGiver和PawnJob
             AddJobGiversAndJobs();
         }
 
         private void AddJobGiversAndJobs()
         {
-            // 获取当前程序集中的所有类型
-            var assembly = Assembly.GetExecutingAssembly();
-            var types = assembly.GetTypes();
-
-            // 找到所有非抽象的PawnJob子类
+            var types = Assembly.GetExecutingAssembly().GetTypes();
             var pawnJobTypes = types.Where(t => t.IsSubclassOf(typeof(PawnJob)) && !t.IsAbstract);
             
             foreach (var pawnJobType in pawnJobTypes)
@@ -58,7 +52,6 @@ namespace ChenChen_AI
                     StateMachine.NextState = pawnJob;
                 };
 
-                // 获取对应的JobGiver类型名称
                 var jobTypeName = pawnJobType.Name.Replace("PawnJob", "JobGiver");
                 var jobGiverType = types.FirstOrDefault(t => t.Name == jobTypeName && t.IsSubclassOf(typeof(JobGiver)) && !t.IsAbstract);
 
@@ -116,7 +109,5 @@ namespace ChenChen_AI
                 }
             }
         }
-
-
     }
-} 
+}

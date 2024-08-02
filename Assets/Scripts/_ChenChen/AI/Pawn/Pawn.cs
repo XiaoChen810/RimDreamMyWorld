@@ -11,17 +11,17 @@ namespace ChenChen_AI
     public abstract class Pawn : MonoBehaviour, IDetailView
     {
         /// <summary>
-        /// 人物的状态机
+        /// Pawn的状态机
         /// </summary>
         public StateMachine StateMachine { get; protected set; }
 
         /// <summary>
-        /// 人物移动的控制
+        /// Pawn移动的控制器
         /// </summary>
         public PawnMoveController MoveController { get; protected set; }
 
         /// <summary>
-        /// 人物动画状态控制
+        /// Pawn动画机
         /// </summary>
         public Animator Animator { get; protected set; }
 
@@ -39,7 +39,7 @@ namespace ChenChen_AI
 
         [Header("条")]
         [SerializeField] private Slider myBar;// 一个滑动条，可以用来显示进度
-        [SerializeField] private GameObject myPanel;      
+        [SerializeField] private GameObject myPanel;
 
         public void ChangeMyBar(float value)
         {
@@ -114,7 +114,6 @@ namespace ChenChen_AI
             }
         }
 
-        // 细节视图
         protected DetailView _detailView;
         public DetailView DetailView
         {
@@ -130,6 +129,8 @@ namespace ChenChen_AI
                 return _detailView;
             }
         }
+
+        public string Faction => Info.faction; 
 
         #endregion
 
@@ -249,18 +250,12 @@ namespace ChenChen_AI
 
         protected virtual void Start()
         {
-            /* 添加这个人物的移动组件 */
             MoveController = GetComponent<PawnMoveController>();
-
-            /* 添加这个人物的动画组件 */
             Animator = GetComponent<Animator>();
-
-            /* 配置状态机 */
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
-            /* 设置图层Pawn和标签 */
             gameObject.layer = 7;
-            gameObject.tag = "Pawn";
+            gameObject.tag = "Pawn";       
         }
 
         private void OnEnable()
@@ -292,11 +287,12 @@ namespace ChenChen_AI
 #if UNITY_EDITOR
             任务列表Debug();
 #endif
-            if (!Def.StopUpdate)
-            {
-                StateMachine.Update();
-                if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
-            }
+            if (Def.StopUpdate) return;
+
+            if (Faction != GameManager.PLAYER_FACTION) return;
+
+            StateMachine.Update();
+            if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
         }
 
         protected void 任务列表Debug()

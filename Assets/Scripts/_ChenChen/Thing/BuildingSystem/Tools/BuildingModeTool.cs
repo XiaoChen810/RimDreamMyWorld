@@ -25,7 +25,7 @@ namespace ChenChen_Thing
         /// <summary>
         /// 当前物体的ThingBase组件
         /// </summary>
-        private ThingBase _curBuildingBase;
+        private Thing _curBuildingBase;
         /// <summary>
         /// 是否正处于建造模式中
         /// </summary>
@@ -50,7 +50,7 @@ namespace ChenChen_Thing
             _curBuildingDef = def;
             _mouseIndicator = UnityEngine.Object.Instantiate(_curBuildingDef.Prefab);
             _mouseIndicator.name = "MouseIndicator";
-            _curBuildingBase = _mouseIndicator.GetComponent<ThingBase>();
+            _curBuildingBase = _mouseIndicator.GetComponent<Thing>();
             OnBuildMode = true;
         }
 

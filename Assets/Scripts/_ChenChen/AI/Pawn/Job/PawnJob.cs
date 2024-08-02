@@ -24,13 +24,8 @@ namespace ChenChen_AI
         /// 尝试取得权限，预定当前工作，标记目标被使用
         /// </summary>
         /// <returns></returns>
-         /* 使用样例
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-         */
         public override bool OnEnter()
         {
-            // 尝试取得权限，预定当前工作，标记目标被使用
             if (target.IsGameObject && target.GameObject == null)
             {
                 DebugLogDescription = ("目标为空");
@@ -53,10 +48,6 @@ namespace ChenChen_AI
         /// 判断目标是否还存在
         /// </summary>
         /// <returns></returns>
-         /* 使用样例
-            var baseResult = base.OnUpdate();
-            if (baseResult != StateType.Doing) return baseResult;
-         */
         public override StateType OnUpdate()
         {
             if(target != null && target.IsGameObject && target.GameObject == null)
@@ -64,7 +55,6 @@ namespace ChenChen_AI
                 return StateType.Failed;
             }
 
-            // 继续执行其他逻辑
             return StateType.Doing;
         }
 
@@ -76,10 +66,8 @@ namespace ChenChen_AI
         {
             base.OnExit();
 
-            // 检查目标是否为空以及目标的 GameObject 是否已被销毁
             if (target != null && target.IsGameObject && target.GameObject != null)
             {
-                // 尝试获取 PermissionBase 组件并归还使用权限
                 if (target.GameObject.TryGetComponent<PermissionBase>(out PermissionBase per))
                 {
                     if (!per.RevokePermission(pawn))
@@ -90,7 +78,6 @@ namespace ChenChen_AI
             }
 
             target = null;
-            // 设置人物状态
             pawn.JobDone();
         }
     }

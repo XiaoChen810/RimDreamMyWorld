@@ -4,7 +4,6 @@ namespace ChenChen_AI
 {
     public class PawnJob_Escape : PawnJob
     {
-        //持续最大时间
         private readonly static float tick = 500;
 
         public PawnJob_Escape(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
@@ -17,7 +16,6 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            //逻辑
             Vector3 dir = pawn.transform.position - target.Positon;
             dir.Normalize();
             dir *= 10;
@@ -34,7 +32,6 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            //逻辑
             if (pawn.MoveController.ReachDestination)
             {
                 return StateType.Success;
@@ -46,7 +43,6 @@ namespace ChenChen_AI
         {
             base.OnExit();
 
-            //逻辑
             pawn.JobDone();
         }
 

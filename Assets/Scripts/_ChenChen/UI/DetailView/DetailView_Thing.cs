@@ -5,11 +5,11 @@ namespace ChenChen_UI
 {
     public class DetailView_Thing : DetailView
     {
-        [SerializeField] protected ThingBase thing;
+        [SerializeField] protected Thing thing;
 
         private void OnEnable()
         {
-            thing = GetComponent<ThingBase>();
+            thing = GetComponent<Thing>();
         }
 
         public override void OpenPanel()

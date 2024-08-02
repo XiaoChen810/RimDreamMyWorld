@@ -6,6 +6,7 @@ namespace ChenChen_AI
     [System.Serializable]
     public class PawnInfo : ICloneable
     {
+        #region - State - 
         // 生存状态
         [SerializeField] private bool isDead;
         public bool IsDead
@@ -46,6 +47,9 @@ namespace ChenChen_AI
             set { isDrafted = value; }
         }
 
+        #endregion
+
+        #region - Stats -
         // 健康值
         [SerializeField] private Stats hp = new Stats("健康值", 100, 100);
         public Stats HP
@@ -69,22 +73,22 @@ namespace ChenChen_AI
             get { return happiness; }
             set { happiness = value; }
         }
+        #endregion
 
-        // 构造函数
+        #region - Other -
+
+        public string faction;
+
+        #endregion
         public PawnInfo()
         {
+            faction = GameManager.PLAYER_FACTION;
         }
 
-        public PawnInfo(bool isDead, bool isSelect, bool isOnWork, bool isOnBattle, bool isDrafted, Stats hp, Stats sleepiness, Stats happiness)
+        public PawnInfo(string faction)
         {
-            IsDead = isDead;
-            IsSelect = isSelect;
-            IsInWork = isOnWork;
-            IsInBattle = isOnBattle;
-            IsDrafted = isDrafted;
-            HP = hp;
-            Sleepiness = sleepiness;
-            Happiness = happiness;
+            Debug.Log("初始化指定派系的Pawn信息: " + faction);
+            this.faction = faction;
         }
 
         // 克隆方法
@@ -104,7 +108,6 @@ namespace ChenChen_AI
     [System.Serializable]
     public class Stats
     {
-        // 属性名称
         [SerializeField] private string name;
         public string Name
         {
@@ -112,19 +115,16 @@ namespace ChenChen_AI
             set { name = value; }
         }
 
-        // 当前值
         [SerializeField] private float curValue;
         public float CurValue
         {
             get { return curValue; }
             set
             {
-                // 限制当前值不小于 0 且不大于 maxValue
                 curValue = Mathf.Clamp(value, 0, maxValue);
             }
         }
 
-        // 最大值
         [SerializeField] private float maxValue;
         public float MaxValue
         {
@@ -132,16 +132,12 @@ namespace ChenChen_AI
             set { maxValue = value; }
         }
 
-        // 是否达到最大值
         public bool IsMax => CurValue >= MaxValue;
 
-        // 是否达到最小值
         public bool IsSpace => CurValue <= 0;
 
-        // 当前百分比
         public float Percentage => CurValue / MaxValue;
 
-        // 构造函数
         public Stats(string name, float curValue, float maxValue)
         {
             Name = name;
@@ -149,7 +145,6 @@ namespace ChenChen_AI
             CurValue = curValue;
         }
 
-        // 克隆方法
         public Stats Clone()
         {
             return new Stats(Name, CurValue, MaxValue);

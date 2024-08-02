@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class SettingPanel : PanelBase
+    public class Panel_Setting : PanelBase
     {
         static readonly string path = "UI/Panel/Menus/SettingPanel";
-        public SettingPanel() : base(new UIType(path)) { }
+        public Panel_Setting() : base(new UIType(path)) { }
 
         private string saveName = string.Empty;
 

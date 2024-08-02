@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class StoragesPanel : PanelBase
+    public class Panel_Storages : PanelBase
     {
         private static readonly string path = "UI/Panel/Menus/StoragesPanel";
-        public StoragesPanel() : base(new UIType(path))
+        public Panel_Storages() : base(new UIType(path))
         {
         }
 

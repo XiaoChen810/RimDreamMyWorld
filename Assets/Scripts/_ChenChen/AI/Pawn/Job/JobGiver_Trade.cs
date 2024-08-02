@@ -14,7 +14,6 @@ namespace ChenChen_AI
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            // 找到是否有等待驯服的动物
             var animals = GameManager.Instance.AnimalGenerateTool.AnimalList;
             foreach (var animal in animals)
             {

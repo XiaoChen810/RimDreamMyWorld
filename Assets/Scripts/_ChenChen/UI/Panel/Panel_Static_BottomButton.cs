@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class ButtonPanel : MonoBehaviour
+    public class Panel_Static_BottomButton : MonoBehaviour
     {
         public Button U;
         public Button T;
@@ -16,27 +16,27 @@ namespace ChenChen_UI
         {
             if (U != null) U.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new BuildingMenuPanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_BuildingMenu(), true);
             });
             if (T != null) T.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new CropWorkSpacePanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_WorkSpace_Crop(), true);
             });
             if (P != null) P.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new PawnListPanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_PawnList(), true);
             });
             if (A != null) A.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new AnimalsListPanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_AnimalsList(), true);
             });
             if (B != null) B.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new StoragesPanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_Storages(), true);
             });
             if (Setting != null) Setting.onClick.AddListener(() =>
             {
-                PanelManager.Instance.TogglePanel(new SettingPanel(), true);
+                PanelManager.Instance.TogglePanel(new Panel_Setting(), true);
             });
         }
     }

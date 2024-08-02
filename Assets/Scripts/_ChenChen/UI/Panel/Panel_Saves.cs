@@ -8,10 +8,10 @@ using UnityEngine.UI;
 
 namespace ChenChen_UI
 {
-    public class SavesPanel : PanelBase
+    public class Panel_Saves : PanelBase
     {
         public static readonly string path = "UI/Panel/Menus/SavesPanel";
-        public SavesPanel() : base(new UIType(path))
+        public Panel_Saves() : base(new UIType(path))
         {
         }
 
@@ -20,7 +20,6 @@ namespace ChenChen_UI
         public override void OnEnter()
         {
             curSave = PlayManager.Instance.CurSave;
-            // 判断是否是新存档
             if(curSave.IsNew)
             {
                 UITool.TryGetChildComponentByName<Text>("提示").text = "无存档\n请新建游戏";
@@ -29,15 +28,12 @@ namespace ChenChen_UI
             {
                 UITool.TryGetChildComponentByName<Text>("提示").text = "是否继续游戏？";
             }
-
-            // 新开始
             UITool.TryGetChildComponentByName<Button>("BtnNew").onClick.AddListener(() =>
             {
                 Debug.Log("New Game");
                 PlayManager.Instance.Delete();
                 SceneSystem.Instance.SetScene(new InitScene());
             });
-            // 继续游戏
             UITool.TryGetChildComponentByName<Button>("BtnContinue").onClick.AddListener(() =>
             {
                 if (!curSave.IsNew)
@@ -49,9 +45,7 @@ namespace ChenChen_UI
                     };
                     Action onPostLoadScene = () =>
                     {
-                        // 加载游戏存档
                         PlayManager.Instance.Load();
-                        // 打开刚刚加载的存档的地图
                         MapManager.Instance.LoadOrGenerateSceneMap(curSave.SaveMap.mapName);
                     };
                     SceneSystem.Instance.SetScene(new MainScene(onPreloadAnimation, onPostLoadScene, 1f));
@@ -62,7 +56,6 @@ namespace ChenChen_UI
                 }
 
             });
-            // 关闭窗口
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
             {
                 PanelManager.RemovePanel(this);

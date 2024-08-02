@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ChenChen_Thing
 {
-    public class Thing_Demolish : ThingBase
+    public class Thing_Demolish : Thing
     {
         public override void OnPlaced()
         {

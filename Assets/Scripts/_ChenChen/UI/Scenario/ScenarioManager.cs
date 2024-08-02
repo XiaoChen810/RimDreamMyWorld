@@ -24,19 +24,5 @@ namespace ChenChen_UI
             _panelManager.AddPanel(new NarrativePanel(this));
             _narrativePanel = _panelManager.GetTopPanel() as NarrativePanel;
         }
-
-        /// <summary>
-        /// 叙述，可能是一个事件，或者一个突发情况等...
-        /// </summary>
-        /// <param name="content"> 叙事内容 </param>
-        /// <param name="target"> 指向目标 </param>
-        public void Narrative(string content, GameObject target)
-        {
-            if(_narrativePanel != null)
-            {
-                string text = $"{GameManager.Instance.currentHour}:{GameManager.Instance.currentMinute} " + content;
-                _narrativePanel.AddOneNarrativeLog(text, target);
-            }    
-        }
     }
 }

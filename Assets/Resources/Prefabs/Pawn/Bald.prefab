@@ -777,7 +777,6 @@ MonoBehaviour:
   myPanel: {fileID: 3867911724546873224}
   _pawnKindDef:
     PawnName: 
-    PawnFaction: 
     PawnDescription: 
     PrefabPath: 
     StopUpdate: 0
@@ -839,6 +838,7 @@ MonoBehaviour:
       name: "\u5FC3\u60C5"
       curValue: 100
       maxValue: 100
+    faction: Player
 --- !u!114 &960917627947803231
 MonoBehaviour:
   m_ObjectHideFlags: 0

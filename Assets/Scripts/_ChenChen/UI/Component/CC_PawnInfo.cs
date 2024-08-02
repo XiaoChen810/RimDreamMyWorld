@@ -10,7 +10,7 @@ namespace ChenChen_UI
     {
         [SerializeField] private Button info_Btn;
 
-        private PawnInfoPanel _pawnInfoPanel = null;
+        private Panel_PawnInfo _pawnInfoPanel = null;
 
         public override void Init(TargetPtr target)
         {
@@ -24,7 +24,7 @@ namespace ChenChen_UI
                     {
                         _pawnInfoPanel.OnExit();
                     }
-                    _pawnInfoPanel = new PawnInfoPanel(pawn);
+                    _pawnInfoPanel = new Panel_PawnInfo(pawn);
                     PanelManager.Instance.AddPanel(_pawnInfoPanel, stopCurrentPanel: false, addToStack: false);
                 });
             }

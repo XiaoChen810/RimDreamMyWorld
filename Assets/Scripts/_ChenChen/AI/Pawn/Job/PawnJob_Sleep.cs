@@ -5,7 +5,6 @@ namespace ChenChen_AI
 {
     public class PawnJob_Sleep : PawnJob
     {
-        //持续最大时间
         private readonly static float tick = 500;
         private Thing_Bed bed;
         public PawnJob_Sleep(Pawn pawn, GameObject bed) : base(pawn, tick, new TargetPtr(bed))
@@ -23,14 +22,12 @@ namespace ChenChen_AI
                 return false;
             }
 
-            // 设置人物目标点，前往目标，走过去
             if (!pawn.MoveController.GoToHere(bed.transform.position, Urgency.Normal, 0.01f))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
-            // 设置人物接取工作
             pawn.JobToDo(bed.gameObject);
             this.Description = "回床上睡觉";
 
@@ -42,24 +39,15 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
-            // 判断是否到达目标点附近
             if (pawn.MoveController.ReachDestination)
             {
-                // 设置人物正在睡觉
                 pawn.JobDoing();
                 this.Description = "正在睡觉";
-
-                // 播放动画
                 pawn.Animator.SetBool("IsDie", true);
-
-                // 睡觉
                 pawn.Info.Sleepiness.CurValue += Time.deltaTime;
-
-                // 移除焦虑
                 pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
             }
 
-            // 睡饱了
             if(pawn.Info.Sleepiness.IsMax)
             {
                 return StateType.Success;
@@ -72,7 +60,6 @@ namespace ChenChen_AI
         {
             base.OnExit();
 
-            // 结束动画
             pawn.Animator.SetBool("IsDie", false);
         }
 

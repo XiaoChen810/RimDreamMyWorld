@@ -17,7 +17,6 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            //返回失败
             if (Vector2.Distance(target.Positon, pawn.transform.position) > pawn.AttackRange)
             {
                 DebugLogDescription = "攻击距离不够";
@@ -31,13 +30,11 @@ namespace ChenChen_AI
 
         public override StateType OnUpdate()
         {
-            //返回成功
             if (target.GameObject == null)
             {
                 return StateType.Success;
             }
 
-            //返回失败
             if (Vector2.Distance(target.Positon, pawn.transform.position) > pawn.AttackRange)
             {
                 return StateType.Failed;

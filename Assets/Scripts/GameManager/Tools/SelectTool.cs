@@ -162,7 +162,7 @@ public class SelectTool : MonoBehaviour
         {
             if (collider.CompareTag("Thing"))
             {
-                ThingBase thing = collider.GetComponent<ThingBase>();
+                Thing thing = collider.GetComponent<Thing>();
                 dvs.Add(thing.DetailView);
                 flag = true;
             }
@@ -177,7 +177,7 @@ public class SelectTool : MonoBehaviour
         {
             if (collider.CompareTag("Floor"))
             {
-                ThingBase thing = collider.GetComponent<ThingBase>();
+                Thing thing = collider.GetComponent<Thing>();
                 dvs.Add(thing.DetailView);
                 flag = true;
             }

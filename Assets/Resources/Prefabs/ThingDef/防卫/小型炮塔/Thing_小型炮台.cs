@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 
 namespace ChenChen_Thing
 {
-    public class Thing_小型炮台 : ThingBase
+    public class Thing_小型炮台 : Thing
     {
         [Header("炮筒")]
         public GameObject Top;

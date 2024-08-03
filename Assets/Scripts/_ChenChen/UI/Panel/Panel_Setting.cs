@@ -16,15 +16,24 @@ namespace ChenChen_UI
         {
             BaseSetting();
             CameraSetting();
+            DebugSetting();
             UITool.TryGetChildComponentByName<Button>("BtnBase").onClick.AddListener(() =>
             {
                 UITool.GetChildByName("基础设置面板").SetActive(true);
                 UITool.GetChildByName("镜头设置面板").SetActive(false);
+                UITool.GetChildByName("开发者模式面板").SetActive(false);
             });       
             UITool.TryGetChildComponentByName<Button>("BtnCamera").onClick.AddListener(() =>
             {
-                UITool.GetChildByName("镜头设置面板").SetActive(true);
+                UITool.GetChildByName("镜头设置面板").SetActive(false);
+                UITool.GetChildByName("基础设置面板").SetActive(true);
+                UITool.GetChildByName("开发者模式面板").SetActive(false);
+            });
+            UITool.TryGetChildComponentByName<Button>("BtnDebug").onClick.AddListener(() =>
+            {
+                UITool.GetChildByName("镜头设置面板").SetActive(false);
                 UITool.GetChildByName("基础设置面板").SetActive(false);
+                UITool.GetChildByName("开发者模式面板").SetActive(true);
             });
             // Close
             UITool.TryGetChildComponentByName<Button>("CloseBtn").onClick.AddListener(() =>
@@ -77,7 +86,7 @@ namespace ChenChen_UI
             {
                 cc.MoveSpeed = value * (cc.speedMax - cc.speedMin) + cc.speedMin;
             });
-            // CameraSpeed
+            // CameraZoom
             Slider cameraZoom_Slider = UITool.TryGetChildComponentByName<Slider>("CameraZoom_Slider");
             cameraZoom_Slider.value = (cc.ZoomSpeed - cc.zoomSpeedMin) / (cc.zoomSpeedMax - cc.zoomSpeedMin);
             cameraZoom_Slider.onValueChanged.AddListener((float value) =>
@@ -116,6 +125,21 @@ namespace ChenChen_UI
             b2.gameObject.SetActive(!cc.UseKeyboard);
             b3.gameObject.SetActive(cc.UseEdge);
             b4.gameObject.SetActive(!cc.UseEdge);
+        }
+
+        private void DebugSetting()
+        {
+            UITool.TryGetChildComponentByName<Button>("AccpetBtn").onClick.AddListener(() =>
+            {
+                string methodName = UITool.TryGetChildComponentByName<InputField>("MethodName").textComponent.text;
+                var method = GameManager.Instance.GetType().GetMethod("Debug_" + methodName);
+                if (method != null)
+                {
+                    Debug.Log("调用测试方法: " + "Debug_" + methodName);
+                    method.Invoke(GameManager.Instance, new object[] { });
+                    PanelManager.RemovePanel(this);
+                }
+            });
         }
 
         public override void OnExit()

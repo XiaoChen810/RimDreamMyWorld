@@ -24,7 +24,7 @@ namespace ChenChen_UI
             });
             UITool.TryGetChildComponentByName<Button>("Btn工作台").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.ToolTable));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Tool));
             });
             UITool.TryGetChildComponentByName<Button>("Btn家具").onClick.AddListener(() =>
             {

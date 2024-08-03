@@ -11,7 +11,7 @@ namespace ChenChen_Thing
         Furniture,  // 家具
         Other,  // 其他
         Tree,   // 树
-        ToolTable,  // 工具台
+        Tool,  // 工具
         Light,  // 光
         Defend, // 防卫
     }

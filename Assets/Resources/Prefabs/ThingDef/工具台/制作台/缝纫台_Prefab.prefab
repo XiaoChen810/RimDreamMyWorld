@@ -42,9 +42,9 @@ GameObject:
   - component: {fileID: 3271916412791338616}
   - component: {fileID: 2138019844809637197}
   - component: {fileID: 8136946196161221735}
-  - component: {fileID: 8746641997330152890}
+  - component: {fileID: 4032888484131105472}
   m_Layer: 0
-  m_Name: "\u5236\u4F5C\u53F0_Prefab"
+  m_Name: "\u7F1D\u7EAB\u53F0_Prefab"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,8 +83,6 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -128,7 +126,6 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9117409374935395340}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -152,8 +149,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.9240856}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,9 +160,10 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
+  serializedVersion: 2
   m_Size: {x: 2, y: 0.8184955}
   m_EdgeRadius: 0
---- !u!114 &8746641997330152890
+--- !u!114 &4032888484131105472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,15 +172,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 9117409374935395340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a453b5071406a64e881a1b59074767a, type: 3}
+  m_Script: {fileID: 11500000, guid: db2e207001329824b8fceae55c00fb65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _theUsingPawn: {fileID: 0}
   _permission: 0
   Def: {fileID: 11400000, guid: 15d3955a32240124694d48a44379a7dc, type: 2}
   _lifeState: 0
+  _tilemapName: Building
   DrawOutline_Collider: 0
   wookPos:
     GameObject: {fileID: 6860843567440042342}
     Vector3: {x: 0, y: 0, z: 0}
-    IsGameObject: 1
+    IsGameObject: 0

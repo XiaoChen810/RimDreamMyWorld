@@ -1,4 +1,5 @@
 ﻿using ChenChen_Thing;
+using System;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -59,6 +60,9 @@ namespace ChenChen_AI
                 this.Description = "正在钓鱼";
                 _time += Time.deltaTime;
                 pawn.MoveController.FilpRight();
+                pawn.Animator.SetBool("IsWalk", false);
+                pawn.Animator.SetBool("IsRun", false);
+                pawn.Animator.SetBool("IsSwimming", false);
             }
 
             if (_time > 0 && _time <= animTime1) pawn.Animator.SetInteger("IsFishing", 1);

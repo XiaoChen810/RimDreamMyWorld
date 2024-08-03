@@ -99,14 +99,8 @@ namespace ChenChen_UI
                 "烹饪能力：" + p.Attribute.A_Culinary.Value.ToString();
             UITool.TryGetChildComponentByPath<Text>(panelPath + "Construction").text =
                 "建造能力：" + p.Attribute.A_Construction.Value.ToString();
-            UITool.TryGetChildComponentByPath<Text>(panelPath + "Survival").text =
-                "生存能力：" + p.Attribute.A_Survival.Value.ToString();
-            UITool.TryGetChildComponentByPath<Text>(panelPath + "Craftsmanship").text =
-                "工艺能力：" + p.Attribute.A_Craftsmanship.Value.ToString();
             UITool.TryGetChildComponentByPath<Text>(panelPath + "Medical").text =
                 "医护能力：" + p.Attribute.A_Medical.Value.ToString();
-            UITool.TryGetChildComponentByPath<Text>(panelPath + "Carrying").text =
-                "搬运能力：" + p.Attribute.A_Carrying.Value.ToString();
             UITool.TryGetChildComponentByPath<Text>(panelPath + "Research").text =
                 "科研能力：" + p.Attribute.A_Research.Value.ToString();
         }

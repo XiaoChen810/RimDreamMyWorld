@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 using System.IO;
+using ChenChen_Thing;
 
 namespace ChenChen_Core
 {
@@ -11,6 +12,20 @@ namespace ChenChen_Core
         private readonly string DEF_PATH = "Xml/Defs";
         private readonly string TEXTURE_PATH = "Xml/Texture";
 
+        public static readonly string Def_Appeal = "Appeals";
+
+        private Dictionary<string, object> defDict = new();
+
+        public List<T> Get<T>(string name) where T : Def
+        {
+            if(defDict.ContainsKey(name))
+            {
+                List<T> res = defDict[name] as List<T>;
+                return res;
+            }
+            throw new System.Exception("不存在定义");
+        }
+
         private void Start()
         {
             Load();
@@ -18,13 +33,34 @@ namespace ChenChen_Core
 
         private void Load()
         {
-            string xmlDirectory = Path.Combine(Application.dataPath, DEF_PATH);
-            string[] xmlFiles = Directory.GetFiles(xmlDirectory, "*.xml");
+            LoadXmlFile_Appeal();
+        }
 
-            foreach (string xmlFile in xmlFiles)
+        private void LoadXmlFile_Appeal()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFile = Path.Combine(Application.dataPath, DEF_PATH, "Appeals.xml");
+
+            xmlDoc.Load(xmlFile);
+
+            var xmlNodeList = xmlDoc.GetElementsByTagName("AppealDef");
+
+            List<AppealDef> appealDefs = new List<AppealDef>();
+
+            foreach (XmlNode xmlNode in xmlNodeList)
             {
+                string name = xmlNode["name"].InnerText;
+                string description = xmlNode["description"].InnerText;
+                string iconPath = xmlNode["iconPath"].InnerText;
+                int workload = int.Parse(xmlNode["cost"]["workload"].InnerText);
+                int costFabric = int.Parse(xmlNode["cost"]["costFabric"].InnerText);
 
+                AppealDef def = new AppealDef(name, description, LoadSprite(iconPath), workload, costFabric);
+
+                appealDefs.Add(def);
             }
+
+            defDict.Add(Def_Appeal, appealDefs);
         }
 
         private Sprite LoadSprite(string relativePath)

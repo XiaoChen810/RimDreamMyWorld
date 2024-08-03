@@ -4,6 +4,7 @@ using UnityEngine;
 using ChenChen_Map;
 using ChenChen_Scene;
 using System;
+using ChenChen_UI;
 
 public class GameManager : SingletonMono<GameManager>
 {
@@ -16,10 +17,10 @@ public class GameManager : SingletonMono<GameManager>
     public TechnologyTool TechnologyTool { get; private set; }
 
     private bool _gameIsStart = false;
-    public bool GameIsStart { get { return _gameIsStart; } }
-
     private bool _cinematicMode = false;
-    public bool CinematicMode { get { return _cinematicMode; } }  // 电影模式
+
+    public bool GameIsStart { get { return _gameIsStart; } }
+    public bool CinematicMode { get { return _cinematicMode; } } 
 
     public event Action OnGameStart;
 
@@ -31,7 +32,7 @@ public class GameManager : SingletonMono<GameManager>
     public float secondsPerGameMinute = 0.7f; // 游戏中的每分钟等于现实中的秒数
     public event Action OnTimeAddOneMinute;   //当时间加了一分钟
     [SerializeField] private Vector2 dayLine;
-    public bool IsDayTime => currentHour >= dayLine.x && currentHour <= dayLine.y;
+    public bool IsDayTime => currentHour >= dayLine.x && currentHour < dayLine.y;
 
     // 当前游戏时间
     public string CurrentTime
@@ -76,12 +77,11 @@ public class GameManager : SingletonMono<GameManager>
     {
         if(GameIsStart)
         {
-            Debug.LogWarning("游戏只能开始一次");
+            Debug.LogWarning("游戏已经开始");
+            return;
         }
-        //正式开始
         _gameIsStart = true;
         OnGameStart?.Invoke();
-        //时间流逝
         StartCoroutine(TimeFlow());
         AnimalGenerateTool.CreateAllAnimalThree();
     }
@@ -132,6 +132,15 @@ public class GameManager : SingletonMono<GameManager>
 
     public void 测试按钮()
     {
+
+    }
+
+#endif
+
+    #region - Debug -
+
+    public void Debug_raid()
+    {
         MapManager mapManager = MapManager.Instance;
         // 地图中心
         Vector2Int center = new Vector2Int(mapManager.CurMapWidth / 2, mapManager.CurMapHeight / 2);
@@ -162,6 +171,19 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
+    public void Debug_night()
+    {
+        currentHour = (int)dayLine.y;
+    }
 
-#endif
+    public void Debug_dayLight()
+    {
+        currentHour = (int)dayLine.x;
+    }
+
+    public void Debug_Cinema()
+    {
+        _cinematicMode = !_cinematicMode;
+    }
+    #endregion
 }

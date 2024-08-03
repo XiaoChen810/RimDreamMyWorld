@@ -4,18 +4,17 @@ using UnityEngine;
 
 namespace ChenChen_AI
 {
-    public class PawnJob_Demolished : PawnJob
+    public class PawnJob_Demolish : PawnJob
     {
         private readonly static float tick = 50;
         private Thing targetComponent;
-        private float _time;
+        private float _timer;
         private float _timeOne;
 
-        public PawnJob_Demolished(Pawn pawn, GameObject building) : base(pawn, tick,new TargetPtr(building))
+        public PawnJob_Demolish(Pawn pawn, GameObject building) : base(pawn, tick,new TargetPtr(building))
         {
             float ability = pawn.Attribute.A_Construction.Value;
-            float a = 1 - (ability / 20);
-            _timeOne = Mathf.Lerp(1f, 10, a) / 2;
+            _timeOne = Mathf.Lerp(0.1f, 1f, (1 - ability / 20));
         }
 
         public override bool OnEnter()
@@ -68,11 +67,11 @@ namespace ChenChen_AI
                 pawn.JobDoing();
                 this.Description = "ÕýÔÚ²ð³ý" + target.GameObject.name;
 
-                _time += Time.deltaTime;
-                if (_time > _timeOne)
+                _timer += Time.deltaTime;
+                if (_timer > _timeOne)
                 {
-                    targetComponent.OnDemolish(pawn.Attribute.A_Construction.Value);
-                    _time = 0;
+                    targetComponent.OnDemolish(1);
+                    _timer = 0;
                 }
 
                 pawn.Animator.SetBool("IsDoing", true);

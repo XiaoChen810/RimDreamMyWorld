@@ -274,7 +274,12 @@ namespace ChenChen_Map
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
                 tr.sortingLayerName = "Bottom";
+              
+#if UNITY_EDITOR
+                //Bug
+#else
                 tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
+#endif
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChenChen_Core;
+using System;
 using UnityEngine;
 
 namespace ChenChen_Thing
@@ -9,6 +10,20 @@ namespace ChenChen_Thing
         private void Start()
         {
             this.tag = "Wall";
+        }
+
+        public override void OnCompleteBuild()
+        {
+            base.OnCompleteBuild();
+
+            RoomManager.Instance.AddWall(transform.position);
+        }
+
+        public override void OnDemolished()
+        {
+            RoomManager.Instance.RemoveWall(transform.position);
+
+            base.OnDemolished();
         }
     }
 }

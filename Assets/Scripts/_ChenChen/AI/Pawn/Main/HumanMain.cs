@@ -66,6 +66,10 @@ namespace ChenChen_AI
                 {
                     jobGivers.Add(jobGiver);
                 }
+                else
+                {
+                    Debug.Log($"未发现{jobTypeName}对应的JobGiver");
+                }
             }
         }
 

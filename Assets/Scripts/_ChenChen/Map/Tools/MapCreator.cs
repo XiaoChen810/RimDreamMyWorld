@@ -81,7 +81,7 @@ namespace ChenChen_Map
             {
                 GetOrSetTileamp(name: t.tilemapName,
                     parent: grid,
-                    isObstacle: false,
+                    isObstacle: t.isObstacle,
                     layerSort: t.layerSort,
                     tag: (t.type == NodeType.water) ? "Water" : null);
             }
@@ -288,7 +288,7 @@ namespace ChenChen_Map
 
         private Tilemap CreateTilemap(string name, GameObject parent, bool isObstacle, int layerSort, string tag)
         {
-            Debug.Log($"未能找到对应的Tilemap，所以重新生成了一个 : {name}");
+            //Debug.Log($"未能找到对应的Tilemap，所以重新生成了一个 : {name}");
 
             GameObject obj = new GameObject(name);
             obj.transform.parent = parent.transform;
@@ -303,7 +303,7 @@ namespace ChenChen_Map
             tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
 #endif
             tr.sortingOrder = layerSort;
-            tr.sortingLayerName = "Bottom";
+            //tr.sortingLayerName = "Bottom";
             
             if (tag != null)
             {

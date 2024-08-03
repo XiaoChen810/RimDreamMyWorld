@@ -11,8 +11,22 @@ namespace ChenChen_Thing
         private float shakeDuraion = 0.5f;
         private float shakeStrength = 3f;
 
-        public bool IsMarkCut;
+        [Header("Cut")]
+        private bool isMarkCut;
+        public bool IsMarkCut
+        {
+            get
+            {
+                return isMarkCut;
+            }
+            set
+            {
+                isMarkCut = value;  
+                markIcon.SetActive(value);
+            }
+        }
         public ParticleSystem particleEffect_WhenCut;
+        public GameObject markIcon;
 
         public override DetailView DetailView
         {

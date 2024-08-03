@@ -188,7 +188,7 @@ namespace ChenChen_AI
                     MaxTick = newState.MaxTick;
                     return;
                 }
-                if(_currentState.DebugLogDescription != null)
+                if (_currentState.DebugLogDescription != null)
                 {
                     string log = _currentState.DebugLogDescription;
                     Debug.Log($"{Owner.name}进入状态 {_currentState} 失败，当前状态自动切换为空：\n" +

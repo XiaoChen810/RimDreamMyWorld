@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChenChen_Core;
+using System;
 using UnityEngine;
 
 namespace ChenChen_Thing
@@ -36,6 +37,7 @@ namespace ChenChen_Thing
         {
             base.OnCompleteBuild();
             SR.color = new Color(1, 1, 1, 0);
+            RoomManager.Instance.AddWall(transform.position);
         }
 
         protected void OpenDoor()

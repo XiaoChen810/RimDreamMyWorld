@@ -58,7 +58,7 @@ namespace ChenChen_AI
                 this.Description = "正在建造" + target.GameObject.name;
 
                 _time += Time.deltaTime;
-                if(_time > _timeOne)
+                if (_time > _timeOne)
                 {
                     targetComponent.OnBuild(1);
                     _time = 0;

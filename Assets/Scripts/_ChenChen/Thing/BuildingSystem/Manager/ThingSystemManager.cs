@@ -378,7 +378,7 @@ namespace ChenChen_Thing
         public bool TryGenerateThing(ThingDef thingDef, Vector2 position, Quaternion routation)
         {
             GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
-            obj.GetComponent<Thing>().Building();
+            obj.GetComponent<Thing>().MarkToBuild();
             return true;
         }
         // 直接使用名字
@@ -386,7 +386,7 @@ namespace ChenChen_Thing
         {
             ThingDef thingDef = GetThingDef(thingName);
             GameObject obj = Generate(thingDef, position + thingDef.Offset, routation);
-            obj.GetComponent<Thing>().Building();
+            obj.GetComponent<Thing>().MarkToBuild();
             return true;
         }
         // 生成

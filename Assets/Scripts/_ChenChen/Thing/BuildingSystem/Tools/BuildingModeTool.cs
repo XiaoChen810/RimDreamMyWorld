@@ -46,10 +46,15 @@ namespace ChenChen_Thing
         /// <param name="def">建筑的定义</param>
         public void BuildStart(ThingDef def)
         {
+            if(OnBuildMode)
+            {
+                BuildEnd();
+            }
             _curBuildingName = def.DefName;
             _curBuildingDef = def;
             _mouseIndicator = UnityEngine.Object.Instantiate(_curBuildingDef.Prefab);
             _mouseIndicator.name = "MouseIndicator";
+            _mouseIndicator.GetComponent<SpriteRenderer>().sortingLayerName = "Above";
             _curBuildingBase = _mouseIndicator.GetComponent<Thing>();
             OnBuildMode = true;
         }

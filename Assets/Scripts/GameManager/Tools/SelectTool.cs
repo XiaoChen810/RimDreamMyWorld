@@ -113,16 +113,13 @@ public class SelectTool : MonoBehaviour
             }
         }
         dvs.Clear();
-        // 判断有无选中棋子
+
         if (Logic_Pawn(hitColliders)) return;
-        // 判断有无选中动物
         if (Logic_Animal(hitColliders)) return;
-        // 判断有无选中物体
         if (Logic_Thing(hitColliders)) return;
-        // 判断有无工作区
-        if (Logic_WorkSpace(hitColliders)) return;
-        // 判断有无地板
+        if (Logic_Wall(hitColliders)) return;
         if (Logic_Floor(hitColliders)) return;
+        if (Logic_WorkSpace(hitColliders)) return;
     }
 
     private bool Logic_Pawn(Collider2D[] hitColliders)
@@ -170,6 +167,21 @@ public class SelectTool : MonoBehaviour
         DetailViewOpen();
         return flag;
     }
+    private bool Logic_Wall(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
+        {
+            if (collider.CompareTag("Wall"))
+            {
+                Thing thing = collider.GetComponent<Thing_Wall>();
+                dvs.Add(thing.DetailView);
+                flag = true;
+            }
+        }
+        DetailViewOpen();
+        return flag;
+    }
     private bool Logic_Floor(Collider2D[] hitColliders)
     {
         bool flag = false;
@@ -177,7 +189,7 @@ public class SelectTool : MonoBehaviour
         {
             if (collider.CompareTag("Floor"))
             {
-                Thing thing = collider.GetComponent<Thing>();
+                Thing thing = collider.GetComponent<Thing_Floor>();
                 dvs.Add(thing.DetailView);
                 flag = true;
             }

@@ -167,17 +167,14 @@ namespace ChenChen_Thing
             SR.sortingLayerName = "Middle";
             SR.sortingOrder = -(int)transform.position.y;
 
-            // 创建中心透明蓝色纹理
             centerTexture = new Texture2D(1, 1);
             centerTexture.SetPixel(0, 0, centerColor);
             centerTexture.Apply();
 
-            // 创建纯白色纹理用于绘制边框
             outlineTexture = new Texture2D(1, 1);
             outlineTexture.SetPixel(0, 0, outlineColor);
             outlineTexture.Apply();
 
-            // 触发基本函数
             OnPlaced();
         }
 
@@ -208,10 +205,9 @@ namespace ChenChen_Thing
         protected virtual void OnDestroy()
         {
             if (!Application.isPlaying) return;
-            // 移除从ThingSystemManager
+
             if (ThingSystemManager.Instance.RemoveThing(this.gameObject))
             {
-                // 如果有瓦片，把对应瓦片地图的瓦片清除
                 if (Def.TileBase != null)
                 {
                     if (MapManager.Instance.TryGetTilemap(_tilemapName, true, out Tilemap buildingTilemap))
@@ -219,13 +215,13 @@ namespace ChenChen_Thing
                         buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                     }
                 }
-                // 如果打开着详情面板，则关闭
+
                 if (_detailView != null && _detailView.IsPanelOpen)
                 {
                     PanelManager panel = DetailViewManager.Instance.PanelManager;
                     panel.RemovePanel(panel.GetTopPanel());
                 }
-                // 如果是障碍物，刷新寻路算法的节点
+
                 if (Def.IsObstacle)
                 {
                     if (AstarPath.active != null)
@@ -237,56 +233,41 @@ namespace ChenChen_Thing
             }
         }
 
-        /// <summary>
-        /// 检查是否能够在指定位置放置指定的游戏对象 
-        /// </summary>
-        /// <returns></returns>
+
         public virtual bool CanBuildHere()
         {
-            // 获取待放置对象的 Collider2D 组件
             Collider2D collider = ColliderSelf;
-            // 获取待放置对象 Collider2D 的边界框信息
             Bounds bounds = collider.bounds;
-            // 计算碰撞体在世界空间中的中心位置
             Vector2 center = bounds.center;
-            // 执行碰撞检测，只检测指定图层的碰撞器
             Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
 
-            // 遍历检测到的碰撞器，如果有任何一个不符合条件，则返回 false，表示无法放置游戏对象
             foreach(var coll in colliders)
             {
-                // 忽略
                 if (coll.gameObject == this.gameObject) continue;
                 if (coll.CompareTag("Pawn")) continue;
                 if (coll.CompareTag("Floor")) continue;
                 return false;              
             }
 
-            // 如果没有任何碰撞器存在，则表示可以放置游戏对象
             return true;
         }
 
-        /// <summary>
-        /// 建造该物体
-        /// </summary>
-        public virtual void Building()
+        public virtual void MarkToBuild()
         {
             ChangeLifeState(BuildingLifeStateType.MarkBuilding);
         }
 
-        /// <summary>
-        /// 拆除该物体
-        /// </summary>
-        public virtual void Demolish()
+        public virtual void MarkToDemolish()
         {
             ChangeLifeState(BuildingLifeStateType.MarkDemolished);
         }
 
-        // 实现接口中定义的属性和方法
+        #region - IBlueprint -
         public virtual void OnPlaced()
         {
             CurDurability = MaxDurability;
         }
+
         public virtual void OnMarkBuild()
         {
             SR.color = new Color(1, 1, 1, 0f);
@@ -303,6 +284,7 @@ namespace ChenChen_Thing
                 Workload = WorkloadBuilt;
             }
         }
+
         public virtual void OnBuild(int value)
         {
             Workload -= value;
@@ -312,6 +294,7 @@ namespace ChenChen_Thing
                 ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
             }
         }
+
         public virtual void OnCompleteBuild()
         {
             // 在瓦片地图设置瓦片
@@ -350,23 +333,22 @@ namespace ChenChen_Thing
             CanDemolish = true;
             DrawOutline_Collider = false;
         }
+
         public virtual void OnCancelBuild()
         {
             Destroy(gameObject);
         }
+
         public virtual void OnInterpretBuild()
         {
             ChangeLifeState(BuildingLifeStateType.MarkBuilding);
         }
-        public virtual void OnMarkDemolish()
-        {
-            // 拆除的工作量是当前耐久
-            Workload = CurDurability;
-            if (CurDurability <= 0)
-            {
-                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
-            }
-        }
+        #endregion
+
+        #region - IDemolish -
+
+        private GameObject markDemolishIcon = null;
+
         public virtual void OnDemolish(int value)
         {
             CurDurability -= value;
@@ -378,14 +360,34 @@ namespace ChenChen_Thing
             // 更新工作量
             Workload = CurDurability;
         }
+
+        public virtual void OnMarkDemolish()
+        {
+            // 拆除的工作量是当前耐久
+            Workload = CurDurability;
+            if (CurDurability <= 0)
+            {
+                ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
+            }
+            markDemolishIcon = GameObject.Instantiate(Resources.Load("Prefabs/ThingDef/MarkDemolishIcon")) as GameObject;
+            markDemolishIcon.transform.position = this.transform.position;
+        }
+
         public virtual void OnDemolished()
         {
+            if (markDemolishIcon != null)
+                Destroy(markDemolishIcon);
             Destroy(gameObject);
         }
+
         public virtual void OnCanclDemolish()
         {
             // 回到刚建造完的时候
             ChangeLifeState(BuildingLifeStateType.FinishedBuilding);
+
+            if (markDemolishIcon != null)
+                Destroy(markDemolishIcon);
         }
+        #endregion
     }
 }

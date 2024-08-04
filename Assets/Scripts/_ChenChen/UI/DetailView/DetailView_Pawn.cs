@@ -52,6 +52,17 @@ namespace ChenChen_UI
             if (panel == null) return;
             if (pawn == null) return;
             content.Clear();
+
+            if(pawn.Info.IsDead)
+            {
+                content.Add("死亡");
+                panel.SetView(
+                    pawn.name,
+                    content
+                    );
+                return;
+            }
+
             if (pawn.StateMachine.CurState != null)
             {
                 content.Add("当前工作：" + pawn.StateMachine.CurState.Description);

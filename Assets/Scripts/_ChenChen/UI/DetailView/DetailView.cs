@@ -1,6 +1,8 @@
 using ChenChen_Thing;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ChenChen_UI
 {
@@ -15,11 +17,11 @@ namespace ChenChen_UI
         protected Indicator indicator;
         protected PanelBase myPanel;
 
-        /// <summary>
-        /// 当前面板上输出的内容
-        /// </summary>
+        // 当前面板上输出的内容
         protected List<string> content = new List<string>();
 
+        public Action<DetailViewPanel> OverrideContentAction = null;
+        
         public virtual void OpenIndicator()
         {
             if (indicator == null)
@@ -59,6 +61,11 @@ namespace ChenChen_UI
             {
                 if (DetailViewManager.Instance.PanelManager.GetTopPanel() is DetailViewPanel detail)
                 {
+                    if(OverrideContentAction != null)
+                    {
+                        OverrideContentAction.Invoke(detail);
+                        return;
+                    }
                     UpdateShow(detail);
                 }
             }
@@ -74,6 +81,15 @@ namespace ChenChen_UI
         {
             IsPanelOpen = false;
             CloseIndicator();
+        }
+
+        private void OnDestroy()
+        {
+            if (IsPanelOpen)
+            {
+                PanelManager panel = DetailViewManager.Instance.PanelManager;
+                panel.RemovePanel(panel.GetTopPanel());
+            }
         }
     }
 }

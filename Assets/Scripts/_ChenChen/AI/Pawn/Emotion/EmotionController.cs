@@ -8,19 +8,18 @@ namespace ChenChen_AI
 {
     public class EmotionController : MonoBehaviour
     {
-        /// <summary>
-        /// 所有可能的情绪列表
-        /// </summary>
         public EmotionList EmotionsList;
 
         private List<Emotion> curEmotionsList = new();
         private Emotion curEmotion;
 
+        private Pawn pawn;
         private SpriteRenderer sr;
         private Dictionary<EmotionType, Emotion> emotionsDict = new();
 
         private void OnEnable()
         {
+            pawn = GetComponentInParent<Pawn>();
             sr = GetComponent<SpriteRenderer>();
             InitializeEmotionsDict();
             StartCoroutine(EmotionCircleCo());
@@ -38,7 +37,6 @@ namespace ChenChen_AI
             }
         }
 
-        //轮播情绪, 如果空了，则sr.sprite == null
         private IEnumerator EmotionCircleCo()
         {
             while (true)
@@ -100,6 +98,8 @@ namespace ChenChen_AI
                 Debug.LogWarning("Emotion not found or SpriteRenderer not initialized.");
                 return false;
             }
+
+            if (pawn.Faction != GameManager.PLAYER_FACTION) return false;
 
             if (curEmotionsList.Any(e => e.type == emotionType)) return false;
 

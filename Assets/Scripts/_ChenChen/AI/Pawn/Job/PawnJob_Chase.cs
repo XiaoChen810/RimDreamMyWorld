@@ -19,11 +19,11 @@ namespace ChenChen_AI
             targetPawnComponent = target.GetComponent<Pawn>();
             if (targetPawnComponent == null)
             {
-                DebugLogDescription = ("目标无Pawn组件");
+                DebugLogDescription = ("目标无Pawn组件，不是一个可追击的目标");
                 return false;
             }
 
-            if(pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange))
+            if(!pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange))
             {
                 DebugLogDescription = ("无法前往目标");
                 return false;

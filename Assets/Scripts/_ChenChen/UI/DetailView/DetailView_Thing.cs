@@ -24,9 +24,13 @@ namespace ChenChen_UI
             if (panel == null) return;
             if (thing == null) return;
             content.Clear();
-            content.Add($"耐久度: {thing.CurDurability} / {thing.MaxDurability}");
-            content.Add($"剩余工作量: {thing.Workload}");
+            content.Add($"耐久度: {thing.CurDurability} / {thing.MaxDurability}");                     
             content.Add($"使用者: {(thing.TheUsingPawn != null ? thing.TheUsingPawn.name : null)}");
+            if(thing.Workload > 0)
+            {
+                content.Add($"剩余工作量: {thing.Workload}");
+            }
+
             panel.SetView(
                 thing.Def.DefName,
                 content

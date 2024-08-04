@@ -69,7 +69,7 @@ namespace ChenChen_AI
         protected Path path;
 
         /// <summary>
-        /// 是否到达目标点
+        /// 是否到达目标点, 只有到达路径终点时会返回True
         /// </summary>
         public bool ReachDestination
         {
@@ -247,6 +247,12 @@ namespace ChenChen_AI
             {
                 return false;
             }
+            if (StaticFuction.CompareDistance(transform.position, destination, endReachedDistance))
+            {
+                OnTargetReached();
+                return true;
+            }
+            reachDestination = false;
             // 转换目标点为格子中心
             Vector3Int toInt = StaticFuction.VectorTransToInt(destination);
             Vector3 to = new Vector3(toInt.x + 0.5f, toInt.y + 0.5f);
@@ -268,7 +274,6 @@ namespace ChenChen_AI
                         path = p;
                         isStart = true;
                         canMove = true;
-                        reachDestination = false;
                         currentWaypoint = 0;
                     }
                     else

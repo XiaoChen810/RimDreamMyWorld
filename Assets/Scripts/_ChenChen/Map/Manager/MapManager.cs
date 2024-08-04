@@ -161,11 +161,7 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 设置特定位置节点的代价
-        /// </summary>
-        /// <param name="position">节点位置</param>
-        /// <param name="penalty">代价值</param>
+        // 设置特定位置节点的代价
         private void SetNodePenalty(Vector2 position, uint penalty)
         {
             var aStarNode = AstarPath.active.GetNearest(position).node;
@@ -175,11 +171,7 @@ namespace ChenChen_Map
             }
         }
 
-        /// <summary>
-        /// 设置特定位置周围8个节点的代价
-        /// </summary>
-        /// <param name="position">中心节点位置</param>
-        /// <param name="penalty">代价值</param>
+        // 设置特定位置周围8个节点的代价
         private void SetSurroundingNodesPenalty(Vector2 position, uint penalty)
         {
             Vector2[] value = {
@@ -293,6 +285,11 @@ namespace ChenChen_Map
             return result != null;
         }
 
+        /// <summary>
+        /// 获取当前位置的节点
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public MapNode GetMapNodeHere(Vector2 position)
         {
             int x = (int)position.x;

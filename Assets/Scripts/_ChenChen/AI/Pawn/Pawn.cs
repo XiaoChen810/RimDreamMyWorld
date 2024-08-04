@@ -10,53 +10,49 @@ namespace ChenChen_AI
     [RequireComponent(typeof(MoveController))]
     public abstract class Pawn : MonoBehaviour, IDetailView
     {
-        /// <summary>
-        /// Pawn的状态机
-        /// </summary>
         public StateMachine StateMachine { get; protected set; }
 
-        /// <summary>
-        /// Pawn移动的控制器
-        /// </summary>
         public PawnMoveController MoveController { get; protected set; }
 
-        /// <summary>
-        /// Pawn动画机
-        /// </summary>
         public Animator Animator { get; protected set; }
 
-        public EmotionController EmotionController;
+        public EmotionController EmotionController { get; protected set; }
 
         [Header("当前任务")]
         public GameObject CurJobTarget;
         public List<string> CurrentStateList = new List<string>();
 
         [Header("人物逻辑属性")]
-        public float WorkRange = 1;
-        public float AttackRange = 1;
-        public float AttackSpeedWait = 2.5f;
-        public float AttackDamage = 0;
+        public float WorkRange = 1.35f;
+        public float AttackRange = 2;
+        public float AttackSpeedWait = 2f;
+        public float AttackDamage => Attribute.A_Combat.Value;
 
-        [Header("条")]
-        [SerializeField] private Slider myBar;// 一个滑动条，可以用来显示进度
-        [SerializeField] private GameObject myPanel;
-
+        private Slider workProgressSlider;
         public void ChangeMyBar(float value)
         {
             Mathf.Clamp01(value);
-            if (myBar != null)
+            if(workProgressSlider == null)
+            {
+                workProgressSlider = transform.Find("Canvas").Find("WorkProgressSlider").GetComponent<Slider>();
+            }
+            if (workProgressSlider != null)
             {
                 if(value > 0)
                 {
-                    myPanel.SetActive(true);
-                    myBar.value = value;
+                    workProgressSlider.gameObject.SetActive(true);
+                    workProgressSlider.value = value;
                 }
                 else
                 {
-                    myPanel.SetActive(false);
-                    myBar.value = 0f;
+                    workProgressSlider.gameObject.SetActive(false);
+                    workProgressSlider.value = 0f;
                 }       
-            }        
+            }
+            else
+            {
+                Debug.LogError("未找到对应物体");
+            }  
         }
 
         #region - 属性 - 
@@ -127,6 +123,19 @@ namespace ChenChen_AI
                     }
                 }
                 return _detailView;
+            }
+        }
+
+        private EnemyPawnBehavior _enemyPawnBehavior = null;
+        protected EnemyPawnBehavior enemyPawnBehavior
+        {
+            get
+            {
+                if (_enemyPawnBehavior == null)
+                {
+                    _enemyPawnBehavior = new EnemyPawnBehavior(this);
+                }
+                return _enemyPawnBehavior;
             }
         }
 
@@ -206,35 +215,25 @@ namespace ChenChen_AI
 
         private bool canDamaged = true;
 
-        public void GetDamage(GameObject enemy, float damage)
+        /// <summary>
+        /// 受到伤害
+        /// </summary>
+        /// <param name="from"> 伤害来源 </param>
+        /// <param name="damage"></param>
+        public void GetDamage(GameObject from, float damage)
         {
-            // 无敌帧返回
             if (!canDamaged) return;
 
-            // 中断当前工作,然后50概率反击，50概率逃跑
-            StopJob(10);
-            if (Random.value < 0.5f)
-            {
-                StateMachine.TryChangeState(new PawnJob_Attack(this, enemy));
-            }
-            else
-            {
-                StateMachine.TryChangeState(new PawnJob_Escape(this, enemy));
-            }
-
-            _pawnInfo.HP.CurValue -= damage;
-
-            // 血条为空则死亡
-            if (_pawnInfo.HP.IsSpace)
-            {
-                Info.IsDead = true;
-                Destroy(gameObject);
-                return;
-            }
-
-            // 触发动画和无敌帧
-            Animator.SetTrigger("IsHurted");
+            Animator.SetTrigger("Hurted");
             StartCoroutine(AvoidDamage(2));
+
+            StopJob(10);
+            if(StateMachine.CurStateType != typeof(PawnJob_Attack))
+            {
+                StateMachine.TryChangeState(new PawnJob_Chase(this, from));
+            }
+
+            Info.HP.CurValue -= damage;
         }
 
         IEnumerator AvoidDamage(float time)
@@ -252,10 +251,37 @@ namespace ChenChen_AI
         {
             MoveController = GetComponent<PawnMoveController>();
             Animator = GetComponent<Animator>();
+            EmotionController = GetComponentInChildren<EmotionController>();
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
             gameObject.layer = 7;
             gameObject.tag = "Pawn";       
+        }
+
+        protected virtual void Update()
+        {
+#if UNITY_EDITOR
+            任务列表Debug();
+#endif
+            if (Def.StopUpdate) return;
+
+            if (Info.IsDead) return;
+
+            if (Info.HP.IsSpace)
+            {
+                Info.IsDead = true;
+                Animator.SetBool("IsDie", true);              
+            }
+
+            StateMachine.Update();
+
+            if (Faction != GameManager.PLAYER_FACTION)
+            {
+                enemyPawnBehavior.Behavior();
+                return;
+            }
+
+            if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
         }
 
         private void OnEnable()
@@ -263,6 +289,7 @@ namespace ChenChen_AI
             GameManager.Instance.OnTimeAddOneMinute += UpdatePawnInfo;
             GameManager.Instance.OnGameStart += Instance_OnGameStart;
         }
+
         private void UpdatePawnInfo()
         {
             if (StateMachine.CurStateType != typeof(PawnJob_Sleep))
@@ -282,19 +309,6 @@ namespace ChenChen_AI
             GameManager.Instance.OnGameStart -= Instance_OnGameStart;
         }
 
-        protected virtual void Update()
-        {
-#if UNITY_EDITOR
-            任务列表Debug();
-#endif
-            if (Def.StopUpdate) return;
-
-            if (Faction != GameManager.PLAYER_FACTION) return;
-
-            StateMachine.Update();
-            if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
-        }
-
         protected void 任务列表Debug()
         {
             CurrentStateList.Clear();
@@ -309,11 +323,6 @@ namespace ChenChen_AI
             {
                 CurrentStateList.Add("准备" + task.ToString());
             }
-        }
-
-        private void OnDestroy()
-        {
-            GameManager.Instance.PawnGeneratorTool.RemovePawn(this);
         }
 
         #endregion

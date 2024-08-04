@@ -37,7 +37,7 @@ namespace ChenChen_UI
                 return;
             }
 
-            List<Pawn> list = GameManager.Instance.PawnGeneratorTool.PawnsList.Where(p => p.Faction == GameManager.PLAYER_FACTION).ToList();
+            IReadOnlyList<Pawn> list = GameManager.Instance.PawnGeneratorTool.PawnList_Colony;
 
             foreach (var pawn in list)
             {

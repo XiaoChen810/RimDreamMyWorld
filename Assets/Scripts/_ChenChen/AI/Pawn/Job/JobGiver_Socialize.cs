@@ -7,10 +7,9 @@ namespace ChenChen_AI
 {
     public class JobGiver_Socialize : JobGiver
     {
-        private static readonly float interval_time = 20;
-        private static readonly float probability_threshold = 0.5f;
+        private static readonly float interval_time = 10;
 
-        public JobGiver_Socialize(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time, probability_threshold)
+        public JobGiver_Socialize(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
         {
         }
 
@@ -28,7 +27,7 @@ namespace ChenChen_AI
         private GameObject FindFriend(Pawn pawn)
         {
             List<GameObject> otherPawns = new();
-            IReadOnlyList<Pawn> pawnsList = GameManager.Instance.PawnGeneratorTool.PawnsList;
+            IReadOnlyList<Pawn> pawnsList = GameManager.Instance.PawnGeneratorTool.PawnList_Colony;
 
             foreach (var otherPawn in pawnsList)
             {

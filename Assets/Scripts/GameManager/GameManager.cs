@@ -17,10 +17,12 @@ public class GameManager : SingletonMono<GameManager>
     public TechnologyTool TechnologyTool { get; private set; }
 
     private bool _gameIsStart = false;
-    private bool _cinematicMode = false;
+    private bool _f_mode_cineme = false;
+    private bool _f_mode_water = false;
 
     public bool GameIsStart { get { return _gameIsStart; } }
-    public bool CinematicMode { get { return _cinematicMode; } } 
+    public bool Mode_Cineme { get { return _f_mode_cineme; } } 
+    public bool Mode_Water { get { return _f_mode_water; } }
 
     public event Action OnGameStart;
 
@@ -53,6 +55,8 @@ public class GameManager : SingletonMono<GameManager>
 
     public static readonly string PLAYER_FACTION = "Player";
 
+    public bool IsGodMode = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -67,9 +71,13 @@ public class GameManager : SingletonMono<GameManager>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F11))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
-            _cinematicMode = !_cinematicMode;
+            _f_mode_water = !_f_mode_water;
+        }
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            _f_mode_cineme = !_f_mode_cineme;
         }
     }
 
@@ -171,6 +179,15 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
+    public void Debug_raid1()
+    {
+        MapManager mapManager = MapManager.Instance;
+
+        Vector2Int center = new Vector2Int(mapManager.CurMapWidth / 2, mapManager.CurMapHeight / 2);
+
+        PawnGeneratorTool.GeneratePawn(position: new Vector3(center.x, center.y), faction: "enemy");
+    }
+
     public void Debug_night()
     {
         currentHour = (int)dayLine.y;
@@ -181,9 +198,14 @@ public class GameManager : SingletonMono<GameManager>
         currentHour = (int)dayLine.x;
     }
 
-    public void Debug_Cinema()
+    public void Debug_cinema()
     {
-        _cinematicMode = !_cinematicMode;
+        _f_mode_cineme = !_f_mode_cineme;
+    }
+
+    public void Debug_godmode()
+    {
+        IsGodMode = !IsGodMode;
     }
     #endregion
 }

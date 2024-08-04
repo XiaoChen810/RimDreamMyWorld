@@ -39,7 +39,7 @@ namespace ChenChen_Core
         private void LoadXmlFile_Appeal()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlFile = Path.Combine(Application.dataPath, DEF_PATH, "Appeals.xml");
+            string xmlFile = Path.Combine(Application.streamingAssetsPath, DEF_PATH, "Appeals.xml");
 
             xmlDoc.Load(xmlFile);
 
@@ -65,7 +65,7 @@ namespace ChenChen_Core
 
         private Sprite LoadSprite(string relativePath)
         {
-            string fullPath = Path.Combine(Application.dataPath, TEXTURE_PATH, relativePath + ".png");
+            string fullPath = Path.Combine(Application.streamingAssetsPath, TEXTURE_PATH, relativePath + ".png");
 
             if (!File.Exists(fullPath))
             {
@@ -81,4 +81,3 @@ namespace ChenChen_Core
         }
     }
 }
-

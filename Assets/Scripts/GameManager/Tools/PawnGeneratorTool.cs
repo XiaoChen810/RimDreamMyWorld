@@ -1,5 +1,6 @@
 ﻿using ChenChen_AI;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PawnGeneratorTool : MonoBehaviour
@@ -8,7 +9,7 @@ public class PawnGeneratorTool : MonoBehaviour
     /// <summary>
     /// 游戏内全部的Pawn列表
     /// </summary>
-    public IReadOnlyList<Pawn> PawnsList
+    public IReadOnlyList<Pawn> PawnList_All
     {
         get
         {
@@ -16,10 +17,32 @@ public class PawnGeneratorTool : MonoBehaviour
         }
     }
 
-    [SerializeField] private List<Pawn> _pawnWhenStartList = new List<Pawn>();
-    /// <summary>
-    /// 仅当进行人物选择时使用的角色列表
-    /// </summary>
+    public IReadOnlyList<Pawn> PawnList_Live
+    {
+        get
+        {
+            return _pawnsList.Where(x => !x.Info.IsDead).ToList();
+        }
+    }
+
+    public IReadOnlyList<Pawn> PawnList_Died
+    {
+        get
+        {
+            return _pawnsList.Where(x => x.Info.IsDead).ToList();
+        }
+    }
+
+    public IReadOnlyList<Pawn> PawnList_Colony
+    {
+        get
+        {
+            return _pawnsList.Where(x => x.Faction == GameManager.PLAYER_FACTION).ToList();
+        }
+    }
+
+    // ! ! ! 仅当进行人物选择时使用的角色列表 ! ! !
+    private List<Pawn> _pawnWhenStartList = new List<Pawn>();
     public List<Pawn> PawnWhenStartList
     {
         get { return _pawnWhenStartList; }
@@ -105,14 +128,20 @@ public class PawnGeneratorTool : MonoBehaviour
         }
     }
 
-    public bool RemovePawn(Pawn pawn)
+    /// <summary>
+    /// 彻底移除Pawn，注意使用时机，只是死亡的话不要使用
+    /// </summary>
+    /// <param name="pawn"></param>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    public bool RemovePawn(Pawn pawn, float time)
     {
-        for (int i = 0; i < PawnsList.Count; i++)
+        for (int i = 0; i < PawnList_All.Count; i++)
         {
-            if (PawnsList[i] == pawn)
+            if (PawnList_All[i] == pawn)
             {            
                 _pawnsList.RemoveAt(i);
-                UnityEngine.Object.Destroy(pawn.gameObject);
+                Destroy(pawn.gameObject, time);
                 return true;
             }
         }
@@ -132,7 +161,7 @@ public class PawnGeneratorTool : MonoBehaviour
 
     public Pawn ReflashSelectPawn(int index)
     {
-        RemovePawn(PawnWhenStartList[index]);
+        RemovePawn(PawnWhenStartList[index], 0);
         PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute());
         PawnWhenStartList[index].Def.StopUpdate = true;
         return PawnWhenStartList[index];
@@ -142,7 +171,7 @@ public class PawnGeneratorTool : MonoBehaviour
     {
         for (int i = 0; i < PawnWhenStartList.Count; i++)
         {
-            RemovePawn(PawnWhenStartList[i]);
+            RemovePawn(PawnWhenStartList[i], 0);
         }
         PawnWhenStartList.Clear();
     }

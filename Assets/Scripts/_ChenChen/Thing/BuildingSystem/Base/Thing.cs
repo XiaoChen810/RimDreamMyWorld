@@ -44,15 +44,14 @@ namespace ChenChen_Thing
         /// </summary>
         public int WorkloadBuilt
         {
-            get { return Def.Workload; }
-        }
-
-        /// <summary>
-        /// 物品拆除所需工作量
-        /// </summary>
-        public int WorkloadDemolished
-        {
-            get { return Mathf.CeilToInt(Def.Workload * 0.5f); }
+            get 
+            {
+                if (GameManager.Instance.IsGodMode)
+                {
+                    return 0;
+                }
+                return Def.Workload;
+            }
         }
 
         /// <summary>
@@ -180,7 +179,7 @@ namespace ChenChen_Thing
 
         private void OnGUI()
         {
-            if (GameManager.Instance.CinematicMode) return;
+            if (GameManager.Instance.Mode_Cineme) return;
             if (DrawOutline_Collider)
             {
                 // 计算建造物体的边界框
@@ -214,12 +213,6 @@ namespace ChenChen_Thing
                     {
                         buildingTilemap.SetTile(StaticFuction.VectorTransToInt(transform.position), null);
                     }
-                }
-
-                if (_detailView != null && _detailView.IsPanelOpen)
-                {
-                    PanelManager panel = DetailViewManager.Instance.PanelManager;
-                    panel.RemovePanel(panel.GetTopPanel());
                 }
 
                 if (Def.IsObstacle)

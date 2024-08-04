@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &937125342713328434
 Transform:
   m_ObjectHideFlags: 0
@@ -226,7 +226,7 @@ SpriteRenderer:
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 325b1e7bced55cb4db3f17d59ee8f9d3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -234,7 +234,7 @@ SpriteRenderer:
   m_Size: {x: 0.28125, y: 0.28125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &196523202131820907
@@ -343,7 +343,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4552308859556195692
 RectTransform:
   m_ObjectHideFlags: 0
@@ -773,8 +773,6 @@ MonoBehaviour:
   AttackRange: 2
   AttackSpeedWait: 2
   AttackDamage: 20
-  myBar: {fileID: 2793896146758145657}
-  myPanel: {fileID: 3867911724546873224}
   _pawnKindDef:
     PawnName: 
     PawnDescription: 
@@ -1016,12 +1014,12 @@ GameObject:
   - component: {fileID: 2881332788548658729}
   - component: {fileID: 2793896146758145657}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: WorkProgressSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2881332788548658729
 RectTransform:
   m_ObjectHideFlags: 0

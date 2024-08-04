@@ -310,11 +310,8 @@ MonoBehaviour:
   AttackRange: 2
   AttackSpeedWait: 2
   AttackDamage: 20
-  myBar: {fileID: 4695147935190589323}
-  myPanel: {fileID: 7699334039030370576}
   _pawnKindDef:
     PawnName: 
-    PawnFaction: 
     PawnDescription: 
     PrefabPath: 
     StopUpdate: 0
@@ -376,6 +373,7 @@ MonoBehaviour:
       name: "\u5FC3\u60C5"
       curValue: 100
       maxValue: 100
+    faction: Player
 --- !u!114 &712924167695433583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,7 +742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &841926616297285117
 RectTransform:
   m_ObjectHideFlags: 0
@@ -835,7 +833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1836221783277999389
 Transform:
   m_ObjectHideFlags: 0
@@ -892,7 +890,7 @@ SpriteRenderer:
   m_SortingLayerID: 1226369987
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 325b1e7bced55cb4db3f17d59ee8f9d3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -900,7 +898,7 @@ SpriteRenderer:
   m_Size: {x: 0.28125, y: 0.28125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &7167412650077590746
@@ -1011,7 +1009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2208983504135346531
 RectTransform:
   m_ObjectHideFlags: 0

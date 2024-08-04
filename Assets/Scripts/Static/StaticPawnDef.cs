@@ -1,94 +1,39 @@
 ﻿using ChenChen_AI;
 using System;
+using System.IO;
+using UnityEngine;
 
 public static class StaticPawnDef
 {
-    public static PawnKindDef s_Bald
+    private static readonly string NameFilePath = "String/Name/Pawn_Flower";
+    private static readonly string[] Descriptions = { "普普通通的光头", "活泼的单马尾女孩", "热血的红毛", "猥琐的黄毛", "单纯的平头男", "可爱的小男孩" };
+    private static readonly string[] PrefabPaths = { "Prefabs/Pawn/Bald", "Prefabs/Pawn/SinglePonytail", "Prefabs/Pawn/RedHair", "Prefabs/Pawn/YellowHair", "Prefabs/Pawn/CrewCut", "Prefabs/Pawn/Boy" };
+
+    private static string[] LoadNamesFromFile()
     {
-        get
+        TextAsset nameFile = Resources.Load<TextAsset>(NameFilePath);
+        if (nameFile != null)
         {
-            return new PawnKindDef(pawnName: "光头",
-                                   pawnDescription: "普普通通的光头",
-                                   prefabPath: "Prefabs/Pawn/Bald");
+            return nameFile.text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         }
-    }
-    public static PawnKindDef s_SinglePonytail
-    {
-        get
+        else
         {
-            return new PawnKindDef(pawnName: "单马尾",
-                                   pawnDescription: "活泼的单马尾女孩",
-                                   prefabPath: "Prefabs/Pawn/SinglePonytail");
-        }
-    }
-    public static PawnKindDef s_RedHair 
-    {
-        get
-        {
-            return new PawnKindDef(pawnName: "红毛",
-                                   pawnDescription: "热血的红毛",
-                                   prefabPath: "Prefabs/Pawn/RedHair");
-        }
-    } 
-    public static PawnKindDef s_YellowHair
-    {
-        get
-        {
-            return new PawnKindDef(pawnName: "黄毛",
-                                   pawnDescription: "猥琐的黄毛",
-                                   prefabPath: "Prefabs/Pawn/YellowHair");
-        }
-    } 
-    public static PawnKindDef s_CrewCut
-    {
-        get
-        {
-            return new PawnKindDef(pawnName: "平头男",
-                                   pawnDescription: "单纯的平头男",
-                                   prefabPath: "Prefabs/Pawn/CrewCut");
+            throw new FileNotFoundException($"文件 {NameFilePath} 未找到。");
         }
     }
 
-    public static PawnKindDef s_Boy
-    {
-        get
-        {
-            return new PawnKindDef(pawnName: "小男孩",
-                                   pawnDescription: "可爱的小男孩",
-                                   prefabPath: "Prefabs/Pawn/Boy");
-        }
-    }
-
-    /// <summary>
-    /// 返回一个随机的PawnKindDef对象
-    /// </summary>
-    /// <returns></returns>
     public static PawnKindDef GetRandomPawn()
     {
-        // 创建一个随机数生成器
-        Random rand = new Random();
+        System.Random rand = new System.Random();
 
-        // 从属性数组中随机选择一个索引
-        int randomIndex = rand.Next(0, 6); // 假设有6个属性，需要根据实际情况修改
+        string[] names = LoadNamesFromFile();
+        int randomIndexForName = rand.Next(names.Length);
+        int randomIndexForDescription = rand.Next(Descriptions.Length);
 
-        // 根据随机索引返回对应的PawnKindDef对象
-        switch (randomIndex)
-        {
-            case 0:
-                return s_Bald;
-            case 1:
-                return s_SinglePonytail;
-            case 2:
-                return s_RedHair;
-            case 3:
-                return s_YellowHair;
-            case 4:
-                return s_CrewCut;
-            case 5:
-                return s_Boy;
-            default:
-                // 如果发生意外，返回一个默认的PawnKindDef对象
-                return s_Bald;
-        }
+        return new PawnKindDef(
+            pawnName: names[randomIndexForName],
+            pawnDescription: Descriptions[randomIndexForDescription],
+            prefabPath: PrefabPaths[randomIndexForDescription]
+        );
     }
 }

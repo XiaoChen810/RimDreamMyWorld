@@ -92,7 +92,7 @@ public class PlayManager : SingletonMono<PlayManager>
             saveData.SaveThings.Add(newThingSave);
         }
         // 保存全部棋子
-        foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnsList)
+        foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnList_All)
         {
             Data_PawnSave newPawnSave = new Data_PawnSave(
                 pawn.transform.position,

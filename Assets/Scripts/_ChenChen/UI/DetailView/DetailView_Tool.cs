@@ -59,11 +59,13 @@ namespace ChenChen_UI
                     tool.MarkToDemolish();
                 });
             }
-
-            panel.SetButton("菜单", () =>
+            if(tool.LifeState == BuildingLifeStateType.FinishedBuilding)
             {
-                tool.OpenMenu();
-            });
+                panel.SetButton("菜单", () =>
+                {
+                    tool.OpenMenu();
+                });
+            }
         }
     }
 }

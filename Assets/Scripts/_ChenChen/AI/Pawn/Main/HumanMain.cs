@@ -8,6 +8,8 @@ namespace ChenChen_AI
 {
     public class HumanMain : Pawn
     {
+        #region - JobGiver -
+
         protected List<JobGiver> jobGivers;
 
         public IReadOnlyCollection<JobGiver> JobGivers
@@ -29,14 +31,6 @@ namespace ChenChen_AI
             {
                 Debug.LogWarning("列表中没有这个属性");
             }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            jobGivers = new List<JobGiver>();
-
-            AddJobGiversAndJobs();
         }
 
         private void AddJobGiversAndJobs()
@@ -66,36 +60,34 @@ namespace ChenChen_AI
                 {
                     jobGivers.Add(jobGiver);
                 }
-                else
-                {
-                    Debug.Log($"未发现{jobTypeName}对应的JobGiver");
-                }
             }
         }
 
-        private float _lastGetJobTime = 0;
-        private float _getJobDuration = 0.2f;
+        #endregion
+
+        protected override void Start()
+        {
+            base.Start();
+            jobGivers = new List<JobGiver>();
+
+            AddJobGiversAndJobs();
+        }
 
         protected override void TryToGetJob()
         {
-            if (Time.time > _lastGetJobTime + _getJobDuration)
+            foreach (JobGiver jobGiver in jobGivers)
             {
-                _lastGetJobTime = Time.time;
-                foreach (JobGiver jobGiver in jobGivers)
+                if (jobGiver.Priority == 0)
                 {
-                    if(jobGiver.Priority == 0)
-                    {
-                        break;
-                    }
-                    GameObject job = jobGiver.TryIssueJobPackage(this);
-                    if (job != null)
-                    {
-                        CurJobTarget = job;
-                        return;
-                    }
+                    break;
+                }
+                GameObject job = jobGiver.TryIssueJobPackage(this);
+                if (job != null)
+                {
+                    CurJobTarget = job;
+                    return;
                 }
             }
-            return;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

@@ -168,7 +168,7 @@ namespace ChenChen_AI
         {
             float minDistance = float.MaxValue;
             Pawn targetPawn = null;
-            foreach (var p in GameManager.Instance.PawnGeneratorTool.PawnsList)
+            foreach (var p in GameManager.Instance.PawnGeneratorTool.PawnList_Live)
             {
                 float distacne = (Vector2.Distance(transform.position, p.transform.position));
                 if (distacne < seeRange)

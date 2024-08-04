@@ -14,6 +14,8 @@ namespace ChenChen_AI
         protected Queue<StateBase> _StateQueue;
         protected float _maxTick = -1;
 
+        public bool IsIdle => CurState == null && NextState == null;
+
         /// <summary>
         /// 当前状态
         /// </summary>
@@ -96,12 +98,6 @@ namespace ChenChen_AI
         public GameObject Owner;
         private float _tickTime;
 
-        public StateMachine(GameObject owner)
-        {
-            _StateQueue = new Queue<StateBase>();
-            Owner = owner;
-        }
-
         public StateMachine(GameObject owner, StateBase defaultState)
         {
             _StateQueue = new Queue<StateBase>();
@@ -112,17 +108,17 @@ namespace ChenChen_AI
 
         public void Update()
         {
-            if (_currentState != null)
+            if (CurState != null)
             {
-                switch (_currentState.OnUpdate())
+                switch (CurState.OnUpdate())
                 {
                     case StateType.Success:
-                        _currentState.IsSuccess = true;
-                        TryChangeState(_currentState.NextStateDefault);
+                        CurState.IsSuccess = true;
+                        TryChangeState(CurState.NextStateDefault);
                         break;
                     case StateType.Failed:
-                        _currentState.OnExit();
-                        _currentState = null;
+                        CurState.OnExit();
+                        CurState = null;
                         break;
                     case StateType.Doing:
                         if (_tickTime > Time.time + _maxTick)
@@ -171,30 +167,30 @@ namespace ChenChen_AI
         /// <param name="newState"></param>
         private void ChangeState(StateBase newState)
         {
-            if (_currentState != null && !_currentState.IsSuccess)
+            if (CurState != null && !_currentState.IsSuccess)
             {
                 InterruptState();
             }
-            else if (_currentState != null)
+            else if (CurState != null)
             {
-                _currentState.OnExit();
+                CurState.OnExit();
             }
 
-            _currentState = newState;
-            if (_currentState != null)
+            CurState = newState;
+            if (CurState != null)
             {
-                if (_currentState.OnEnter())
+                if (CurState.OnEnter())
                 {
                     MaxTick = newState.MaxTick;
                     return;
                 }
-                if (_currentState.DebugLogDescription != null)
+                if (CurState.DebugLogDescription != null)
                 {
-                    string log = _currentState.DebugLogDescription;
-                    Debug.Log($"{Owner.name}进入状态 {_currentState} 失败，当前状态自动切换为空：\n" +
+                    string log = CurState.DebugLogDescription;
+                    Debug.Log($"{Owner.name}进入状态 {CurState} 失败，当前状态自动切换为空：\n" +
                         $"失败原因: {log}");
                 }
-                _currentState = null;
+                CurState = null;
             }
         }
 
@@ -205,12 +201,12 @@ namespace ChenChen_AI
         private void InterruptState()
         {
             // 中断当前状态
-            if (_currentState != null)
+            if (CurState != null)
             {
-                _currentState.OnInterrupt();
+                CurState.OnInterrupt();
             }
 
-            _currentState = null;
+            CurState = null;
         }
     }
 }

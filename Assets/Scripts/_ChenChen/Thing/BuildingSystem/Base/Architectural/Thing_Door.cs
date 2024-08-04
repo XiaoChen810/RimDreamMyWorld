@@ -65,5 +65,10 @@ namespace ChenChen_Thing
                 IsOpen = false;
             }
         }
+
+        private void Update()
+        {
+            srDoor.color = SR.color;
+        }
     }
 }

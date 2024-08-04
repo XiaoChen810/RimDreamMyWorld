@@ -11,16 +11,14 @@ namespace ChenChen_AI
         public string JobName = string.Empty;
 
         protected float intervalTime = 5;
-        protected float probability = 1;
         protected Action<GameObject> onGetJobSuccessly;
 
-        private float lastGiverTime;
+        private float giverTimer = 0;
 
-        public JobGiver(Action<GameObject> onGetJobSuccessly, string jobName = null, float intervalTime = 5, float probability = 1)
+        public JobGiver(Action<GameObject> onGetJobSuccessly, string jobName = null, float intervalTime = 5)
         {
             this.onGetJobSuccessly = onGetJobSuccessly;
             this.intervalTime = intervalTime;
-            this.probability = probability;
 
             if (jobName != null )
             {
@@ -32,14 +30,12 @@ namespace ChenChen_AI
 
         public virtual GameObject TryIssueJobPackage(Pawn pawn)
         {
-            if (Time.time < lastGiverTime + intervalTime) return null;
-            if (UnityEngine.Random.value > probability) return null;
-            lastGiverTime = Time.time;
+            giverTimer += Time.deltaTime;
+            if (giverTimer <= intervalTime) return null;
+            giverTimer = 0;
+
             GameObject job = TryGiveJob(pawn);
-            if (job == null)
-            {
-                return null;
-            }
+            if (job == null) return null;
             onGetJobSuccessly?.Invoke(job);
             return job;
         }

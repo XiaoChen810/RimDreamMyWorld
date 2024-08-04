@@ -57,6 +57,11 @@ public class Quadtree
     // 获取对象应插入的子节点索引
     private int GetIndex(GameObject go)
     {
+        if(go == null)
+        {
+            throw new System.Exception("失去实例");
+        }
+
         int index = -1;
         Vector2 pos = go.transform.position;
         float verticalMidpoint = bounds.x + bounds.width / 2f;

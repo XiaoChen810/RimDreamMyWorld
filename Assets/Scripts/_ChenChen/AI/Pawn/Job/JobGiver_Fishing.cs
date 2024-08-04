@@ -6,7 +6,7 @@ namespace ChenChen_AI
 {
     public class JobGiver_Fishing : JobGiver
     {
-        private static readonly float interval_time = 10;
+        private static readonly float interval_time = 1f;
         private static readonly string jobName = "钓鱼";
         public JobGiver_Fishing(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, interval_time)
         {

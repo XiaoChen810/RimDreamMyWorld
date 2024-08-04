@@ -1,30 +1,41 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ChenChen_AI
 {
     public class PawnJob_Move : PawnJob
     {
-        private readonly static float tick = 50;
+        private readonly static float tick = 500;
 
-        /// <summary>
-        /// 改变移动目标，需设置目标点
-        /// </summary>
-        /// <param name="characterMain"></param>
-        /// <param name="targetPos"></param>
-        public PawnJob_Move(Pawn pawn, Vector2 targetPos) : base(pawn, tick, new TargetPtr(targetPos))
+        public PawnJob_Move(Pawn pawn, Vector2 targetPos, Urgency urgency = Urgency.Normal) : base(pawn, tick, new TargetPtr(targetPos))
         {
             this.pawn = pawn;
-            this.Description = "移动";
+            this.Description = " 移动";          
+            this.urgency = urgency;
         }
+
+        /// <summary>
+        /// 移动到设定位置，并附带到达时的方法
+        /// </summary>
+        /// <param name="onReach"> 当到达时，在返回Success前，触发 </param>
+        public PawnJob_Move(Pawn pawn, Vector2 targetPos, Action onReach,Urgency urgency = Urgency.Normal) : base(pawn, tick, new TargetPtr(targetPos))
+        {
+            this.pawn = pawn;
+            this.Description = " 移动";
+            this.onReach = onReach;
+            this.urgency = urgency;
+        }
+
+        Urgency urgency = Urgency.Normal;
+        Action onReach = null;
 
         public override bool OnEnter()
         {
-            if (!pawn.MoveController.GoToHere(target.Positon))
+            if (!pawn.MoveController.GoToHere(target.Positon, urgency))
             {
-                DebugLogDescription = ("无法移动到目标点");
+                DebugLogDescription = ($"无法移动到目标点: {target.Positon} ");
                 return false;
             }
-
             pawn.JobToDo(null);
             pawn.JobCanGet();
             return true;
@@ -34,6 +45,10 @@ namespace ChenChen_AI
         {
             if (pawn.MoveController.ReachDestination)
             {
+                if(onReach != null)
+                {
+                    onReach.Invoke();
+                }
                 return StateType.Success;
             }
 

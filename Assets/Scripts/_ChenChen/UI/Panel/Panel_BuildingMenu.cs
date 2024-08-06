@@ -16,27 +16,27 @@ namespace ChenChen_UI
             base.OnEnter();
             UITool.TryGetChildComponentByName<Button>("Btn结构").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Architectural));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Architectural));
             });
             UITool.TryGetChildComponentByName<Button>("Btn其他").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Other));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Other));
             });
             UITool.TryGetChildComponentByName<Button>("Btn工作台").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Tool));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Tool));
             });
             UITool.TryGetChildComponentByName<Button>("Btn家具").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Furniture));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Furniture));
             });
             UITool.TryGetChildComponentByName<Button>("Btn光照").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Light));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Light));
             });
             UITool.TryGetChildComponentByName<Button>("Btn防卫").onClick.AddListener(() =>
             {
-                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.ThingType.Defend));
+                PanelManager.AddPanel(new Panel_Things(ChenChen_Thing.BuildingType.Defend));
             });
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
             {

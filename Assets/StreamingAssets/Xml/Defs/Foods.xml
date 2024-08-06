@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 模板
+	<FoodDef>
+		<name></name>
+		<label></label>
+		<description></description>
+		<iconPath>Food/ [name] </iconPath>
+		<worth></worth>
+		<workload></workload>
+		<nutritional></nutritional>	// 提供的营养值
+		<requiredMaterials>
+			<Need>
+				<label></label>
+				<numbers></numbers>
+			</Need>
+			<Need>
+				<name></name>
+				<numbers></numbers>
+			</Need>
+		</requiredMaterials>
+	</FoodDef>
+-->
+
+<Foods>
+	
+	
+</Foods>

@@ -1,6 +1,7 @@
 ﻿using ChenChen_Thing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -16,7 +17,16 @@ namespace ChenChen_AI
 
         protected override GameObject TryGiveJob(Pawn pawn)
         {
-            return ThingSystemManager.Instance.GetTreeToCut();
+            var trees = ThingSystemManager.Instance.GetThingsInstance<Thing_Tree>();
+            if (trees != null)
+            {
+                var res = trees.FirstOrDefault<Thing_Tree>(t => t.IsMarkCut && t.IsFree);
+                if (res != null)
+                {
+                    return res.gameObject;
+                }
+            }
+            return null;
         }
     }
 }

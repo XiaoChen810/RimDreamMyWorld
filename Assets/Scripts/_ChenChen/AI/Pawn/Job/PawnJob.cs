@@ -1,3 +1,4 @@
+using ChenChen_Core;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -32,9 +33,10 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if (target.GameObject.TryGetComponent<PermissionBase>(out PermissionBase per))
+            if (target.GameObject.TryGetComponent<IGrant>(out var grant))
             {
-                if (!per.GetPermission(pawn))
+                grant.GetPermission(pawn);
+                if(grant.UserPawn != pawn)
                 {
                     DebugLogDescription = ("目标已经其他人被使用");
                     return false;
@@ -68,12 +70,9 @@ namespace ChenChen_AI
 
             if (target != null && target.IsGameObject && target.GameObject != null)
             {
-                if (target.GameObject.TryGetComponent<PermissionBase>(out PermissionBase per))
+                if (target.GameObject.TryGetComponent<IGrant>(out var grant))
                 {
-                    if (!per.RevokePermission(pawn))
-                    {
-                        Debug.Log($"归还目标使用权限失败：{pawn.name} to {per.name}");
-                    }
+                    grant.RevokePermission(pawn);
                 }
             }
 

@@ -67,7 +67,6 @@ namespace ChenChen_AI
                 {
                     pawn.MoveController.FilpRight();
                 }
-                pawn.Animator.SetTrigger("Attack");
                 _targetPawn.GetDamage(pawn.gameObject, pawn.AttackDamage);
             }
 

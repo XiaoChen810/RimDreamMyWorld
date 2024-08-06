@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Heads>
+	<HeadDef>
+		<name>正常</name>
+		<label>normal</label>
+		<description></description>
+		<iconPath>Head/Heads_Normal</iconPath>
+	</HeadDef>
+
+	<HeadDef>
+		<name>尖</name>
+		<label>pointy</label>
+		<description></description>
+		<iconPath>Head/Heads_Pointy</iconPath>
+	</HeadDef>
+
+	<HeadDef>
+		<name>宽</name>
+		<label>wide</label>
+		<description></description>
+		<iconPath>Head/Heads_Wide</iconPath>
+	</HeadDef>
+
+</Heads>

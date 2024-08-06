@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Bodies>
+	<BodyDef>
+		<name>儿童</name>
+		<label>child</label>
+		<description>儿童体型</description>
+		<iconPath>Body/Naked_Child</iconPath>
+	</BodyDef>
+
+	<BodyDef>
+		<name>瘦</name>
+		<label>thin</label>
+		<description>瘦小体型</description>
+		<iconPath>Body/Naked_Thin</iconPath>
+	</BodyDef>
+</Bodies>

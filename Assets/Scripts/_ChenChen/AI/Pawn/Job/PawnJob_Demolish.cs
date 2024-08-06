@@ -7,7 +7,7 @@ namespace ChenChen_AI
     public class PawnJob_Demolish : PawnJob
     {
         private readonly static float tick = 50;
-        private Thing targetComponent;
+        private Building targetComponent;
         private float _timer;
         private float _timeOne;
 
@@ -22,7 +22,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            targetComponent = target.GetComponent<Thing>();
+            targetComponent = target.GetComponent<Building>();
             if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");
@@ -52,7 +52,7 @@ namespace ChenChen_AI
                 return StateType.Success;
             }
 
-            if (targetComponent.CurDurability <= 0)
+            if (targetComponent.Durability <= 0)
             {
                 return StateType.Success;
             }
@@ -73,8 +73,6 @@ namespace ChenChen_AI
                     targetComponent.OnDemolish(1);
                     _timer = 0;
                 }
-
-                pawn.Animator.SetBool("IsDoing", true);
             }
 
             return StateType.Doing;
@@ -83,15 +81,10 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()
         {
-            // 归还目标使用权限
-            targetComponent.RevokePermission(pawn);
-
             OnExit();
         }
     }

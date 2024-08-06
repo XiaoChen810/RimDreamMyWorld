@@ -14,8 +14,6 @@ namespace ChenChen_AI
 
         public PawnMoveController MoveController { get; protected set; }
 
-        public Animator Animator { get; protected set; }
-
         public EmotionController EmotionController { get; protected set; }
 
         [Header("当前任务")]
@@ -55,6 +53,27 @@ namespace ChenChen_AI
             }  
         }
 
+        [Header("Body")]
+        public SpriteRenderer SR_Hair;
+        public SpriteRenderer SR_Head;
+        public SpriteRenderer SR_Appeal;
+        public SpriteRenderer SR_Body;
+
+        private Animator anim;
+
+        public void SetAnimator(string animation, bool value)
+        {
+            foreach (AnimatorControllerParameter param in anim.parameters)
+            {
+                if (param.type == AnimatorControllerParameterType.Bool)
+                {
+                    anim.SetBool(param.name, false);
+                }
+            }
+
+            anim.SetBool(animation, value);
+        }
+
         #region - 属性 - 
 
         [Header("人物定义")]
@@ -65,6 +84,7 @@ namespace ChenChen_AI
             { 
                 if(_pawnKindDef == null)
                 {
+                    Debug.LogError("Def is Null");
                     _pawnKindDef = new PawnKindDef();
                 }
                 return _pawnKindDef; 
@@ -224,7 +244,6 @@ namespace ChenChen_AI
         {
             if (!canDamaged) return;
 
-            Animator.SetTrigger("Hurted");
             StartCoroutine(AvoidDamage(2));
 
             StopJob(10);
@@ -250,7 +269,7 @@ namespace ChenChen_AI
         protected virtual void Start()
         {
             MoveController = GetComponent<PawnMoveController>();
-            Animator = GetComponent<Animator>();
+            anim = GetComponent<Animator>();
             EmotionController = GetComponentInChildren<EmotionController>();
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
@@ -269,8 +288,7 @@ namespace ChenChen_AI
 
             if (Info.HP.IsSpace)
             {
-                Info.IsDead = true;
-                Animator.SetBool("IsDie", true);              
+                Info.IsDead = true;          
             }
 
             StateMachine.Update();

@@ -7,10 +7,10 @@ using ChenChen_Thing;
 
 public class ThingDefGeneratorEditorWindow : EditorWindow
 {
-    private ThingDefGenerator ThingGenerator;
+    private BuildingDefGenerator ThingGenerator;
 
     private string ThingName;
-    private ThingType ThingType;
+    private BuildingType ThingType;
     private int ThingWorkload;
     private int ThingDurability;
     private Sprite ThingPreviewSprite;
@@ -26,7 +26,7 @@ public class ThingDefGeneratorEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        ThingGenerator = new ThingDefGenerator();
+        ThingGenerator = new BuildingDefGenerator();
     }
 
     private void OnGUI()
@@ -35,7 +35,7 @@ public class ThingDefGeneratorEditorWindow : EditorWindow
 
         // 属性设置
         ThingName = EditorGUILayout.TextField("名字", ThingName);
-        ThingType = (ThingType)EditorGUILayout.EnumPopup("类型", ThingType); 
+        ThingType = (BuildingType)EditorGUILayout.EnumPopup("类型", ThingType); 
         ThingWorkload = EditorGUILayout.IntField("工作量", ThingWorkload);
         ThingDurability = EditorGUILayout.IntField("耐久度",ThingDurability);
         ThingPreviewSprite = (Sprite)EditorGUILayout.ObjectField("预览图", ThingPreviewSprite, typeof(Sprite), false);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 模板
+	<WeaponDef>
+		<name></name>
+		<label></label>
+		<description></description>
+		<iconPath>Weapon/ [name] </iconPath>
+		<worth></worth>
+		<workload></workload>
+		<meleeDamage></meleeDamage>
+		<rangeDamage></rangeDamage>
+		<requiredMaterials>
+			<Need>
+				<label></label>
+				<numbers></numbers>
+			</Need>
+			<Need>
+				<name></name>
+				<numbers></numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>
+-->
+
+<Weapons>
+	
+	
+</Weapons>

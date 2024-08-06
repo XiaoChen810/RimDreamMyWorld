@@ -29,10 +29,14 @@ public class Indicator : MonoBehaviour
         Bounds Boxbounds = sr.bounds;
 
         // 取最大矩形框
-        //Vector2 min = new Vector2(Mathf.Floor(Boxbounds.min.x), Mathf.Floor(Boxbounds.min.y));
-        //Vector2 max = new Vector2(Mathf.Ceil(Boxbounds.max.x), Mathf.Ceil(Boxbounds.max.y)); 
         Vector2 min = new Vector2(Boxbounds.min.x, Boxbounds.min.y);
         Vector2 max = new Vector2(Boxbounds.max.x, Boxbounds.max.y);
+
+        if(Mathf.Abs(max.x - max.x) < 1 || Mathf.Abs(max.y - max.y) < 1)
+        {
+            min -= new Vector2(0.5f, 0.5f);
+            max += new Vector2(0.5f, 0.5f);
+        }
 
         float duration = 0.5f;  // 动画时间
 

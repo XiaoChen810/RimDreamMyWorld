@@ -16,7 +16,7 @@ namespace ChenChen_AI
         protected override GameObject TryGiveJob(Pawn pawn)
         {
             if (!pawn.Def.CanBuild) return null;
-            return ThingSystemManager.Instance.GetThingInstance(BuildingLifeStateType.MarkDemolished, needFree: true);
+            return ThingSystemManager.Instance.GetBuildingInstance(BuildingLifeStateType.MarkDemolished);
         }
     }
 }

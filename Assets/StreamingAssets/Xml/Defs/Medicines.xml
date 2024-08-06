@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 模板
+	<MedicineDef>
+		<name></name>
+		<label></label>
+		<description></description>
+		<iconPath>Medicine/ [name] </iconPath>
+		<worth></worth>
+		<workload></workload>
+		<therapeutic></therapeutic>	//疗效
+		<requiredMaterials>
+			<Need>
+				<label></label>
+				<numbers></numbers>
+			</Need>
+			<Need>
+				<name></name>
+				<numbers></numbers>
+			</Need>
+		</requiredMaterials>
+	</MedicineDef>
+-->
+
+<Medicines>
+	
+</Medicines>

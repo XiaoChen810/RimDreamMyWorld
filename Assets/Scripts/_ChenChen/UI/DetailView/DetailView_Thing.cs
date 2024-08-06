@@ -24,42 +24,8 @@ namespace ChenChen_UI
             if (panel == null) return;
             if (thing == null) return;
             content.Clear();
-            content.Add($"耐久度: {thing.CurDurability} / {thing.MaxDurability}");                     
-            content.Add($"使用者: {(thing.TheUsingPawn != null ? thing.TheUsingPawn.name : null)}");
-            if(thing.Workload > 0)
-            {
-                content.Add($"剩余工作量: {thing.Workload}");
-            }
-
-            panel.SetView(
-                thing.Def.DefName,
-                content
-                );
-
-            if (thing.LifeState == BuildingLifeStateType.MarkBuilding)
-            {
-                panel.RemoveAllButton();
-                panel.SetButton("取消", () =>
-                {
-                    thing.OnCancelBuild();
-                });
-            }
-            if (thing.LifeState == BuildingLifeStateType.MarkDemolished)
-            {
-                panel.RemoveAllButton();
-                panel.SetButton("取消", () =>
-                {
-                    thing.OnCanclDemolish();
-                });
-            }
-            if (thing.LifeState == BuildingLifeStateType.FinishedBuilding)
-            {
-                panel.RemoveAllButton();
-                panel.SetButton("拆除", () =>
-                {
-                    thing.MarkToDemolish();
-                });
-            }
+            content.Add($"耐久度: {thing.Durability} / {thing.MaxDurability}");                     
+            content.Add($"使用者: {(thing.UserPawn != null ? thing.UserPawn.name : null)}");          
         }
 
         public override void StartShow()

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Hairs>
+	<HairDef>
+		<name>长发</name>
+		<label>wave_long</label>
+		<description></description>
+		<iconPath>Hair/wave_long</iconPath>
+	</HairDef>
+	<HairDef>
+		<name>双马尾</name>
+		<label>twin0</label>
+		<description></description>
+		<iconPath>Hair/twin0</iconPath>
+	</HairDef>
+	<HairDef>
+		<name>双马尾</name>
+		<label>twin1</label>
+		<description></description>
+		<iconPath>Hair/twin1</iconPath>
+	</HairDef>
+	<HairDef>
+		<name>双马尾</name>
+		<label>twin2</label>
+		<description></description>
+		<iconPath>Hair/twin2</iconPath>
+	</HairDef>
+	<HairDef>
+		<name>双马尾</name>
+		<label>twin3</label>
+		<description></description>
+		<iconPath>Hair/twin3</iconPath>
+	</HairDef>
+	<HairDef>
+		<name>双马尾</name>
+		<label>twin4</label>
+		<description></description>
+		<iconPath>Hair/twin4</iconPath>
+	</HairDef>
+</Hairs>

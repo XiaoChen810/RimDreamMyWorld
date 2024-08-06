@@ -25,7 +25,7 @@ namespace ChenChen_AI
 
         private GameObject FindBed(Pawn pawn)
         {
-            var beds = ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>(BuildingLifeStateType.FinishedBuilding);
+            var beds = ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>();
 
             foreach (var bed in beds)
             {

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 模板
+	<ApparelDef>
+		<name>ApronSkirt</name>
+		<label>apronSkirt</label>
+		<description>围裙</description>
+		<iconPath>Apparel/ApronSkirt</iconPath>
+		<worth>50</worth>
+		<workload>100</workload>
+		<requiredMaterials>
+			<Need>
+				<label>Cloth</label>
+				<numbers>10</numbers>
+			</Need>
+			<Need>
+				<name>Leather</name>
+				<numbers>5</numbers>
+			</Need>
+		</requiredMaterials>
+	</ApparelDef>
+-->
+
+<Apparels>
+	<ApparelDef>
+		<name>ApronSkirt</name>
+		<label>apronSkirt</label>
+		<description>围裙</description>
+		<iconPath>Apparel/ApronSkirt</iconPath>
+		<worth>50</worth>
+		<workload>100</workload>
+		<requiredMaterials>
+			<Need>
+				<label>cloth</label>
+				<numbers>10</numbers>
+			</Need>
+			<Need>
+				<label>leather</label>
+				<numbers>5</numbers>
+			</Need>
+		</requiredMaterials>
+	</ApparelDef>
+
+	<ApparelDef>
+		<name>BattleSuit</name>
+		<label>battleSuit</label>
+		<description>作战服</description>
+		<iconPath>Apparel/BattleSuit</iconPath>
+		<worth>500</worth>
+		<workload>200</workload>
+		<requiredMaterials>
+			<Need>
+				<label>cloth</label>
+				<numbers>10</numbers>
+			</Need>
+			<Need>
+				<label>leather</label>
+				<numbers>20</numbers>
+			</Need>
+		</requiredMaterials>
+	</ApparelDef>
+
+	<ApparelDef>
+		<name>ChefSuit</name>
+		<label>chefSuit</label>
+		<description>厨师服</description>
+		<iconPath>Apparel/ChefSuit</iconPath>
+		<worth>50</worth>
+		<workload>150</workload>
+		<requiredMaterials>
+			<Need>
+				<label>cloth</label>
+				<numbers>10</numbers>
+			</Need>
+		</requiredMaterials>
+	</ApparelDef>
+</Apparels>

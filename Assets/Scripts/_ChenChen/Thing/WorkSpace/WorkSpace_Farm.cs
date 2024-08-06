@@ -71,7 +71,6 @@ namespace ChenChen_Thing
             }
             Debug.Log($"该种植区{name}已经满了，权限设为IsBooking");
             farmingPositon = Vector2.zero;
-            _permission = PermissionType.IsBooking;
             return false;
         }
 
@@ -141,7 +140,6 @@ namespace ChenChen_Thing
                 if (cell.pos == position && cell.isUse && !cell.isFarm)
                 {
                     cell.isUse = false;
-                    _permission = PermissionType.IsFree;
                 }
             }
         }

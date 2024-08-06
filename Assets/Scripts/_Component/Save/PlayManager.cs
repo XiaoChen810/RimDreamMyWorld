@@ -82,14 +82,13 @@ public class PlayManager : SingletonMono<PlayManager>
         foreach (var thing in ThingSystemManager.Instance.GetAllThingsInstance())
         {
             // 保存
-            ThingDef thingDef = thing.Def;
-            Data_ThingSave newThingSave = new Data_ThingSave(
-                thingDef.DefName,
-                thing.transform.position,
-                thing.transform.rotation,
-                thing.MapName,
-                thing.LifeState);
-            saveData.SaveThings.Add(newThingSave);
+            //ThingDef thingDef = thing.Def;
+            //Data_ThingSave newThingSave = new Data_ThingSave(
+            //    thingDef.DefName,
+            //    thing.transform.position,
+            //    thing.transform.rotation,
+            //    thing.LifeState);
+            //saveData.SaveThings.Add(newThingSave);
         }
         // 保存全部棋子
         foreach (var pawn in GameManager.Instance.PawnGeneratorTool.PawnList_All)

@@ -10,11 +10,11 @@ namespace ChenChen_UI
     {
         static readonly string path = "UI/Panel/Menus/ThingsPanel";
 
-        private ThingType ThingType;
+        private BuildingType ThingType;
         private GameObject content;
         private ThingPool thingPool;
 
-        public Panel_Things(ThingType thingType) : base(new UIType(path))
+        public Panel_Things(BuildingType thingType) : base(new UIType(path))
         {
             this.ThingType = thingType;
         }
@@ -36,9 +36,9 @@ namespace ChenChen_UI
         /// <summary>
         /// 初始化内容
         /// </summary>
-        private void InitContent(ThingType type)
+        private void InitContent(BuildingType type)
         {
-            Dictionary<string, ThingDef> dict = ThingSystemManager.Instance.ThingDefDictionary;
+            Dictionary<string, BuildingDef> dict = ThingSystemManager.Instance.ThingDefDictionary;
 
             // 根据蓝图字典,设置成对应的按钮添加到内容(content)中
             foreach (var item in dict)

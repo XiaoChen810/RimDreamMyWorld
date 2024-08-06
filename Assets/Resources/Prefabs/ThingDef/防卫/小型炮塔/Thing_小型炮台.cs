@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 
 namespace ChenChen_Thing
 {
-    public class Thing_小型炮台 : Thing
+    public class Thing_小型炮台 : Building
     {
         [Header("炮筒")]
         public GameObject Top;
@@ -22,9 +22,10 @@ namespace ChenChen_Thing
 
         protected ObjectPool<GameObject> _bulletPool;
 
-        protected override void OnEnable()
+        protected override void Start()
         {
-            base.OnEnable();
+            base.Start();
+
             _bulletPool = new ObjectPool<GameObject>(Create, Get, Release);
             StartCoroutine(PeriodicScan());
         }

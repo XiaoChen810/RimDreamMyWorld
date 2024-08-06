@@ -64,8 +64,6 @@ namespace ChenChen_AI
                     }
                     return StateType.Failed;
                 }
-
-                pawn.Animator.SetBool("IsDoing", true);
             }
             return StateType.Doing;
         }
@@ -73,8 +71,6 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()

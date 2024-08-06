@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 模板
+	<MaterialDef>
+		<name></name>
+		<label></label>
+		<description></description>
+		<iconPath>Material/ [name] </iconPath>
+		<worth></worth>
+		<workload></workload>
+		<armorFactor></armorFactor>		// 装甲系数
+		<warmthFactor></warmthFactor>	// 保暖系数
+		<damageFactor></damageFactor>	// 伤害系数
+	</MaterialDef>
+-->
+
+<Materials>
+	
+</Materials>

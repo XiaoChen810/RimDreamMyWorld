@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -144,8 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930889b399ff9154e9c0064ab903370e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _theUsingPawn: {fileID: 0}
-  _permission: 0
+  isLocked: 0
+  userPawn: {fileID: 0}
   Def: {fileID: 11400000, guid: 4f0f0e50be6a4644aa932379f2bb4ba1, type: 2}
   _lifeState: 0
   _tilemapName: Door

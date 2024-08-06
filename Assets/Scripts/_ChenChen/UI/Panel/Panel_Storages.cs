@@ -35,14 +35,14 @@ namespace ChenChen_UI
                 return;
             }
 
-            foreach (var storage in StorageManager.Instance.StoragesDictionary)
-            {
-                GameObject stuffInfomation = Object.Instantiate(stuffInfomationPrefab);
-                stuffInfomation.name = $"BtnBlueprint{storage.Value.Def.Name}";
-                stuffInfomation.transform.Find("NameText").GetComponent<Text>().text = storage.Value.Def.Name;
-                stuffInfomation.transform.Find("NumText").GetComponent<Text>().text = $"数量: {storage.Value.Num}";
-                stuffInfomation.transform.SetParent(content.transform, false);
-            }
+            //foreach (var storage in StorageManager.Instance.StoragesDictionary)
+            //{
+            //    GameObject stuffInfomation = Object.Instantiate(stuffInfomationPrefab);
+            //    stuffInfomation.name = $"BtnBlueprint{storage.Value.Def.Name}";
+            //    stuffInfomation.transform.Find("NameText").GetComponent<Text>().text = storage.Value.Def.Name;
+            //    stuffInfomation.transform.Find("NumText").GetComponent<Text>().text = $"数量: {storage.Value.Num}";
+            //    stuffInfomation.transform.SetParent(content.transform, false);
+            //}
         }
     }
 }

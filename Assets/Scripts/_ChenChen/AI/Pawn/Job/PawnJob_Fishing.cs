@@ -9,17 +9,12 @@ namespace ChenChen_AI
         private readonly static float tick = 50;
         private Thing_Furniture curTargetComponent;
 
-        private float _time;
-        private float animTime1 = 1.135f;
-        private float animTime2 = 6.135f;
-        private float animTime3 = 10f;
-        private float animTime4 = 15f;
+        private float _timer;
+        private float _oneTime = 10f;
 
         /// <summary>
         /// 开始钓鱼，需要设置钓鱼位置
         /// </summary>
-        /// <param name="characterMain"></param>
-        /// <param name="fishPos"></param>
         public PawnJob_Fishing(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
         {
         }
@@ -58,29 +53,13 @@ namespace ChenChen_AI
             {
                 pawn.JobDoing();
                 this.Description = "正在钓鱼";
-                _time += Time.deltaTime;
+                _timer += Time.deltaTime;
                 pawn.MoveController.FilpRight();
-                pawn.Animator.SetBool("IsWalk", false);
-                pawn.Animator.SetBool("IsRun", false);
-                pawn.Animator.SetBool("IsSwimming", false);
             }
 
-            if (_time > 0 && _time <= animTime1) pawn.Animator.SetInteger("IsFishing", 1);
-            if (_time > animTime1 && _time <= animTime2) pawn.Animator.SetInteger("IsFishing", 2);
-            if (_time > animTime2 && _time <= animTime3) pawn.Animator.SetInteger("IsFishing", 3);
-
-            if (_time > animTime3 && _time <= animTime4)
+            if (_timer > _oneTime)
             {
-                if (pawn.Animator.GetInteger("IsFishing") != 4)
-                {
-                    Debug.Log("钓上一条鱼");
-                }
-                pawn.Animator.SetInteger("IsFishing", 4);
-            }
-
-            if (_time > animTime4)
-            {
-                pawn.Animator.SetInteger("IsFishing", 0);
+                Debug.Log("钓上一条鱼");
                 return StateType.Success;
             }
 
@@ -90,8 +69,6 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetInteger("IsFishing", 0);
         }
 
         public override void OnInterrupt()

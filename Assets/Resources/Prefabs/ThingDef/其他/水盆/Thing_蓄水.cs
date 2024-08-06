@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using ChenChen_Map;
 using ChenChen_UI;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace ChenChen_Thing
 {
-    public class Thing_蓄水 : Thing
+    public class Thing_蓄水 : Building
     {
         private LineRenderer lineRenderer;
         private GameManager gameManager;
@@ -20,9 +19,11 @@ namespace ChenChen_Thing
         [SerializeField] private float line_width = 0.1f;
         [SerializeField] private int line_max_deep = 7;
         [SerializeField] private Sprite full_icon;
-     
-        private void Start()
+
+        protected override void Start()
         {
+            base.Start();
+
             lineRenderer = gameObject.AddComponent<LineRenderer>();
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
             lineRenderer.startWidth = line_width;
@@ -33,20 +34,25 @@ namespace ChenChen_Thing
 
             gameManager = GameManager.Instance;
 
-            DetailView.OverrideContentAction = ((DetailViewPanel panel) =>
+            DetailView.OverrideContentAction = (DetailViewOverrideContentAction());
+        }
+
+        private Action<DetailViewPanel> DetailViewOverrideContentAction()
+        {
+            return (DetailViewPanel panel) =>
             {
                 List<String> content = new List<String>();
-                content.Add($"耐久度: {this.CurDurability} / {this.MaxDurability}");
-                content.Add($"使用者: {(this.TheUsingPawn != null ? this.TheUsingPawn.name : null)}");
+                content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
+                content.Add($"使用者: {(this.UserPawn != null ? this.UserPawn.name : null)}");
                 if (this.Workload > 0)
                 {
                     content.Add($"剩余工作量: {this.Workload}");
                 }
-                if(this.LifeState == BuildingLifeStateType.FinishedBuilding)
+                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
                 {
                     content.Add($"蓄水量: {this.water.ToString("0.0")}");
                 }
-                panel.SetView(this.Def.DefName,content);
+                panel.SetView(this.Def.DefName, content);
                 if (this.LifeState == BuildingLifeStateType.MarkBuilding)
                 {
                     panel.RemoveAllButton();
@@ -71,7 +77,7 @@ namespace ChenChen_Thing
                         this.MarkToDemolish();
                     });
                 }
-            });
+            };
         }
 
         private void Update()

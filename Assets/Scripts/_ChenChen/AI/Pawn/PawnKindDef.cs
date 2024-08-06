@@ -12,8 +12,6 @@ namespace ChenChen_AI
 
         public string PawnDescription;
 
-        public string PrefabPath;
-
         public bool StopUpdate;
         // Ñ¡Ôñ
         public bool CanSelect = true;
@@ -31,13 +29,19 @@ namespace ChenChen_AI
         public bool CanForaging = true;
 
 
-        public PawnKindDef() { }
+        public PawnKindDef()
+        {          
+        }
 
-        public PawnKindDef(string pawnName, string pawnDescription, string prefabPath)
+        public PawnKindDef(string pawnName)
+        {
+            PawnName = pawnName;
+        }
+
+        public PawnKindDef(string pawnName, string pawnDescription)
         {
             PawnName = pawnName;
             PawnDescription = pawnDescription;
-            PrefabPath = prefabPath;
             StopUpdate = false;
         }
 

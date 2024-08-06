@@ -43,7 +43,7 @@ public class WorkSpaceTool : MonoBehaviour
         foreach(var space in TotalWorkSpaceDictionary)
         {
             if(space.Value.WorkSpaceType == workSpaceType 
-                && space.Value.Permission == PermissionBase.PermissionType.IsFree)
+                && space.Value.IsFree)
             {
                 result = space.Value.gameObject;
                 break;

@@ -67,10 +67,9 @@ namespace ChenChen_AI
                 }
 
                 pawn.MoveController.FilpIt(target.Positon.x);
-                pawn.Animator.SetBool("IsLumbering", true);
             }
 
-            if (tree.CurDurability <= 0)
+            if (tree.Durability <= 0)
             {
                 return StateType.Success;
             }
@@ -86,8 +85,6 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetBool("IsLumbering", false);
         }
 
         public override void OnInterrupt()

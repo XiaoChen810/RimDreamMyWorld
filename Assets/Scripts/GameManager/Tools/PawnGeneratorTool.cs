@@ -1,10 +1,12 @@
 ﻿using ChenChen_AI;
+using ChenChen_Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class PawnGeneratorTool : MonoBehaviour
 {
+    #region - PawnList -
     [SerializeField] private List<Pawn> _pawnsList = new List<Pawn>();
     /// <summary>
     /// 游戏内全部的Pawn列表
@@ -48,6 +50,10 @@ public class PawnGeneratorTool : MonoBehaviour
         get { return _pawnWhenStartList; }
     }
 
+    #endregion
+
+    private GameObject pawnPrefab = null;
+
     /// <summary>
     /// 生成Pawn，并添加到PawnsList
     /// </summary>
@@ -55,45 +61,33 @@ public class PawnGeneratorTool : MonoBehaviour
     {
         if (!TryInitGameObject(kindDef, out Pawn newPawn))
         {
-            Debug.LogWarning("初始化游戏物体失败");
+            Debug.LogWarning("初始化 Pawn 失败");
             return null;
         }
 
-        if (newPawn.TryGetComponent<Pawn>(out Pawn pawn))
-        {
-            pawn.Def = (PawnKindDef)kindDef.Clone();
-            pawn.Info = (PawnInfo)info.Clone();
-            pawn.Attribute = (PawnAttribute)attribute.Clone();
-            _pawnsList.Add(newPawn);
-            return pawn;
-        }
-        else
-        {
-            Debug.LogError("获取Pawn组件失败");
-            return null;
-        }
+        newPawn.Def = (PawnKindDef)kindDef.Clone();
+        newPawn.Info = (PawnInfo)info.Clone();
+        newPawn.Attribute = (PawnAttribute)attribute.Clone();
+        _pawnsList.Add(newPawn);
+        return newPawn;
 
         bool TryInitGameObject(PawnKindDef kindDef, out Pawn result)
         {
-            GameObject prefab = null;
-            if (prefab == null)
+            if (pawnPrefab == null)
             {
-                prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
+                pawnPrefab = Resources.Load<GameObject>("Prefabs/Pawn/PawnDefault");
             }
-            if (prefab == null)
-            {
-                kindDef = StaticPawnDef.GetRandomPawn();
-                prefab = Resources.Load<GameObject>(kindDef.PrefabPath);
-            }
-            if (prefab == null)
-            {
-                Debug.LogError("Prefab is null");
-                result = null;
-                return false;
-            }
-            result = UnityEngine.Object.Instantiate(prefab, position, Quaternion.identity).GetComponent<Pawn>();    
+
+            result = Instantiate(pawnPrefab, position, Quaternion.identity).GetComponent<Pawn>();
             result.name = kindDef.PawnName;
             result.transform.parent = transform;
+
+            XmlLoader xmlLoader = XmlLoader.Instance;
+            result.SR_Hair.sprite = xmlLoader.GetRandom<HairDef>(XmlLoader.Def_PawnHair).sprite;
+            result.SR_Body.sprite = xmlLoader.GetRandom<BodyDef>(XmlLoader.Def_PawnBody).sprite;
+            result.SR_Appeal.sprite = xmlLoader.GetRandom<ApparelDef>(XmlLoader.Def_Apparel).sprite;
+            result.SR_Head.sprite = xmlLoader.GetRandom<HeadDef>(XmlLoader.Def_PawnHead).sprite;
+
             return true;
         }
     }
@@ -105,7 +99,7 @@ public class PawnGeneratorTool : MonoBehaviour
     /// <returns></returns>
     public Pawn GeneratePawn(Vector3 position)
     {
-        return GeneratePawn(position, StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute());
+        return GeneratePawn(position, new PawnKindDef(StaticPawnDef.GetRandomPawnName()), new PawnInfo(), new PawnAttribute());
     }
 
     /// <summary>
@@ -116,7 +110,7 @@ public class PawnGeneratorTool : MonoBehaviour
     /// <returns></returns>
     public Pawn GeneratePawn(Vector3 position, string faction)
     {
-        return GeneratePawn(position, StaticPawnDef.GetRandomPawn(), new PawnInfo(faction), new PawnAttribute());
+        return GeneratePawn(position, new PawnKindDef(StaticPawnDef.GetRandomPawnName()), new PawnInfo(faction), new PawnAttribute());
     }
 
     public void LoadScenePawnFromSave(Data_GameSave data_GameSave)
@@ -148,11 +142,13 @@ public class PawnGeneratorTool : MonoBehaviour
         return false;
     }
 
+    private readonly float HIGH = 2f;
+
     public void StartSelect()
     {
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(0, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
-        PawnWhenStartList.Add(GeneratePawn(new Vector3(5, 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute()));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(-5, HIGH, 0)));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(0, HIGH, 0)));
+        PawnWhenStartList.Add(GeneratePawn(new Vector3(5, HIGH, 0)));
         foreach (var pawn in PawnWhenStartList)
         {
             pawn.Def.StopUpdate = true;
@@ -162,7 +158,7 @@ public class PawnGeneratorTool : MonoBehaviour
     public Pawn ReflashSelectPawn(int index)
     {
         RemovePawn(PawnWhenStartList[index], 0);
-        PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), 1.3f, 0), StaticPawnDef.GetRandomPawn(), new PawnInfo(), new PawnAttribute());
+        PawnWhenStartList[index] = GeneratePawn(new Vector3(5 * (index - 1), HIGH, 0));
         PawnWhenStartList[index].Def.StopUpdate = true;
         return PawnWhenStartList[index];
     }

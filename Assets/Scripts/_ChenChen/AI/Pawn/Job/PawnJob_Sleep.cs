@@ -43,7 +43,6 @@ namespace ChenChen_AI
             {
                 pawn.JobDoing();
                 this.Description = "ÕýÔÚË¯¾õ";
-                pawn.Animator.SetBool("IsDie", true);
                 pawn.Info.Sleepiness.CurValue += Time.deltaTime;
                 pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
             }
@@ -59,8 +58,6 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetBool("IsDie", false);
         }
 
         public override void OnInterrupt()

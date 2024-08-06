@@ -7,7 +7,7 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 50;
 
-        private Thing targetComponent;
+        private Building targetComponent;
         private float _time;
         private float _timeOne;
 
@@ -28,7 +28,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if(baseResult != true) return baseResult;
 
-            targetComponent = target.GetComponent<Thing>();
+            targetComponent = target.GetComponent<Building>();
             if (targetComponent == null)
             {
                 DebugLogDescription = ("尝试获取组件失败");
@@ -63,8 +63,6 @@ namespace ChenChen_AI
                     targetComponent.OnBuild(1);
                     _time = 0;
                 }
-
-                pawn.Animator.SetBool("IsDoing", true);
             }
 
             if (targetComponent.Workload <= 0)
@@ -78,8 +76,6 @@ namespace ChenChen_AI
         public override void OnExit()
         {
             base.OnExit();
-
-            pawn.Animator.SetBool("IsDoing", false);
         }
 
         public override void OnInterrupt()

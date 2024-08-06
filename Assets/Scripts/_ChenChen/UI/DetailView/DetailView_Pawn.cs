@@ -19,7 +19,6 @@ namespace ChenChen_UI
                 GameObject go = Instantiate(Resources.Load<GameObject>("Views/Indicator"), gameObject.transform);
                 indicator = go.GetComponent<Indicator>();
                 indicator.gameObject.name = "Indicator";
-                go.transform.position += new Vector3(0, 0.4f, 0);
             }
             IsIndicatorOpen = true;
             indicator.gameObject.SetActive(true);
@@ -33,7 +32,6 @@ namespace ChenChen_UI
                 GameObject go = Instantiate(Resources.Load<GameObject>("Views/Indicator"), gameObject.transform);
                 indicator = go.GetComponent<Indicator>();
                 indicator.gameObject.name = "Indicator";
-                go.transform.position += new Vector3(0, 0.4f, 0);
             }
             IsIndicatorOpen = false;
             indicator.gameObject.SetActive(false);

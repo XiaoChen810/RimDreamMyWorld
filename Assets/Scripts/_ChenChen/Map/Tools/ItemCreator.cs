@@ -13,10 +13,10 @@ namespace ChenChen_Map
         /// <param name="itemName"></param>
         public void GenerateItem(string itemName, Vector2 pos, string mapName, bool isNotCommonlyUsed = false)
         {
-            ThingDef thing_generated = ThingSystemManager.Instance.GetThingDef(itemName);
+            BuildingDef thing_generated = ThingSystemManager.Instance.GetThingDef(itemName);
             if (thing_generated != null)
             {
-                Data_ThingSave thingSave = new Data_ThingSave(thing_generated.DefName, pos, Quaternion.identity, mapName, BuildingLifeStateType.None);
+                Data_ThingSave thingSave = new Data_ThingSave(thing_generated.DefName, pos, Quaternion.identity, BuildingLifeStateType.None);
                 ThingSystemManager.Instance.TryGenerateThing(thingSave);
             }
         }

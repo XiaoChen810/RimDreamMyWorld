@@ -53,40 +53,16 @@ namespace ChenChen_AI
 
         private void UpdateMoveAnimation()
         {
-            if (!isStart || !canMove)
+            if (isStart)
             {
-                _pawn.Animator.SetBool("IsWalk", false);
-                _pawn.Animator.SetBool("IsRun", false);
-                _pawn.Animator.SetBool("IsSwimming", _isSwimming);
-                return;
-            }
-            if (!_isSwimming)
-            {
-                if (Speed > 0 && Speed <= 1)
-                {
-                    SetAnimation("IsWalk", true);
-                }
-                if (Speed > 1)
-                {
-                    SetAnimation("IsRun", true);
-                }
+                _pawn.SetAnimator("Walking", true);
             }
             else
             {
-                SetAnimation("IsSwimming", true);
-            }
-            void SetAnimation(string name,bool value)
-            {
-                if(value == _pawn.Animator.GetBool(name))
-                {
-                    return;
-                }
-                _pawn.Animator.SetBool("IsWalk", false);
-                _pawn.Animator.SetBool("IsRun", false);
-                _pawn.Animator.SetBool("IsSwimming", false);
-                _pawn.Animator.SetBool(name, value);
+                _pawn.SetAnimator("Walking", false);
             }
         }
+
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision != null && collision.CompareTag("Water"))
@@ -102,6 +78,7 @@ namespace ChenChen_AI
             }
 
         }
+
         private void OnTriggerExit2D(Collider2D collision)
         {
             if (collision != null && collision.CompareTag("Water"))

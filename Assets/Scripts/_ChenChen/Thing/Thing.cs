@@ -2,6 +2,9 @@
 using ChenChen_UI;
 using ChenChen_Core;
 using ChenChen_AI;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace ChenChen_Thing
 {
@@ -22,9 +25,11 @@ namespace ChenChen_Thing
 
         public int Durability { get; protected set; }
 
+        public List<ValueTuple<string,int>> DestroyOutputs = new();
+
         #endregion
 
-
+        #region - Unity Life -
         protected virtual void Start()
         {
             name = name.Replace("(Clone)", "").Trim();
@@ -38,7 +43,6 @@ namespace ChenChen_Thing
             ColliderSelf.isTrigger = true;
 
             SR = GetComponentInChildren<SpriteRenderer>();
-            SR.sortingLayerName = "Middle";
             SR.sortingOrder = -(int)transform.position.y;
 
             Durability = MaxDurability;
@@ -47,8 +51,12 @@ namespace ChenChen_Thing
         protected virtual void OnDestroy()
         {
             if (!Application.isPlaying) return;
-            ThingSystemManager.Instance.RemoveThing(this.gameObject);
+
+            var thingSystemManager = ThingSystemManager.Instance;
+
+            if(thingSystemManager != null ) thingSystemManager.RemoveThing(this.gameObject);
         }
+        #endregion
 
         #region - IDetailView -
         protected DetailView _detailView;
@@ -69,54 +77,48 @@ namespace ChenChen_Thing
         #endregion
 
         #region - IGrant -
+
+        private object lockObj = new object();
+
         [Header("权限")]
-        [SerializeField] private bool isLocked;
+        [SerializeField] private bool unLock;
         [SerializeField] private Pawn userPawn;
 
-        public bool IsFree
-        {
-            get => !isLocked && userPawn == null;
-        }
+        public bool UnLock => !unLock;
 
-        public bool IsLocked
-        {
-            get => isLocked;
-            set => isLocked = value;
-        }
-
-        public Pawn UserPawn
-        {
-            get => userPawn;
-            set => userPawn = value;
-        }
+        public Pawn UserPawn => userPawn;
 
         public void GetPermission(Pawn pawn)
         {
-            if (!isLocked)
+            lock (lockObj)
             {
-                userPawn = pawn;
-                isLocked = true;
-                // 实现获取权限的逻辑
-                Debug.Log($"{pawn.name} has been granted permission.");
-            }
-            else
-            {
-                Debug.Log($"{pawn.name} Permission is locked. Cannot grant permission.");
+                if (!unLock)
+                {
+                    unLock = true;
+                    userPawn = pawn;
+                    Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限");
+                }
+                else
+                {
+                    Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限失败. 已经被 {userPawn.name} 获取");
+                }
             }
         }
 
         public void RevokePermission(Pawn pawn)
         {
-            if (userPawn == pawn)
+            lock (lockObj)
             {
-                userPawn = null;
-                isLocked = false;
-                // 实现撤销权限的逻辑
-                Debug.Log($"{pawn.name} has had their permission revoked.");
-            }
-            else
-            {
-                Debug.Log("Permission not granted to this pawn.");
+                if (unLock && userPawn == pawn)
+                {
+                    unLock = false;
+                    Debug.Log($"{pawn.name} 归还权限");
+                    userPawn = null;
+                }
+                else
+                {
+                    Debug.Log($"{pawn.name} 归还权限失败");
+                }
             }
         }
         #endregion

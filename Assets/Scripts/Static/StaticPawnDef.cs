@@ -6,10 +6,16 @@ using UnityEngine;
 public static class StaticPawnDef
 {
     private static readonly string NameFilePath = "String/Name/Pawn_Flower";
-   
+
+    private static TextAsset nameFile;
+
     private static string[] LoadNamesFromFile()
     {
-        TextAsset nameFile = Resources.Load<TextAsset>(NameFilePath);
+        if (nameFile == null)
+        {
+            nameFile = Resources.Load<TextAsset>(NameFilePath);
+        }
+
         if (nameFile != null)
         {
             return nameFile.text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);

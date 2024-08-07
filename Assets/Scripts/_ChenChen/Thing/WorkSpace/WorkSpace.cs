@@ -52,54 +52,48 @@ namespace ChenChen_Thing
         protected abstract void AfterSizeChange();
 
         #region - IGrant -
+
+        private object lockObj = new object();
+
         [Header("权限")]
         [SerializeField] private bool isLocked;
         [SerializeField] private Pawn userPawn;
 
-        public bool IsFree
-        {
-            get => !isLocked && userPawn == null;
-        }
+        public bool UnLock => isLocked;
 
-        public bool IsLocked
-        {
-            get => isLocked;
-            set => isLocked = value;
-        }
-
-        public Pawn UserPawn
-        {
-            get => userPawn;
-            set => userPawn = value;
-        }
+        public Pawn UserPawn => userPawn;
 
         public void GetPermission(Pawn pawn)
         {
-            if (!isLocked)
+            lock (lockObj)
             {
-                userPawn = pawn;
-                isLocked = true;
-                // 实现获取权限的逻辑
-                Debug.Log($"{pawn.name} has been granted permission.");
-            }
-            else
-            {
-                Debug.Log("Permission is locked. Cannot grant permission.");
+                if (!isLocked)
+                {
+                    isLocked = true;
+                    userPawn = pawn;
+                    Debug.Log($"Permission granted to {pawn.name}");
+                }
+                else
+                {
+                    Debug.Log($"Permission denied to {pawn.name}. Already locked by {userPawn.name}");
+                }
             }
         }
 
         public void RevokePermission(Pawn pawn)
         {
-            if (userPawn == pawn)
+            lock (lockObj)
             {
-                userPawn = null;
-                isLocked = false;
-                // 实现撤销权限的逻辑
-                Debug.Log($"{pawn.name} has had their permission revoked.");
-            }
-            else
-            {
-                Debug.Log("Permission not granted to this pawn.");
+                if (isLocked && userPawn == pawn)
+                {
+                    isLocked = false;
+                    Debug.Log($"Permission revoked from {pawn.name}");
+                    userPawn = null;
+                }
+                else
+                {
+                    Debug.Log($"Permission revoke failed for {pawn.name}");
+                }
             }
         }
         #endregion

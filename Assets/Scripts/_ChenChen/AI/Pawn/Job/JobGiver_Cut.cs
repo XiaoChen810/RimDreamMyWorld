@@ -11,19 +11,19 @@ namespace ChenChen_AI
         private static readonly float interval_time = 0.1f;
         private static readonly string jobName = "砍伐";
 
-        public JobGiver_Cut(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, intervalTime: interval_time)
+        public JobGiver_Cut(Action<TargetPtr> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, intervalTime: interval_time)
         {
         }
 
-        protected override GameObject TryGiveJob(Pawn pawn)
+        protected override TargetPtr TryGiveJob(Pawn pawn)
         {
             var trees = ThingSystemManager.Instance.GetThingsInstance<Thing_Tree>();
             if (trees != null)
             {
-                var res = trees.FirstOrDefault<Thing_Tree>(t => t.IsMarkCut && t.IsFree);
+                var res = trees.FirstOrDefault<Thing_Tree>(t => t.IsMarkCut && t.UnLock);
                 if (res != null)
                 {
-                    return res.gameObject;
+                    return new TargetPtr(res.gameObject);
                 }
             }
             return null;

@@ -83,11 +83,10 @@ public class PawnGeneratorTool : MonoBehaviour
             result.transform.parent = transform;
 
             XmlLoader xmlLoader = XmlLoader.Instance;
-            result.SR_Hair.sprite = xmlLoader.GetRandom<HairDef>(XmlLoader.Def_PawnHair).sprite;
-            result.SR_Body.sprite = xmlLoader.GetRandom<BodyDef>(XmlLoader.Def_PawnBody).sprite;
-            result.SR_Appeal.sprite = xmlLoader.GetRandom<ApparelDef>(XmlLoader.Def_Apparel).sprite;
-            result.SR_Head.sprite = xmlLoader.GetRandom<HeadDef>(XmlLoader.Def_PawnHead).sprite;
-
+            result.SetHead(xmlLoader.GetRandom<HeadDef>(XmlLoader.Def_PawnHead));
+            result.SetHair(xmlLoader.GetRandom<HairDef>(XmlLoader.Def_PawnHair), true);
+            result.SetBody(xmlLoader.GetRandom<BodyDef>(XmlLoader.Def_PawnBody), true);                  
+            result.SetDressed(xmlLoader.GetRandom<ApparelDef>(XmlLoader.Def_Apparel));
             return true;
         }
     }

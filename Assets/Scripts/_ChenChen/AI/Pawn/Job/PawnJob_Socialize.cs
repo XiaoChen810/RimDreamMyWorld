@@ -8,7 +8,7 @@ namespace ChenChen_AI
         //持续最大时间
         private readonly static float tick = 500;
 
-        public PawnJob_Socialize(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Socialize(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
         }
 
@@ -17,7 +17,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            if (!target.GameObject.TryGetComponent<Pawn>(out Pawn targetPawn))
+            if (!target.TargetA.TryGetComponent<Pawn>(out Pawn targetPawn))
             {
                 DebugLogDescription = ("对象不是Pawn");
                 return false;
@@ -29,7 +29,7 @@ namespace ChenChen_AI
                 return false;
             }
 
-            pawn.JobToDo(targetPawn.gameObject);
+            pawn.JobToDo(target);
             this.Description = $"准备和{targetPawn.name}一起玩";
 
             return true;

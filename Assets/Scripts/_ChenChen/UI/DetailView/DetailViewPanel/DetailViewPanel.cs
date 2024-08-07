@@ -57,6 +57,7 @@ namespace ChenChen_UI
         }
 
         private Dictionary<string, Button> _btnDict = new Dictionary<string, Button>();
+
         public void SetButton(string btnText, UnityAction onClick)
         {
             if (_btnDict.ContainsKey(btnText)) return;
@@ -73,7 +74,33 @@ namespace ChenChen_UI
                     return;
                 }
             }
-            Debug.LogWarning("使用的Button已达最大限度");
+            int usedButton = 0;
+            foreach(var btn in Buttons)
+            {
+                if (btn.gameObject.activeSelf)
+                    usedButton++;
+            }
+            GridLayoutGroup layoutGroup = UITool.TryGetChildComponentByName<GridLayoutGroup>("TextContent");
+            if (usedButton <= 5)
+            {
+                layoutGroup.cellSize = new Vector2(layoutGroup.cellSize.x, 29);
+            }
+            else if(usedButton == 6)
+            {
+                layoutGroup.cellSize = new Vector2(layoutGroup.cellSize.x, 24);
+            }
+            else if (usedButton == 7)
+            {
+                layoutGroup.cellSize = new Vector2(layoutGroup.cellSize.x, 20.5f);
+            }
+            else if (usedButton == 8)
+            {
+                layoutGroup.cellSize = new Vector2(layoutGroup.cellSize.x, 18f);
+            }
+            else
+            {
+                Debug.LogWarning("使用的Button已达最大限度");
+            }
         }
 
         public void RemoveButton(string btnText)

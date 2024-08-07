@@ -6,9 +6,9 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 500;
 
-        public PawnJob_Escape(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Escape(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
-            this.Description = "正在逃离" + target.name;
+            this.Description = "正在逃离" + target.TargetA.name;
         }
 
         public override bool OnEnter()
@@ -16,7 +16,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            Vector3 dir = pawn.transform.position - target.Positon;
+            Vector3 dir = pawn.transform.position - target.PositonA;
             dir.Normalize();
             dir *= 10;
             Vector2 pos = pawn.transform.position + dir;

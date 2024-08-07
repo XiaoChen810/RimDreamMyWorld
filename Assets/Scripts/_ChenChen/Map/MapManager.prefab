@@ -65,32 +65,32 @@ MonoBehaviour:
   _terrainList:
   - probability: 0.2
     tilemapName: River
-    layerSort: 2
+    layerSort: -1
     isObstacle: 1
     tile: {fileID: 11400000, guid: 713de5a758900fe4aadb3f2d9f797f5b, type: 2}
     type: 2
   - probability: 0.4
     tilemapName: Grass
-    layerSort: 0
+    layerSort: -3
     isObstacle: 0
     tile: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
     type: 1
   - probability: 0.52
     tilemapName: Ground
-    layerSort: 1
+    layerSort: -2
     isObstacle: 0
     tile: {fileID: 11400000, guid: 7daa9c2b7aebb064b9c5084d6bcb51cb, type: 2}
     type: 3
   - probability: 1
     tilemapName: Grass
-    layerSort: 0
+    layerSort: -3
     isObstacle: 0
     tile: {fileID: 11400000, guid: 921017dd0bca2374797c7dde2aa5917e, type: 2}
     type: 1
   _flowersList:
   - probability: 0.5
     tilemapName: "\u8349\u576A"
-    layerSort: 3
+    layerSort: 1
     tile:
     - {fileID: 11400000, guid: 46957dc2bd9c1ab42b18d2e20306d19f, type: 2}
     - {fileID: 11400000, guid: 86364b14d7b225a4b9b73907cf53f370, type: 2}
@@ -101,7 +101,7 @@ MonoBehaviour:
     type: 1
   - probability: 0.02
     tilemapName: "\u82B1\u6735"
-    layerSort: 4
+    layerSort: 2
     tile:
     - {fileID: 11400000, guid: 0bf5dc79edd470345995409a43b00763, type: 2}
     - {fileID: 11400000, guid: 6fe63dcf0ccb7f842b88463f98e9f2b3, type: 2}
@@ -112,7 +112,7 @@ MonoBehaviour:
     type: 1
   - probability: 0.01
     tilemapName: "\u8349\u4E1B"
-    layerSort: 5
+    layerSort: 3
     tile:
     - {fileID: 11400000, guid: fcdfaed77fb5b6a41b44e71991891dbc, type: 2}
     - {fileID: 11400000, guid: 3e88eb4485fd81245b046b6efc922da9, type: 2}
@@ -120,7 +120,7 @@ MonoBehaviour:
     type: 1
   - probability: 0.03
     tilemapName: "\u6C34\u4E2D"
-    layerSort: 6
+    layerSort: 4
     tile:
     - {fileID: 11400000, guid: 4f01ec944e45ef84aabc02d5dd378366, type: 2}
     - {fileID: 11400000, guid: 0b97ad1217c97f144a341a27f224a1ec, type: 2}

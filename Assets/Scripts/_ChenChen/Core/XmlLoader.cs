@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 using System.IO;
+using System.Linq;
 
 namespace ChenChen_Core
 {
@@ -21,6 +22,7 @@ namespace ChenChen_Core
         public static readonly string Def_Weapon = "Weapons";
 
         private Dictionary<string, object> defDict = new();
+        private List<Def> defList = new();
 
         public List<T> Get<T>(string name) where T : Def
         {
@@ -40,6 +42,11 @@ namespace ChenChen_Core
                 return res[Random.Range(0, res.Count)];
             }
             throw new System.Exception("不存在定义");
+        }
+
+        public Def GetDef(string label)
+        {
+            return defList.FirstOrDefault(x => x.label == label);
         }
 
         private void Start()
@@ -100,6 +107,13 @@ namespace ChenChen_Core
                         {
                             property.SetValue(def, LoadSprite(childNode.InnerText));
                         }
+                        else if (property.FieldType == typeof(Color))
+                        {
+                            if (ColorUtility.TryParseHtmlString(childNode.InnerText, out Color col))
+                            {
+                                property.SetValue(def, col);
+                            }
+                        }
                         else if (property.FieldType == typeof(List<Need>))
                         {
                             List<Need> needs = new List<Need>();
@@ -125,6 +139,18 @@ namespace ChenChen_Core
                             }
                             property.SetValue(def, needs);
                         }
+                        else if (property.FieldType == typeof(List<string>))
+                        {
+                            List<string> content = new List<string>();
+                            foreach (XmlNode itemNode in childNode.ChildNodes)
+                            {
+                                if (itemNode.Name == "li")
+                                {
+                                    content.Add(itemNode.InnerText);
+                                }
+                            }
+                            property.SetValue(def, content);
+                        }
                     }
                     else
                     {
@@ -135,7 +161,9 @@ namespace ChenChen_Core
             }
 
             defDict.Add(fileName, defs);
+            defList.AddRange(defs);
         }
+
         private Sprite LoadSprite(string relativePath)
         {
             string fullPath = Path.Combine(Application.streamingAssetsPath, TEXTURE_PATH, relativePath + ".png");
@@ -149,6 +177,9 @@ namespace ChenChen_Core
             byte[] fileData = File.ReadAllBytes(fullPath);
             Texture2D texture = new Texture2D(2, 2);
             texture.LoadImage(fileData);
+
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.filterMode = FilterMode.Point;
 
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }

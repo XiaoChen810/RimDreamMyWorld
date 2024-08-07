@@ -1,14 +1,18 @@
-using ChenChen_UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ChenChen_UI;
+using ChenChen_Core;
+using ChenChen_Thing;
+using System;
+using System.Linq;
 
 namespace ChenChen_AI
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(MoveController))]
-    public abstract class Pawn : MonoBehaviour, IDetailView
+    public abstract class Pawn : MonoBehaviour, IDetailView, IStorage
     {
         public StateMachine StateMachine { get; protected set; }
 
@@ -17,7 +21,7 @@ namespace ChenChen_AI
         public EmotionController EmotionController { get; protected set; }
 
         [Header("当前任务")]
-        public GameObject CurJobTarget;
+        public TargetPtr CurJobTarget;
         public List<string> CurrentStateList = new List<string>();
 
         [Header("人物逻辑属性")]
@@ -53,14 +57,7 @@ namespace ChenChen_AI
             }  
         }
 
-        [Header("Body")]
-        public SpriteRenderer SR_Hair;
-        public SpriteRenderer SR_Head;
-        public SpriteRenderer SR_Appeal;
-        public SpriteRenderer SR_Body;
-
         private Animator anim;
-
         public void SetAnimator(string animation, bool value)
         {
             foreach (AnimatorControllerParameter param in anim.parameters)
@@ -73,6 +70,140 @@ namespace ChenChen_AI
 
             anim.SetBool(animation, value);
         }
+
+        [SerializeField] private Vector3 _hand;
+        public Vector3 hand => _hand;
+
+        #region - IStorage -
+        private Dictionary<string, int> bag = new Dictionary<string, int>();
+
+        public Dictionary<string, int> Bag => bag;
+
+        public void Put(string name, int num)
+        {
+            if (bag.ContainsKey(name))
+            {
+                bag[name] += num;
+            }
+            else
+            {
+                bag.Add(name, num);
+            }
+        }
+
+        public int Get(string name, int num)
+        {
+            if (bag.ContainsKey(name))
+            {
+                int store = bag[name];
+                if(store - num > 0)
+                {
+                    store -= num;
+                    return num;
+                }
+                else
+                {
+                    return store;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        #endregion
+
+        #region - Body -
+
+        [Header("Body")]
+        [SerializeField] private SpriteRenderer SR_Hair;
+        [SerializeField] private SpriteRenderer SR_Head;      
+        [SerializeField] private SpriteRenderer SR_Body;
+
+        [Header("Apparel Part")]
+        [SerializeField] private SpriteRenderer SR_UpperHead;
+        [SerializeField] private SpriteRenderer SR_Torso;
+        [SerializeField] private SpriteRenderer SR_Shoulders;
+        [SerializeField] private SpriteRenderer SR_Legs;
+        [SerializeField] private SpriteRenderer SR_Eyes;
+        [SerializeField] private SpriteRenderer SR_Neck;
+        private Dictionary<string, SpriteRenderer> bodyPartRenderers;
+
+        public void SetDressed(ApparelDef apparel)
+        {
+            List<string> partGroup = apparel.bodyPartGroups;
+            string mainPart = partGroup[0];
+
+            // 先脱
+            foreach (string part in partGroup)
+            {
+                if (bodyPartRenderers.TryGetValue(part, out var spriteRenderer))
+                {
+                    spriteRenderer.sprite = null;
+                }
+                else
+                {
+                    Debug.LogError($"不存在字段 {part}");
+                }
+            }
+
+            // 再穿
+            if (bodyPartRenderers.TryGetValue(mainPart, out var mainSpriteRenderer))
+            {
+                mainSpriteRenderer.sprite = apparel.sprite;
+            }
+            else
+            {
+                Debug.LogError($"不存在字段 {mainPart}");
+            }
+        }
+
+        public void SetHair(HairDef hairDef, bool changeColor)
+        {
+            SR_Hair.sprite = hairDef.sprite;
+
+            if (changeColor)
+            {
+                Color randomColor = new Color(
+                    UnityEngine.Random.Range(0.2f, 0.6f), 
+                    UnityEngine.Random.Range(0.1f, 0.4f), 
+                    UnityEngine.Random.Range(0.05f, 0.2f) 
+                );
+
+                SR_Hair.color = randomColor;
+            }
+        }
+        public void SetHead(HeadDef headDef)
+        {
+            SR_Head.sprite = headDef.sprite;
+        }
+        public void SetBody(BodyDef bodyDef, bool changeColor)
+        {
+            SR_Body.sprite = bodyDef.sprite;
+
+            if (changeColor)
+            {
+                // 常用的皮肤颜色
+                Color[] skinColors = new Color[]
+                {
+                new Color(0.99f, 0.89f, 0.77f), // 浅肤色1
+                new Color(0.95f, 0.80f, 0.68f), // 浅肤色2
+                new Color(0.87f, 0.72f, 0.53f), // 中等肤色1
+                new Color(0.78f, 0.58f, 0.36f), // 中等肤色2
+                new Color(0.65f, 0.50f, 0.39f), // 深肤色1
+                new Color(0.55f, 0.41f, 0.33f), // 深肤色2
+                new Color(0.43f, 0.34f, 0.27f)  // 深肤色3
+                };
+
+                // 从数组中随机选择一个颜色
+                Color randomColor = skinColors[UnityEngine.Random.Range(0, skinColors.Length)];
+
+                SR_Body.color = randomColor;
+                SR_Head.color = randomColor;
+            }
+        }
+
+        #endregion
 
         #region - 属性 - 
 
@@ -159,7 +290,7 @@ namespace ChenChen_AI
             }
         }
 
-        public string Faction => Info.faction; 
+        public string Faction => Info.faction;
 
         #endregion
 
@@ -171,7 +302,7 @@ namespace ChenChen_AI
         /// Going to work for job, but not in work now;
         /// </summary>
         /// <param name="job"></param>
-        public void JobToDo(GameObject job)
+        public void JobToDo(TargetPtr job)
         {
             _pawnKindDef.CanGetJob = false;
             _pawnInfo.IsInWork = false;
@@ -249,7 +380,7 @@ namespace ChenChen_AI
             StopJob(10);
             if(StateMachine.CurStateType != typeof(PawnJob_Attack))
             {
-                StateMachine.TryChangeState(new PawnJob_Chase(this, from));
+                StateMachine.TryChangeState(new PawnJob_Chase(this, new TargetPtr(from)));
             }
 
             Info.HP.CurValue -= damage;
@@ -266,6 +397,20 @@ namespace ChenChen_AI
 
         #region - Life -
 
+        private void Awake()
+        {
+            // 初始化字典映射
+            bodyPartRenderers = new Dictionary<string, SpriteRenderer>
+            {
+                { "UpperHead", SR_UpperHead },
+                { "Torso", SR_Torso },
+                { "Shoulders", SR_Shoulders },
+                { "Legs", SR_Legs },
+                { "Eyes", SR_Eyes },
+                { "Neck", SR_Neck }
+            };
+        }
+
         protected virtual void Start()
         {
             MoveController = GetComponent<PawnMoveController>();
@@ -274,7 +419,7 @@ namespace ChenChen_AI
             StateMachine = new StateMachine(this.gameObject, new PawnJob_Idle(this));
 
             gameObject.layer = 7;
-            gameObject.tag = "Pawn";       
+            gameObject.tag = "Pawn";
         }
 
         protected virtual void Update()

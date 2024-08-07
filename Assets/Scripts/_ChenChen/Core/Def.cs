@@ -10,6 +10,7 @@ namespace ChenChen_Core
         public string name;
         public string description;
         public Sprite sprite; // 图标贴图
+        public Color color = Color.white;
     }
 
     // 基础类：StuffDef
@@ -56,6 +57,7 @@ namespace ChenChen_Core
     // 材料类
     public class MaterialDef : StuffDef
     {
+        public string stuffCategories; // 类别
         public float armorFactor = 1;  // 装甲系数
         public float warmthFactor = 1; // 保暖系数
         public float damageFactor = 1; // 伤害系数
@@ -64,6 +66,7 @@ namespace ChenChen_Core
     // 衣物类
     public class ApparelDef : StuffDef
     {
+        public List<string> bodyPartGroups;  // 装备在身体那个部位
         public List<Need> requiredMaterials; // 制作所需材料
     }
 

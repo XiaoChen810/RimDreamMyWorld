@@ -243,9 +243,6 @@ namespace ChenChen_Map
         /// <summary>
         /// 在当前地图上获取Tilemap，如果不存在，则新生成一个
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="isObstacle"></param>
-        /// <param name="result"></param>
         /// <returns></returns>
         public bool TryGetTilemap(string name, bool isObstacle,out Tilemap result)
         {
@@ -265,13 +262,15 @@ namespace ChenChen_Map
                 GameObject newObj = new GameObject(name);
                 Tilemap tilemap = newObj.AddComponent<Tilemap>();
                 TilemapRenderer tr = newObj.AddComponent<TilemapRenderer>();
-                tr.sortingLayerName = "Bottom";
-              
+                tr.sortingLayerName = "Middle";
+
 #if UNITY_EDITOR
                 //Bug
 #else
-                tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
+                var res = Resources.Load<Material>("Materials/Material-Tilemap");
+                tr.material = res;
 #endif
+
                 if (isObstacle)
                 {
                     newObj.AddComponent<TilemapCollider2D>().usedByComposite = true;

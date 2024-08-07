@@ -32,7 +32,7 @@ public class Indicator : MonoBehaviour
         Vector2 min = new Vector2(Boxbounds.min.x, Boxbounds.min.y);
         Vector2 max = new Vector2(Boxbounds.max.x, Boxbounds.max.y);
 
-        if(Mathf.Abs(max.x - max.x) < 1 || Mathf.Abs(max.y - max.y) < 1)
+        if(Mathf.Abs(max.x - min.x) < 1 || Mathf.Abs(max.y - min.y) < 1)
         {
             min -= new Vector2(0.5f, 0.5f);
             max += new Vector2(0.5f, 0.5f);

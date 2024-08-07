@@ -13,6 +13,7 @@ namespace ChenChen_AI
         protected StateBase _defaultState = null;
         protected Queue<StateBase> _StateQueue;
         protected float _maxTick = -1;
+        protected bool isSequence = false;
 
         public bool IsIdle => CurState == null && NextState == null;
 
@@ -137,8 +138,30 @@ namespace ChenChen_AI
             TryChangeState();
         }
 
+        public void TrySequenceChangeState(List<StateBase> sequence)
+        {
+            isSequence = true;
+            for (int i = 0; i < sequence.Count; i++)
+            {
+                StateQueue.Enqueue(sequence[i]);
+            }
+        }
+
         public void TryChangeState(StateBase newState = null)
         {
+            if (isSequence)
+            {
+                if(_StateQueue.Count > 0)
+                {
+                    ChangeState(_StateQueue.Dequeue());
+                    return;
+                }
+                else
+                {
+                    isSequence = false;
+                }
+            }
+
             if (newState != null)
             {
                 ChangeState(newState);
@@ -187,8 +210,7 @@ namespace ChenChen_AI
                 if (CurState.DebugLogDescription != null)
                 {
                     string log = CurState.DebugLogDescription;
-                    Debug.Log($"{Owner.name}进入状态 {CurState} 失败，当前状态自动切换为空：\n" +
-                        $"失败原因: {log}");
+                    Debug.Log($"{Owner.name}进入状态 {CurState} 失败，当前状态自动切换为空：\n" + $"失败原因: {log}");
                 }
                 CurState = null;
             }

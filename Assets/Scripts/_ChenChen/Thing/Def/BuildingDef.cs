@@ -31,7 +31,7 @@ namespace ChenChen_Thing
         public Vector2 Offset = new Vector2(0.5f, 0.5f);
 
         [Tooltip("建造所需材料")]
-        public List<Need> RequiredMaterials;
+        public List<Need> RequiredMaterials = new List<Need>();
 
         //----------------------------------------------------------------------
         [Header("可选属性")]

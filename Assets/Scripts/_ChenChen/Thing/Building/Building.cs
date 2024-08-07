@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine;
 using ChenChen_UI;
+using ChenChen_Core;
 
 namespace ChenChen_Thing
 {
@@ -25,6 +26,44 @@ namespace ChenChen_Thing
 
         [Header("建筑属性")]
         public BuildingDef Def;
+
+        // 建造 所 需要的材料
+        private List<Need> requiredMaterialList = new List<Need>();
+        // 建造 还 需要的材料
+        public IReadOnlyList<(string, int)> RequiredMaterialList
+        {
+            get
+            {
+                List<(string, int)> res = new List<(string, int)>();
+                foreach (Need requiredMaterial in requiredMaterialList)
+                {
+                    int had = Bag.ContainsKey(requiredMaterial.label) ? Bag[requiredMaterial.label] : 0;
+                    int required = requiredMaterial.numbers;
+                    int need = required - had;
+                    if (need != 0)
+                    {
+                        res.Add((requiredMaterial.label, need));
+                    }
+                }
+                return res;
+            }
+        }
+        // 建造需要的材料已经准备完全
+        public bool RequiredMaterialsLoadFull
+        {
+            get
+            {
+                foreach (Need need in requiredMaterialList)
+                {
+                    if (Bag.ContainsKey(need.label) && Bag[need.label] == need.numbers)
+                    {
+                        continue;
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
 
         #region - State -
         [SerializeField] protected BuildingLifeStateType _lifeState = 0;       
@@ -62,104 +101,80 @@ namespace ChenChen_Thing
 
         [SerializeField] protected string _tilemapName = "Building"; // 放置瓦片（如果有）的瓦片地图名
 
-        // 绘制GUI
-        public bool DrawOutline_Collider;    // 根据Box Collider2D画
-        private Color centerColor = new Color(0f, 0f, 1f, 0f); // 透明蓝色
-        private Color outlineColor = Color.white; // 纯白色
-        private float outlineWidth = 2f;
-
-        private Texture2D centerTexture;
-        private Texture2D outlineTexture;
-
-        protected virtual Action<DetailViewPanel> DetailViewOverrideContentAction()
+        protected virtual void DetailViewOverrideContentAction(DetailViewPanel panel)
         {
-            return (DetailViewPanel panel) =>
+            if (panel == null) return;
+
+            // String Content
+            List<String> content = new List<String>();
+            InitDetailViewContent(content);
+            panel.SetView(this.Def.DefName, content);
+
+            // Button
+            InitDetailViewButton(panel);
+        }
+
+        protected void InitDetailViewContent(List<string> content)
+        {
+            content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
+            content.Add($"使用者: {(this.UserPawn != null ? this.UserPawn.name : null)}");
+            if (this.Workload > 0)
             {
-                List<String> content = new List<String>();
-                content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
-                content.Add($"使用者: {(this.UserPawn != null ? this.UserPawn.name : null)}");
-                if (this.Workload > 0)
+                content.Add($"剩余工作量: {this.Workload}");
+            }
+            if (!this.RequiredMaterialsLoadFull)
+            {
+                foreach (var need in requiredMaterialList)
                 {
-                    content.Add($"剩余工作量: {this.Workload}");
+                    int a = Bag.ContainsKey(need.label) ? Bag[need.label] : 0;
+                    int b = need.numbers;
+                    content.Add($"需要{XmlLoader.Instance.GetDef(need.label).name}: {a}/{b}");
                 }
-                panel.SetView(this.Def.DefName, content);
-                if (this.LifeState == BuildingLifeStateType.MarkBuilding)
+            }
+        }
+
+        protected void InitDetailViewButton(DetailViewPanel panel)
+        {
+            panel.RemoveAllButton();
+            if (this.LifeState == BuildingLifeStateType.MarkBuilding)
+            {              
+                panel.SetButton("取消", () =>
                 {
-                    panel.RemoveAllButton();
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCancelBuild();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.MarkDemolished)
+                    this.OnCancelBuild();
+                });
+            }
+            if (this.LifeState == BuildingLifeStateType.MarkDemolished)
+            {
+                panel.SetButton("取消", () =>
                 {
-                    panel.RemoveAllButton();
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCanclDemolish();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
+                    this.OnCanclDemolish();
+                });
+            }
+            if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
+            {
+                panel.SetButton("拆除", () =>
                 {
-                    panel.RemoveAllButton();
-                    panel.SetButton("拆除", () =>
-                    {
-                        this.MarkToDemolish();
-                    });
-                }
-            };
+                    this.MarkToDemolish();
+                });
+            }
         }
 
         protected override void Start()
         {
             base.Start();
 
-            centerTexture = new Texture2D(1, 1);
-            centerTexture.SetPixel(0, 0, centerColor);
-            centerTexture.Apply();
-
-            outlineTexture = new Texture2D(1, 1);
-            outlineTexture.SetPixel(0, 0, outlineColor);
-            outlineTexture.Apply();
-
-            DetailView.OverrideContentAction = (DetailViewOverrideContentAction());
-        }
-
-        private void OnGUI()
-        {
-            if (GameManager.Instance.Mode_Cineme) return;
-            if (DrawOutline_Collider)
-            {
-                // 计算建造物体的边界框
-                Bounds bounds = GetComponent<Collider2D>().bounds;
-
-                // 计算建造物体边界框在屏幕上的位置和大小
-                Vector3 screenBoundsMin = Camera.main.WorldToScreenPoint(bounds.min);
-                Vector3 screenBoundsMax = Camera.main.WorldToScreenPoint(bounds.max);
-                Vector3 screenSize = screenBoundsMax - screenBoundsMin;
-
-                // 绘制中心透明蓝色矩形
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, screenSize.y), centerTexture);
-
-                // 绘制边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, screenSize.x, outlineWidth), outlineTexture); // 上边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 左边框
-                GUI.DrawTexture(new Rect(screenBoundsMax.x - outlineWidth, Screen.height - screenBoundsMax.y, outlineWidth, screenSize.y), outlineTexture); // 右边框
-                GUI.DrawTexture(new Rect(screenBoundsMin.x, Screen.height - screenBoundsMin.y, screenSize.x, outlineWidth), outlineTexture); // 下边框
-            }
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
             OnPlaced();
+
+            DetailView.OverrideContentAction = DetailViewOverrideContentAction;
         }
 
         protected override void OnDestroy()
         {
             if (!Application.isPlaying) return;
 
-            if (ThingSystemManager.Instance.RemoveThing(this.gameObject))
+            var thingSystemManager = ThingSystemManager.Instance;
+
+            if (thingSystemManager != null && thingSystemManager.RemoveThing(this.gameObject))
             {
                 if (Def.TileBase != null)
                 {
@@ -229,12 +244,21 @@ namespace ChenChen_Thing
         public virtual void OnPlaced()
         {
             //Debug.Log($"放置一个建筑：{name}");
+            requiredMaterialList.Clear();
+            foreach(var need in Def.RequiredMaterials)
+            {
+                var add = new Need()
+                {
+                    label = need.label,
+                    numbers = need.numbers,
+                };
+                requiredMaterialList.Add(add);
+            }
         }
 
         public virtual void OnMarkBuild()
         {
-            SR.color = new Color(1, 1, 1, 0f);
-            DrawOutline_Collider = true;
+            SR.color = new Color(1, 1, 1, 0.7f);
             // 如果所需工作量为0，直接完成
             if (Workload_Construction <= 0)
             {
@@ -293,7 +317,6 @@ namespace ChenChen_Thing
                     Debug.LogError("AstarPath.active is null");
                 }
             }
-            DrawOutline_Collider = false;
         }
 
         public virtual void OnCancelBuild()
@@ -337,13 +360,14 @@ namespace ChenChen_Thing
 
         public virtual void OnMarkDemolish()
         {
-            // 拆除的工作量是当前耐久
             Workload = Workload_Demolition;
             if (Durability <= 0)
             {
                 ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
             }
-            markDemolishIcon = GameObject.Instantiate(Resources.Load("Prefabs/ThingDef/MarkDemolishIcon")) as GameObject;
+
+            var obj = Resources.Load("Prefabs/ThingDef/MarkDemolishIcon") as GameObject;
+            markDemolishIcon = Instantiate(obj);
             markDemolishIcon.transform.position = this.transform.position;
         }
 
@@ -361,6 +385,46 @@ namespace ChenChen_Thing
 
             if (markDemolishIcon != null)
                 Destroy(markDemolishIcon);
+        }
+        #endregion
+
+        #region - IStorage -
+        private Dictionary<string, int> bag = new Dictionary<string, int>();
+
+        public Dictionary<string, int> Bag => bag;
+
+        public void Put(string label, int num)
+        {
+            if (bag.ContainsKey(label))
+            {
+                bag[label] += num;
+            }
+            else
+            {
+                bag.Add(label, num);
+            }
+        }
+
+        public int Get(string label, int num)
+        {
+            if (bag.ContainsKey(label))
+            {
+                int store = bag[label];
+                if (store - num > 0)
+                {
+                    store -= num;
+                    return num;
+                }
+                else
+                {
+                    bag.Remove(label);
+                    return store;
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
         #endregion
     }

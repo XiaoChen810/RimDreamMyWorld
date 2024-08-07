@@ -11,11 +11,11 @@ namespace ChenChen_AI
         public string JobName = string.Empty;
 
         protected float intervalTime = 5;
-        protected Action<GameObject> onGetJobSuccessly;
+        protected Action<TargetPtr> onGetJobSuccessly;
 
         private float giverTimer = 0;
 
-        public JobGiver(Action<GameObject> onGetJobSuccessly, string jobName = null, float intervalTime = 5)
+        public JobGiver(Action<TargetPtr> onGetJobSuccessly, string jobName = null, float intervalTime = 5)
         {
             this.onGetJobSuccessly = onGetJobSuccessly;
             this.intervalTime = intervalTime;
@@ -26,18 +26,19 @@ namespace ChenChen_AI
             }            
         }
 
-        protected abstract GameObject TryGiveJob(Pawn pawn);
+        protected abstract TargetPtr TryGiveJob(Pawn pawn);
 
-        public virtual GameObject TryIssueJobPackage(Pawn pawn)
+        public virtual TargetPtr TryIssueJobPackage(Pawn pawn)
         {
             giverTimer += Time.deltaTime;
             if (giverTimer <= intervalTime) return null;
             giverTimer = 0;
 
-            GameObject job = TryGiveJob(pawn);
-            if (job == null) return null;
-            onGetJobSuccessly?.Invoke(job);
-            return job;
+            TargetPtr targetPtr = TryGiveJob(pawn);
+            if (targetPtr == null) return null;
+
+            onGetJobSuccessly?.Invoke(targetPtr);
+            return targetPtr;
         }
     }
 }

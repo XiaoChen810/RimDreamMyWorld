@@ -197,7 +197,11 @@ namespace ChenChen_AI
         }
         private void OnDisable()
         {
-            GameManager.Instance.MonsterGeneratorTool.MonstersList.Remove(this);
+            var gameManager = GameManager.Instance;
+            if(gameManager != null )
+            {
+                gameManager.MonsterGeneratorTool.MonstersList.Remove(this);
+            }
         }
     }
 }

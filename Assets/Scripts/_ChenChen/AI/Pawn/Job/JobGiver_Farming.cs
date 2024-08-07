@@ -7,14 +7,15 @@ namespace ChenChen_AI
     {
         private static readonly float interval_time = 0.1f;
         private static readonly string jobName = "种植";
-        public JobGiver_Farming(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, interval_time)
+        public JobGiver_Farming(Action<TargetPtr> onGetJobSuccessly) : base(onGetJobSuccessly, jobName, interval_time)
         {
         }
 
-        protected override GameObject TryGiveJob(Pawn pawn)
+        protected override TargetPtr TryGiveJob(Pawn pawn)
         {
             if(!pawn.Def.CanPlant) return null;
-            return GameManager.Instance.WorkSpaceTool.GetAWorkSpace(WorkSpaceType.Farm);
+            GameObject obj = GameManager.Instance.WorkSpaceTool.GetAWorkSpace(WorkSpaceType.Farm);
+            return obj == null ? null : new TargetPtr(obj);
         }
     }
 }

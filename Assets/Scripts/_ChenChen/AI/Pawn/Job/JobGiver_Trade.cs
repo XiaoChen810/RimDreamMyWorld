@@ -8,18 +8,18 @@ namespace ChenChen_AI
         private static readonly float INTERVAL_TIME = 1f;
         private static readonly string JOBNAME = "驯兽";
 
-        public JobGiver_Trade(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, JOBNAME, INTERVAL_TIME)
+        public JobGiver_Trade(Action<TargetPtr> onGetJobSuccessly) : base(onGetJobSuccessly, JOBNAME, INTERVAL_TIME)
         {
         }
 
-        protected override GameObject TryGiveJob(Pawn pawn)
+        protected override TargetPtr TryGiveJob(Pawn pawn)
         {
             var animals = GameManager.Instance.AnimalGenerateTool.AnimalList;
             foreach (var animal in animals)
             {
                 if (animal.WaitToTrade)
                 {
-                    return animal.gameObject;
+                    return new TargetPtr(animal.gameObject);
                 }
             }
 

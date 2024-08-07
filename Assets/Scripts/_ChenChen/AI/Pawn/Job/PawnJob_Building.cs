@@ -16,7 +16,7 @@ namespace ChenChen_AI
         /// </summary>
         /// <param name="characterMain"></param>
         /// <param name="buildPos"></param>
-        public PawnJob_Building(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Building(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
             float ability = pawn.Attribute.A_Construction.Value;
             float a = 1 - (ability / 20);
@@ -35,14 +35,14 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if (!pawn.MoveController.GoToHere(target.Positon, Urgency.Urge, pawn.WorkRange))
+            if (!pawn.MoveController.GoToHere(target.PositonA, Urgency.Urge, pawn.WorkRange))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "前往建造" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "前往建造" + target.TargetA.name;
 
             return true;
         }
@@ -55,7 +55,7 @@ namespace ChenChen_AI
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();
-                this.Description = "正在建造" + target.GameObject.name;
+                this.Description = "正在建造" + target.TargetA.name;
 
                 _time += Time.deltaTime;
                 if (_time > _timeOne)

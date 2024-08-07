@@ -9,21 +9,21 @@ namespace ChenChen_AI
     {
         private static readonly float interval_time = 5;
 
-        public JobGiver_Sleep(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
+        public JobGiver_Sleep(Action<TargetPtr> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
         {
         }
 
         private float sleepy_threshold = 0.3f; 
         private bool noBed;
 
-        protected override GameObject TryGiveJob(Pawn pawn)
+        protected override TargetPtr TryGiveJob(Pawn pawn)
         {
             if (pawn.Info.Sleepiness.CurValue > sleepy_threshold * pawn.Info.Sleepiness.MaxValue) return null;
 
             return FindBed(pawn);
         }
 
-        private GameObject FindBed(Pawn pawn)
+        private TargetPtr FindBed(Pawn pawn)
         {
             var beds = ThingSystemManager.Instance.GetThingsInstance<Thing_Bed>();
 
@@ -32,7 +32,7 @@ namespace ChenChen_AI
                 if (bed.Owner == pawn)
                 {
                     noBed = false;
-                    return bed.gameObject;
+                    return new TargetPtr(bed.gameObject);
                 }
             }
 
@@ -42,7 +42,7 @@ namespace ChenChen_AI
                 {
                     bed.Owner = pawn;
                     noBed = false;
-                    return bed.gameObject;
+                    return new TargetPtr(bed.gameObject);
                 }
             }
 

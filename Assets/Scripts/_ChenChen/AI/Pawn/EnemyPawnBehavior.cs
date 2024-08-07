@@ -39,7 +39,7 @@ namespace ChenChen_AI
                 {
                     raid_start = true;
                     pawn.StateMachine.TryChangeState(new PawnJob_Move(pawn, target_center, Urgency.Wander));
-                    //Debug.Log($"{pawn.name}发起袭击");
+                    Debug.Log($"{pawn.name}发起袭击");
                     return;
                 }
             }
@@ -80,7 +80,7 @@ namespace ChenChen_AI
             if(pawn.StateMachine.CurStateType == typeof(PawnJob_Attack)) return;
             if (target_pawn == target_pawn_last) return;
             target_pawn_last = target_pawn;
-            pawn.StateMachine.TryChangeState(new PawnJob_Chase(pawn, target_pawn.gameObject));
+            pawn.StateMachine.TryChangeState(new PawnJob_Chase(pawn, new TargetPtr(target_pawn.gameObject)));
             Debug.Log($"{pawn.name} 追击 {target_pawn.name}");
         }
 

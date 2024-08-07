@@ -23,9 +23,12 @@ namespace ChenChen_UI
         {
             if (panel == null) return;
             if (thing == null) return;
+
             content.Clear();
             content.Add($"耐久度: {thing.Durability} / {thing.MaxDurability}");                     
-            content.Add($"使用者: {(thing.UserPawn != null ? thing.UserPawn.name : null)}");          
+            content.Add($"使用者: {(thing.UserPawn != null ? thing.UserPawn.name : null)}");
+
+            panel.SetView(thing.name, content);
         }
 
         public override void StartShow()

@@ -17,8 +17,6 @@ namespace ChenChen_AI
         [Header("紧迫程度")]
         [SerializeField] protected Urgency curUrgency = Urgency.Normal;
 
-        private bool _isSwimming = false;
-
         protected override void Start()
         {
             base.Start();
@@ -60,30 +58,6 @@ namespace ChenChen_AI
             else
             {
                 _pawn.SetAnimator("Walking", false);
-            }
-        }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            if (collision != null && collision.CompareTag("Water"))
-            {
-                // 判断是否完全浸没水中
-                bool fullyOverlapped = CheckFullyContained(collision, _collider);
-                if (fullyOverlapped) _isSwimming = true;
-            }
-
-            bool CheckFullyContained(Collider2D colliderA, Collider2D colliderB)
-            {
-                return true;
-            }
-
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision != null && collision.CompareTag("Water"))
-            {
-                _isSwimming = false;
             }
         }
 

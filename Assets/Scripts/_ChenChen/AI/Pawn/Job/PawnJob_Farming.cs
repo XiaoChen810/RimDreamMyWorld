@@ -21,7 +21,7 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            if (!target.GameObject.TryGetComponent<WorkSpace_Farm>(out _workSpace_Farm))
+            if (!target.TargetA.TryGetComponent<WorkSpace_Farm>(out _workSpace_Farm))
             {
                 DebugLogDescription = ($"{pawn.name} No WorkSpace_Farm");
                 return false;
@@ -39,8 +39,8 @@ namespace ChenChen_AI
                 return false;
             }
 
-            pawn.JobToDo(_workSpace_Farm.gameObject);
-            this.Description = "正在前往" + target.GameObject.name + "种植";
+            pawn.JobToDo(target);
+            this.Description = "正在前往" + target.TargetA.name + "种植";
 
             return true;
         }
@@ -53,7 +53,7 @@ namespace ChenChen_AI
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();
-                this.Description = "正在" + target.GameObject.name + "种植";
+                this.Description = "正在" + target.TargetA.name + "种植";
 
                 _farmingTime -= Time.deltaTime;
                 if (_farmingTime <= 0)

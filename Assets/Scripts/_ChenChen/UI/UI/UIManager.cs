@@ -10,7 +10,7 @@ namespace ChenChen_UI
     /// </summary>
     public class UIManager
     {
-        public Dictionary<UIType, GameObject> UIDict;
+        public Dictionary<UIType, GameObject> UIDict = new Dictionary<UIType, GameObject>();
 
         public UIManager() 
         {
@@ -19,6 +19,8 @@ namespace ChenChen_UI
 
         private GameObject canvas;
 
+        private Dictionary<UIType, GameObject> cacheList = new Dictionary<UIType, GameObject>();
+
         /// <summary>
         /// 获取单个的一个UI对象
         /// </summary>
@@ -26,7 +28,7 @@ namespace ChenChen_UI
         /// <returns></returns>
         public GameObject GetOrGenerateSingleUI(UIType type)
         {
-            if(canvas == null)
+            if (canvas == null)
             {
                 canvas = GameObject.Find("Canvas");
                 if (canvas == null)
@@ -36,10 +38,15 @@ namespace ChenChen_UI
                 }
             }
 
-            if(UIDict.ContainsKey(type)) return UIDict[type];
+            if (UIDict.ContainsKey(type)) return UIDict[type];
 
-            // 如果不存在则生成一个
-            GameObject newUI = GameObject.Instantiate(Resources.Load<GameObject>(type.Path), canvas.transform);
+            GameObject prefab = null;
+            if (!cacheList.TryGetValue(type, out prefab))
+            {
+                prefab = Resources.Load<GameObject>(type.Path);
+                cacheList.Add(type, prefab);
+            }
+            GameObject newUI = GameObject.Instantiate(prefab, canvas.transform);
             newUI.name = type.Name;
             UIDict.Add(type, newUI);
             return newUI;

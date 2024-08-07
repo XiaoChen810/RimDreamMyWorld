@@ -34,50 +34,20 @@ namespace ChenChen_Thing
 
             gameManager = GameManager.Instance;
 
-            DetailView.OverrideContentAction = (DetailViewOverrideContentAction());
+            DetailView.OverrideContentAction = DetailViewOverrideContentAction;
         }
 
-        private Action<DetailViewPanel> DetailViewOverrideContentAction()
+        protected override void DetailViewOverrideContentAction(DetailViewPanel panel)
         {
-            return (DetailViewPanel panel) =>
+            List<String> content = new List<String>();
+            InitDetailViewContent(content);
+            if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
             {
-                List<String> content = new List<String>();
-                content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
-                content.Add($"使用者: {(this.UserPawn != null ? this.UserPawn.name : null)}");
-                if (this.Workload > 0)
-                {
-                    content.Add($"剩余工作量: {this.Workload}");
-                }
-                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
-                {
-                    content.Add($"蓄水量: {this.water.ToString("0.0")}");
-                }
-                panel.SetView(this.Def.DefName, content);
-                if (this.LifeState == BuildingLifeStateType.MarkBuilding)
-                {
-                    panel.RemoveAllButton();
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCancelBuild();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.MarkDemolished)
-                {
-                    panel.RemoveAllButton();
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCanclDemolish();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
-                {
-                    panel.RemoveAllButton();
-                    panel.SetButton("拆除", () =>
-                    {
-                        this.MarkToDemolish();
-                    });
-                }
-            };
+                content.Add($"蓄水量: {this.water.ToString("0.0")}");
+            }
+            panel.SetView(this.Def.DefName, content);
+
+            InitDetailViewButton(panel);
         }
 
         private void Update()

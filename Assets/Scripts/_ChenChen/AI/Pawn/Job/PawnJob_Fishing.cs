@@ -15,7 +15,7 @@ namespace ChenChen_AI
         /// <summary>
         /// 开始钓鱼，需要设置钓鱼位置
         /// </summary>
-        public PawnJob_Fishing(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Fishing(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
         }
 
@@ -31,14 +31,14 @@ namespace ChenChen_AI
                 return false;
             }
 
-            bool flag = pawn.MoveController.GoToHere(target.Positon - new Vector3(0, 0.4f), Urgency.Normal);
+            bool flag = pawn.MoveController.GoToHere(target.PositonA - new Vector3(0, 0.4f), Urgency.Normal);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
+            pawn.JobToDo(target);
             this.Description = "正在前往钓鱼";
 
             return true;

@@ -13,7 +13,7 @@ namespace ChenChen_Thing
         #region - Cut -
         [Header("Cut")]
         private float shakeDuraion = 0.5f;
-        private float shakeStrength = 3f;
+        private float shakeStrength = 5f;
         private bool isMarkCut;
         [SerializeField] private ParticleSystem particleEffect_WhenCut;
         [SerializeField] private GameObject markIcon;
@@ -67,6 +67,12 @@ namespace ChenChen_Thing
 
         #endregion
 
+        protected override void Start()
+        {
+            base.Start();
+            DestroyOutputs.Add(("wood", 3));
+        }
+
         private void OnTriggerStay2D(Collider2D collision)
         {          
             if (collision.CompareTag("Pawn"))
@@ -89,38 +95,27 @@ namespace ChenChen_Thing
             DOTween.KillAll();
         }
 
-        protected override Action<DetailViewPanel> DetailViewOverrideContentAction()
+        protected override void DetailViewOverrideContentAction(DetailViewPanel panel)
         {
-            return (DetailViewPanel panel) =>
+            base.DetailViewOverrideContentAction(panel);
+            if (this.IsMarkCut)
             {
-                List<string> content = new List<string>();
-                if (panel == null) return;
-                if (this == null) return;
-                content.Clear();
-                content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
-                if (this.UserPawn != null) content.Add($"使用者: {this.UserPawn.name}");
-                panel.SetView(
-                    this.Def.DefName,
-                    content);
-                if (this.IsMarkCut)
+                panel.RemoveAllButton();
+                panel.SetButton("取消", () =>
                 {
-                    panel.RemoveAllButton();
-                    panel.SetButton("取消", () =>
-                    {
-                        // 取消砍伐
-                        this.OnCanclCut();
-                    });
-                }
-                else
+                    // 取消砍伐
+                    this.OnCanclCut();
+                });
+            }
+            else
+            {
+                panel.RemoveAllButton();
+                panel.SetButton("砍伐", () =>
                 {
-                    panel.RemoveAllButton();
-                    panel.SetButton("砍伐", () =>
-                    {
-                        // 标记砍伐
-                        this.OnMarkCut();
-                    });
-                }
-            };
+                    // 标记砍伐
+                    this.OnMarkCut();
+                });
+            }
         }
     }
 }

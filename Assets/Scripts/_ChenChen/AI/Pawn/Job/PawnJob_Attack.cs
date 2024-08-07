@@ -10,7 +10,7 @@ namespace ChenChen_AI
         private float _lastAttackTime;
         private Pawn _targetPawn;
 
-        public PawnJob_Attack(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Attack(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
             _targetPawn = target.GetComponent<Pawn>();
         }
@@ -26,20 +26,20 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if (Vector2.Distance(target.Positon, pawn.transform.position) > pawn.AttackRange)
+            if (Vector2.Distance(target.PositonA, pawn.transform.position) > pawn.AttackRange)
             {
                 DebugLogDescription = "攻击距离不够";
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "攻击" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "攻击" + target.TargetA.name;
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (target.GameObject == null)
+            if (target.TargetA == null)
             {
                 return StateType.Success;
             }
@@ -49,7 +49,7 @@ namespace ChenChen_AI
                 return StateType.Success;
             }
 
-            if (Vector2.Distance(target.Positon, pawn.transform.position) > pawn.AttackRange)
+            if (Vector2.Distance(target.PositonA, pawn.transform.position) > pawn.AttackRange)
             {
                 return StateType.Failed;
             }
@@ -59,7 +59,7 @@ namespace ChenChen_AI
             if(Time.time > _lastAttackTime + pawn.AttackSpeedWait)
             {
                 _lastAttackTime = Time.time;
-                if(target.Positon.x < pawn.transform.position.x)
+                if(target.PositonA.x < pawn.transform.position.x)
                 {
                     pawn.MoveController.FilpLeft();
                 }

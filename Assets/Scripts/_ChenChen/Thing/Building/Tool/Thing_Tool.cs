@@ -1,4 +1,5 @@
-﻿using ChenChen_UI;
+﻿using ChenChen_Core;
+using ChenChen_UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,62 +7,46 @@ using UnityEngine;
 namespace ChenChen_Thing
 {
     public class Thing_Tool : Building
-    {
-        public bool IsSuccess { get; private set; }
+    {        
+        /// <summary>
+        /// 制造所需材料
+        /// </summary>
+        public virtual IReadOnlyList<(string, int)> RequiredForMade { get; }
 
-        public TargetPtr wookPos;
+        public virtual bool IsFullRequiredForMade { get { return true; } }
 
-        public virtual void OpenMenu()
+        public virtual void OpenWorkMenu()
         {
             Debug.Log("未设置");
         }
 
-        protected override Action<DetailViewPanel> DetailViewOverrideContentAction()
+        protected override void DetailViewOverrideContentAction(DetailViewPanel panel)
         {
-            return (DetailViewPanel panel) =>
+            if (panel == null) return;
+
+            List<String> content = new List<String>();
+
+            InitDetailViewContent(content);
+
+            if (!this.IsFullRequiredForMade)
             {
-                List<String> content = new List<String>();
-                if (panel == null) return;
-                content.Clear();
-                content.Add($"耐久度: {this.Durability} / {this.MaxDurability}");
-                content.Add($"剩余工作量: {this.Workload}");
-                content.Add($"使用者: {(this.UserPawn != null ? this.UserPawn.name : null)}");
-                panel.SetView(
-                this.Def.DefName,
-                    content
-                );
+                foreach (var it in RequiredForMade)
+                {
+                    content.Add($"制作需要{XmlLoader.Instance.GetDef(it.Item1).name}: {it.Item2}");
+                }
+            }
 
-                panel.RemoveAllButton();
+            InitDetailViewButton(panel);
 
-                if (this.LifeState == BuildingLifeStateType.MarkBuilding)
+            if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
+            {
+                panel.SetButton("菜单", () =>
                 {
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCancelBuild();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.MarkDemolished)
-                {
-                    panel.SetButton("取消", () =>
-                    {
-                        this.OnCanclDemolish();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
-                {
-                    panel.SetButton("拆除", () =>
-                    {
-                        this.MarkToDemolish();
-                    });
-                }
-                if (this.LifeState == BuildingLifeStateType.FinishedBuilding)
-                {
-                    panel.SetButton("菜单", () =>
-                    {
-                        this.OpenMenu();
-                    });
-                }
-            };
+                    this.OpenWorkMenu();
+                });
+            }
+
+            panel.SetView(this.Def.DefName, content);
         }
     }
 }

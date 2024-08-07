@@ -11,7 +11,7 @@ namespace ChenChen_AI
         private float tradeDuration = 5;
         private float timer = 0;
 
-        public PawnJob_Trade(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Trade(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
             if(!target.TryGetComponent<Animal>(out animal))
             {
@@ -36,7 +36,7 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if (!pawn.MoveController.GoToHere(target.GameObject,endReachedDistance: pawn.WorkRange))
+            if (!pawn.MoveController.GoToHere(target.TargetA,endReachedDistance: pawn.WorkRange))
             {
                 DebugLogDescription = "无法移动到目标";
                 return false;
@@ -44,8 +44,8 @@ namespace ChenChen_AI
 
             animal.Trade();
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "前往驯服" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "前往驯服" + target.TargetA.name;
             
             return true;
         }
@@ -55,7 +55,7 @@ namespace ChenChen_AI
             var baseResult = base.OnUpdate();
             if (baseResult != StateType.Doing) return baseResult;
 
-            if (target.GameObject == null)
+            if (target.TargetA == null)
             {
                 return StateType.Failed;
             }

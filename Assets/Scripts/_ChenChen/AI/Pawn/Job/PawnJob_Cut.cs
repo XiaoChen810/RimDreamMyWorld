@@ -12,7 +12,7 @@ namespace ChenChen_AI
         private float _time = 0;
         private float _timeOne = 0.76f;
 
-        public PawnJob_Cut(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Cut(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
         }
 
@@ -28,13 +28,13 @@ namespace ChenChen_AI
             }
 
             Vector3 position;
-            if (pawn.transform.position.x < target.Positon.x)
+            if (pawn.transform.position.x < target.PositonA.x)
             {               
-                 position = target.Positon + new Vector3(-1, 0.3f); 
+                 position = target.PositonA + new Vector3(-1, 0.3f); 
             }
             else
             {
-                 position = target.Positon + new Vector3(2, 0.3f);
+                 position = target.PositonA + new Vector3(2, 0.3f);
             }
 
             if (!pawn.MoveController.GoToHere(position))
@@ -43,8 +43,8 @@ namespace ChenChen_AI
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "Ç°Íù¿³·¥" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "Ç°Íù¿³·¥" + target.TargetA.name;
 
             return true;
         }
@@ -57,7 +57,7 @@ namespace ChenChen_AI
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();
-                this.Description = "ÕýÔÚ¿³·¥" + target.GameObject.name;
+                this.Description = "ÕýÔÚ¿³·¥" + target.TargetA.name;
 
                 _time += Time.deltaTime;
                 if (_time > _timeOne)
@@ -66,7 +66,7 @@ namespace ChenChen_AI
                     _time = 0;
                 }
 
-                pawn.MoveController.FilpIt(target.Positon.x);
+                pawn.MoveController.FilpIt(target.PositonA.x);
             }
 
             if (tree.Durability <= 0)

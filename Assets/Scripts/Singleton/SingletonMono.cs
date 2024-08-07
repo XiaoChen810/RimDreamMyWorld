@@ -11,7 +11,7 @@ public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (applicationIsQutting)
             {
-                return instance;
+                return null;
             }
             if (instance == null && Application.isPlaying) 
             {

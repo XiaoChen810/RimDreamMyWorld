@@ -8,6 +8,14 @@
 		<iconPath>Apparel/ApronSkirt</iconPath>
 		<worth>50</worth>
 		<workload>100</workload>
+		<bodyPartGroups>
+			<li>UpperHead</li>	//头
+			<li>Torso</li>		//躯干
+			<li>Shoulders</li>	//肩膀
+			<li>Legs</li>		//腿
+			<li>Eyes</li>		//眼睛
+			<li>Neck</li>		//脖子
+		</bodyPartGroups>
 		<requiredMaterials>
 			<Need>
 				<label>Cloth</label>
@@ -23,12 +31,15 @@
 
 <Apparels>
 	<ApparelDef>
-		<name>ApronSkirt</name>
+		<name>围裙</name>
 		<label>apronSkirt</label>
 		<description>围裙</description>
 		<iconPath>Apparel/ApronSkirt</iconPath>
 		<worth>50</worth>
 		<workload>100</workload>
+		<bodyPartGroups>
+			<li>Torso</li>
+		</bodyPartGroups>
 		<requiredMaterials>
 			<Need>
 				<label>cloth</label>
@@ -42,12 +53,15 @@
 	</ApparelDef>
 
 	<ApparelDef>
-		<name>BattleSuit</name>
+		<name>作战服</name>
 		<label>battleSuit</label>
 		<description>作战服</description>
 		<iconPath>Apparel/BattleSuit</iconPath>
 		<worth>500</worth>
 		<workload>200</workload>
+		<bodyPartGroups>
+			<li>Torso</li>
+		</bodyPartGroups>
 		<requiredMaterials>
 			<Need>
 				<label>cloth</label>
@@ -61,12 +75,15 @@
 	</ApparelDef>
 
 	<ApparelDef>
-		<name>ChefSuit</name>
+		<name>厨师服</name>
 		<label>chefSuit</label>
 		<description>厨师服</description>
 		<iconPath>Apparel/ChefSuit</iconPath>
 		<worth>50</worth>
 		<workload>150</workload>
+		<bodyPartGroups>
+			<li>Torso</li>
+		</bodyPartGroups>
 		<requiredMaterials>
 			<Need>
 				<label>cloth</label>

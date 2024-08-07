@@ -27,21 +27,32 @@ namespace ChenChen_AI
         /// <returns></returns>
         public override bool OnEnter()
         {
-            if (target.IsGameObject && target.GameObject == null)
+            if (target != null && target.TargetA != null)
             {
-                DebugLogDescription = ("目标为空");
-                return false;
-            }
-
-            if (target.GameObject.TryGetComponent<IGrant>(out var grant))
-            {
-                grant.GetPermission(pawn);
-                if(grant.UserPawn != pawn)
+                if (target.TargetA.TryGetComponent<IGrant>(out var grantA))
                 {
-                    DebugLogDescription = ("目标已经其他人被使用");
-                    return false;
+                    grantA.GetPermission(pawn);
+                    if (grantA.UserPawn != pawn)
+                    {
+                        DebugLogDescription = ($"目标已经 {grantA.UserPawn.name} 被使用");
+                        return false;
+                    }
                 }
             }
+
+            if (target != null && target.TargetB != null)
+            {
+                if (target.TargetB.TryGetComponent<IGrant>(out var grantB))
+                {
+                    grantB.GetPermission(pawn);
+                    if (grantB.UserPawn != pawn)
+                    {
+                        DebugLogDescription = ($"目标已经 {grantB.UserPawn.name} 被使用");
+                        return false;
+                    }
+                }
+            }
+
 
             return true;
         }
@@ -52,7 +63,7 @@ namespace ChenChen_AI
         /// <returns></returns>
         public override StateType OnUpdate()
         {
-            if(target != null && target.IsGameObject && target.GameObject == null)
+            if(target != null && target.TargetA == null)
             {
                 return StateType.Failed;
             }
@@ -68,11 +79,19 @@ namespace ChenChen_AI
         {
             base.OnExit();
 
-            if (target != null && target.IsGameObject && target.GameObject != null)
+            if (target != null && target.TargetA != null)
             {
-                if (target.GameObject.TryGetComponent<IGrant>(out var grant))
+                if (target.TargetA.TryGetComponent<IGrant>(out var grantA))
                 {
-                    grant.RevokePermission(pawn);
+                    grantA.RevokePermission(pawn);
+                }
+            }
+
+            if (target != null && target.TargetB != null)
+            {
+                if (target.TargetB.TryGetComponent<IGrant>(out var grantB))
+                {
+                    grantB.RevokePermission(pawn);
                 }
             }
 

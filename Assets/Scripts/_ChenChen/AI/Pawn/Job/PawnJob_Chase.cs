@@ -9,7 +9,7 @@ namespace ChenChen_AI
         private readonly static float tick = 500;
         private Pawn targetPawnComponent;
 
-        public PawnJob_Chase(Pawn pawn, GameObject target) : base(pawn, tick, new TargetPtr(target))
+        public PawnJob_Chase(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
 
         }
@@ -23,14 +23,14 @@ namespace ChenChen_AI
                 return false;
             }
 
-            if(!pawn.MoveController.GoToHere(target.GameObject, Urgency.Normal, pawn.AttackRange))
+            if(!pawn.MoveController.GoToHere(target.TargetA, Urgency.Normal, pawn.AttackRange))
             {
                 DebugLogDescription = ("无法前往目标");
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "正在追击" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "正在追击" + target.TargetA.name;
 
             return true;
         }
@@ -50,7 +50,7 @@ namespace ChenChen_AI
                 pawn.JobDoing();
 
                 IsSuccess = true;
-                pawn.StateMachine.NextState = new PawnJob_Attack(pawn, target.GameObject);
+                pawn.StateMachine.NextState = new PawnJob_Attack(pawn, target);
                 return StateType.Success;
             }
 

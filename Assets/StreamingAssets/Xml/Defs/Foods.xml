@@ -23,6 +23,74 @@
 -->
 
 <Foods>
-	
-	
+	<FoodDef>
+		<name>梅子</name>
+		<label>plum</label>
+		<description>香甜多汁的水果</description>
+		<iconPath>Food/plum</iconPath>
+		<worth>10</worth>
+		<workload>0</workload>
+		<nutritional>10</nutritional>
+	</FoodDef>
+
+	<FoodDef>
+		<name>罗宋汤</name>
+		<label>Bortsch</label>
+		<description>是一种在东欧地区广泛流传的菜品，有可能出现于公元前5世纪到公元前9世纪之间的东欧地区。</description>
+		<iconPath>Food/餐食/Bortsch</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>	
+
+	<FoodDef>
+		<name>石锅拌饭</name>
+		<label>Bibimbap</label>
+		<description>由的蔬菜、牛肉和特制酱汁组成！</description>
+		<iconPath>Food/餐食/Bibimbap</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>	
+
+	<FoodDef>
+		<name>勃艮第牛肉</name>
+		<label>Beef Burgundy</label>
+		<description>俗名红酒炖牛肉，是法国勃艮第省的一道名菜。</description>
+		<iconPath>Food/餐食/BeefBurgundy</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>
+
+	<FoodDef>
+		<name>汉堡套餐</name>
+		<label>Burger</label>
+		<description>简单的速食套餐</description>
+		<iconPath>Food/餐食/Burger</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>
+
+	<FoodDef>
+		<name>北京烤鸭</name>
+		<label>CanardLaque</label>
+		<description>广为人知的北京美食。</description>
+		<iconPath>Food/餐食/CanardLaque</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>
+
+	<FoodDef>
+		<name>披萨</name>
+		<label>Pizza</label>
+		<description>用发酵的圆面饼上面覆盖番茄酱、奶酪、肉、蔬菜等其他配料，并由烤炉烤制而成。</description>
+		<iconPath>Food/餐食/Pizza</iconPath>
+		<worth>50</worth>
+		<workload>50</workload>
+		<nutritional>100</nutritional>	
+	</FoodDef>
+
 </Foods>

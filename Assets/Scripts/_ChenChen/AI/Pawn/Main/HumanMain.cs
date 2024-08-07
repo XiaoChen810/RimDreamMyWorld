@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 using System.Linq;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ChenChen_AI
 {
@@ -40,7 +41,7 @@ namespace ChenChen_AI
             
             foreach (var pawnJobType in pawnJobTypes)
             {
-                Action<GameObject> onGetJobSuccessly = (GameObject job) =>
+                Action<TargetPtr> onGetJobSuccessly = (TargetPtr job) =>
                 {
                     var pawnJob = (PawnJob)Activator.CreateInstance(pawnJobType, this, job);
                     StateMachine.NextState = pawnJob;
@@ -81,7 +82,7 @@ namespace ChenChen_AI
                 {
                     break;
                 }
-                GameObject job = jobGiver.TryIssueJobPackage(this);
+                TargetPtr job = jobGiver.TryIssueJobPackage(this);
                 if (job != null)
                 {
                     CurJobTarget = job;

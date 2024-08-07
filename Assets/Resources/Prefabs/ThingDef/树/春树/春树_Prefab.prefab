@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
-  m_SortingLayer: 3
+  m_SortingLayer: 1
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3c925f99ed8f8354e8a5696cb8a52b88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
@@ -159,7 +159,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
-  m_SortingLayer: 3
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 6771233541102765696, guid: 802795dff0ff517469d6db1f50df8914, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -229,13 +229,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f51ed0f9937ab4b93327458d00fad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _theUsingPawn: {fileID: 0}
-  _permission: 0
+  unLock: 0
+  userPawn: {fileID: 0}
   Def: {fileID: 11400000, guid: ff51175be8a3fd84cae97170be49ab97, type: 2}
   _lifeState: 0
   _tilemapName: Building
-  DrawOutline_Collider: 0
-  particleEffect_WhenCut: {fileID: 6262429266312670216, guid: bb766a4d1368dfb4e996d628f21c3a3f, type: 3}
+  particleEffect_WhenCut: {fileID: 0}
   markIcon: {fileID: 4926743867814115836}
 --- !u!1001 &7909178918709581517
 PrefabInstance:
@@ -248,6 +247,10 @@ PrefabInstance:
     - target: {fileID: 103865595981141561, guid: 6e180738b3f9e0940b5122df5a092591, type: 3}
       propertyPath: m_Name
       value: "\u6811\u53F6\u98D8\u843D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 103865595981141561, guid: 6e180738b3f9e0940b5122df5a092591, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 103865595981141562, guid: 6e180738b3f9e0940b5122df5a092591, type: 3}
       propertyPath: m_LocalPosition.x

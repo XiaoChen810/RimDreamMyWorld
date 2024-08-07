@@ -11,7 +11,7 @@ namespace ChenChen_AI
         private float _timer;
         private float _timeOne;
 
-        public PawnJob_Demolish(Pawn pawn, GameObject building) : base(pawn, tick,new TargetPtr(building))
+        public PawnJob_Demolish(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
             float ability = pawn.Attribute.A_Construction.Value;
             _timeOne = Mathf.Lerp(0.1f, 1f, (1 - ability / 20));
@@ -29,15 +29,15 @@ namespace ChenChen_AI
                 return false;
             }
 
-            bool flag = pawn.MoveController.GoToHere(target.Positon, Urgency.Urge, pawn.WorkRange);
+            bool flag = pawn.MoveController.GoToHere(target.PositonA, Urgency.Urge, pawn.WorkRange);
             if (!flag)
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
-            pawn.JobToDo(target.GameObject);
-            this.Description = "前往拆除" + target.GameObject.name;
+            pawn.JobToDo(target);
+            this.Description = "前往拆除" + target.TargetA.name;
 
             return true;
         }
@@ -65,7 +65,7 @@ namespace ChenChen_AI
             if (pawn.MoveController.ReachDestination)
             {
                 pawn.JobDoing();
-                this.Description = "正在拆除" + target.GameObject.name;
+                this.Description = "正在拆除" + target.TargetA.name;
 
                 _timer += Time.deltaTime;
                 if (_timer > _timeOne)

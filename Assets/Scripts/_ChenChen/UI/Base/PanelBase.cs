@@ -117,7 +117,7 @@ namespace ChenChen_UI
         }
 
         /// <summary>
-        /// 删除时的调用，默认删除GameObject 和 调用退出回调函数
+        /// 删除时的调用，调用退出回调函数和DestroyUI
         /// </summary>
         public virtual void OnExit()
         {

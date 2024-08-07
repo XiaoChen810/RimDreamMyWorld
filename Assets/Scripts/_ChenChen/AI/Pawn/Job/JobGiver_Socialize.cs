@@ -9,14 +9,14 @@ namespace ChenChen_AI
     {
         private static readonly float interval_time = 10;
 
-        public JobGiver_Socialize(Action<GameObject> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
+        public JobGiver_Socialize(Action<TargetPtr> onGetJobSuccessly) : base(onGetJobSuccessly, null, interval_time)
         {
         }
 
         private float mood_threshold = 0.4f;    // 不开心的阈值 0 ~ 1。
         private bool isAlone = false;
 
-        protected override GameObject TryGiveJob(Pawn pawn)
+        protected override TargetPtr TryGiveJob(Pawn pawn)
         {
             // 如果心情不好
             if (pawn.Info.Happiness.CurValue > mood_threshold * pawn.Info.Happiness.MaxValue) return null;
@@ -24,7 +24,7 @@ namespace ChenChen_AI
             return FindFriend(pawn);
         }
 
-        private GameObject FindFriend(Pawn pawn)
+        private TargetPtr FindFriend(Pawn pawn)
         {
             List<GameObject> otherPawns = new();
             IReadOnlyList<Pawn> pawnsList = GameManager.Instance.PawnGeneratorTool.PawnList_Colony;
@@ -46,7 +46,8 @@ namespace ChenChen_AI
             else
             {
                 isAlone = false;
-                return otherPawns[UnityEngine.Random.Range(0, otherPawns.Count)];
+                GameObject obj = otherPawns[UnityEngine.Random.Range(0, otherPawns.Count)];
+                return new TargetPtr(obj);
             }
         }
     }

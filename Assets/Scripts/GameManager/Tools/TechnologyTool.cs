@@ -39,6 +39,8 @@ public class TechnologyTool : MonoBehaviour
                 Debug.LogError("Failed to load TechnologyDef.");
             }
         }
+
+        Resources.UnloadUnusedAssets();
     }
 
     /// <summary>

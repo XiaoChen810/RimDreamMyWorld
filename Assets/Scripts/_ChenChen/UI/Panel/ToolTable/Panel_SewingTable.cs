@@ -11,7 +11,7 @@ namespace ChenChen_UI
         private static readonly string path = "UI/Panel/Menus/SewingTablePanel";
         private static readonly string path_appealInfo = "UI/Component/Info/ApparelInfo";
 
-        private Thing_SewingTable sewingTable;
+        private readonly Thing_SewingTable sewingTable;
 
         public Panel_SewingTable(Thing_SewingTable sewingTable) : base(new UIType(path))
         {
@@ -20,16 +20,51 @@ namespace ChenChen_UI
 
         public override void OnEnter()
         {
-            base.OnEnter();
+            InitApparelList();
 
-            // 通过xml读取所有衣服类定义
+            UITool.TryGetChildComponentByName<Button>("CancelDoing").onClick.AddListener(CancelCurrentDoing);
+
+            UITool.TryGetChildComponentByName<Button>("PlusDemand").onClick.AddListener(() =>
+            {
+                sewingTable.NumberOfWaitingToMade--;
+                UITool.TryGetChildComponentByName<Text>("NumberOfWaitingToMade").text = sewingTable.NumberOfWaitingToMade.ToString();
+            });
+
+            UITool.TryGetChildComponentByName<Button>("ReduceDemand").onClick.AddListener(() =>
+            {
+                sewingTable.NumberOfWaitingToMade++;
+                UITool.TryGetChildComponentByName<Text>("NumberOfWaitingToMade").text = sewingTable.NumberOfWaitingToMade.ToString();
+            });
+
+            UITool.GetChildByName("CurrentDoing").SetActive(false);
+
+            if (sewingTable.CurrentApparelDef != null)
+            {
+                UITool.TryGetChildComponentByPath<Image>("CurrentDoing/iconBG/Icon").sprite = sewingTable.CurrentApparelDef.sprite;
+                UITool.TryGetChildComponentByName<Text>("NumberOfWaitingToMade").text = sewingTable.NumberOfWaitingToMade.ToString();
+                UITool.GetChildByName("CurrentDoing").SetActive(true);
+            }
+
+            UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
+            {
+                PanelManager.RemovePanel(this);
+            });
+        }
+
+        public override void OnExit()
+        {
+            sewingTable.IsOpenMenu = false;
+            base.OnExit();
+        }
+
+        private void InitApparelList()
+        {
             var xmlLoader = XmlLoader.Instance;
             List<ApparelDef> apparelDefs = xmlLoader.Get<ApparelDef>(XmlLoader.Def_Apparel);
-
-            GameObject appealInfoPrefab = Resources.Load(path_appealInfo) as GameObject;
             Transform content = UITool.GetChildByName("Content").transform;
+            GameObject appealInfoPrefab = Resources.Load(path_appealInfo) as GameObject;
 
-            foreach(var apparelDef in apparelDefs)
+            foreach (var apparelDef in apparelDefs)
             {
                 var obj = GameObject.Instantiate(appealInfoPrefab);
                 obj.transform.SetParent(content);
@@ -42,38 +77,23 @@ namespace ChenChen_UI
                     SetCurrnetDoing(apparelDef);
                 });
             }
-
-            UITool.TryGetChildComponentByName<Button>("CancelDoing").onClick.AddListener(CancelCurrentDoing);
-
-            UITool.GetChildByName("CurrentDoing").SetActive(false);
-            if (sewingTable.CurrentApparelDef != null)
-            {
-                UITool.TryGetChildComponentByPath<Image>("CurrentDoing/iconBG/Icon").sprite = sewingTable.CurrentApparelDef.sprite;
-                UITool.GetChildByName("CurrentDoing").SetActive(true);
-            }
-
-            UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
-            {
-                PanelManager.RemovePanel(this);
-            });
         }
 
-        public override void OnExit()
-        {
-            sewingTable.isOpenMenu = false;
-            base.OnExit();
-        }
-
+        // 设置当前任务
         private void SetCurrnetDoing(ApparelDef def)
         {
             sewingTable.CurrentApparelDef = def;
+            sewingTable.NumberOfWaitingToMade = 1;
             UITool.TryGetChildComponentByPath<Image>("CurrentDoing/iconBG/Icon").sprite = def.sprite;
+            UITool.TryGetChildComponentByName<Text>("NumberOfWaitingToMade").text = sewingTable.NumberOfWaitingToMade.ToString();
             UITool.GetChildByName("CurrentDoing").SetActive(true);
         }
 
+        // 取消当前任务
         private void CancelCurrentDoing()
         {
             sewingTable.CurrentApparelDef = null;
+            sewingTable.NumberOfWaitingToMade = 0;
             UITool.GetChildByName("CurrentDoing").SetActive(false);
         }
     }

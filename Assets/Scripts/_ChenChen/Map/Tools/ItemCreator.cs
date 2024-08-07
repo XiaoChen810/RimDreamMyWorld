@@ -16,8 +16,9 @@ namespace ChenChen_Map
             BuildingDef thing_generated = ThingSystemManager.Instance.GetThingDef(itemName);
             if (thing_generated != null)
             {
-                Data_ThingSave thingSave = new Data_ThingSave(thing_generated.DefName, pos, Quaternion.identity, BuildingLifeStateType.None);
-                ThingSystemManager.Instance.TryGenerateThing(thingSave);
+                //Data_ThingSave thingSave = new Data_ThingSave(thing_generated.DefName, pos, Quaternion.identity, BuildingLifeStateType.None);
+                //ThingSystemManager.Instance.TryGenerateThing(thingSave);
+                ThingSystemManager.Instance.TryGenerateBuilding(thing_generated, pos, Quaternion.identity, true);
             }
         }
         /// <summary>
@@ -28,7 +29,7 @@ namespace ChenChen_Map
         {
             foreach (var thingSave in gameSave.SaveThings)
             {
-                ThingSystemManager.Instance.TryGenerateThing(thingSave);
+                //ThingSystemManager.Instance.TryGenerateThing(thingSave);
             }         
         }
     }

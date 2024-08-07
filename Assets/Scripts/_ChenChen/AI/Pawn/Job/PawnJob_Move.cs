@@ -31,9 +31,9 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            if (!pawn.MoveController.GoToHere(target.Positon, urgency))
+            if (!pawn.MoveController.GoToHere(target.PositonA, urgency))
             {
-                DebugLogDescription = ($"无法移动到目标点: {target.Positon} ");
+                DebugLogDescription = ($"无法移动到目标点: {target.PositonA} ");
                 return false;
             }
             pawn.JobToDo(null);

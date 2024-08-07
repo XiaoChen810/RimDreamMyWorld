@@ -15,5 +15,42 @@
 -->
 
 <Materials>
+	<MaterialDef>
+		<name>木头</name>
+		<label>wood</label>
+		<description></description>
+		<iconPath>Material/wood</iconPath>
+		<color>#8B4513</color>
+		<worth>1</worth>
+	</MaterialDef>
 	
+	<MaterialDef>
+		<name>布料</name>
+		<label>cloth</label>
+		<description></description>
+		<iconPath>Material/cloth</iconPath>
+		<worth>1</worth>
+	</MaterialDef>
+
+	<MaterialDef>
+		<name>皮革</name>
+		<label>leather</label>
+		<description></description>
+		<iconPath>Material/leather</iconPath>
+		<worth>3</worth>
+	</MaterialDef>
+
+	<MaterialDef>
+		<name>肉</name>
+		<label>meat</label>
+		<description></description>
+		<iconPath>Material/meat</iconPath>
+	</MaterialDef>
+	
+	<MaterialDef>
+		<name>蛋白质</name>
+		<label>protein</label>
+		<description></description>
+		<iconPath>Material/protein</iconPath>
+	</MaterialDef>
 </Materials>

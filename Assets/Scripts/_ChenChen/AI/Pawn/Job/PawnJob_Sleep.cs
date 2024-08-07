@@ -7,7 +7,8 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 500;
         private Thing_Bed bed;
-        public PawnJob_Sleep(Pawn pawn, GameObject bed) : base(pawn, tick, new TargetPtr(bed))
+
+        public PawnJob_Sleep(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
         }
 
@@ -16,7 +17,7 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            if (!target.GameObject.TryGetComponent<Thing_Bed>(out bed)) 
+            if (!target.TargetA.TryGetComponent<Thing_Bed>(out bed)) 
             {
                 DebugLogDescription = ("没有Thing_Bed组件");
                 return false;
@@ -28,7 +29,7 @@ namespace ChenChen_AI
                 return false;
             }
 
-            pawn.JobToDo(bed.gameObject);
+            pawn.JobToDo(target);
             this.Description = "回床上睡觉";
 
             return true;

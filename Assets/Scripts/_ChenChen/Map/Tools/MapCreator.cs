@@ -300,11 +300,12 @@ namespace ChenChen_Map
 #if UNITY_EDITOR              
             //Bug
 #else
-            tr.material = Resources.Load<Material>("Materials/Material-Tilemap");
-#endif
+            var res = Resources.Load<Material>("Materials/Material-Tilemap");
+            tr.material = res;
+#endif          
+            tr.sortingLayerName = "Bottom";
             tr.sortingOrder = layerSort;
-            //tr.sortingLayerName = "Bottom";
-            
+
             if (tag != null)
             {
                 obj.tag = "Water";

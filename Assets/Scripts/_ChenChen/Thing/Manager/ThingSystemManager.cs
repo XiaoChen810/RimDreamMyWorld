@@ -6,21 +6,20 @@ using System.IO;
 using ChenChen_Map;
 using System;
 using System.Linq;
+using ChenChen_Core;
 
 namespace ChenChen_Thing
 {
-    /// <summary>
-    /// 记录全部蓝图
-    /// </summary>
     public class ThingSystemManager : SingletonMono<ThingSystemManager>
     {
-        [SerializedDictionary("名称", "物品定义")]
+        [SerializedDictionary("名称", "建筑定义")]
         public SerializedDictionary<string, BuildingDef> ThingDefDictionary = new SerializedDictionary<string, BuildingDef>();
 
         private LinkedList<Thing> things = new LinkedList<Thing>();
-
-        private BuildingModeTool tool; // 建造模式工具
-        private Quadtree quadtree;   // 存放物体的四叉树
+        private HashSet<Vector2Int> thingSet;
+        private BuildingModeTool tool; 
+        private Quadtree quadtree;   
+        private XmlLoader xmlLoader;    
 
         public BuildingModeTool Tool 
         {
@@ -49,7 +48,8 @@ namespace ChenChen_Thing
         protected override void Awake()
         {
             base.Awake();
-            LoadAllThingDefData();
+            xmlLoader = XmlLoader.Instance;
+            LoadAllBuildingDefData();
         }
 
         public void Update()
@@ -57,9 +57,9 @@ namespace ChenChen_Thing
             Tool.BuildUpdate();
         }
 
-        private void LoadAllThingDefData()
+        private void LoadAllBuildingDefData()
         {
-            // 加载所有ThingDef资源
+            // 加载所有BuildingDef资源
             BuildingDef[] defs = Resources.LoadAll<BuildingDef>("Prefabs/ThingDef");
 
             foreach (var def in defs)
@@ -76,14 +76,16 @@ namespace ChenChen_Thing
                     }
                     else
                     {
-                        Debug.LogWarning($"ThingDef with name '{def.DefName}' already exists. Skipping.");
+                        Debug.LogWarning($"BuildingDef with name '{def.DefName}' already exists. Skipping.");
                     }
                 }
                 else
                 {
-                    Debug.LogError("Failed to load ThingDef.");
+                    Debug.LogError("Failed to load BuildingDef.");
                 }
             }
+
+            Resources.UnloadUnusedAssets();
         }
 
         #region Public
@@ -140,6 +142,15 @@ namespace ChenChen_Thing
 
             things.Remove(thing);
 
+            if(thing.DestroyOutputs.Count > 0)
+            {
+                foreach(var output in thing.DestroyOutputs)
+                {
+                    Def def = xmlLoader.GetDef(output.Item1);
+                    TryGenerateItem(def, obj.transform.position, output.Item2);
+                }
+            }
+
             return true;
         }
 
@@ -151,48 +162,22 @@ namespace ChenChen_Thing
         /// <returns></returns>
         public GameObject GetThingInstance(string name)
         {
-            Thing res = things.FirstOrDefault(thing => thing.name == name && thing.IsFree);
+            Thing res = things.FirstOrDefault(thing => thing.name == name && thing.UnLock);
             if (res != null)
             {
                 return res.gameObject;
             }
             return null;
         }
-
-        /// <summary>
-        /// 获取建筑实例
-        /// </summary>
-        /// <param name="lifeState"> 物体处于什么阶段 </param>
-        /// <returns></returns>
-        public GameObject GetBuildingInstance(BuildingLifeStateType lifeState)
-        {
-            foreach(Thing thing in things)
-            {
-                if(thing == null)
-                {
-                    throw new ArgumentNullException(nameof(thing));
-                }
-                if(thing.TryGetComponent<Building>(out Building building))
-                {
-                    if(building.LifeState == lifeState && building.IsFree)
-                    {
-                        return building.gameObject;
-                    }
-                }
-            }
-
-            return null;
-        }
         /// <summary>
         /// 获取对应类型物品实例
         /// </summary>
         /// <returns>符合条件的物体列表</returns>
-        public List<T> GetThingsInstance<T>() where T : Thing
+        public IReadOnlyList<T> GetThingsInstance<T>() where T : Thing
         {
-            var res = things.Where(thing => thing is T).Cast<T>().ToList();
+            var res = things.Where(thing => thing is T && thing.UnLock).Cast<T>().ToList();
             return res;
         }
-
         /// <summary>
         /// 获取全部物体实例
         /// </summary>
@@ -204,8 +189,6 @@ namespace ChenChen_Thing
         /// <summary>
         /// 访问字典，找到存在的物品定义并返回
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public BuildingDef GetThingDef(string name)
         {
             if (ThingDefDictionary.TryGetValue(name, out var def))
@@ -216,15 +199,14 @@ namespace ChenChen_Thing
                 }
                 if (def.Prefab == null)
                 {
-                    string folderPath = "Assets/Resources/Prefabs/ThingDef"; // 大体文件夹路径
-                    string fileName = $"{def.DefName}_Prefab.prefab"; // 文件名
+                    string folderPath = "Assets/Resources/Prefabs/ThingDef"; 
+                    string fileName = $"{def.DefName}_Prefab.prefab";
 
                     string filePath = FindFileInFolder(folderPath, fileName);
 
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        // 从文件路径中提取相对路径以便于 Resources.Load
-                        string resourcePath = filePath.Substring(filePath.IndexOf("Resources/") + 10); // 去掉 "Resources/" 和扩展名 ".prefab"
+                        string resourcePath = filePath.Substring(filePath.IndexOf("Resources/") + 10); 
                         resourcePath = resourcePath.Replace(".prefab", "");
 
                         def.Prefab = Resources.Load<GameObject>(resourcePath);
@@ -248,7 +230,6 @@ namespace ChenChen_Thing
 
                 string FindFileInFolder(string folderPath, string fileName)
                 {
-                    // 递归搜索文件夹
                     foreach (string file in Directory.GetFiles(folderPath, "*.prefab", SearchOption.AllDirectories))
                     {
                         if (Path.GetFileName(file) == fileName)
@@ -256,7 +237,7 @@ namespace ChenChen_Thing
                             return file;
                         }
                     }
-                    return null; // 未找到文件，返回null
+                    return null; 
                 }
             }
 
@@ -285,19 +266,14 @@ namespace ChenChen_Thing
             Generate(thingDef, thingSave.ThingPos, thingSave.ThingRot, true);
             return true;
         }
-        // 直接使用定义
-        public bool TryGenerateThing(BuildingDef thingDef, Vector2 position, Quaternion routation, bool putInQuadtree)
-        {
-            Generate(thingDef, position + thingDef.Offset, routation, putInQuadtree);
-            return true;
-        }
-        // 直接使用名字
-        public bool TryGenerateThing(string thingName, Vector2 position, Quaternion routation, bool putInQuadtree)
-        {
-            BuildingDef thingDef = GetThingDef(thingName);
-            Generate(thingDef, position + thingDef.Offset, routation, putInQuadtree);
-            return true;
-        }
+        /// <summary>
+        /// 生成建筑
+        /// </summary>
+        /// <param name="thingDef"></param>
+        /// <param name="position"></param>
+        /// <param name="routation"></param>
+        /// <param name="putInQuadtree"></param>
+        /// <returns></returns>
         public bool TryGenerateBuilding(BuildingDef thingDef, Vector2 position, Quaternion routation, bool putInQuadtree)
         {
             var obj = Generate(thingDef, position + thingDef.Offset, routation, putInQuadtree);
@@ -312,6 +288,31 @@ namespace ChenChen_Thing
             AddThingToList(obj, putInQuadtree);
             if (GameManager.Instance.GameIsStart) AudioManager.Instance.PlaySFX("Placed");
             return obj;
+        }
+        /// <summary>
+        /// 生产物品
+        /// </summary>
+        /// <param name="def"></param>
+        /// <param name="position"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public Item TryGenerateItem(Def def, Vector2 position, int num)
+        {
+            var obj = new GameObject(def.label);
+            obj.transform.position = new Vector2((int)position.x + 0.5f, (int)position.y + 0.5f);
+
+            var sr = obj.AddComponent<SpriteRenderer>();
+            sr.sprite = def.sprite;
+            sr.drawMode = SpriteDrawMode.Sliced;
+            sr.size = Vector2.one;
+            sr.color = def.color;
+
+            var item = obj.AddComponent<Item>();
+            item.Init(def, num);
+            item.GetComponent<BoxCollider2D>().size = sr.size;
+
+            AddThingToList(obj, false);
+            return item;
         }
         #endregion
 

@@ -10,68 +10,58 @@ namespace ChenChen_AI
         //持续最大时间
         private readonly static float tick = 500;
 
-        private Item item;    // 要搬运的东西
-        private Building building; // 要搬运的目标
+        private readonly Item item;    // 要搬运的东西
+        private readonly Building building; // 要搬运的目标
         private int stage = 0;
 
         public PawnJob_Carry(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
-            this.Description = $"搬运 {XmlLoader.Instance.GetDef(target.TargetA.name).name} 到 {target.TargetB.name}";
+            item = target.TargetA.GetComponent<Item>();
+            building = target.TargetB.GetComponent<Building>();
         }
 
         public override bool OnEnter()
         {
+            if (item == null || building == null)
+            {
+                return false;
+            }
+
             bool res = base.OnEnter();
             if(res == false) { return false; }
-
-            if (!target.TargetA.TryGetComponent<Item>(out item))
-            {
-                DebugLogDescription = $"无法搬运这个东西：{target.TargetA.name}";
-                return false;
-            }
-
-            if (!target.TargetB.TryGetComponent<Building>(out building))
-            {
-                DebugLogDescription = ($"{target.TargetB.name}不是可存储物件");
-                return false;
-            }
+            
+            Description = $"搬运 {XmlLoader.Instance.GetDef(item.name).name} 到 {building.name}";
 
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            if (target != null && (target.TargetA == null || target.TargetB == null))
+            if (item == null || building == null)
             {
-                return StateType.Failed;
-            }
-
-            if(item.UserPawn != pawn || building.UserPawn != pawn)
-            {
-                Debug.LogError($"{pawn.name} 错误");
                 return StateType.Failed;
             }
 
             // 阶段一，去拿物资
             if (stage == 0)
             {
-                pawn.MoveController.GoToHere(target.TargetA);
+                pawn.MoveController.GoToHere(item.gameObject.transform.position);
                 stage = 1;
             }
             // 阶段二，运送物资
             if (stage == 1 && pawn.MoveController.ReachDestination)
             {
                 //逻辑
-                var wuzi = building.RequiredMaterialList.First(x => x.Item1 == item.Label);
+                var required = building.RequiredMaterialList.First(x => x.Item1 == item.Label);
 
                 // 当需要的物资多了时
-                if(item.Num > wuzi.Item2)
+                if(item.Num > required.Item2)
                 {
-                    Debug.Log($"生成新的剩余数量的item {item.Num - wuzi.Item2}");
-                    Item newItem = ThingSystemManager.Instance.TryGenerateItem(item.Def, item.transform.position, item.Num - wuzi.Item2);
+                    Debug.Log($"生成新的剩余数量的item {item.Num - required.Item2}");
+                    Item newItem = ThingSystemManager.Instance.GenerateItem(item.Def, item.transform.position, item.Num - required.Item2);
 
                     // 只拿需要的物资
-                    item.Num = wuzi.Item2;
+                    item.Num = required.Item2;
                 }
 
                 // 将需要的物资拿在手中
@@ -80,7 +70,7 @@ namespace ChenChen_AI
                 item.SR.sortingLayerName = "Above";
                 item.SR.sortingOrder = 10;
 
-                pawn.MoveController.GoToHere(target.TargetB);
+                pawn.MoveController.GoToHere(building.transform.position, endReachedDistance: pawn.WorkRange);
 
                 stage = 2;
             }
@@ -108,6 +98,9 @@ namespace ChenChen_AI
 
         public override void OnInterrupt()
         {
+            item.transform.parent = null;
+            item.SR.sortingLayerName = "Default";
+            item.SR.sortingOrder = 0;
             OnExit();
         }
     }

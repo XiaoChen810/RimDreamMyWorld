@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7197548735172075225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 0.95, y: 0.95, z: 0.95}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -51,8 +51,6 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -75,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1226369987
-  m_SortingLayer: 3
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -554941205, guid: c3bfbf672d89f444e90971c8bd7830af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -96,7 +94,6 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7197548735172075225}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -120,8 +117,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.00502035}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,6 +128,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
+  serializedVersion: 2
   m_Size: {x: 0.8103514, y: 1.7660534}
   m_EdgeRadius: 0
 --- !u!114 &-326381737178148534
@@ -146,10 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac98f574e25769438d2b60a54bddebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _theUsingPawn: {fileID: 0}
-  _permission: 0
+  unLock: 0
+  userPawn: {fileID: 0}
   Def: {fileID: 11400000, guid: 6741b3a41c5aac348a5c75ddf135f3dd, type: 2}
   _lifeState: 0
-  _tilemapName: Building
-  DrawOutline_Collider: 0
   _owner: {fileID: 0}

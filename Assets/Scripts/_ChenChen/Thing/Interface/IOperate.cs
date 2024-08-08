@@ -10,6 +10,7 @@ namespace ChenChen_Thing
         /// 正在等待去操作
         /// </summary>
         bool IsWaitToOperate {  get; }
+        bool IsCompleteOperate { get; }
         /// <summary>
         /// 操作点
         /// </summary>

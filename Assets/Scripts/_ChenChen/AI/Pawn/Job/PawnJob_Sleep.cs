@@ -10,18 +10,18 @@ namespace ChenChen_AI
 
         public PawnJob_Sleep(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
+            bed = target.TargetA.GetComponent<Thing_Bed>();
         }
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
-            if (!target.TargetA.TryGetComponent<Thing_Bed>(out bed)) 
+            if(bed == null)
             {
-                DebugLogDescription = ("没有Thing_Bed组件");
                 return false;
             }
+
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
 
             if (!pawn.MoveController.GoToHere(bed.transform.position, Urgency.Normal, 0.01f))
             {
@@ -30,7 +30,7 @@ namespace ChenChen_AI
             }
 
             pawn.JobToDo(target);
-            this.Description = "回床上睡觉";
+            Description = "回床上睡觉";
 
             return true;
         }
@@ -54,16 +54,6 @@ namespace ChenChen_AI
             }
 
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
         }
     }
 }

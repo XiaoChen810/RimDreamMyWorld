@@ -3,7 +3,6 @@ using ChenChen_Core;
 using DG.Tweening;
 using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [System.Serializable]
 public class TargetPtr
@@ -46,18 +45,34 @@ public class TargetPtr
         }
     }
 
-
-    public TargetPtr(GameObject targetA)
+    public override string ToString()
     {
-        TargetA = targetA;
-        isGameObject = true;
+        string res = string.Empty;  
+        if(TargetA != null)
+        {
+            res += TargetA.name;
+        }
+        res += ":";
+        if(TargetB != null)
+        {
+            res += TargetB.name;
+        }
+        return res;
     }
 
-    public TargetPtr(GameObject targetA, GameObject targetB)
+    public TargetPtr(GameObject a)
     {
-        TargetA = targetA;
-        TargetB = targetB;
+        TargetA = a;
         isGameObject = true;
+        Debug.Log($"创建了新的TargetPtr {a.name}");
+    }
+
+    public TargetPtr(GameObject a, GameObject b)
+    {
+        TargetA = a;
+        TargetB = b;
+        isGameObject = true;
+        Debug.Log($"创建了新的TargetPtr {a.name} {b.name}");
     }
 
     public TargetPtr(Vector3 vecA)
@@ -80,6 +95,11 @@ public class TargetPtr
 
     public bool TryGetComponent<T>(out T component) where T : Component
     {
+        if (TargetA == null)
+        {
+            component = null;
+            return false;
+        }
         return TargetA.TryGetComponent(out component);
     }
 

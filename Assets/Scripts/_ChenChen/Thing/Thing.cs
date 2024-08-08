@@ -8,8 +8,7 @@ using System.Threading;
 
 namespace ChenChen_Thing
 {
-    [RequireComponent(typeof(BoxCollider2D))]
-    public abstract class Thing : MonoBehaviour, IDetailView , IGrant
+    public class Thing : MonoBehaviour, IDetailView , IGrant
     {
         public BoxCollider2D ColliderSelf { get; protected set; }
 
@@ -43,6 +42,7 @@ namespace ChenChen_Thing
             ColliderSelf.isTrigger = true;
 
             SR = GetComponentInChildren<SpriteRenderer>();
+            SR.sortingLayerName = "Default";
             SR.sortingOrder = -(int)transform.position.y;
 
             Durability = MaxDurability;

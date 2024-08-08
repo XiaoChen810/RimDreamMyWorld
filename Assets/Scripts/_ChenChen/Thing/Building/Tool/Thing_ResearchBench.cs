@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ChenChen_Thing
 {
     // 研究台
-    internal class Thing_ResearchBench : Thing_Tool
+    public class Thing_ResearchBench : Thing_Tool
     {
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e26f88b41b3c3409fec8a9b2881016, type: 3}
+  m_Name: "ThingDef_\u673A\u5668\u52A0\u5DE5\u53F0"
+  m_EditorClassIdentifier: 
+  DefName: "\u673A\u5668\u52A0\u5DE5\u53F0"
+  Type: 4
+  Workload: 100
+  Durability: 50
+  PreviewSprite: {fileID: -1324156097, guid: b4a3b02e0cefd4c4ca4788b31ad7a0d0, type: 3}
+  Prefab: {fileID: 5654501625409044019, guid: 1c960f47d82cd754a80d7d5846012eeb, type: 3}
+  Offset: {x: 0.5, y: 0.5}
+  RequiredMaterials:
+  - label: wood
+    numbers: 5
+  Size: {x: 3, y: 2}
+  TileBase: {fileID: 0}
+  IsObstacle: 0
+  IsEffectBuild: 0

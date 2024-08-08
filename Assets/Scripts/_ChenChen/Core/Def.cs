@@ -18,6 +18,10 @@ namespace ChenChen_Core
     {
         public int worth;   // 市场价值
         public int workload;    // 制作所需工作量
+        public Vector2Int size = Vector2Int.one;
+
+        public bool canMade = true;
+        public List<Need> requiredMaterials = new List<Need>(); // 制作所需材料
     }
 
     // 需求材料类
@@ -25,11 +29,13 @@ namespace ChenChen_Core
     public class Need
     {
         public string label; // 后续根据标签找到对应的材料
+        public string name => XmlLoader.Instance.GetDef(label).name;
+
         public int numbers;
 
         public override string ToString()
         {
-            return label + " " + numbers;
+            return name + " " + numbers;
         }
     }
 
@@ -67,7 +73,6 @@ namespace ChenChen_Core
     public class ApparelDef : StuffDef
     {
         public List<string> bodyPartGroups;  // 装备在身体那个部位
-        public List<Need> requiredMaterials; // 制作所需材料
     }
 
     // 武器类
@@ -75,21 +80,18 @@ namespace ChenChen_Core
     {
         public float meleeDamage;
         public float rangeDamage;
-        public List<Need> requiredMaterials; // 制作所需材料
     }
 
     // 食物类
     public class FoodDef : StuffDef
     {
         public float nutritional;   // 提供的营养值
-        public List<Need> requiredMaterials; // 制作所需材料
     }
 
     // 药品类
     public class MedicineDef : StuffDef
     {
         public float therapeutic;   // 疗效
-        public List<Need> requiredMaterials; // 制作所需材料
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿using ChenChen_Thing;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace ChenChen_AI
@@ -33,7 +34,27 @@ namespace ChenChen_AI
                         string materialLabel = required.Item1; // 材料标签
                         int requiredAmount = required.Item2;  // 所需数量
 
-                        Item selectedItem = FindSuitableItem(materialLabel, requiredAmount);
+                        Item selectedItem = null;
+                        int maxAvailable = 0;
+
+                        IReadOnlyList<Item> items = ThingSystemManager.Instance.GetThingsInstance<Item>();
+
+                        foreach (var item in items)
+                        {
+                            if (item.Label == materialLabel)
+                            {
+                                if (item.Num == requiredAmount)
+                                {
+                                    selectedItem = item;
+                                    break;
+                                }
+                                else if (maxAvailable < requiredAmount && item.Num > maxAvailable)
+                                {
+                                    maxAvailable = item.Num;
+                                    selectedItem = item;
+                                }
+                            }
+                        }
 
                         if (selectedItem != null)
                         {
@@ -55,7 +76,27 @@ namespace ChenChen_AI
                         string materialLabel = required.Item1; // 材料标签
                         int requiredAmount = required.Item2;  // 所需数量
 
-                        Item selectedItem = FindSuitableItem(materialLabel, requiredAmount);
+                        Item selectedItem = null;
+                        int maxAvailable = 0;
+
+                        IReadOnlyList<Item> items = ThingSystemManager.Instance.GetThingsInstance<Item>();
+
+                        foreach (var item in items)
+                        {
+                            if (item.Label == materialLabel)
+                            {
+                                if (item.Num == requiredAmount)
+                                {
+                                    selectedItem = item;
+                                    break;
+                                }
+                                else if (maxAvailable < requiredAmount && item.Num > maxAvailable)
+                                {
+                                    maxAvailable = item.Num;
+                                    selectedItem = item;
+                                }
+                            }
+                        }
 
                         if (selectedItem != null)
                         {
@@ -66,33 +107,6 @@ namespace ChenChen_AI
             }
 
             return null;
-        }
-
-        private static Item FindSuitableItem(string materialLabel, int requiredAmount)
-        {
-            Item res = null;
-            int maxAvailable = 0;
-
-            IReadOnlyList<Item> items = ThingSystemManager.Instance.GetThingsInstance<Item>();
-
-            foreach (var item in items)
-            {
-                if (item.Label == materialLabel)
-                {
-                    if (item.Num == requiredAmount)
-                    {
-                        res = item;
-                        break;
-                    }
-                    else if (maxAvailable < requiredAmount && item.Num > maxAvailable)
-                    {
-                        maxAvailable = item.Num;
-                        res = item;
-                    }
-                }
-            }
-
-            return res;
         }
     }
 }

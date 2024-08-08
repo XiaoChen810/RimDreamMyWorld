@@ -53,6 +53,10 @@ namespace ChenChen_Thing
         {
             get
             {
+                if (GameManager.Instance.IsGodMode)
+                {
+                    return true;
+                }
                 foreach (Need need in requiredMaterialList)
                 {
                     if (Bag.ContainsKey(need.label) && Bag[need.label] == need.numbers)
@@ -99,7 +103,7 @@ namespace ChenChen_Thing
 
         #region - 绘制效果 -
 
-        [SerializeField] protected string _tilemapName = "Building"; // 放置瓦片（如果有）的瓦片地图名
+        private static readonly string _tilemapName = "Building"; 
 
         protected virtual void DetailViewOverrideContentAction(DetailViewPanel panel)
         {
@@ -124,11 +128,11 @@ namespace ChenChen_Thing
             }
             if (!this.RequiredMaterialsLoadFull)
             {
-                foreach (var need in requiredMaterialList)
+                foreach (Need need in requiredMaterialList)
                 {
                     int a = Bag.ContainsKey(need.label) ? Bag[need.label] : 0;
                     int b = need.numbers;
-                    content.Add($"需要{XmlLoader.Instance.GetDef(need.label).name}: {a}/{b}");
+                    content.Add($"需要{need.name}: {a}/{b}");
                 }
             }
         }
@@ -198,25 +202,6 @@ namespace ChenChen_Thing
         #endregion
 
         #region - Public -
-
-        public virtual bool CanBuildHere()
-        {
-            Collider2D collider = ColliderSelf;
-            Bounds bounds = collider.bounds;
-            Vector2 center = bounds.center;
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(center, bounds.size, 0f);
-
-            foreach (var coll in colliders)
-            {
-                if (coll.gameObject == this.gameObject) continue;
-                if (coll.CompareTag("Pawn")) continue;
-                if (coll.CompareTag("Floor")) continue;
-                return false;
-            }
-
-            return true;
-        }
-
         public virtual void MarkToBuild()
         {
             ChangeLifeState(BuildingLifeStateType.MarkBuilding);
@@ -340,7 +325,7 @@ namespace ChenChen_Thing
                 {
                     return 0;
                 }
-                return Def.Durability;
+                return Durability;
             }
         }
 
@@ -349,26 +334,27 @@ namespace ChenChen_Thing
         public virtual void OnDemolish(int value)
         {
             Durability -= value;
-            if (Durability <= 0)
+            Workload = Workload_Demolition;
+            if (Workload <= 0)
             {
                 Durability = 0;
                 ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
             }
-            // 更新工作量
-            Workload = Workload_Demolition;
         }
 
         public virtual void OnMarkDemolish()
         {
             Workload = Workload_Demolition;
-            if (Durability <= 0)
+            if (Workload <= 0)
             {
                 ChangeLifeState(BuildingLifeStateType.FinishedDemolished);
             }
-
-            var obj = Resources.Load("Prefabs/ThingDef/MarkDemolishIcon") as GameObject;
-            markDemolishIcon = Instantiate(obj);
-            markDemolishIcon.transform.position = this.transform.position;
+            else
+            {
+                var obj = Resources.Load("Prefabs/ThingDef/MarkDemolishIcon") as GameObject;
+                markDemolishIcon = Instantiate(obj);
+                markDemolishIcon.transform.position = this.transform.position;
+            }
         }
 
         public virtual void OnDemolished()

@@ -36,4 +36,27 @@ public static class StaticFuction
         return distanceSquared <= compareSquared;
     }
 
+    /// <summary>
+    /// 将str更换为带换行"/n"的输入框
+    /// </summary>
+    /// <param name="str">需要转换的str</param>
+    /// <param name="lengthLine">单行包含字符数</param>
+    /// <returns>带换行的Str</returns>
+    public static string GetNstring(string str, int lengthLine)
+    {
+        string result = "";
+        int point = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (point == lengthLine)
+            {
+                result += '\n';
+                point = 0;
+            }
+            result += str[i];
+            point++;
+        }
+        return result;
+    }
+
 }

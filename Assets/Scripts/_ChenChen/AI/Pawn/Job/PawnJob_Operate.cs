@@ -14,19 +14,18 @@ namespace ChenChen_AI
 
         public PawnJob_Operate(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
+            operate = target.TargetA.GetComponent<IOperate>();
         }
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
-            //逻辑
-            if (!target.TargetA.TryGetComponent<IOperate>(out operate))
+            if (operate == null)
             {
-                DebugLogDescription = $"该目标无 IOperate 接口: {target.TargetA.name}";
                 return false;
             }
+
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
 
             if (!pawn.MoveController.GoToHere(operate.OperationPosition))
             {
@@ -45,32 +44,25 @@ namespace ChenChen_AI
             if (baseResult != StateType.Doing) return baseResult;
 
             //逻辑
+            if (operate.IsCompleteOperate)
+            {
+                return StateType.Success;
+            }
+
             if (pawn.MoveController.ReachDestination)
             {
-                if(timer < onceTime)
+                if (timer < onceTime)
                 {
                     timer += Time.deltaTime;
                 }
                 else
                 {
                     operate.Operate();
-                    return StateType.Success;
-                }            
+                    timer = 0;
+                }
             }
 
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-
-            //逻辑
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
         }
     }
 }

@@ -19,7 +19,8 @@ MonoBehaviour:
   PreviewSprite: {fileID: 378976718, guid: 86fa40898b6ef244bad1ba466af76c9d, type: 3}
   Prefab: {fileID: 4435497446646638506, guid: 2146f244f8a3d0c45a2f19ec8828bfc7, type: 3}
   Offset: {x: 0, y: 0}
-  IsObstacle: 0
+  RequiredMaterials: []
+  Size: {x: 2, y: 2}
   TileBase: {fileID: 0}
-  IsNotInstancing: 0
-  CanRotation: 0
+  IsObstacle: 0
+  IsEffectBuild: 0

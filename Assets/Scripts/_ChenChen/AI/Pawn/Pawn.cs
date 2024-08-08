@@ -173,10 +173,12 @@ namespace ChenChen_AI
                 SR_Hair.color = randomColor;
             }
         }
+
         public void SetHead(HeadDef headDef)
         {
             SR_Head.sprite = headDef.sprite;
         }
+
         public void SetBody(BodyDef bodyDef, bool changeColor)
         {
             SR_Body.sprite = bodyDef.sprite;

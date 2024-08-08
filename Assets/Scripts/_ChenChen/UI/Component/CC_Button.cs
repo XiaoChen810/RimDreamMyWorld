@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,5 +16,14 @@ namespace ChenChen_UI
             // 调用基类的点击事件处理
             base.OnPointerClick(eventData);
         }
+
+        public Action onMosueEnter;
+
+        public override void OnPointerEnter(PointerEventData eventData)
+        {
+            onMosueEnter?.Invoke();
+            base.OnPointerEnter(eventData);
+        }
+
     }
 }

@@ -15,10 +15,12 @@ MonoBehaviour:
   DefName: "\u6728\u5730\u677F"
   Type: 0
   Workload: 0
-  PreviewSprite: {fileID: 471750548, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
-  IsObstacle: 0
-  Prefab: {fileID: 4485589614726433316, guid: 61769f2968d357348baff52ddf8f174e, type: 3}
-  TileBase: {fileID: 0}
   Durability: 10
+  PreviewSprite: {fileID: 471750548, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
+  Prefab: {fileID: 4485589614726433316, guid: 61769f2968d357348baff52ddf8f174e, type: 3}
   Offset: {x: 0.5, y: 0.5}
-  CanRotation: 0
+  RequiredMaterials: []
+  Size: {x: 1, y: 1}
+  TileBase: {fileID: 0}
+  IsObstacle: 0
+  IsEffectBuild: 1

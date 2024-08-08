@@ -7,34 +7,29 @@ namespace ChenChen_AI
         //持续最大时间
         private readonly static float tick = 120;
 
-        private Animal animal;
-        private float tradeDuration = 5;
+        private readonly Animal animal = null;
+        private readonly float tradeTime = 5;
         private float timer = 0;
 
         public PawnJob_Trade(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
-            if(!target.TryGetComponent<Animal>(out animal))
-            {
-                Debug.LogError("错误！传入参数不正确");
-            }
+            animal = target.TargetA.GetComponent<Animal>();
         }
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
             if (animal == null)
             {
-                DebugLogDescription = "对应参数错误，该目标动物组件不存在";
                 return false;
             }
 
             if (!animal.WaitToTrade)
             {
-                DebugLogDescription = "该动物并不需要自己去驯服";
                 return false;
             }
+
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
 
             if (!pawn.MoveController.GoToHere(target.TargetA,endReachedDistance: pawn.WorkRange))
             {
@@ -43,9 +38,8 @@ namespace ChenChen_AI
             }
 
             animal.Trade();
-
             pawn.JobToDo(target);
-            this.Description = "前往驯服" + target.TargetA.name;
+            Description = "前往驯服" + animal.name;
             
             return true;
         }
@@ -64,9 +58,9 @@ namespace ChenChen_AI
             {
                 pawn.JobDoing();
                 timer += Time.deltaTime;
-                pawn.ChangeMyBar (1 - timer / tradeDuration);
+                pawn.ChangeMyBar (1 - timer / tradeTime);
 
-                if(timer >= tradeDuration)
+                if(timer >= tradeTime)
                 {
                     animal.CompleteTrade();
                     return StateType.Success;
@@ -81,11 +75,6 @@ namespace ChenChen_AI
 
             pawn.ChangeMyBar(0);
             animal.StopTrade();
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
         }
     }
 }

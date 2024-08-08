@@ -7,17 +7,16 @@ namespace ChenChen_AI
     public class PawnJob_Chase : PawnJob
     {
         private readonly static float tick = 500;
-        private Pawn targetPawnComponent;
+        private Pawn chaseTarget;
 
         public PawnJob_Chase(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
-
+            chaseTarget = target.TargetA.GetComponent<Pawn>();
         }
 
         public override bool OnEnter()
         {
-            targetPawnComponent = target.GetComponent<Pawn>();
-            if (targetPawnComponent == null)
+            if (chaseTarget == null)
             {
                 DebugLogDescription = ("目标无Pawn组件，不是一个可追击的目标");
                 return false;
@@ -30,17 +29,19 @@ namespace ChenChen_AI
             }
 
             pawn.JobToDo(target);
-            this.Description = "正在追击" + target.TargetA.name;
+            Description = "正在追击" + chaseTarget.name;
 
             return true;
         }
 
         public override StateType OnUpdate()
         {
-            var baseResult = base.OnUpdate();
-            if (baseResult != StateType.Doing) return baseResult;
+            if (chaseTarget == null)
+            {
+                return StateType.Interrupt;
+            }
 
-            if (targetPawnComponent.Info.IsDead)
+            if (chaseTarget.Info.IsDead)
             {
                 return StateType.Success;
             }
@@ -55,11 +56,6 @@ namespace ChenChen_AI
             }
 
             return StateType.Doing;
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
         }
     }
 }

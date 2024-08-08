@@ -14,6 +14,7 @@ namespace ChenChen_Thing
         [Header("必须属性")]
         public string DefName;
         public BuildingType Type;
+        public string Description;
 
         [Tooltip("建造所需工作量")]
         public int Workload;
@@ -33,20 +34,20 @@ namespace ChenChen_Thing
         [Tooltip("建造所需材料")]
         public List<Need> RequiredMaterials = new List<Need>();
 
+        [Tooltip("建筑尺寸")]
+        public Vector2Int Size = Vector2Int.one;
+
         //----------------------------------------------------------------------
         [Header("可选属性")]
-
-        [Tooltip("是否是障碍物")]
-        public bool IsObstacle;
 
         [Tooltip("最后生成的瓦片")]
         public TileBase TileBase;
 
-        [Tooltip("是否选择不生成实体")]
-        public bool IsNotInstancing;
+        [Tooltip("是否是障碍物")]
+        public bool IsObstacle;
 
-        [Tooltip("可以旋转")]
-        public bool CanRotation;
+        [Tooltip("是否影响建造")]
+        public bool IsEffectBuild = false;
 
     }
 }

@@ -8,7 +8,7 @@ namespace ChenChen_AI
 
         public PawnJob_Escape(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
-            this.Description = "正在逃离" + target.TargetA.name;
+            Description = "正在逃离" + target.TargetA.name;
         }
 
         public override bool OnEnter()

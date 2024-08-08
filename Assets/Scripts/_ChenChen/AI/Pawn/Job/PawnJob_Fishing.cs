@@ -7,7 +7,7 @@ namespace ChenChen_AI
     public class PawnJob_Fishing : PawnJob
     {
         private readonly static float tick = 50;
-        private Thing_Furniture curTargetComponent;
+        private Thing fishingComponent;
 
         private float _timer;
         private float _oneTime = 10f;
@@ -17,29 +17,27 @@ namespace ChenChen_AI
         /// </summary>
         public PawnJob_Fishing(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
+            fishingComponent = target.TargetA.GetComponent<Thing>();
         }
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
-            curTargetComponent = target.GetComponent<Thing_Furniture>();
-            if (curTargetComponent == null)
+            if (fishingComponent == null)
             {
-                DebugLogDescription = ("尝试获取组件失败");
                 return false;
             }
 
-            bool flag = pawn.MoveController.GoToHere(target.PositonA - new Vector3(0, 0.4f), Urgency.Normal);
-            if (!flag)
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
+
+            if (!pawn.MoveController.GoToHere(fishingComponent.transform.position, Urgency.Normal))
             {
                 DebugLogDescription = ("无法移动到目标点");
                 return false;
             }
 
             pawn.JobToDo(target);
-            this.Description = "正在前往钓鱼";
+            Description = "正在前往钓鱼";
 
             return true;
         }   
@@ -54,7 +52,6 @@ namespace ChenChen_AI
                 pawn.JobDoing();
                 this.Description = "正在钓鱼";
                 _timer += Time.deltaTime;
-                pawn.MoveController.FilpRight();
             }
 
             if (_timer > _oneTime)
@@ -64,16 +61,6 @@ namespace ChenChen_AI
             }
 
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
         }
     }
 }

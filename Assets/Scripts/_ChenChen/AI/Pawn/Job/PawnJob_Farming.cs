@@ -13,7 +13,7 @@ namespace ChenChen_AI
         private Vector2 _farmingPosition;
         private float _farmingTime;
 
-        public PawnJob_Farming(Pawn pawn, GameObject workSpace) : base(pawn, tick, new TargetPtr(workSpace))
+        public PawnJob_Farming(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
             _farmingTime = 15 - base.pawn.Attribute.A_Survival.Value;
             _farmingTime = _farmingTime > 1 ? _farmingTime : 1;
@@ -66,11 +66,6 @@ namespace ChenChen_AI
                 }
             }
             return StateType.Doing;
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
         }
 
         public override void OnInterrupt()

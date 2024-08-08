@@ -11,14 +11,14 @@ namespace ChenChen_Map
         /// 生成物体从新
         /// </summary>
         /// <param name="itemName"></param>
-        public void GenerateItem(string itemName, Vector2 pos, string mapName, bool isNotCommonlyUsed = false)
+        public void GenerateItem(string itemName, Vector2Int pos, string mapName, bool isNotCommonlyUsed = false)
         {
             BuildingDef thing_generated = ThingSystemManager.Instance.GetThingDef(itemName);
             if (thing_generated != null)
             {
                 //Data_ThingSave thingSave = new Data_ThingSave(thing_generated.DefName, pos, Quaternion.identity, BuildingLifeStateType.None);
-                //ThingSystemManager.Instance.TryGenerateThing(thingSave);
-                ThingSystemManager.Instance.TryGenerateBuilding(thing_generated, pos, Quaternion.identity, true);
+                //ThingSystemManager.Instance.TryGenerateThing(thingSave);             
+                ThingSystemManager.Instance.GenerateBuilding(thing_generated, pos, true);
             }
         }
         /// <summary>

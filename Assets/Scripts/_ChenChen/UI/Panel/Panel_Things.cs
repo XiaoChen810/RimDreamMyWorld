@@ -13,6 +13,7 @@ namespace ChenChen_UI
         private BuildingType ThingType;
         private GameObject content;
         private ThingPool thingPool;
+        private Text descriptionText;
 
         public Panel_Things(BuildingType thingType) : base(new UIType(path))
         {
@@ -25,6 +26,7 @@ namespace ChenChen_UI
 
             thingPool = ThingPool.Instance;
             content = UITool.GetChildByName("Content");
+            descriptionText = UITool.TryGetChildComponentByName<Text>("DescriptionText");
 
             InitContent(ThingType);
             UITool.TryGetChildComponentByName<Button>("Btn关闭").onClick.AddListener(() =>
@@ -53,7 +55,7 @@ namespace ChenChen_UI
             }
 
             // 获取内容中的全部子物体
-            Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<Button>(true);
+            CC_Button[] btnContents = UITool.GetChildByName("Content").GetComponentsInChildren<CC_Button>(true);
             foreach (var btn in btnContents)
             {
                 btn.onClick.AddListener(() =>
@@ -61,7 +63,17 @@ namespace ChenChen_UI
                     string name = btn.name.Replace("BtnBlueprint", "");
                     UseBlueprintByName(name);
                 });
+
+                btn.onMosueEnter = () =>
+                {
+                    string name = btn.name.Replace("BtnBlueprint", "");
+                    var def = ThingSystemManager.Instance.GetThingDef(name);
+                    var str = def.DefName + "\n" + def.Description;
+                    descriptionText.text = StaticFuction.GetNstring(str, 20);
+                };
             }
+
+
         }
 
         public override void OnExit()

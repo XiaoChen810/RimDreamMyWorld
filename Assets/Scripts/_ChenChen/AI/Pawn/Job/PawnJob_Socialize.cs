@@ -7,21 +7,22 @@ namespace ChenChen_AI
     {
         //持续最大时间
         private readonly static float tick = 500;
+        private readonly Pawn targetPawn = null;
 
         public PawnJob_Socialize(Pawn pawn, TargetPtr target) : base(pawn, tick, target)
         {
+            targetPawn = target.TargetA.GetComponent<Pawn>();
         }
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
-            if (!target.TargetA.TryGetComponent<Pawn>(out Pawn targetPawn))
+            if(targetPawn == null)
             {
-                DebugLogDescription = ("对象不是Pawn");
                 return false;
             }
+
+            var baseResult = base.OnEnter();
+            if (baseResult != true) return baseResult;
 
             if (!pawn.MoveController.GoToHere(targetPawn.gameObject, Urgency.Normal, 2))
             {
@@ -30,7 +31,7 @@ namespace ChenChen_AI
             }
 
             pawn.JobToDo(target);
-            this.Description = $"准备和{targetPawn.name}一起玩";
+            Description = $"准备和{targetPawn.name}社交";
 
             return true;
         }
@@ -44,8 +45,7 @@ namespace ChenChen_AI
             {
                 pawn.JobDoing();
 
-                string him = target.GetComponent<Pawn>().Def.PawnName;
-                this.Description = $"正在和{him}一起玩";
+                Description = $"正在和{targetPawn.Def.PawnName}社交";
 
                 pawn.EmotionController.RemoveEmotion(EmotionType.distressed);
 

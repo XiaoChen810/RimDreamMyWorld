@@ -18,8 +18,9 @@ MonoBehaviour:
   Durability: 50
   PreviewSprite: {fileID: 652640142, guid: db895175ad2fe89478d590017f77d6e8, type: 3}
   Prefab: {fileID: 2007173955114566622, guid: ec8c90dba70dae04280290ded603ba46, type: 3}
-  Offset: {x: 0.5, y: 0.5}
-  IsObstacle: 0
+  Offset: {x: 0, y: 0.75}
+  RequiredMaterials: []
+  Size: {x: 2, y: 1}
   TileBase: {fileID: 0}
-  IsNotInstancing: 0
-  CanRotation: 0
+  IsObstacle: 0
+  IsEffectBuild: 0

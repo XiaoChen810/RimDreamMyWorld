@@ -78,6 +78,7 @@ namespace ChenChen_AI
         public virtual void OnInterrupt()
         {
             Debug.Log("Interrupt" + this.ToString());
+            OnExit();
         }
     }
 }

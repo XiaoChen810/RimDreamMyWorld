@@ -17,12 +17,9 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            var baseResult = base.OnEnter();
-            if (baseResult != true) return baseResult;
-
-            if (!target.TryGetComponent<Pawn>(out _targetPawn))
+            if (_targetPawn == null)
             {
-                DebugLogDescription = "攻击目标不允许";
+                DebugLogDescription = "攻击目标消失";
                 return false;
             }
 
@@ -33,7 +30,8 @@ namespace ChenChen_AI
             }
 
             pawn.JobToDo(target);
-            this.Description = "攻击" + target.TargetA.name;
+            Description = "攻击" + target.TargetA.name;
+
             return true;
         }
 
@@ -73,20 +71,5 @@ namespace ChenChen_AI
 
             return StateType.Doing;
         }
-
-
-        public override void OnExit()
-        {
-            base.OnExit();
-
-            pawn.JobDone();
-        }
-
-        public override void OnInterrupt()
-        {
-            OnExit();
-        }
-
-
     }
 }

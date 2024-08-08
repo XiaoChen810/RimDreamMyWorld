@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using ChenChen_Map;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using ChenChen_Core;
 
 namespace ChenChen_Thing
 {
@@ -13,103 +14,86 @@ namespace ChenChen_Thing
     /// </summary>
     public class BuildingModeTool
     {
-        public ThingSystemManager BuildingSystemManager;
-        /// <summary>
-        /// 当前蓝图的名字
-        /// </summary>
-        private string _curBuildingName;
-        /// <summary>
-        /// 当前的物体定义
-        /// </summary>
-        private BuildingDef _curBuildingDef;
-        /// <summary>
-        /// 当前物体的Building组件
-        /// </summary>
-        private Building _curBuildingBase;
-        /// <summary>
-        /// 是否正处于建造模式中
-        /// </summary>
+        private ThingSystemManager manager;
+        private GameObject _mouseIndicator;
+
         public bool OnBuildMode { get; private set; }
-        /// <summary>
-        /// 当前鼠标上的预览
-        /// </summary>
-        public GameObject _mouseIndicator;
+
+        private BuildingDef CurBuildingDef {  get; set; }
+
+        public GameObject MouseIndicator
+        {
+            get
+            {
+                if(_mouseIndicator == null)
+                {
+                    _mouseIndicator = new GameObject("MouseIndicator");
+                    _mouseIndicator.AddComponent<SpriteRenderer>().sortingLayerName = "Above";
+                }
+                return _mouseIndicator;
+            }
+        }
 
         public BuildingModeTool(ThingSystemManager buildingSystemManager)
         {
-            BuildingSystemManager = buildingSystemManager;
+            manager = buildingSystemManager;
         }
 
-        /// <summary>
-        /// Start
-        /// </summary>
-        /// <param name="def">建筑的定义</param>
         public void BuildStart(BuildingDef def)
         {
             if(OnBuildMode)
             {
                 BuildEnd();
             }
-            _curBuildingName = def.DefName;
-            _curBuildingDef = def;
-            _mouseIndicator = UnityEngine.Object.Instantiate(_curBuildingDef.Prefab);
-            _mouseIndicator.name = "MouseIndicator";
-            _mouseIndicator.GetComponent<SpriteRenderer>().sortingLayerName = "Above";
-            _curBuildingBase = _mouseIndicator.GetComponent<Building>();
+            CurBuildingDef = def;
+            MouseIndicator.gameObject.SetActive(true);
+            MouseIndicator.GetComponent<SpriteRenderer>().sprite = def.PreviewSprite;
             OnBuildMode = true;
         }
 
-        /// <summary>
-        /// Update，监听鼠标信息，放置蓝图等
-        /// </summary>
         public void BuildUpdate()
         {
-            if (OnBuildMode && _mouseIndicator != null)
+            if (OnBuildMode && MouseIndicator != null)
             {
                 // 监听鼠标位置信息转换成世界坐标, 并且取整为网格坐标
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int placePosition = StaticFuction.VectorTransToInt(mousePosition);
-                _mouseIndicator.transform.position = placePosition + new Vector3(_curBuildingDef.Offset.x, _curBuildingDef.Offset.y);
+                MouseIndicator.transform.position = placePosition + new Vector3(CurBuildingDef.Offset.x, CurBuildingDef.Offset.y);
 
                 // 如果能建造则设置主体为绿色，否则为红色
-                SpriteRenderer sr = _curBuildingBase.SR;
-                if (_curBuildingBase.CanBuildHere())
+                SpriteRenderer sr = MouseIndicator.GetComponent<SpriteRenderer>();
+                if (CanBuildHere())
                 {
                     sr.color = Color.green;
-                    // 当鼠标按下, 再判断一次能否建造，然后建造
-                    if (Input.GetMouseButton(0) && _curBuildingBase.CanBuildHere())
-                    {
-                        Vector2 posInt = new Vector2(placePosition.x,placePosition.y);
-                        Quaternion rot = _mouseIndicator.transform.rotation;
-                        BuildingSystemManager.TryGenerateBuilding(_curBuildingDef, posInt, rot, false);
-                    }
                 }
                 else
                 {
                     sr.color = Color.red;
                 }
 
-                // 旋转
-                if (_curBuildingDef.CanRotation)
+                // 放置
+                if (Input.GetMouseButton(0) && CanBuildHere())
                 {
-                    // 当按下Q键，物体顺时针旋转90度
-                    if (Input.GetKeyDown(KeyCode.Q))
-                    {
-                        _mouseIndicator.transform.Rotate(Vector3.forward, 90f);
-                    }
-                    // 当按下E键，物体逆时针旋转90度
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        _mouseIndicator.transform.Rotate(Vector3.forward, -90f);
-                    }
+                    Vector2Int posInt = new Vector2Int(placePosition.x, placePosition.y);
+                    manager.GenerateBuilding(CurBuildingDef, posInt, false);
                 }
 
-                //取消
+                // 取消
                 if (Input.GetMouseButtonDown(1))
                 {
                     BuildEnd();
                 }
             }
+        }
+
+        private bool CanBuildHere()
+        {
+            Vector2Int posInt = new Vector2Int((int)MouseIndicator.transform.position.x, (int)MouseIndicator.transform.position.y);
+            Vector2Int size = CurBuildingDef.Size;
+
+            if (CurBuildingDef.IsEffectBuild) return true;
+
+            return manager.CanBuildHere(posInt, size);
         }
 
         /// <summary>
@@ -118,10 +102,8 @@ namespace ChenChen_Thing
         public void BuildEnd()
         {
             OnBuildMode = false;
-            UnityEngine.Object.Destroy(_mouseIndicator);
-            _curBuildingBase = null;
-            _curBuildingDef = null;
-            _curBuildingName = null;
+            CurBuildingDef = null;
+            MouseIndicator.gameObject.SetActive(false);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace ChenChen_Core
 {
@@ -20,6 +21,7 @@ namespace ChenChen_Core
         public static readonly string Def_Food = "Foods";
         public static readonly string Def_Medicine = "Medicines";
         public static readonly string Def_Weapon = "Weapons";
+        public static readonly string Def_Stuff = "Stuff";
 
         private Dictionary<string, object> defDict = new();
         private List<Def> defList = new();
@@ -64,6 +66,7 @@ namespace ChenChen_Core
             LoadXmlFile<FoodDef>(Def_Food);
             LoadXmlFile<MedicineDef>(Def_Medicine);
             LoadXmlFile<WeaponDef>(Def_Weapon);
+            LoadXmlFile<StuffDef>(Def_Stuff);
         }
 
         private void LoadXmlFile<T>(string fileName) where T : Def, new()
@@ -88,7 +91,7 @@ namespace ChenChen_Core
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
                     string fieldName = childNode.Name != "iconPath" ? childNode.Name : "sprite";
-                    var property = def.GetType().GetField(fieldName);
+                    FieldInfo property = def.GetType().GetField(fieldName);
                     if (property != null)
                     {
                         if (property.FieldType == typeof(int))
@@ -103,6 +106,10 @@ namespace ChenChen_Core
                         {
                             property.SetValue(def, childNode.InnerText);
                         }
+                        else if (property.FieldType == typeof(bool))
+                        {
+                            property.SetValue(def, bool.Parse(childNode.InnerText));
+                        }
                         else if (property.FieldType == typeof(Sprite))
                         {
                             property.SetValue(def, LoadSprite(childNode.InnerText));
@@ -113,6 +120,10 @@ namespace ChenChen_Core
                             {
                                 property.SetValue(def, col);
                             }
+                        }
+                        else if (property.FieldType == typeof(Vector2Int))
+                        {
+                            property.SetValue(def, LoadSize(childNode.InnerText));
                         }
                         else if (property.FieldType == typeof(List<Need>))
                         {
@@ -182,6 +193,17 @@ namespace ChenChen_Core
             texture.filterMode = FilterMode.Point;
 
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        }
+
+        private Vector2Int LoadSize(string size)
+        {
+            switch (size)
+            {
+                case "Long":
+                    return new Vector2Int(1, 2);
+                default:
+                    return new Vector2Int(1, 1);
+            }
         }
     }
 }

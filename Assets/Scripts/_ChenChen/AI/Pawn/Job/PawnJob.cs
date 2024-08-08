@@ -63,11 +63,6 @@ namespace ChenChen_AI
         /// <returns></returns>
         public override StateType OnUpdate()
         {
-            if(target != null && target.TargetA == null)
-            {
-                return StateType.Failed;
-            }
-
             return StateType.Doing;
         }
 

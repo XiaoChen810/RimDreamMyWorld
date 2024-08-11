@@ -10,6 +10,7 @@ namespace ChenChen_Thing
         {
             base.Start();
             SR.sortingLayerName = "Middle";
+            tag = "Floor";
         }
     }
 }

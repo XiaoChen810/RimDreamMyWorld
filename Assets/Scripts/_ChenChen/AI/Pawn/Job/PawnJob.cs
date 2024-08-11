@@ -57,10 +57,6 @@ namespace ChenChen_AI
             return true;
         }
 
-        /// <summary>
-        /// 判断目标是否还存在
-        /// </summary>
-        /// <returns></returns>
         public override StateType OnUpdate()
         {
             return StateType.Doing;

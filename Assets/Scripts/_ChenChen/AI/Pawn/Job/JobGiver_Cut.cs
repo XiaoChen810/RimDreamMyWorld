@@ -20,7 +20,7 @@ namespace ChenChen_AI
             var trees = ThingSystemManager.Instance.GetThingsInstance<Thing_Tree>();
             if (trees != null)
             {
-                var res = trees.FirstOrDefault<Thing_Tree>(t => t.IsMarkCut && t.UnLock);
+                var res = trees.FirstOrDefault<Thing_Tree>(t => t.IsMarkCut);
                 if (res != null)
                 {
                     return new TargetPtr(res.gameObject);

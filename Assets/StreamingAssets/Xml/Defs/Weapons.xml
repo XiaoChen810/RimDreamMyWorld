@@ -8,8 +8,13 @@
 		<iconPath>Weapon/ [name] </iconPath>
 		<worth></worth>
 		<workload></workload>
+		<isMelee>true</isMelee>
 		<meleeDamage></meleeDamage>
 		<rangeDamage></rangeDamage>
+		<equippedAngleOffset></equippedAngleOffset>
+		<range></range>
+		<warmupTime></warmupTime>
+		<rangedWeaponCooldown></rangedWeaponCooldown>
 		<requiredMaterials>
 			<Need>
 				<label></label>
@@ -24,6 +29,122 @@
 -->
 
 <Weapons>
-	
+	<WeaponDef>
+		<name>单手剑</name>
+		<label>OneHanded</label>
+		<description>标准的卫兵武器</description>
+		<iconPath>Weapon/OneHanded</iconPath>
+		<worth>500</worth>
+		<workload>100</workload>
+		<isMelee>true</isMelee>
+		<meleeDamage>10</meleeDamage>
+		<rangeDamage>0</rangeDamage>
+		<equippedAngleOffset>0</equippedAngleOffset>
+		<range>2</range>
+		<warmupTime>0.8</warmupTime>
+		<rangedWeaponCooldown>1</rangedWeaponCooldown>
+		<requiredMaterials>
+			<Need>
+				<label>iron</label>
+				<numbers>10</numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>	
+
+	<WeaponDef>
+		<name>重骑枪</name>
+		<label>HeavyLance</label>
+		<description>重型骑兵武器</description>
+		<iconPath>Weapon/HeavyLance</iconPath>
+		<worth>500</worth>
+		<workload>100</workload>
+		<isMelee>true</isMelee>
+		<meleeDamage>20</meleeDamage>
+		<rangeDamage>0</rangeDamage>
+		<equippedAngleOffset>-45</equippedAngleOffset>
+		<range>2</range>
+		<warmupTime>1.5</warmupTime>
+		<rangedWeaponCooldown>1.5</rangedWeaponCooldown>
+		<requiredMaterials>
+			<Need>
+				<label>iron</label>
+				<numbers>10</numbers>
+			</Need>
+			<Need>
+				<label>wood</label>
+				<numbers>10</numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>
+
+	<WeaponDef>
+		<name>菜刀</name>
+		<label>Cleaver</label>
+		<description>功夫再高也怕菜单</description>
+		<iconPath>Weapon/Cleaver</iconPath>
+		<worth>200</worth>
+		<workload>30</workload>
+		<isMelee>true</isMelee>
+		<meleeDamage>5</meleeDamage>
+		<rangeDamage>0</rangeDamage>
+		<equippedAngleOffset>0</equippedAngleOffset>
+		<range>1.5</range>
+		<warmupTime>0.5</warmupTime>
+		<rangedWeaponCooldown>0.6</rangedWeaponCooldown>
+		<requiredMaterials>
+			<Need>
+				<label>iron</label>
+				<numbers>5</numbers>
+			</Need>
+			<Need>
+				<label>wood</label>
+				<numbers>5</numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>
+
+	<WeaponDef>
+		<name>步枪</name>
+		<label>Rifle</label>
+		<description>标准枪支</description>
+		<iconPath>Weapon/Rifle</iconPath>
+		<worth>1000</worth>
+		<workload>150</workload>
+		<isMelee>false</isMelee>
+		<meleeDamage>5</meleeDamage>
+		<rangeDamage>20</rangeDamage>
+		<equippedAngleOffset>-45</equippedAngleOffset>
+		<range>25</range>
+		<warmupTime>1</warmupTime>
+		<rangedWeaponCooldown>1.2</rangedWeaponCooldown>
+		<requiredMaterials>
+			<Need>
+				<label>iron</label>
+				<numbers>20</numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>
+
+	<WeaponDef>
+		<name>狙击步枪</name>
+		<label>SniperRifle</label>
+		<description>射程更远的步枪，装填速度较慢</description>
+		<iconPath>Weapon/SniperRifle</iconPath>
+		<worth>1000</worth>
+		<workload>200</workload>
+		<isMelee>false</isMelee>
+		<meleeDamage>5</meleeDamage>
+		<rangeDamage>30</rangeDamage>
+		<equippedAngleOffset>-45</equippedAngleOffset>
+		<range>33</range>
+		<warmupTime>1</warmupTime>
+		<rangedWeaponCooldown>2.1</rangedWeaponCooldown>
+		<requiredMaterials>
+			<Need>
+				<label>iron</label>
+				<numbers>25</numbers>
+			</Need>
+		</requiredMaterials>
+	</WeaponDef>
 	
 </Weapons>

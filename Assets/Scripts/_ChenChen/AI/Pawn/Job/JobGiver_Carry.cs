@@ -37,7 +37,7 @@ namespace ChenChen_AI
                         Item selectedItem = null;
                         int maxAvailable = 0;
 
-                        IReadOnlyList<Item> items = ThingSystemManager.Instance.GetThingsInstance<Item>();
+                        var items = ThingSystemManager.Instance.GetThingsInstance<Item>();
 
                         foreach (var item in items)
                         {
@@ -79,7 +79,7 @@ namespace ChenChen_AI
                         Item selectedItem = null;
                         int maxAvailable = 0;
 
-                        IReadOnlyList<Item> items = ThingSystemManager.Instance.GetThingsInstance<Item>();
+                        var items = ThingSystemManager.Instance.GetThingsInstance<Item>();
 
                         foreach (var item in items)
                         {

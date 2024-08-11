@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChenChen_Map;
-using ChenChen_Scene;
 using System;
-using ChenChen_UI;
+using ChenChen_Core;
 
 public class GameManager : SingletonMono<GameManager>
 {
@@ -13,7 +12,6 @@ public class GameManager : SingletonMono<GameManager>
     public AnimatorTool AnimatorTool { get; private set; }
     public WorkSpaceTool WorkSpaceTool { get; private set; }
     public AnimalGenerateTool AnimalGenerateTool { get; private set; }
-    public MonsterGeneratorTool MonsterGeneratorTool { get; private set; }
     public TechnologyTool TechnologyTool { get; private set; }
 
     private bool _gameIsStart = false;
@@ -65,7 +63,6 @@ public class GameManager : SingletonMono<GameManager>
         AnimatorTool = GetComponent<AnimatorTool>();
         WorkSpaceTool = GetComponent<WorkSpaceTool>();
         AnimalGenerateTool = GetComponent<AnimalGenerateTool>();
-        MonsterGeneratorTool = GetComponent<MonsterGeneratorTool>();
         TechnologyTool = GetComponent<TechnologyTool>();
     }
 
@@ -78,6 +75,10 @@ public class GameManager : SingletonMono<GameManager>
         if (Input.GetKeyDown(KeyCode.F11))
         {
             _f_mode_cineme = !_f_mode_cineme;
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameManager.Instance.WorkSpaceTool.SetNewWorkSpace_Storage();
         }
     }
 
@@ -175,7 +176,8 @@ public class GameManager : SingletonMono<GameManager>
             randomPosition.y = Mathf.Clamp(randomPosition.y, 0, mapManager.CurMapHeight - 1);
 
             // 生成Pawn
-            PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y), faction: "enemy");
+            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y), faction: "enemy");
+            p.SetWeapon(XmlLoader.Instance.GetRandom<WeaponDef>(XmlLoader.Def_Weapon));
         }
     }
 
@@ -185,7 +187,8 @@ public class GameManager : SingletonMono<GameManager>
 
         Vector2Int center = new Vector2Int(mapManager.CurMapWidth / 2, mapManager.CurMapHeight / 2);
 
-        PawnGeneratorTool.GeneratePawn(position: new Vector3(center.x, center.y), faction: "enemy");
+        var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(center.x, center.y), faction: "enemy");
+        p.SetWeapon(XmlLoader.Instance.GetRandom<WeaponDef>(XmlLoader.Def_Weapon));
     }
 
     public void Debug_night()
@@ -206,6 +209,32 @@ public class GameManager : SingletonMono<GameManager>
     public void Debug_godmode()
     {
         IsGodMode = !IsGodMode;
+    }
+
+    public void Debug_colony()
+    {
+        MapManager mapManager = MapManager.Instance;
+        // 地图中心
+        Vector2Int center = new Vector2Int(mapManager.CurMapWidth / 2, mapManager.CurMapHeight / 2);
+        // 生成范围
+        int radius = 10;
+        // 生成数量
+        int numbers = 10;
+
+        for (int i = 0; i < numbers; i++)
+        {
+            // 生成随机偏移
+            Vector2Int randomPosition = center;
+            randomPosition += new Vector2Int(UnityEngine.Random.Range(-radius, radius), UnityEngine.Random.Range(-radius, radius));
+
+            // 确保生成的位置在地图边界内
+            randomPosition.x = Mathf.Clamp(randomPosition.x, 0, mapManager.CurMapWidth - 1);
+            randomPosition.y = Mathf.Clamp(randomPosition.y, 0, mapManager.CurMapHeight - 1);
+
+            // 生成Pawn
+            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y));
+            p.SetWeapon(XmlLoader.Instance.GetRandom<WeaponDef>(XmlLoader.Def_Weapon));
+        }
     }
     #endregion
 }

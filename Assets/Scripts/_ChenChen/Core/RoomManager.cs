@@ -1,4 +1,5 @@
 ﻿using ChenChen_Map;
+using ChenChen_UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,54 @@ namespace ChenChen_Core
     public class Room
     {
         public List<Vector2> area = new List<Vector2>();
-        public int size = 0;
-        public string type = "空房间";
+        public int size => area.Count;
+        public string type = "杂间";
+        public Color color = new Color(1, 1, 1, 0.3f);
 
         public bool InRoom(Vector2 pos)
         {
             return area.Any(x => x == new Vector2((int)pos.x, (int)pos.y)); 
+        }
+
+        public GameObject ShowRoom()
+        {
+            GameObject parent = new GameObject(type);
+            var dv = parent.AddComponent<DetailView_Room>();
+            dv.Init(this);
+
+            // 创建子物体方块
+            foreach (Vector2 position in area)
+            {
+                GameObject block = new GameObject("Room");
+                block.transform.position = position + new Vector2(0.5f, 0.5f);
+
+                SpriteRenderer renderer = block.AddComponent<SpriteRenderer>();
+                renderer.sprite = Resources.Load<Sprite>("Room");
+                renderer.color = color;
+
+                block.transform.parent = parent.transform;
+            }
+
+            // 计算边界并设置Collider2D
+            Vector2 min = area[0];
+            Vector2 max = area[0];
+
+            foreach (Vector2 position in area)
+            {
+                min = Vector2.Min(min, position);
+                max = Vector2.Max(max, position);
+            }
+
+            Vector2 size = max - min + Vector2.one; // +1保证包含所有方块
+            Vector2 center = (min + max) / 2;
+
+            // 在父对象上添加BoxCollider2D并设为触发器
+            BoxCollider2D collider = parent.AddComponent<BoxCollider2D>();
+            collider.size = size;
+            collider.offset = center - (Vector2)parent.transform.position;
+            collider.isTrigger = true;
+
+            return parent;
         }
     }
 
@@ -23,7 +66,8 @@ namespace ChenChen_Core
     {
         [SerializeField] private List<List<bool>> walls;
         [SerializeField] private List<Room> rooms = new List<Room>();
-
+        [SerializeField] private List<GameObject> graphics = new List<GameObject>();
+        [SerializeField] private bool open = false;
         protected override void Awake()
         {
             base.Awake();
@@ -124,7 +168,6 @@ namespace ChenChen_Core
 
                 visited[curY, curX] = true;
                 room.area.Add(current);
-                room.size++;
 
                 stack.Push(new Vector2(curX + 1, curY));
                 stack.Push(new Vector2(curX - 1, curY));
@@ -133,6 +176,44 @@ namespace ChenChen_Core
             }
 
             return isClosed;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                if(!open)
+                {
+                    open = true;
+                    ShowRooms();
+                }
+                else
+                {
+                    open = false;
+                    CloseRooms();
+                }
+                
+            }
+        }
+
+        private void ShowRooms()
+        {
+            graphics.Clear();
+
+            foreach (Room room in rooms)
+            {
+                graphics.Add(room.ShowRoom());
+            }
+        }
+
+        private void CloseRooms()
+        {
+            foreach (var obj in graphics)
+            {
+                Destroy(obj);
+            }
+
+            graphics.Clear();
         }
     }
 }

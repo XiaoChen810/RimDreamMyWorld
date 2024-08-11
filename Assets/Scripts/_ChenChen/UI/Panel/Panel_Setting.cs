@@ -25,14 +25,14 @@ namespace ChenChen_UI
             });       
             UITool.TryGetChildComponentByName<Button>("BtnCamera").onClick.AddListener(() =>
             {
-                UITool.GetChildByName("镜头设置面板").SetActive(false);
-                UITool.GetChildByName("基础设置面板").SetActive(true);
+                UITool.GetChildByName("基础设置面板").SetActive(false);
+                UITool.GetChildByName("镜头设置面板").SetActive(true);
                 UITool.GetChildByName("开发者模式面板").SetActive(false);
             });
             UITool.TryGetChildComponentByName<Button>("BtnDebug").onClick.AddListener(() =>
             {
-                UITool.GetChildByName("镜头设置面板").SetActive(false);
                 UITool.GetChildByName("基础设置面板").SetActive(false);
+                UITool.GetChildByName("镜头设置面板").SetActive(false);
                 UITool.GetChildByName("开发者模式面板").SetActive(true);
             });
             // Close

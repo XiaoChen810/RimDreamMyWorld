@@ -27,19 +27,9 @@ namespace ChenChen_AI
             var baseResult = base.OnEnter();
             if (baseResult != true) return baseResult;
 
-            Vector3 position;
-            if (pawn.transform.position.x < target.PositonA.x)
-            {               
-                 position = target.PositonA + new Vector3(-1, 0.3f); 
-            }
-            else
+            if (!pawn.MoveController.GoToHere(tree.transform.position, endReachedDistance: 1))
             {
-                 position = target.PositonA + new Vector3(2, 0.3f);
-            }
-
-            if (!pawn.MoveController.GoToHere(position))
-            {
-                DebugLogDescription = "前往目标点失败";
+                DebugLogDescription = "前往目标失败";
                 return false;
             }
 
@@ -75,8 +65,6 @@ namespace ChenChen_AI
                     tree.OnCut(20);
                     _timer = 0;
                 }
-
-                pawn.MoveController.FilpIt(target.PositonA.x);
             }
 
             return StateType.Doing;

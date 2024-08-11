@@ -21,7 +21,6 @@ namespace ChenChen_AI
         private Pawn target_pawn = null;
         private Pawn target_pawn_last = null;
 
-        private float range_chase = 14;
         private float time_prepare = 0;
 
         private bool raid_start = false;
@@ -35,10 +34,17 @@ namespace ChenChen_AI
             if (time_prepare > 0)
             {
                 time_prepare -= Time.deltaTime;
+
+                if (pawn.StateMachine.IsDefault)
+                {
+                    pawn.StateMachine.TryChangeState(new PawnJob_Move(pawn, 
+                        pawn.transform.position + new Vector3(UnityEngine.Random.Range(-5, 5), UnityEngine.Random.Range(-5, 5)), 
+                        Urgency.Wander));
+                }
+
                 if (time_prepare <= 0 && !raid_start)
                 {
                     raid_start = true;
-                    pawn.StateMachine.TryChangeState(new PawnJob_Move(pawn, target_center, Urgency.Wander));
                     Debug.Log($"{pawn.name}发起袭击");
                     return;
                 }
@@ -60,28 +66,6 @@ namespace ChenChen_AI
                     }
                 }
             }
-
-            if (pawn.StateMachine.IsIdle && target_pawn == null)
-            {
-                if (raid_start)
-                {
-                    pawn.StateMachine.TryChangeState(new PawnJob_Move(pawn, target_center, Urgency.Wander));
-                }
-                else
-                {
-                    Vector2 moveTo = pawn.transform.position + new Vector3(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f), 0f);
-                    pawn.StateMachine.TryChangeState(new PawnJob_Move(pawn, moveTo, Urgency.Wander));
-                }
-            }
-        }
-
-        private void TryChaseTarget()
-        {
-            if(pawn.StateMachine.CurStateType == typeof(PawnJob_Attack)) return;
-            if (target_pawn == target_pawn_last) return;
-            target_pawn_last = target_pawn;
-            pawn.StateMachine.TryChangeState(new PawnJob_Chase(pawn, new TargetPtr(target_pawn.gameObject)));
-            Debug.Log($"{pawn.name} 追击 {target_pawn.name}");
         }
 
         private Pawn GetNearestColonyPawn()
@@ -93,7 +77,7 @@ namespace ChenChen_AI
             foreach (var colonyPawn in colonyPawnList)
             {
                 float distance = Vector2.Distance(pawn.transform.position, colonyPawn.transform.position);
-                if (distance < nearestDistance && distance <= range_chase)
+                if (distance < nearestDistance)
                 {
                     nearestDistance = distance;
                     nearestPawn = colonyPawn;
@@ -102,5 +86,16 @@ namespace ChenChen_AI
 
             return nearestPawn;
         }
+
+        private void TryChaseTarget()
+        {
+            if (pawn.StateMachine.CurStateType == typeof(PawnJob_Battle)) return;
+            if (target_pawn == target_pawn_last) return;
+            target_pawn_last = target_pawn;
+            pawn.StateMachine.TryChangeState(new PawnJob_Battle(pawn, new TargetPtr(target_pawn.gameObject)));
+            Debug.Log($"{pawn.name} 追击 {target_pawn.name}");
+        }
+
+
     }
 }

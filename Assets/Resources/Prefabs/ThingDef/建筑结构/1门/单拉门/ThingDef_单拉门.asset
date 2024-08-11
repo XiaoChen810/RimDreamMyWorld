@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefName: "\u5355\u62C9\u95E8"
   Type: 0
+  Description: 
   Workload: 0
   Durability: 50
   PreviewSprite: {fileID: -1745512642, guid: d83ad136966dcc64c830ef9c105da7e9, type: 3}

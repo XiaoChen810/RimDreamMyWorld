@@ -14,7 +14,8 @@ public class WorkSpaceTool : MonoBehaviour
     [SerializedDictionary("SpaceName", "WorkSpace")]
     public SerializedDictionary<string, WorkSpace> TotalWorkSpaceDictionary;
 
-    public GameObject WorkSpacePrefab;
+    public GameObject WorkSpacePrefab_Farm;
+    public GameObject WorkSpacePrefab_Storage;
     public bool IsDoingWorkSpace = false;
 
     private void Start()
@@ -43,7 +44,8 @@ public class WorkSpaceTool : MonoBehaviour
         foreach(var space in TotalWorkSpaceDictionary)
         {
             if(space.Value.WorkSpaceType == workSpaceType 
-                && space.Value.UnLock)
+                && !space.Value.Lock
+                && !space.Value.IsFull)
             {
                 result = space.Value.gameObject;
                 break;
@@ -55,7 +57,7 @@ public class WorkSpaceTool : MonoBehaviour
     /// <summary>
     /// 添加一个新的 种植区
     /// </summary>
-    public void AddNewWorkSpace(string cropName)
+    public void SetNewWorkSpace_Crop(string cropName)
     {
         string newWorkSpaceName = $"种植区{index_farm++}";
         if (TotalWorkSpaceDictionary.ContainsKey(newWorkSpaceName))
@@ -73,25 +75,46 @@ public class WorkSpaceTool : MonoBehaviour
         };
 
         // 初始设置
-        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, onPlace));
+        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, onPlace, WorkSpaceType.Farm));
+    }
+
+    public void SetNewWorkSpace_Storage()
+    {
+        string newWorkSpaceName = $"存储区{index_farm++}";
+        if (TotalWorkSpaceDictionary.ContainsKey(newWorkSpaceName))
+        {
+            Debug.LogWarning("不会生成相同名字的存储区");
+            return;
+        }
+
+        Action<GameObject> onPlace = (GameObject obj) =>
+        {
+            if (obj.TryGetComponent<WorkSpace_Storage>(out WorkSpace_Storage workSpace_Storage))
+            {
+                Debug.Log("存储区创建");
+            }
+        };
+
+        // 初始设置
+        StartCoroutine(AddWorkSpaceCo(newWorkSpaceName, onPlace, WorkSpaceType.Storage));
     }
 
     public void LoadFarmWorkSpaceFromSave(Data_GameSave gameSave)
     {
-        foreach(var fws in gameSave.SaveFarmWorkSpace)
-        {
-            // 加载种植区。
-            Vector2 vector_bl = new Vector2(fws.bounds.min.x, fws.bounds.min.y);
-            Vector2 vector_tr = new Vector2(fws.bounds.max.x, fws.bounds.max.y);
-            GameObject go = WorkSpacePlacedFinally(fws.workSpaceName, vector_bl, vector_tr);
-            WorkSpace_Farm wsf = go.GetComponent<WorkSpace_Farm>();
-            wsf.Init(fws.cropName);
-            // 将其已经种植的作物加载
-            foreach(var cropSave in fws.crops)
-            {
-                wsf.SetAPositionHadFarmed(cropSave);
-            }
-        }
+        //foreach(var fws in gameSave.SaveFarmWorkSpace)
+        //{
+        //    // 加载种植区。
+        //    Vector2 vector_bl = new Vector2(fws.bounds.min.x, fws.bounds.min.y);
+        //    Vector2 vector_tr = new Vector2(fws.bounds.max.x, fws.bounds.max.y);
+        //    GameObject go = WorkSpacePlacedFinally(fws.workSpaceName, vector_bl, vector_tr);
+        //    WorkSpace_Farm wsf = go.GetComponent<WorkSpace_Farm>();
+        //    wsf.Init(fws.cropName);
+        //    // 将其已经种植的作物加载
+        //    foreach(var cropSave in fws.crops)
+        //    {
+        //        wsf.SetAPositionHadFarmed(cropSave);
+        //    }
+        //}
 
     }
 
@@ -119,7 +142,7 @@ public class WorkSpaceTool : MonoBehaviour
 
     }
 
-    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, Action<GameObject> onComplete)
+    private IEnumerator AddWorkSpaceCo(string newWorkSpaceName, Action<GameObject> onComplete, WorkSpaceType type)
     {
         IsDoingWorkSpace = true;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -206,7 +229,7 @@ public class WorkSpaceTool : MonoBehaviour
             {
                 if (IsOk(mouseDownPosition, mouseDownPosition))
                 {
-                    GameObject obj = WorkSpacePlacedFinally(newWorkSpaceName, bottomLeft, topRight);
+                    GameObject obj = WorkSpacePlacedFinally(newWorkSpaceName, bottomLeft, topRight, type);
                     // 重置LineRenderer
                     ResetLineRenderer();
                     IsDoingWorkSpace = false;
@@ -288,10 +311,20 @@ public class WorkSpaceTool : MonoBehaviour
         }
     }
 
-    private GameObject WorkSpacePlacedFinally(string newWorkSpaceName, Vector2 vector_bl, Vector2 vector_tr)
+    private GameObject WorkSpacePlacedFinally(string newWorkSpaceName, Vector2 vector_bl, Vector2 vector_tr, WorkSpaceType type)
     {
         // 生成实例
-        GameObject obj = Instantiate(WorkSpacePrefab, transform);
+        GameObject obj = null;
+
+        if (type == WorkSpaceType.Farm)
+        {
+            obj = Instantiate(WorkSpacePrefab_Farm, transform); 
+        }
+        else if (type == WorkSpaceType.Storage)
+        {
+            obj = Instantiate(WorkSpacePrefab_Storage, transform);
+        }
+
         obj.name = newWorkSpaceName;
         obj.tag = "WorkSpace";
         WorkSpace workSpace = obj.GetComponent<WorkSpace>();

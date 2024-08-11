@@ -6,5 +6,6 @@ namespace ChenChen_Thing
     {
         None = 0,
         Farm = 1,
+        Storage = 2,
     }
 }

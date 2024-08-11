@@ -91,9 +91,7 @@ namespace ChenChen_Thing
             Vector2Int posInt = new Vector2Int((int)MouseIndicator.transform.position.x, (int)MouseIndicator.transform.position.y);
             Vector2Int size = CurBuildingDef.Size;
 
-            if (CurBuildingDef.IsEffectBuild) return true;
-
-            return manager.CanBuildHere(posInt, size);
+            return manager.CanBuildHere(CurBuildingDef, posInt, size);
         }
 
         /// <summary>

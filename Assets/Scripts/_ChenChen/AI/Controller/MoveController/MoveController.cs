@@ -15,7 +15,7 @@ namespace ChenChen_AI
         [Header("Debug")]
         // 自身上一个位置
         protected Vector3 lastTransPositon;
-        // 停止
+        // 停止，手动停止移动，也会被视为到达
         [SerializeField] protected bool isStop = false;
         // 开始移动
         [SerializeField] protected bool isStart = false;
@@ -75,7 +75,15 @@ namespace ChenChen_AI
         {
             get
             {
-                return reachDestination;
+                if (!isStart && !reachDestination)
+                {
+                    return true;   
+                }
+                if (reachDestination)
+                {
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -129,13 +137,6 @@ namespace ChenChen_AI
                 }
                 else
                 {
-                    if (targetIsAObject)
-                    {
-                        if(!StaticFuction.CompareDistance(transform.position, targetDestination.position, endReachedDistance))
-                        {
-                            return;
-                        }
-                    }
                     reachedEndOfPath = true;
                     OnTargetReached();
                 }
@@ -146,10 +147,7 @@ namespace ChenChen_AI
             speedFactor = !reachDestination ? speedFactor : 0;
             speedFactor = canMove ? speedFactor : 0;
             Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-            transform.position += dir * speedFactor * Time.deltaTime;
-
-            // 其他逻辑
-            Filp();       
+            transform.position += dir * speedFactor * Time.deltaTime;      
         }
 
         protected virtual void OnTargetReached()
@@ -160,11 +158,11 @@ namespace ChenChen_AI
 
         #region Move
         /// <summary>
-        /// 暂停移动
+        /// 暂停移动，当重新选择路径时，会解除暂停
         /// </summary>
         public void StopMove()
         {
-            isStop = false;
+            isStop = true;
         }
 
         /// <summary>
@@ -179,9 +177,9 @@ namespace ChenChen_AI
 
         IEnumerator StopMoveCo(float time)
         {
-            isStop = false;
-            yield return new WaitForSeconds(time);
             isStop = true;
+            yield return new WaitForSeconds(time);
+            isStop = false;
         }
 
         /// <summary>
@@ -190,7 +188,7 @@ namespace ChenChen_AI
         public void RecoverMove()
         {
             StopCoroutine(StopMoveCoroutine);
-            isStop = true;
+            isStop = false;
         }
         #endregion
 
@@ -247,15 +245,14 @@ namespace ChenChen_AI
             {
                 return false;
             }
-            if (StaticFuction.CompareDistance(transform.position, destination, endReachedDistance))
+            reachDestination = false;
+            Vector3Int toInt = StaticFuction.VectorTransToInt(destination);
+            Vector3 to = new Vector3(toInt.x + 0.5f, toInt.y + 0.5f);
+            if (StaticFuction.CompareDistance(transform.position, to, endReachedDistance))
             {
                 OnTargetReached();
                 return true;
             }
-            reachDestination = false;
-            // 转换目标点为格子中心
-            Vector3Int toInt = StaticFuction.VectorTransToInt(destination);
-            Vector3 to = new Vector3(toInt.x + 0.5f, toInt.y + 0.5f);
             // 新建路径
             ABPath newPath = ABPath.Construct(transform.position, to);
             // 开始计算路径
@@ -294,82 +291,82 @@ namespace ChenChen_AI
 
         #endregion
 
-        #region Flip
+        //#region Flip
 
-        protected void Filp()
-        {
-            if (lastTransPositon != transform.position)
-            {
-                if (IsFaceRight)
-                {
-                    // 向右边走，正面
-                    if (lastTransPositon.x < transform.position.x)
-                    {
-                        transform.localScale = Vector3.one;
-                    }
-                    // 向左边走，反面
-                    if (lastTransPositon.x > transform.position.x)
-                    {
-                        transform.localScale = new Vector3(-1, 1, 1);
-                    }
-                    lastTransPositon = transform.position;
-                }   
-                if (!IsFaceRight)
-                {
-                    // 向左边走，正面
-                    if (lastTransPositon.x < transform.position.x)
-                    {
-                        transform.localScale = new Vector3(-1, 1, 1);
-                    }
-                    // 向右边走，反面
-                    if (lastTransPositon.x > transform.position.x)
-                    {
-                        transform.localScale = Vector3.one;
-                    }
-                    lastTransPositon = transform.position;
-                }
-            }
-        }
+        //protected void Filp()
+        //{
+        //    if (lastTransPositon != transform.position)
+        //    {
+        //        if (IsFaceRight)
+        //        {
+        //            // 向右边走，正面
+        //            if (lastTransPositon.x < transform.position.x)
+        //            {
+        //                transform.localScale = Vector3.one;
+        //            }
+        //            // 向左边走，反面
+        //            if (lastTransPositon.x > transform.position.x)
+        //            {
+        //                transform.localScale = new Vector3(-1, 1, 1);
+        //            }
+        //            lastTransPositon = transform.position;
+        //        }   
+        //        if (!IsFaceRight)
+        //        {
+        //            // 向左边走，正面
+        //            if (lastTransPositon.x < transform.position.x)
+        //            {
+        //                transform.localScale = new Vector3(-1, 1, 1);
+        //            }
+        //            // 向右边走，反面
+        //            if (lastTransPositon.x > transform.position.x)
+        //            {
+        //                transform.localScale = Vector3.one;
+        //            }
+        //            lastTransPositon = transform.position;
+        //        }
+        //    }
+        //}
 
-        public void FilpLeft()
-        {
-            if (IsFaceRight)
-            {
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-            else
-            {
-                transform.localScale = Vector3.one;
-            }
-            lastTransPositon = transform.position;
+        //public void FilpLeft()
+        //{
+        //    if (IsFaceRight)
+        //    {
+        //        transform.localScale = new Vector3(-1, 1, 1);
+        //    }
+        //    else
+        //    {
+        //        transform.localScale = Vector3.one;
+        //    }
+        //    lastTransPositon = transform.position;
 
-        }
+        //}
 
-        public void FilpRight()
-        {
-            if (IsFaceRight)
-            {
-                transform.localScale = Vector3.one;
-            }
-            else
-            {
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-            lastTransPositon = transform.position;
-        }
+        //public void FilpRight()
+        //{
+        //    if (IsFaceRight)
+        //    {
+        //        transform.localScale = Vector3.one;
+        //    }
+        //    else
+        //    {
+        //        transform.localScale = new Vector3(-1, 1, 1);
+        //    }
+        //    lastTransPositon = transform.position;
+        //}
 
-        public void FilpIt(float x)
-        {
-            if(transform.position.x < x)
-            {
-                FilpRight();
-            }
-            else
-            {
-                FilpLeft();
-            }
-        }
+        //public void FilpIt(float x)
+        //{
+        //    if(transform.position.x < x)
+        //    {
+        //        FilpRight();
+        //    }
+        //    else
+        //    {
+        //        FilpLeft();
+        //    }
+        //}
 
-        #endregion
+        //#endregion
     }
 }

@@ -104,7 +104,7 @@ namespace ChenChen_Thing
         [SerializeField] private bool isLocked;
         [SerializeField] private Pawn userPawn;
 
-        public bool UnLock => isLocked;
+        public bool Lock => isLocked;
 
         public Pawn UserPawn => userPawn;
 

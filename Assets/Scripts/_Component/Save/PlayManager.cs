@@ -101,15 +101,6 @@ public class PlayManager : SingletonMono<PlayManager>
                 );
             saveData.SavePawns.Add(newPawnSave);
         }
-        // 保存全部怪物
-        foreach(var monster in GameManager.Instance.MonsterGeneratorTool.MonstersList)
-        {
-            Data_MonsterSave newMonsterSave = new Data_MonsterSave(
-                monster.IndexId,
-                monster.transform.position
-                );
-            saveData.SaveMonster.Add(newMonsterSave);
-        }
         // 保存工作区
         foreach(var workSpace in GameManager.Instance.WorkSpaceTool.TotalWorkSpaceDictionary)
         {
@@ -176,8 +167,6 @@ public class PlayManager : SingletonMono<PlayManager>
         MapManager.Instance.ItemCreator.LoadItemFromSave(CurSave);
         // 加载Pawn
         GameManager.Instance.PawnGeneratorTool.LoadScenePawnFromSave(CurSave);
-        // 加载Monster
-        GameManager.Instance.MonsterGeneratorTool.LoadMonstersFromSave(CurSave);
         // 加载种植区
         GameManager.Instance.WorkSpaceTool.LoadFarmWorkSpaceFromSave(CurSave);
     }

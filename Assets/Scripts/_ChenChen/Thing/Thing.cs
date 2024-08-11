@@ -4,11 +4,10 @@ using ChenChen_Core;
 using ChenChen_AI;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace ChenChen_Thing
 {
-    public class Thing : MonoBehaviour, IDetailView , IGrant
+    public abstract class Thing : MonoBehaviour, IDetailView , IGrant, ICommand
     {
         public BoxCollider2D ColliderSelf { get; protected set; }
 
@@ -41,7 +40,7 @@ namespace ChenChen_Thing
             ColliderSelf = GetComponent<BoxCollider2D>();
             ColliderSelf.isTrigger = true;
 
-            SR = GetComponentInChildren<SpriteRenderer>();
+            SR = GetComponent<SpriteRenderer>();
             SR.sortingLayerName = "Default";
             SR.sortingOrder = -(int)transform.position.y;
 
@@ -77,50 +76,45 @@ namespace ChenChen_Thing
         #endregion
 
         #region - IGrant -
-
-        private object lockObj = new object();
-
         [Header("权限")]
-        [SerializeField] private bool unLock;
-        [SerializeField] private Pawn userPawn;
+        [SerializeField] private Pawn userPawn = null;
 
-        public bool UnLock => !unLock;
+        public bool Lock => userPawn != null;
 
         public Pawn UserPawn => userPawn;
 
         public void GetPermission(Pawn pawn)
         {
-            lock (lockObj)
+            if (!Lock)
             {
-                if (!unLock)
-                {
-                    unLock = true;
-                    userPawn = pawn;
-                    Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限");
-                }
-                else
-                {
-                    Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限失败. 已经被 {userPawn.name} 获取");
-                }
+                userPawn = pawn;
+                Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限");
+            }
+            else
+            {
+                Debug.Log($"{pawn.name} 获取 {gameObject.name} 权限失败. 已经被 {userPawn.name} 获取");
             }
         }
 
         public void RevokePermission(Pawn pawn)
         {
-            lock (lockObj)
+            if (Lock && userPawn == pawn)
             {
-                if (unLock && userPawn == pawn)
-                {
-                    unLock = false;
-                    Debug.Log($"{pawn.name} 归还权限");
-                    userPawn = null;
-                }
-                else
-                {
-                    Debug.Log($"{pawn.name} 归还权限失败");
-                }
+                Debug.Log($"{pawn.name} 归还权限");
+                userPawn = null;
+            }
+            else
+            {
+                Debug.Log($"{pawn.name} 归还权限失败");
             }
         }
+
+        #endregion
+
+        #region - ICommand -
+        public abstract string CommandName { get; }
+
+        public abstract void CommandFunc(Pawn p);
         #endregion
     }
 }

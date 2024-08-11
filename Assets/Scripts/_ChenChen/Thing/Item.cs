@@ -4,15 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using ChenChen_Core;
 using ChenChen_UI;
+using ChenChen_AI;
 
 namespace ChenChen_Thing
 {
     public class Item : Thing
     {
-        public Def Def;
-        private int num;
+        public Def Def;    
 
         public string Label => Def.label;
+
+        [SerializeField] private int num;
         public int Num
         {
             get
@@ -28,6 +30,8 @@ namespace ChenChen_Thing
                 }
             }
         }
+
+        public bool IsOnStorage;
 
         public void Init(Def def, int num)
         {
@@ -52,6 +56,13 @@ namespace ChenChen_Thing
             base.Start();
 
             DetailView.OverrideContentAction = DetailViewOverrideContentAction;
+        }
+
+        public override string CommandName => "优先搬运";
+
+        public override void CommandFunc(Pawn p)
+        {
+            Debug.Log("3");
         }
     }
 }

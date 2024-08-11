@@ -117,9 +117,10 @@ public class SelectTool : MonoBehaviour
         if (Logic_Pawn(hitColliders)) return;
         if (Logic_Animal(hitColliders)) return;
         if (Logic_Thing(hitColliders)) return;
-        if (Logic_Wall(hitColliders)) return;
-        if (Logic_Floor(hitColliders)) return;
+        if (Logic_Wall(hitColliders)) return;    
         if (Logic_WorkSpace(hitColliders)) return;
+        if (Logic_Other(hitColliders)) return;
+        if (Logic_Floor(hitColliders)) return;
     }
 
     private bool Logic_Pawn(Collider2D[] hitColliders)
@@ -212,7 +213,20 @@ public class SelectTool : MonoBehaviour
         DetailViewOpen();
         return flag;
     }
-
+    private bool Logic_Other(Collider2D[] hitColliders)
+    {
+        bool flag = false;
+        foreach (Collider2D collider in hitColliders)
+        {
+            if(!collider.CompareTag("Floor") && collider.TryGetComponent<DetailView>(out var detailView))
+            {
+                dvs.Add(detailView);
+                flag = true;
+            }
+        }
+        DetailViewOpen();
+        return flag;
+    }
     private void DetailViewOpen()
     {
         if (dvs.Count == 1)
@@ -222,9 +236,13 @@ public class SelectTool : MonoBehaviour
         }
         else if (dvs.Count > 1)
         {
-            foreach (var d in dvs)
+            for (int i = 0; i < dvs.Count; i++)
             {
-                d.OpenIndicator();
+                if(i == 0)
+                {
+                    dvs[i].OpenPanel();
+                }
+                dvs[i].OpenIndicator();
             }
         }
     }

@@ -26,10 +26,25 @@ namespace ChenChen_AI
         /// </summary>
         public string DebugLogDescription { get; set; }
 
+        private string description = string.Empty;
         /// <summary>
         /// ×´Ì¬ÃèÊö
         /// </summary>
-        public string Description = string.Empty;
+        public string Description
+        {
+            get
+            {
+                if (description == string.Empty)
+                {
+                    description = GetType().Name;
+                }
+                return description;
+            }
+            set
+            {
+                description = value;
+            }
+        }
 
 
         public StateBase(StateMachine machine, StateBase next = null)

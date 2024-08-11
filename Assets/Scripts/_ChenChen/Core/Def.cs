@@ -9,15 +9,15 @@ namespace ChenChen_Core
         public string label;
         public string name;
         public string description;
-        public Sprite sprite; // 图标贴图
+        public Sprite sprite = null; // 图标贴图
         public Color color = Color.white;
     }
 
     // 基础类：StuffDef
     public class StuffDef : Def
     {
-        public int worth;   // 市场价值
-        public int workload;    // 制作所需工作量
+        public int worth = 0;   // 市场价值
+        public int workload = 0;    // 制作所需工作量
         public Vector2Int size = Vector2Int.one;
 
         public bool canMade = true;
@@ -78,8 +78,32 @@ namespace ChenChen_Core
     // 武器类
     public class WeaponDef : StuffDef
     {
-        public float meleeDamage;
-        public float rangeDamage;
+        public bool isMelee;
+
+        public float meleeDamage;           // 近距离伤害
+        public float rangeDamage;           // 远距离伤害
+
+        public float equippedAngleOffset;   // 装备时偏移量
+
+        public float range;                 // 射击范围
+        public float warmupTime;            // 准备时间
+        public float rangedWeaponCooldown;  // 冷却时间
+
+        public float accuracy = 1;              // 射击精度
+
+        public static readonly WeaponDef Fist = new WeaponDef
+        {
+            label = "Fist",
+            name = "拳头",
+            isMelee = true,
+            meleeDamage = 1.0f,     // 定义拳头的近距离伤害
+            rangeDamage = 0.0f,     // 拳头没有远距离伤害
+            equippedAngleOffset = 0.0f,
+            range = 1.0f,           // 拳头的攻击范围很近
+            warmupTime = 0.5f,      // 拳头的准备时间
+            rangedWeaponCooldown = 0.5f,
+            accuracy = 1.0f
+        };
     }
 
     // 食物类

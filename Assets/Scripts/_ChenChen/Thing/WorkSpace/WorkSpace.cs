@@ -32,6 +32,8 @@ namespace ChenChen_Thing
             }
         }
 
+        public abstract bool IsFull { get; }
+
         protected virtual void OnEnable()
         {
             SR = GetComponent<SpriteRenderer>();
@@ -53,47 +55,36 @@ namespace ChenChen_Thing
 
         #region - IGrant -
 
-        private object lockObj = new object();
-
         [Header("х╗оч")]
-        [SerializeField] private bool isLocked;
         [SerializeField] private Pawn userPawn;
 
-        public bool UnLock => isLocked;
+        public bool Lock => userPawn != null;
 
         public Pawn UserPawn => userPawn;
 
         public void GetPermission(Pawn pawn)
         {
-            lock (lockObj)
+            if (!Lock)
             {
-                if (!isLocked)
-                {
-                    isLocked = true;
-                    userPawn = pawn;
-                    Debug.Log($"Permission granted to {pawn.name}");
-                }
-                else
-                {
-                    Debug.Log($"Permission denied to {pawn.name}. Already locked by {userPawn.name}");
-                }
+                userPawn = pawn;
+                Debug.Log($"Permission granted to {pawn.name}");
+            }
+            else
+            {
+                Debug.Log($"Permission denied to {pawn.name}. Already locked by {userPawn.name}");
             }
         }
 
         public void RevokePermission(Pawn pawn)
         {
-            lock (lockObj)
+            if (Lock && userPawn == pawn)
             {
-                if (isLocked && userPawn == pawn)
-                {
-                    isLocked = false;
-                    Debug.Log($"Permission revoked from {pawn.name}");
-                    userPawn = null;
-                }
-                else
-                {
-                    Debug.Log($"Permission revoke failed for {pawn.name}");
-                }
+                Debug.Log($"Permission revoked from {pawn.name}");
+                userPawn = null;
+            }
+            else
+            {
+                Debug.Log($"Permission revoke failed for {pawn.name}");
             }
         }
         #endregion

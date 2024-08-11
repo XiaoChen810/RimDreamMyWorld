@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine;
 using ChenChen_UI;
 using ChenChen_Core;
+using ChenChen_AI;
 
 namespace ChenChen_Thing
 {
@@ -413,5 +414,15 @@ namespace ChenChen_Thing
             }
         }
         #endregion
+
+        public override string CommandName => "优先建造";
+
+        public override void CommandFunc(Pawn p)
+        {
+            if (LifeState == BuildingLifeStateType.MarkBuilding)
+            {
+                p.StateMachine.TryChangeState(new PawnJob_Building(p, new TargetPtr(this.gameObject)));
+            }
+        }
     }
 }

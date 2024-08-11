@@ -62,7 +62,7 @@ namespace ChenChen_Thing
         protected virtual void ShootBullet()
         {
             GameObject bullet = _bulletPool.Get();
-            bullet.GetComponent<Bullet>().Shot(_bulletPool);
+            //bullet.GetComponent<Bullet>().Shot(_bulletPool);
         }
 
         /// <summary>
@@ -81,24 +81,7 @@ namespace ChenChen_Thing
         /// </summary>
         public void Scan()
         {
-            // 全局怪物列表
-            List<Monster> monsters = GameManager.Instance.MonsterGeneratorTool.MonstersList;
-
-            foreach (Monster monster in monsters)
-            {
-                if (monster.IsDie) continue;
-                if (StaticFuction.CompareDistance(transform.position, monster.transform.position, scanRadius))
-                {
-                    // 做一条2D射线，检查有无墙体（CompareTag（“Wall”））如果没有阻挡，则转向敌人，发射
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, monster.transform.position - transform.position, scanRadius);
-                    if (hit.collider == null || !hit.collider.CompareTag("Wall"))
-                    {
-                        RotateTopTowards(monster.transform.position);
-                        ShootBullet();
-                        break; // 发现一个敌人后停止扫描
-                    }
-                }
-            }
+            //Todo
         }
 
 

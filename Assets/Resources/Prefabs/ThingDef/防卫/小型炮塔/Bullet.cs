@@ -1,51 +1,46 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour
 {
-    public float speed = 20f;
-    public Rigidbody2D rb;
-    public float lifetime = 5f;
-    public int damage = 5;
+    private Rigidbody2D rb;
+    private Vector2 _destination;
+    private float speed = 0f;
 
-    private bool isHit = false;
-    private ObjectPool<GameObject> _pool;
+    private float lifetime = 0f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    /// <summary>
-    /// 被发射
-    /// </summary>
-    public void Shot(ObjectPool<GameObject> pool)
+    private void Update()
     {
-        _pool = pool;
-        isHit = false;
-        rb.velocity = transform.up * speed;
-        StartCoroutine(ReturnToPoolAfterTime(lifetime));
-    }
-
-    public void Hit()
-    {
-        if(!isHit)
+        if (Vector2.Distance(transform.position, _destination) <= 0.5f)
         {
-            isHit = true;
-            _pool.Release(gameObject);
+            Destroy(gameObject);
+        }
+        lifetime += Time.deltaTime;
+
+        if (lifetime > 5f)
+        {
+            Destroy(gameObject);
         }
     }
 
-    private IEnumerator ReturnToPoolAfterTime(float time)
+    public void Shot(Vector2 destination)
     {
-        yield return new WaitForSeconds(time);
-        if (!isHit)
-        {
-            isHit = true;
-            _pool.Release(gameObject);
-        }
+        _destination = destination;
+
+        // 计算方向并旋转到目标点
+        Vector2 direction = (_destination - (Vector2)transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+
+        // 发射
+        speed = 30f;
+        rb.velocity = direction * speed;
     }
 }

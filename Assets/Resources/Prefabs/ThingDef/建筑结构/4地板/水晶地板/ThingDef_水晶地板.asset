@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: "ThingDef_\u6C34\u6676\u5730\u677F"
   m_EditorClassIdentifier: 
   DefName: "\u6C34\u6676\u5730\u677F"
-  Type: 0
+  Type: 7
+  Description: 
   Workload: 0
   Durability: 5
   PreviewSprite: {fileID: -598211783, guid: b7f2ff9c9a5610d40b9d1cf16dae25ac, type: 3}
@@ -23,4 +24,4 @@ MonoBehaviour:
   Size: {x: 1, y: 1}
   TileBase: {fileID: 0}
   IsObstacle: 0
-  IsEffectBuild: 1
+  Isbunker: 0

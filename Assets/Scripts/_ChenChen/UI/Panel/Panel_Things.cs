@@ -45,7 +45,7 @@ namespace ChenChen_UI
             // 根据蓝图字典,设置成对应的按钮添加到内容(content)中
             foreach (var item in dict)
             {
-                if (item.Value.Type == type)
+                if (item.Value.Type == type || (type == BuildingType.Architectural && item.Value.Type == BuildingType.Floor))
                 {
                     thingPool.Init(content);
                     GameObject btnInstance = thingPool.pool.Get();

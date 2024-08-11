@@ -9,7 +9,7 @@ namespace ChenChen_Thing
         public class Cell
         {
             public Vector2 pos;
-            public bool isUse;
+            public bool isUsed;
             public bool isFarm;
             public Crop Crop;
         }
@@ -22,6 +22,21 @@ namespace ChenChen_Thing
         public CropDef CurCrop
         {
             get { return _whatCrop; }
+        }
+
+        public override bool IsFull
+        {
+            get
+            {
+                foreach (var cell in Cells)
+                {
+                    if (!cell.Value.isFarm)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 
         /// <summary>
@@ -38,15 +53,11 @@ namespace ChenChen_Thing
                 for (float y = Mathf.Floor(bounds.min.y); y < Mathf.Ceil(bounds.max.y); y++)
                 {
                     Vector2 cellPosition = new Vector2Int((int)x, (int)y) + new Vector2(0.5f, 0.5f);
-                    Cells.Add(cellPosition, new Cell { pos = cellPosition, isUse = false, isFarm = false });
+                    Cells.Add(cellPosition, new Cell { pos = cellPosition, isUsed = false, isFarm = false });
                 }
             }
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-        }
 
         public void Init(string cropName)
         {
@@ -62,14 +73,14 @@ namespace ChenChen_Thing
         {
             foreach (var cell in Cells)
             {
-                if (!cell.Value.isUse && !cell.Value.isFarm)
+                if (!cell.Value.isUsed && !cell.Value.isFarm)
                 {
                     farmingPositon = cell.Key;
-                    cell.Value.isUse = true;
+                    cell.Value.isUsed = true;
                     return true;
                 }
             }
-            Debug.Log($"该种植区{name}已经满了，权限设为IsBooking");
+            Debug.Log($"该种植区{name}已经满了");
             farmingPositon = Vector2.zero;
             return false;
         }
@@ -84,7 +95,7 @@ namespace ChenChen_Thing
             if (Cells.ContainsKey(position))
             {
                 Cell cell = Cells[position];
-                if (cell.pos == position && cell.isUse && !cell.isFarm)
+                if (cell.pos == position && cell.isUsed && !cell.isFarm)
                 {
                     GameObject cropObj = new GameObject(_whatCrop.CropName);
                     cropObj.transform.position = position;
@@ -93,7 +104,7 @@ namespace ChenChen_Thing
                     crop.Init(_whatCrop, this);
 
                     cell.isFarm = true;
-                    cell.isUse = false;
+                    cell.isUsed = false;
                     cell.Crop = crop;
                     return true;
                 }
@@ -120,7 +131,7 @@ namespace ChenChen_Thing
                 crop.Init(_whatCrop, this, data_CropSave);
 
                 cell.isFarm = true;
-                cell.isUse = false;
+                cell.isUsed = false;
                 cell.Crop = crop;
                 return;
 
@@ -137,9 +148,9 @@ namespace ChenChen_Thing
             if (Cells.ContainsKey(position))
             {
                 Cell cell = Cells[position];
-                if (cell.pos == position && cell.isUse && !cell.isFarm)
+                if (cell.pos == position && cell.isUsed && !cell.isFarm)
                 {
-                    cell.isUse = false;
+                    cell.isUsed = false;
                 }
             }
         }

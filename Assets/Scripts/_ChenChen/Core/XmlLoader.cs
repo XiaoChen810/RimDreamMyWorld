@@ -26,21 +26,35 @@ namespace ChenChen_Core
         private Dictionary<string, object> defDict = new();
         private List<Def> defList = new();
 
-        public List<T> Get<T>(string name) where T : Def
+        /// <summary>
+        /// 获取某定义的全部，返回一个列表
+        /// </summary>
+        /// <typeparam name="T"> Def </typeparam>
+        /// <param name="fileName"> 选择文件名，可以直接用静态定义好的 </param>
+        /// <returns> List<T> </returns>
+        /// <exception cref="System.Exception"></exception>
+        public List<T> Get<T>(string fileName) where T : Def
         {
-            if(defDict.ContainsKey(name))
+            if(defDict.ContainsKey(fileName))
             {
-                List<T> res = defDict[name] as List<T>;
+                List<T> res = defDict[fileName] as List<T>;
                 return res;
             }
             throw new System.Exception("不存在定义");
         }
 
-        public T GetRandom<T>(string name) where T : Def
+        /// <summary>
+        /// 获取某定义的随机一个值，返回一个列表
+        /// </summary>
+        /// <typeparam name="T"> Def </typeparam>
+        /// <param name="fileName"> 选择文件名，可以直接用静态定义好的 </param>
+        /// <returns> List<T> </returns>
+        /// <exception cref="System.Exception"></exception>
+        public T GetRandom<T>(string fileName) where T : Def
         {
-            if (defDict.ContainsKey(name))
+            if (defDict.ContainsKey(fileName))
             {
-                List<T> res = defDict[name] as List<T>;
+                List<T> res = defDict[fileName] as List<T>;
                 return res[Random.Range(0, res.Count)];
             }
             throw new System.Exception("不存在定义");

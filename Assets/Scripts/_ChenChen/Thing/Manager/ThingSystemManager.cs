@@ -7,6 +7,7 @@ using ChenChen_Map;
 using System;
 using System.Linq;
 using ChenChen_Core;
+using UnityEngine.UIElements;
 
 namespace ChenChen_Thing
 {
@@ -15,9 +16,10 @@ namespace ChenChen_Thing
         [SerializedDictionary("名称", "建筑定义")]
         public SerializedDictionary<string, BuildingDef> ThingDefDictionary = new SerializedDictionary<string, BuildingDef>();
 
-        private LinkedList<Thing> things = new LinkedList<Thing>();
-        private HashSet<Vector2Int> thingSet = new HashSet<Vector2Int>();
-        private Dictionary<Vector2Int,LinkedList<Thing>> thingDict = new Dictionary<Vector2Int,LinkedList<Thing>>();
+        private List<Thing> things = new List<Thing>();
+
+        private HashSet<Vector2Int> buildingMap = new();
+        private HashSet<Vector2Int> floorsMap = new();
 
         private BuildingModeTool tool; 
         private Quadtree quadtree;   
@@ -90,12 +92,24 @@ namespace ChenChen_Thing
             Resources.UnloadUnusedAssets();
         }
 
-        #region Public
-
-        public void OpenBuildingMode(string name)
+        public void AddThingToList(GameObject obj, bool putInQuadtree)
         {
-            Tool.BuildStart(GetThingDef(name));
+            if (obj.TryGetComponent<Thing>(out var thing))
+            {
+                try
+                {
+                    things.Add(thing);
+
+                    if (putInQuadtree)
+                        Quadtree.Insert(obj);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
         }
+
         public bool RemoveThing(GameObject obj)
         {
             if (obj == null)
@@ -109,45 +123,92 @@ namespace ChenChen_Thing
                 return false;
             }
 
-            things.Remove(thing);
-
-            if(thing.DestroyOutputs.Count > 0)
+            if (thing.DestroyOutputs.Count > 0)
             {
-                foreach(var output in thing.DestroyOutputs)
+                foreach (var output in thing.DestroyOutputs)
                 {
                     Def def = xmlLoader.GetDef(output.Item1);
                     GenerateItem(def, obj.transform.position, output.Item2);
                 }
             }
 
+            things.Remove(thing);
+
+            if (obj.TryGetComponent<Building>(out var building))
+            {
+                BuildingDef def = building.Def;
+                Vector2Int position = new Vector2Int((int)building.transform.position.x, (int)building.transform.position.y);
+
+                Vector2Int size = def.Size;
+                Vector2Int bottomLeftPosition = new Vector2Int(
+                    position.x - size.x / 2,
+                    position.y - size.y / 2
+                );
+
+                for (int i = 0; i < size.x; i++)
+                {
+                    for (int j = 0; j < size.y; j++)
+                    {
+                        var key = new Vector2Int(bottomLeftPosition.x + i, bottomLeftPosition.y + j);
+                        if (buildingMap.Contains(key))
+                        {
+                            buildingMap.Remove(key);
+                            if(building.Def.Type == BuildingType.Floor)
+                            {
+                                floorsMap.Remove(key);
+                            }                    
+                        }
+                        else
+                        {
+                            Debug.LogError("错误");
+                        }
+                    }
+                }
+            }
+
             return true;
-        }
-        /// <summary>
-        /// 判断这个地方能否建造
-        /// </summary>
-        public bool CanBuildHere(Vector2Int position, Vector2Int size)
+        }    
+
+        #region Add
+
+        public void OpenBuildingMode(string name)
         {
+            Tool.BuildStart(GetThingDef(name));
+        }
+
+        public bool CanBuildHere(BuildingDef def, Vector2Int position, Vector2Int size)
+        {
+            // 检测范围
             Vector2Int bottomLeftPosition = new Vector2Int(
                 position.x - size.x / 2,
                 position.y - size.y / 2
-            );
+            );          
 
             for (int i = 0; i < size.x; i++)
             {
                 for (int j = 0; j < size.y; j++)
                 {
                     Vector2Int checkPosition = new Vector2Int(bottomLeftPosition.x + i, bottomLeftPosition.y + j);
-                    if (thingSet.Contains(checkPosition))
+                    if (def.Type == BuildingType.Floor)
                     {
-                        return false; // 该位置已被占用，无法建造
+                        if (floorsMap.Contains(checkPosition))
+                        {
+                            return false;
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        if (buildingMap.Contains(checkPosition))
+                        {
+                            return false;
+                        }
                     }
                 }
             }
             return true;
         }
-        /// <summary>
-        /// 生成建筑
-        /// </summary>
+
         public void GenerateBuilding(BuildingDef def, Vector2Int position, bool putInQuadtree)
         {
             var offest = def.Offset;
@@ -156,8 +217,6 @@ namespace ChenChen_Thing
 
             Building building = obj.GetComponent<Building>();
             building.MarkToBuild();
-
-            if (def.IsEffectBuild) return;
 
             Vector2Int size = def.Size;
             Vector2Int bottomLeftPosition = new Vector2Int(
@@ -169,13 +228,20 @@ namespace ChenChen_Thing
             {
                 for (int j = 0; j < size.y; j++)
                 {
-                    thingSet.Add(new Vector2Int(bottomLeftPosition.x + i, bottomLeftPosition.y + j));
+                    var key = new Vector2Int(bottomLeftPosition.x + i, bottomLeftPosition.y + j);
+                    
+                    if(def.Type == BuildingType.Floor)
+                    {
+                        floorsMap.Add(key);
+                    }
+                    else
+                    {
+                        buildingMap.Add(key);
+                    }       
                 }
             }
         }
-        /// <summary>
-        /// 生产物品
-        /// </summary>
+
         public Item GenerateItem(Def def, Vector2 position, int num)
         {
             var obj = new GameObject(def.label);
@@ -196,7 +262,7 @@ namespace ChenChen_Thing
             AddThingToList(obj, false);
             return item;
         }
-        // 生成
+
         private GameObject Generate(BuildingDef thingDef, Vector2 position, Quaternion routation, bool putInQuadtree)
         {
             GameObject obj = Instantiate(thingDef.Prefab, position, routation, transform);
@@ -204,60 +270,30 @@ namespace ChenChen_Thing
             if (GameManager.Instance.GameIsStart) AudioManager.Instance.PlaySFX("Placed");
             return obj;
         }
-        private void AddThingToList(GameObject obj, bool putInQuadtree)
-        {
-            if (obj.TryGetComponent<Thing>(out var thing))
-            {
-                try
-                {
-                    things.AddLast(thing);
 
-                    if (putInQuadtree)
-                        Quadtree.Insert(obj);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-        }
         #endregion
 
-        #region 获取物体实例
-        /// <summary>
-        /// 获取物体实例
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        #region - Get -
         public GameObject GetThingInstance(string name)
         {
-            Thing res = things.FirstOrDefault(thing => thing.name == name && thing.UnLock);
+            Thing res = things.FirstOrDefault(thing => thing.name == name && !thing.Lock);
             if (res != null)
             {
                 return res.gameObject;
             }
             return null;
         }
-        /// <summary>
-        /// 获取对应类型物品实例
-        /// </summary>
-        /// <returns>符合条件的物体列表</returns>
+
         public IReadOnlyList<T> GetThingsInstance<T>() where T : Thing
         {
-            var res = things.Where(thing => thing is T && thing.UnLock).Cast<T>().ToList();
-            return res;
+            return things.Where(thing => thing is T && !thing.Lock).Cast<T>().ToList();
         }
-        /// <summary>
-        /// 获取全部物体实例
-        /// </summary>
-        /// <returns></returns>     
+
         public List<Thing> GetAllThingsInstance()
         {
             return things.ToList();
         }
-        /// <summary>
-        /// 访问字典，找到存在的物品定义并返回
-        /// </summary>
+
         public BuildingDef GetThingDef(string name)
         {
             if (ThingDefDictionary.TryGetValue(name, out var def))

@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using ChenChen_AI;
 
 namespace ChenChen_Thing
 {
@@ -115,6 +116,16 @@ namespace ChenChen_Thing
                     // 标记砍伐
                     this.OnMarkCut();
                 });
+            }
+        }
+
+        public override string CommandName => "优先砍伐";
+
+        public override void CommandFunc(Pawn p)
+        {
+            if (IsMarkCut)
+            {
+                p.StateMachine.TryChangeState(new PawnJob_Cut(p, new TargetPtr(this.gameObject)));
             }
         }
     }

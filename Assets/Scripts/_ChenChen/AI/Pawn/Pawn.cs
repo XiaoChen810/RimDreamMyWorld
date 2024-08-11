@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using ChenChen_UI;
 using ChenChen_Core;
 using ChenChen_Thing;
-using System;
 using System.Linq;
 
 namespace ChenChen_AI
@@ -58,6 +57,7 @@ namespace ChenChen_AI
         }
 
         private Animator anim;
+        public Animator Anim => anim;
         public void SetAnimator(string animation, bool value)
         {
             foreach (AnimatorControllerParameter param in anim.parameters)
@@ -66,6 +66,12 @@ namespace ChenChen_AI
                 {
                     anim.SetBool(param.name, false);
                 }
+            }
+
+            if (Info.IsDead)
+            {
+                anim.SetBool("Die", true);
+                return;
             }
 
             anim.SetBool(animation, value);
@@ -127,37 +133,29 @@ namespace ChenChen_AI
         [SerializeField] private SpriteRenderer SR_Legs;
         [SerializeField] private SpriteRenderer SR_Eyes;
         [SerializeField] private SpriteRenderer SR_Neck;
-        private Dictionary<string, SpriteRenderer> bodyPartRenderers;
 
-        public void SetDressed(ApparelDef apparel)
+        [Header("Weapon")]
+        [SerializeField] private SpriteRenderer SR_Weapon;
+        [SerializeField] private Transform weaponHand;
+
+        private WeaponDef weaponDef = null;
+        public WeaponDef Weapon
         {
-            List<string> partGroup = apparel.bodyPartGroups;
-            string mainPart = partGroup[0];
-
-            // 先脱
-            foreach (string part in partGroup)
+            get
             {
-                if (bodyPartRenderers.TryGetValue(part, out var spriteRenderer))
+                if (weaponDef == null)
                 {
-                    spriteRenderer.sprite = null;
+                    weaponDef = WeaponDef.Fist;
                 }
-                else
-                {
-                    Debug.LogError($"不存在字段 {part}");
-                }
-            }
-
-            // 再穿
-            if (bodyPartRenderers.TryGetValue(mainPart, out var mainSpriteRenderer))
-            {
-                mainSpriteRenderer.sprite = apparel.sprite;
-            }
-            else
-            {
-                Debug.LogError($"不存在字段 {mainPart}");
+                return weaponDef;
             }
         }
+        public float WeaponAccuracy => Weapon.accuracy;
+        public float WeaponDemage => Weapon.isMelee ? Weapon.meleeDamage : Weapon.rangeDamage;
+        public float Armor => 0;
 
+        private Dictionary<string, SpriteRenderer> bodyPartRenderers;
+        private Dictionary<string, ApparelDef> bodyPartApparelDefs;
         public void SetHair(HairDef hairDef, bool changeColor)
         {
             SR_Hair.sprite = hairDef.sprite;
@@ -165,9 +163,9 @@ namespace ChenChen_AI
             if (changeColor)
             {
                 Color randomColor = new Color(
-                    UnityEngine.Random.Range(0.2f, 0.6f), 
-                    UnityEngine.Random.Range(0.1f, 0.4f), 
-                    UnityEngine.Random.Range(0.05f, 0.2f) 
+                    UnityEngine.Random.Range(0.2f, 0.6f),
+                    UnityEngine.Random.Range(0.1f, 0.4f),
+                    UnityEngine.Random.Range(0.05f, 0.2f)
                 );
 
                 SR_Hair.color = randomColor;
@@ -203,6 +201,71 @@ namespace ChenChen_AI
                 SR_Body.color = randomColor;
                 SR_Head.color = randomColor;
             }
+        }
+
+        public void SetDressed(ApparelDef apparel)
+        {
+            List<string> partGroup = apparel.bodyPartGroups;
+            string mainPart = partGroup[0];
+
+            // 先脱
+            foreach (string part in partGroup)
+            {
+                if (bodyPartRenderers.TryGetValue(part, out var spriteRenderer))
+                {
+                    spriteRenderer.sprite = null;
+                }
+                else
+                {
+                    Debug.LogError($"不存在字段 {part}");
+                }
+
+                if (bodyPartApparelDefs.TryGetValue(part, out var apparelDef))
+                {
+                    if(apparelDef != null)
+                    {
+                        UnloadBody<ApparelDef>(apparelDef);
+                    }
+
+                    bodyPartApparelDefs[part] = null;
+                }
+            }
+
+            // 再穿
+            if (bodyPartRenderers.TryGetValue(mainPart, out var mainSpriteRenderer))
+            {
+                mainSpriteRenderer.sprite = apparel.sprite;
+
+                bodyPartApparelDefs[mainPart] = apparel;
+            }
+            else
+            {
+                Debug.LogError($"不存在字段 {mainPart}");
+            }            
+        }
+
+        public void SetWeapon(WeaponDef def)
+        {
+            // 先卸下本来的装备
+            if (this.weaponDef != null)
+            {
+                UnloadBody<WeaponDef>(this.weaponDef);
+            }
+            
+            // 装上新的装备
+            this.weaponDef = def;
+
+            if (this.weaponDef != null)
+            {
+                SR_Weapon.sprite = def.sprite;
+                SR_Weapon.transform.localRotation = Quaternion.Euler(0f, 0f, def.equippedAngleOffset);
+                EndBattle();
+            }                    
+        }
+
+        private void UnloadBody<T>(T def) where T : Def
+        {
+            ThingSystemManager.Instance.GenerateItem(def, transform.position, 1);
         }
 
         #endregion
@@ -306,8 +369,8 @@ namespace ChenChen_AI
         /// <param name="job"></param>
         public void JobToDo(TargetPtr job)
         {
-            _pawnKindDef.CanGetJob = false;
-            _pawnInfo.IsInWork = false;
+            Def.CanGetJob = false;
+            Info.IsInWork = false;
             CurJobTarget = job;
         }
 
@@ -316,7 +379,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobDoing()
         {
-            _pawnInfo.IsInWork = true;
+            Info.IsInWork = true;
         }
 
         /// <summary>
@@ -324,8 +387,8 @@ namespace ChenChen_AI
         /// </summary>
         public void JobDone()
         {
-            _pawnKindDef.CanGetJob = true;
-            _pawnInfo.IsInWork = false;
+            Def.CanGetJob = true;
+            Info.IsInWork = false;
             CurJobTarget = null;
         }
 
@@ -334,7 +397,7 @@ namespace ChenChen_AI
         /// </summary>
         public void JobCanGet()
         {
-            _pawnKindDef.CanGetJob = true;
+            Def.CanGetJob = true;
         }
 
         /// <summary>
@@ -342,57 +405,104 @@ namespace ChenChen_AI
         /// </summary>
         public void JobCannotGet()
         {
-            _pawnKindDef.CanGetJob = false;
-        }
-
-        /// <summary>
-        /// 暂停当前工作，并停止接受工作一段时间
-        /// </summary>
-        /// <param name="wait"></param>
-        public void StopJob(float wait)
-        {
-            StateMachine.TryChangeState(null);
-            StartCoroutine(StopJobCo(wait));
-
-            IEnumerator StopJobCo(float wait)
-            {
-                _pawnKindDef.CanGetJob = false;
-                yield return new WaitForSeconds(wait);
-                _pawnKindDef.CanGetJob = true;
-            }
+            Def.CanGetJob = false;
         }
 
         #endregion
 
         #region - Battle -
 
-        private bool canDamaged = true;
+        [Header("Battle")]
+        public GameObject bulletPrefab = null;
+
+        /// <summary>
+        /// 调整武器角度
+        /// </summary>
+        /// <param name="target"></param>
+        public void SetWeaponAngle(Vector3 target)
+        {
+            Vector3 dir = target - transform.position;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            weaponHand.localRotation = Quaternion.Euler(0f, 0f, angle);
+            weaponHand.localScale = new Vector3(1, (transform.position.x <= target.x) ? 1 : -1, 1);
+        }
+
+        /// <summary>
+        /// 造成伤害
+        /// </summary>
+        /// <param name="to">伤害目标</param>
+        public void SetDamage(GameObject to, bool isMelee)
+        {
+            Pawn toPawn = to.GetComponent<Pawn>();
+            if(toPawn != null)
+            {
+                if (weaponDef.isMelee)
+                {
+                    anim.SetTrigger("Attack_Melee");
+                }
+                else
+                {
+                    GameObject obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                    Bullet bullet = obj.GetComponent<Bullet>();
+                    if (bullet != null)
+                    {
+                        bullet.Shot(to.transform.position);
+                    }
+                    anim.SetTrigger("Attack_Ranged");
+                }
+
+                toPawn.GetDamage(gameObject, DamageJoddge(this, toPawn), isMelee);
+            }
+        }
 
         /// <summary>
         /// 受到伤害
         /// </summary>
         /// <param name="from"> 伤害来源 </param>
         /// <param name="damage"></param>
-        public void GetDamage(GameObject from, float damage)
+        public void GetDamage(GameObject from, float damage, bool isMelee)
         {
-            if (!canDamaged) return;
-
-            StartCoroutine(AvoidDamage(2));
-
-            StopJob(10);
-            if(StateMachine.CurStateType != typeof(PawnJob_Attack))
+            if (StateMachine.CurStateType != typeof(PawnJob_Battle))
             {
-                StateMachine.TryChangeState(new PawnJob_Chase(this, new TargetPtr(from)));
-            }
+                if (!isMelee && !weaponDef.isMelee)
+                {
+                    var list = ThingSystemManager.Instance.GetThingsInstance<Building>()
+                        .Where(x => x.Def.Isbunker)
+                        .OrderBy(x => Vector3.Distance(this.transform.position, x.transform.position))
+                        .ToList();
 
+                    Building bunker = list.FirstOrDefault(); // 找到最近的掩体
+
+                    if (bunker != null)
+                    {
+                        StateMachine.TryChangeState(new PawnJob_HideInBunker(this, new TargetPtr(bunker.gameObject, from)));
+                    }
+                }
+                else
+                {
+                    StateMachine.TryChangeState(new PawnJob_Battle(this, new TargetPtr(from)));
+                }
+            }
             Info.HP.CurValue -= damage;
         }
 
-        IEnumerator AvoidDamage(float time)
+
+        /// <summary>
+        /// 结束战斗
+        /// </summary>
+        public void EndBattle()
         {
-            canDamaged = false;
-            yield return new WaitForSeconds(time);
-            canDamaged = true;
+            weaponHand.localRotation = Quaternion.Euler(0f, 0f, 60);
+        }
+
+        private static float DamageJoddge(Pawn attacker, Pawn defender)
+        {
+            if (UnityEngine.Random.value > attacker.WeaponAccuracy)
+            {
+                return 0;
+            }
+
+            return attacker.AttackDamage - defender.Armor;
         }
 
         #endregion
@@ -410,6 +520,16 @@ namespace ChenChen_AI
                 { "Legs", SR_Legs },
                 { "Eyes", SR_Eyes },
                 { "Neck", SR_Neck }
+            };
+
+            bodyPartApparelDefs = new Dictionary<string, ApparelDef>
+            {
+                { "UpperHead", null },
+                { "Torso", null },
+                { "Shoulders", null },
+                { "Legs", null },
+                { "Eyes", null },
+                { "Neck", null }
             };
         }
 
@@ -435,7 +555,9 @@ namespace ChenChen_AI
 
             if (Info.HP.IsSpace)
             {
-                Info.IsDead = true;          
+                Info.IsDead = true;
+                SetAnimator("Die", true);
+                ChangeMyBar(0);
             }
 
             StateMachine.Update();
@@ -446,7 +568,10 @@ namespace ChenChen_AI
                 return;
             }
 
-            if (!Info.IsInWork && Def.CanGetJob) TryToGetJob();
+            if (!Info.IsInWork && Def.CanGetJob)
+            {
+                TryToGetJob();
+            }
         }
 
         private void OnEnable()

@@ -7,8 +7,8 @@ namespace ChenChen_AI
     {
         private readonly static float tick = 10;
 
-        float _time;
-        float _waitTime = 5;
+        float _timer;
+        float _waitTime;
         /// <summary>
         /// 闲置
         /// </summary>
@@ -20,7 +20,8 @@ namespace ChenChen_AI
 
         public override bool OnEnter()
         {
-            _time = 0;
+            _timer = 0;
+            _waitTime = Random.Range(0, 2f);
             return true;
         }
 
@@ -31,8 +32,8 @@ namespace ChenChen_AI
                 return StateType.Success;
             }
 
-            _time += Time.deltaTime;
-            if (_time > _waitTime)
+            _timer += Time.deltaTime;
+            if (_timer > _waitTime)
             {
                 pawn.EmotionController.AddEmotion(EmotionType.confused);
 

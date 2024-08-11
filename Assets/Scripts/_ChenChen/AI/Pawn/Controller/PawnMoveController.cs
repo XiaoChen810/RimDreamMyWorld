@@ -17,6 +17,10 @@ namespace ChenChen_AI
         [Header("紧迫程度")]
         [SerializeField] protected Urgency curUrgency = Urgency.Normal;
 
+        private Vector3 lastPosition;
+        private float accumulatedDistance;
+        private float timeElapsed;
+
         protected override void Start()
         {
             base.Start();
@@ -28,6 +32,7 @@ namespace ChenChen_AI
         protected override void Update()
         {
             base.Update();
+            if (_pawn.Info.IsDead) return;
             // 选中情况下，按下R征兆
             if (_pawn.Info.IsSelect && Input.GetKeyDown(KeyCode.R))
             {
@@ -51,14 +56,19 @@ namespace ChenChen_AI
 
         private void UpdateMoveAnimation()
         {
-            if (isStart)
+            float distance = (transform.position - lastPosition).magnitude;
+            accumulatedDistance += distance;
+            timeElapsed += Time.deltaTime;
+
+            if (timeElapsed >= 0.1f) // 每0.1秒更新一次
             {
-                _pawn.SetAnimator("Walking", true);
+                float speed = accumulatedDistance / timeElapsed;
+                _pawn.Anim.SetFloat("Speed", speed);
+                accumulatedDistance = 0f;
+                timeElapsed = 0f;
             }
-            else
-            {
-                _pawn.SetAnimator("Walking", false);
-            }
+
+            lastPosition = transform.position;
         }
 
         /// <summary>
@@ -117,6 +127,7 @@ namespace ChenChen_AI
 
         protected void DrawPathUpdate()
         {
+            if (_pawn.Faction != GameManager.PLAYER_FACTION) return;
             List<Vector3> pathDraw = new List<Vector3>();
             if (path != null && _pawn.Info.IsSelect)
             {

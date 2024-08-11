@@ -64,7 +64,7 @@ public class TargetPtr
     {
         TargetA = a;
         isGameObject = true;
-        Debug.Log($"创建了新的TargetPtr {a.name}");
+        //Debug.Log($"创建了新的TargetPtr {a.name}");
     }
 
     public TargetPtr(GameObject a, GameObject b)
@@ -72,7 +72,7 @@ public class TargetPtr
         TargetA = a;
         TargetB = b;
         isGameObject = true;
-        Debug.Log($"创建了新的TargetPtr {a.name} {b.name}");
+        //Debug.Log($"创建了新的TargetPtr {a.name} {b.name}");
     }
 
     public TargetPtr(Vector3 vecA)

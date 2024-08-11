@@ -6,7 +6,7 @@ namespace ChenChen_Core
 {
     public interface IGrant
     {
-        bool UnLock { get; }
+        bool Lock { get; }
 
         Pawn UserPawn { get; }
 

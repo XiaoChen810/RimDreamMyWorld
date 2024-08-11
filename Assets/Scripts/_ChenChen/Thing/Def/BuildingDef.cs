@@ -46,8 +46,8 @@ namespace ChenChen_Thing
         [Tooltip("是否是障碍物")]
         public bool IsObstacle;
 
-        [Tooltip("是否影响建造")]
-        public bool IsEffectBuild = false;
+        [Tooltip("是否是掩体")]
+        public bool Isbunker = false;
 
     }
 }

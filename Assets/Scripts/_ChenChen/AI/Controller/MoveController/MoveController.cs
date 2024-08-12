@@ -157,8 +157,14 @@ namespace ChenChen_AI
         }
 
         #region Move
+        public void ForceReach()
+        {
+            targetIsAObject = false;
+            targetDestination = null;
+            destination = transform.position;
+        }
         /// <summary>
-        /// 暂停移动，当重新选择路径时，会解除暂停
+        /// 暂停移动
         /// </summary>
         public void StopMove()
         {

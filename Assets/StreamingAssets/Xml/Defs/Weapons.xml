@@ -114,9 +114,9 @@
 		<meleeDamage>5</meleeDamage>
 		<rangeDamage>20</rangeDamage>
 		<equippedAngleOffset>-45</equippedAngleOffset>
-		<range>25</range>
-		<warmupTime>1</warmupTime>
-		<rangedWeaponCooldown>1.2</rangedWeaponCooldown>
+		<range>10</range>
+		<warmupTime>1.2</warmupTime>
+		<rangedWeaponCooldown>1.5</rangedWeaponCooldown>
 		<requiredMaterials>
 			<Need>
 				<label>iron</label>
@@ -136,9 +136,9 @@
 		<meleeDamage>5</meleeDamage>
 		<rangeDamage>30</rangeDamage>
 		<equippedAngleOffset>-45</equippedAngleOffset>
-		<range>33</range>
-		<warmupTime>1</warmupTime>
-		<rangedWeaponCooldown>2.1</rangedWeaponCooldown>
+		<range>16</range>
+		<warmupTime>2.1</warmupTime>
+		<rangedWeaponCooldown>3</rangedWeaponCooldown>
 		<requiredMaterials>
 			<Need>
 				<label>iron</label>

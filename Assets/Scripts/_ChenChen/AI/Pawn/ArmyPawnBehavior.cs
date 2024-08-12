@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace ChenChen_AI
 {
-    public class EnemyPawnBehavior
+    public class ArmyPawnBehavior
     {
         private Pawn me;
         private Pawn target_pawn = null;
         private Pawn target_pawn_last = null;
 
-        public EnemyPawnBehavior(Pawn pawn)
+        public ArmyPawnBehavior(Pawn pawn)
         {
             this.me = pawn;
         }
@@ -18,7 +18,7 @@ namespace ChenChen_AI
         public void Behavior()
         {
             target_pawn = GetNearestPawn();
-
+            
             if (target_pawn != null && target_pawn_last != target_pawn)
             {
                 target_pawn_last = target_pawn;
@@ -27,6 +27,7 @@ namespace ChenChen_AI
 
             return;
         }
+
 
         private Pawn GetNearestPawn()
         {
@@ -56,7 +57,5 @@ namespace ChenChen_AI
             me.StateMachine.TryChangeState(new PawnJob_Battle(me, new TargetPtr(target_pawn.gameObject)));
             Debug.Log($"{me.name} 追击 {target_pawn.name}");
         }
-
-
     }
 }

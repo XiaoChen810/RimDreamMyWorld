@@ -41,19 +41,26 @@ namespace ChenChen_AI
             attackState = AttackState.None;
 
             Description = $"正在追击 {enemy.Def.PawnName}";
-
+            pawn.JobToDo(target);
+            pawn.MoveController.GoToHere(enemy.gameObject, endReachedDistance: range);
             return true;
         }
 
         public override StateType OnUpdate()
         {
+            if (target.TargetA == null)
+            {                
+                return StateType.Failed;
+            }
+
             if (enemy == null || enemy.Info.IsDead)
             {
+                Debug.LogWarning($"目标 {enemy.name} 被击杀");
                 return StateType.Success;
             }
 
             // 索敌
-            if (StaticFuction.CompareDistance(pawn.transform.position, enemy.transform.position, range))
+            if (Vector2.Distance(pawn.transform.position, enemy.transform.position) < range)
             {
                 switch (attackState)
                 {
@@ -75,6 +82,7 @@ namespace ChenChen_AI
                         {
                             //Debug.Log("前摇结束，开始攻击");
                             attackState = AttackState.Attacking;
+                            pawn.MoveController.ForceReach();
                             pawn.SetDamage(enemy.gameObject, pawn.Weapon.isMelee);
                             timer = rangedWeaponCooldown;
                             pawn.ChangeMyBar(0);
@@ -117,6 +125,7 @@ namespace ChenChen_AI
         {
             pawn.ChangeMyBar(0);
             pawn.EndBattle();
+            pawn.MoveController.ForceReach();
         }
     }
 }

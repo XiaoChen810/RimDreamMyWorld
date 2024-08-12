@@ -355,6 +355,19 @@ namespace ChenChen_AI
             }
         }
 
+        private ArmyPawnBehavior _armyPawnBehavior = null;
+        protected ArmyPawnBehavior armyPawnBehavior
+        {
+            get
+            {
+                if(_armyPawnBehavior == null)
+                {
+                    _armyPawnBehavior = new ArmyPawnBehavior(this);
+                }
+                return _armyPawnBehavior;
+            }
+        }
+
         public string Faction => Info.faction;
 
         #endregion
@@ -556,15 +569,24 @@ namespace ChenChen_AI
             if (Info.HP.IsSpace)
             {
                 Info.IsDead = true;
+                StateMachine.TryChangeState(null);
+                MoveController.StopMove();
+                JobCannotGet();
                 SetAnimator("Die", true);
                 ChangeMyBar(0);
             }
 
             StateMachine.Update();
 
-            if (Faction != GameManager.PLAYER_FACTION)
+            if (Faction == GameManager.ENEMY_FACTION)
             {
                 enemyPawnBehavior.Behavior();
+                return;
+            }
+
+            if (Faction == GameManager.PLATER_ARMY)
+            {
+                armyPawnBehavior.Behavior();
                 return;
             }
 

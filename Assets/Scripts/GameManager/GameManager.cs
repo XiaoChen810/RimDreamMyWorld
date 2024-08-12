@@ -52,6 +52,8 @@ public class GameManager : SingletonMono<GameManager>
     }
 
     public static readonly string PLAYER_FACTION = "Player";
+    public static readonly string ENEMY_FACTION = "Enemy";
+    public static readonly string PLATER_ARMY = "Army";
 
     public bool IsGodMode = false;
 
@@ -176,7 +178,7 @@ public class GameManager : SingletonMono<GameManager>
             randomPosition.y = Mathf.Clamp(randomPosition.y, 0, mapManager.CurMapHeight - 1);
 
             // 生成Pawn
-            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y), faction: "enemy");
+            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y), faction: ENEMY_FACTION);
             p.SetWeapon(XmlLoader.Instance.GetRandom<WeaponDef>(XmlLoader.Def_Weapon));
         }
     }
@@ -221,10 +223,12 @@ public class GameManager : SingletonMono<GameManager>
         // 生成数量
         int numbers = 10;
 
+        Vector2Int direction = new Vector2Int(1, 0);
+
         for (int i = 0; i < numbers; i++)
         {
             // 生成随机偏移
-            Vector2Int randomPosition = center;
+            Vector2Int randomPosition = center + direction * 70;
             randomPosition += new Vector2Int(UnityEngine.Random.Range(-radius, radius), UnityEngine.Random.Range(-radius, radius));
 
             // 确保生成的位置在地图边界内
@@ -232,9 +236,15 @@ public class GameManager : SingletonMono<GameManager>
             randomPosition.y = Mathf.Clamp(randomPosition.y, 0, mapManager.CurMapHeight - 1);
 
             // 生成Pawn
-            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y));
+            var p = PawnGeneratorTool.GeneratePawn(position: new Vector3(randomPosition.x, randomPosition.y),faction: PLATER_ARMY);
             p.SetWeapon(XmlLoader.Instance.GetRandom<WeaponDef>(XmlLoader.Def_Weapon));
         }
+    }
+
+    public void Debug_battle()
+    {
+        Debug_raid();
+        Debug_colony();
     }
     #endregion
 }
